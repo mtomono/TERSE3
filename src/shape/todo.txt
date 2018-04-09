@@ -1,0 +1,8 @@
+
+ccw cw
+from to
+
+Angle2dをAngle3dに統合して、cw, ccw, closerを指定可能に
+
+
+2dのテスト
