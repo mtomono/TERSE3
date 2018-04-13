@@ -5,24 +5,20 @@
  */
 package parser;
 
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-import static org.hamcrest.CoreMatchers.*;
-
 import java.util.function.Function;
 
+import static org.testng.Assert.*;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 import static parser.Parsers.*;
+import static test.TestUtils.methodName;
 
-@RunWith(JUnit4.class)
-public class ParserTest {
+public class ParserNGTest {
 
     public static class JsonParserFactory {
         static final Parser<String, Character, String> boolValue = str("true").or(str("false"));
         static final Parser<String, Character, String> nullValue = str("null");
-        static final Parser<String, Character, String> value = doubleQuote.or(numberStr).or(boolValue).or(nullValue); 
+        static final Parser<String, Character, String> value = doubleQuote.or(numberStr).or(boolValue).or(nullValue);
 
         static final Parser<String, Character, Character> garbage = many(anyChar.t().except(c->c=='"').tr());
         static final Parser<String, Character, Character> skipping = many(anyChar.t().except(c->c==','));
@@ -46,65 +42,103 @@ public class ParserTest {
         static Parser<String, Character, String> create(String targetKey) {
             return create(targetKey, s->s);
         }
+    }
 
+    public ParserNGTest() {
+    }
+
+    @BeforeMethod
+    public void setUpMethod() throws Exception {
     }
 
     @Test
     public void testExtractJsonValueWhenTargetValueIsString() throws ParseException {
-        final Parser<String, Character, String> extractor = JsonParserFactory.create("interest");
-        final String result = extractor.parse(new StrSource("{\"interest\": \"OK\"}"));
+        System.out.println(methodName(0));
 
-        assertThat(result, is("OK"));
+        final Parser<String, Character, String> extractor = JsonParserFactory.create("interest");
+
+        final String result = extractor.parse(new StrSource("{\"interest\": \"OK\"}"));
+        final String expected = "OK";
+
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
     }
 
     @Test
     public void testExtractJsonValueWhenTargetValueIsNumber() throws ParseException {
+        System.out.println(methodName(0));
+
         final Parser<String, Character, Double> extractor = JsonParserFactory.create("interest", s->Double.parseDouble(s));
 
-        final Double result = extractor.parse(new StrSource("{\"interest\": 1.0}"));
+        double result = extractor.parse(new StrSource("{\"interest\": 1.0}"));
+        double expected = 1.0;
 
-        assertThat(result, is(1.0));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
     }
 
     @Test
     public void testExtractJsonValueWhenTargetValueIsBoolean() throws ParseException {
+        System.out.println(methodName(0));
+
         final Parser<String, Character, Boolean> extractor = JsonParserFactory.create("interest", s->Boolean.parseBoolean(s));
 
-        final Boolean result = extractor.parse(new StrSource("{\"interest\": true}"));
+        boolean result = extractor.parse(new StrSource("{\"interest\": true}"));
 
-        assertThat(result, is(true));
+        System.out.println("result  : " + result);
+        System.out.println("expected: true");
+        assertTrue(result);
     }
 
     @Test
     public void testExtractJsonValueWhenTargetValueIsNull() throws ParseException {
+        System.out.println(methodName(0));
+
         final Parser<String, Character, String> extractor = JsonParserFactory.create("interest", s->s.equals("null")?null:s);
 
         final String result = extractor.parse(new StrSource("{\"interest\": null}"));
 
+        System.out.println("result  : " + result);
+        System.out.println("expected: null");
         assertNull(result);
     }
 
     @Test
     public void testExtractJsonValueWhenJsonContainsManyOtherMembers() throws ParseException {
+        System.out.println(methodName(0));
+
         final Parser<String, Character, String> extractor = JsonParserFactory.create("interest");
 
         final String result = extractor.parse(new StrSource("  {\"ignore1\": \"NG\", \"ignore2\": \"NG\" , \"interest\": \"OK\",\"ignore3\": \"NG\" } "));
+        final String expected = "OK";
 
-        assertThat(result, is("OK"));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
     }
 
-    @Test(expected = StringIndexOutOfBoundsException.class)
+    @Test(expectedExceptions = StringIndexOutOfBoundsException.class)
     public void testExtractJsonValueWhenJsonIsNotContainsTarget() throws ParseException {
+        System.out.println(methodName(0));
+
         final Parser<String, Character, String> extractor = JsonParserFactory.create("interest");
 
+        System.out.println("expectedExceptions: StringIndexOutOfBoundsException");
         extractor.parse(new StrSource("{ \"ignore1\": \"NG\", \"ignore2\": \"NG\" , \"ignore3\": \"NG\" } "));
     }
 
+    @Test
     public void testJudgeJsonValue() throws ParseException {
+        System.out.println(methodName(0));
+
         final Parser<String, Character, Boolean> judge = JsonParserFactory.create("interest", s->Double.parseDouble(s)>0.5);
 
-        final Boolean result = judge.parse(new StrSource("{\"interest\": 1.0}"));
+        boolean result = judge.parse(new StrSource("{\"interest\": 1.0}"));
 
+        System.out.println("result  : " + result);
+        System.out.println("expected: true");
         assertTrue(result);
     }
 }
