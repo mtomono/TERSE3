@@ -20,7 +20,10 @@
     
     <test name="All tests for TERSE3">
         <packages>
-            <package name=".*"/>
+            <package name=".*">
+                <exclude name="z"/>
+                <!-- z package should be excluded because this package contains tests which check very the behavior of JRE -->
+            </package>
         </packages>
     </test>
 

@@ -64,7 +64,7 @@ public class CharacterNGTest {
     public void testIllegalEscape() {
         System.out.println(test.TestUtils.methodName(0));
         char result = "\100".charAt(0);
-        char expected = '\n';
+        char expected = '@';
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
