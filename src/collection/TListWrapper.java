@@ -15,10 +15,7 @@
 
 package collection;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 /**
  * base implementation for TList
@@ -30,6 +27,26 @@ public class TListWrapper<T> implements List<T> {
     public TListWrapper(List<T> body) {
         this.body = body;
     }
+
+    static public boolean equalityForListSubclass(List<? extends Object> target, Object o) {
+        if (!(o instanceof List))
+            return false;
+        List<? extends Object> e = (List<? extends Object>)o;
+        return e.size()==target.size()&&TList.set(target).pair(e, (a,b)->a.equals(b)).stream().allMatch(p->p);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return equalityForListSubclass(this, o);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 23*hash+Objects.hashCode(this.body);
+        return hash;
+    }
+    
     @Override
     public ListIterator<T> listIterator() {
         return body.listIterator();

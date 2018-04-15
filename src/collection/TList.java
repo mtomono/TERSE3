@@ -72,13 +72,6 @@ public class TList<T> extends TListWrapper<T> {
         return this;
     }
     
-    static public boolean equalityForListSubclass(List<? extends Object> target, Object o) {
-        if (!(o instanceof List))
-            return false;
-        List<? extends Object> e = (List<? extends Object>)o;
-        return e.size()==target.size()&&TList.set(target).pair(e, (a,b)->a.equals(b)).stream().allMatch(p->p);
-    }
-
 //-----------Generating
     
     static public <T> TList<T> wrap(T target) {
@@ -114,11 +107,7 @@ public class TList<T> extends TListWrapper<T> {
     public boolean isUniform() {
         return distinctLocally().isEmpty();
     }
-    
-    public boolean equals(Object o) {
-        return equalityForListSubclass(this, o);
-    }
-    
+        
     public boolean isAscending(Comparator<T> comp) {
         return diff((a,b)->comp.compare(a,b)).filter(d->d>=0).isEmpty();
     }
