@@ -112,6 +112,14 @@ public class TPoint3d extends Point3d {
         return self(p->p.add(move));
     }
     
+    public TPoint3d interpolateR(TPoint3d to, double rate) {
+        return retval(p->p.interpolate(to, rate));
+    }
+    
+    public TPoint3d interpolateS(TPoint3d to, double rate) {
+        return self(p->p.interpolate(to, rate));
+    }
+    
     public TVector3d to(Point3d to) {
         return TVector3d.c(this, to);
     }

@@ -104,6 +104,10 @@ public class TVector2d extends Vector2d {
         setY(this.y-y);
     }
     
+    public TPoint2d moveFrom(TPoint2d point) {
+        return point.moveR(this);
+    }
+    
     public TVector2d scaleR(double s) {
         return retval(v->v.scale(s));
     }
@@ -144,6 +148,22 @@ public class TVector2d extends Vector2d {
         return self(v->v.normalize());
     }
     
+    public TVector2d setXR(double v1) {
+        return retval(v->v.setX(v1));
+    }
+    
+    public TVector2d setXS(double v1) {
+        return self(v->v.setX(v1));
+    }
+    
+    public TVector2d setYR(double v1) {
+        return retval(v->v.setY(v1));
+    }
+    
+    public TVector2d setYS(double v1) {
+        return self(v->v.setY(v1));
+    }
+    
     public TVector2d interpolateR(TVector2d to, double rate) {
         return retval(p->p.interpolate(to, rate));
     }
@@ -168,18 +188,38 @@ public class TVector2d extends Vector2d {
         return new TVector2d(y, -x);
     }
     
-    public TVector2d flip() {
-        return new TVector2d(y, x);
-    }
-    
     public TVector2d rot(double angle) {
         return new TVector2d(x*cos(angle)-y*sin(angle), x*sin(angle)+y*cos(angle));
     }
     
+    public TVector2d hypotenuseOf(TVector2d side) {
+        return scaleR(side.length()/dot(side.normalizeR()));
+    }
+    
+    public TVector2d theOtherSideOf(TVector2d side) {
+        return hypotenuseOf(side).subR(side);
+    }
+    
+    public TVector2d flip() {
+        return new TVector2d(y, x);
+    }
+    
+    public TList<TVector2d> disrelative(TList<TVector2d> relativeSeq) {
+        return relativeSeq.iterator().heap(this, (a,b)->a.addR(b)).stream().collect(toTList());
+    }
+        
+    static public TList<TVector2d> relative(TList<TVector2d> concreteSeq) {
+        return concreteSeq.diff((a,b)->b.subR(a));
+    }
+        
     public TList<TVector2d> quadrant(UnaryOperator<TVector2d> rot) {
         return Stream.iterate(this, rot).limit(4).collect(toTList());
     }
     static public TVector2d average(TList<? extends Tuple2d> ps) {
         return new TVector2d(TPoint2d.average(ps));
+    }
+
+    public String toCsv() {
+        return Double.toString(x)+","+Double.toString(y);
     }
 }

@@ -127,6 +127,21 @@ public class TPoint2d extends Point2d {
         return TVector2d.c(from, this);
     }
     
+    public TPoint2d setXR(double v1) {
+        return retval(v->v.setX(v1));
+    }
+    
+    public TPoint2d setXS(double v1) {
+        return self(v->v.setX(v1));
+    }
+    
+    public TPoint2d setYR(double v1) {
+        return retval(v->v.setY(v1));
+    }
+    
+    public TPoint2d setYS(double v1) {
+        return self(v->v.setY(v1));
+    }
     public TPoint3d expand() {
         return expand(0);
     }

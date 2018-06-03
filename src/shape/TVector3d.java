@@ -119,6 +119,10 @@ public class TVector3d extends Vector3d {
         return self(v->v.add(x, y, z));
     }
     
+    public TPoint3d moveFrom(TPoint3d point) {
+        return point.moveR(this);
+    }
+    
     public TVector3d scaleR(double s) {
         return retval(v->v.scale(s));
     }
@@ -199,6 +203,14 @@ public class TVector3d extends Vector3d {
         return self(v->v.setZ(v1));
     }
     
+    public TVector3d interpolateR(TVector3d to, double rate) {
+        return retval(p->p.interpolate(to, rate));
+    }
+    
+    public TVector3d interpolateS(TVector3d to, double rate) {
+        return self(p->p.interpolate(to, rate));
+    }
+    
     public TVector2d shrink() {
         return new TVector2d(x, y);
     }
@@ -237,10 +249,6 @@ public class TVector3d extends Vector3d {
         return new TVector3d(x*cos(angle)-y*sin(angle), x*sin(angle)+y*cos(angle), z);
     }
     
-    public TPoint3d moveFrom(TPoint3d point) {
-        return point.moveR(this);
-    }
-    
     public TList<TVector3d> disrelative(TList<TVector3d> relativeSeq) {
         return relativeSeq.iterator().heap(this, (a,b)->a.addR(b)).stream().collect(toTList());
     }
@@ -253,10 +261,11 @@ public class TVector3d extends Vector3d {
         return Stream.iterate(this, rot).limit(4).collect(toTList());
     }
     
-    public String toCsv() {
-        return Double.toString(x)+","+Double.toString(y)+","+Double.toString(z);
-    }
     static public TVector3d average(TList<? extends Tuple3d> ps) {
         return new TVector3d(TPoint3d.average(ps));
+    }
+
+    public String toCsv() {
+        return Double.toString(x)+","+Double.toString(y)+","+Double.toString(z);
     }
 }
