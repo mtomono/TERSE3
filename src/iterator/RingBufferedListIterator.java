@@ -19,7 +19,6 @@ import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import viewlist.View;
 
 /**
  * a listiterator which only can previous() up to depth times in a row.
@@ -28,7 +27,7 @@ import viewlist.View;
  */
 public class RingBufferedListIterator<T> extends BufferedListIterator<T> {
     PreIterator<T> body;
-    View<T> view;
+    RingBufferView<T> view;
     ListIterator<Optional<T>> observer;
     
     public RingBufferedListIterator(Iterator<T> body, int depth) {
@@ -37,7 +36,7 @@ public class RingBufferedListIterator<T> extends BufferedListIterator<T> {
     
     public RingBufferedListIterator(PreIterator<T> body) {
         this.body = body;
-        this.view = View.pre(body.pre(), body.getDepth());
+        this.view = RingBufferView.pre(body.pre(), body.getDepth());
         this.observer = view.listIterator();
     }
     

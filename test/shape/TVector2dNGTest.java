@@ -5,6 +5,7 @@
  */
 package shape;
 
+import collection.TList;
 import static java.lang.Math.PI;
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
@@ -12,6 +13,7 @@ import javax.vecmath.Vector3d;
 import static org.testng.Assert.*;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import static shape.ShapeUtil.vector2;
 
 /**
  *
@@ -321,5 +323,55 @@ public class TVector2dNGTest {
         assertEquals(result, expected);
     }
 
+    @Test
+    public void testQuadrantCw() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<TVector2d> result = vector2(1, 1).quadrant(TVector2d::rotCw);
+        TList<TVector2d> expected = TList.of(vector2(1,1),vector2(1,-1),vector2(-1,-1),vector2(-1,1));
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testRotCcw() {
+        System.out.println(test.TestUtils.methodName(0));
+        TVector2d result = vector2(1,1).rotCcw();
+        TVector2d expected = vector2(-1,1);
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testRotCw() {
+        System.out.println(test.TestUtils.methodName(0));
+        TVector2d result = vector2(1,1).rotCw();
+        TVector2d expected = vector2(1,-1);
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testRot() {
+        System.out.println(test.TestUtils.methodName(0));
+        TVector2d result = vector2(1,1).rot(PI/2);
+        TVector2d expected = vector2(-1,1);
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertTrue(result.epsilonEquals(expected, err));
+    }
+
+    @Test
+    public void testQuadrant() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<TVector2d> result = vector2(1,1).quadrant(TVector2d::rotCcw);
+        TList<TVector2d> expected = TList.of(vector2(1,1),vector2(-1,1),vector2(-1,-1),vector2(1,-1));
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result, expected);
+    }
+    
 
 }

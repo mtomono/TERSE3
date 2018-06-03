@@ -15,7 +15,13 @@
 
 package shape;
 
+import collection.TList;
+import static collection.TList.toTList;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
 import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
+import java.util.stream.Stream;
 import javax.vecmath.*;
 
 /**
@@ -23,12 +29,18 @@ import javax.vecmath.*;
  * @author masao
  */
 public class TVector2d extends Vector2d {
+    static public TVector2d zero = new TVector2d(0, 0);
+
     public TVector2d() {
         super();
     }
     
     public TVector2d(Tuple2d t) {
         super(t);
+    }
+    
+    public TVector2d(Tuple2i t) {
+        super(t.x, t.y);
     }
     
     public TVector2d(double x, double y) {
@@ -132,6 +144,14 @@ public class TVector2d extends Vector2d {
         return self(v->v.normalize());
     }
     
+    public TVector2d interpolateR(TVector2d to, double rate) {
+        return retval(p->p.interpolate(to, rate));
+    }
+    
+    public TVector2d interpolateS(TVector2d to, double rate) {
+        return self(p->p.interpolate(to, rate));
+    }
+    
     public TVector3d expand() {
         return expand(0);
     }
@@ -140,4 +160,26 @@ public class TVector2d extends Vector2d {
         return new TVector3d(x, y, z);
     }
     
+    public TVector2d rotCcw() {
+        return new TVector2d(-y, x);
+    }
+    
+    public TVector2d rotCw() {
+        return new TVector2d(y, -x);
+    }
+    
+    public TVector2d flip() {
+        return new TVector2d(y, x);
+    }
+    
+    public TVector2d rot(double angle) {
+        return new TVector2d(x*cos(angle)-y*sin(angle), x*sin(angle)+y*cos(angle));
+    }
+    
+    public TList<TVector2d> quadrant(UnaryOperator<TVector2d> rot) {
+        return Stream.iterate(this, rot).limit(4).collect(toTList());
+    }
+    static public TVector2d average(TList<? extends Tuple2d> ps) {
+        return new TVector2d(TPoint2d.average(ps));
+    }
 }

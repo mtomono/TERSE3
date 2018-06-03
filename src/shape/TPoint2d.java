@@ -15,6 +15,7 @@
 
 package shape;
 
+import collection.TList;
 import java.util.function.Consumer;
 import javax.vecmath.*;
 
@@ -23,12 +24,18 @@ import javax.vecmath.*;
  * @author masao
  */
 public class TPoint2d extends Point2d {
+    static public TPoint2d zero = new TPoint2d(0, 0);
+
     public TPoint2d() {
         super();
     }
     
     public TPoint2d(Tuple2d t) {
         super(t);
+    }
+    
+    public TPoint2d(Tuple2i t) {
+        super(t.x,t.y);
     }
     
     public TPoint2d(double x, double y) {
@@ -104,6 +111,14 @@ public class TPoint2d extends Point2d {
         return self(p->p.add(move));
     }
     
+    public TPoint2d interpolateR(TPoint2d to, double rate) {
+        return retval(p->p.interpolate(to, rate));
+    }
+    
+    public TPoint2d interpolateS(TPoint2d to, double rate) {
+        return self(p->p.interpolate(to, rate));
+    }
+    
     public TVector2d to(Point2d to) {
         return TVector2d.c(this, to);
     }
@@ -118,5 +133,13 @@ public class TPoint2d extends Point2d {
     
     public TPoint3d expand(double z) {
         return new TPoint3d(x, y, z);
+    }
+    
+    public TPoint2d flip() {
+        return new TPoint2d(y, x);
+    }
+    
+    static public TPoint2d average(TList<? extends Tuple2d> ps) {
+        return new TPoint2d(ps.averageD(p->p.x), ps.averageD(p->p.y));
     }
 }

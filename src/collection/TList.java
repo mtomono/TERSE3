@@ -24,6 +24,8 @@ import iterator.TIterator;
 import iterator.TListIterator;
 import java.util.*;
 import java.util.function.*;
+import java.util.stream.Collector;
+import orderedSet.Range;
 
 /**
  *
@@ -56,6 +58,27 @@ public class TList<T> extends TListWrapper<T> {
         return new TListRandom<>(new ArrayList<>(this));
     }
     
+    public TList<T> fixDebug(int interval) {
+        List<T> retval = new ArrayList<>();
+        Iterator<T> iter = iterator();
+        int count = 0;
+        while (iter.hasNext()) {
+            System.out.println("next");
+            for (int i=0; i<interval; i++) {
+                if (!iter.hasNext())
+                    break;
+                retval.add(iter.next());
+            }
+            System.out.println(count += interval);
+        }
+        System.out.println("finished");
+        return new TListRandom<>(retval);
+    }
+    
+    public TList<T> fixDebug() {
+        return fixDebug(1000);
+    }
+    
     public TList<T> fix2seq() {
         return new TList<>(new LinkedList<>(this));
     }
@@ -72,14 +95,42 @@ public class TList<T> extends TListWrapper<T> {
         return this;
     }
     
+    public TList<T> cache() {
+        return set(new CacheList(this));
+    }
+
 //-----------Generating
     
     static public <T> TList<T> wrap(T target) {
         return set(Collections.singletonList(target));
     }
     
+    static TList<Integer> rangeBase(int from, int to) {
+        assert from <= to;
+        return set(new ShiftedScale(from)).subList(0, to-from);
+    }
+    
+    static TList<Integer> rangeBaseSym(int from, int to) {
+        assert from <= to+1 : "from:"+from+" to:"+to;
+        return rangeBase(from, to+1);
+    }
+    
     static public TList<Integer> range(int from, int to) {
-        return set(new Scale()).subList(from, to);
+        if (from <= to)
+            return rangeBase(from, to);
+        else
+            return rangeBase(to, from).reverse();
+    }
+    
+    static public TList<Integer> rangeSym(int from, int to) {
+        if (from <= to)
+            return rangeBaseSym(from, to);
+        else
+            return rangeBaseSym(to, from).reverse();
+    }
+    
+    static public TList<Integer> range(Range<Integer> range) {
+        return rangeBase(range.start(), range.end());
     }
     
     static public <T> TList<T> empty() {
@@ -88,6 +139,10 @@ public class TList<T> extends TListWrapper<T> {
     
     static public <T> TList<T> set(List<T> body) {
         return (body instanceof RandomAccess) ? new TListRandom<>(body) : new TList<>(body);
+    }
+    
+    static public <T> TList<T> set(Collection<T> body) {
+        return set(new ArrayList<>(body));
     }
     
     static public <T> TList<T> c() {
@@ -146,12 +201,24 @@ public class TList<T> extends TListWrapper<T> {
         return map(map, e->{throw new RuntimeException("NoReach : ");});
     }
     
+    public <S> TList<S> mapc(Function<T, S> map) {
+        return map(map).cache();
+    }
+    
     public <S> TList<S> flatMap(Function<T, List<S>> map) {
         return (body instanceof RandomAccess) ? new TListRandom<>(new ListRandomList<>(map(map))) : new TList<>(new ListSequentialList<>(map(map)));
     }
     
+    public <S> TList<S> flatMapc(Function<T, List<S>> map) {
+        return (body instanceof RandomAccess) ? new TListRandom<>(new ListRandomList<>(mapc(map))) : new TList<>(new ListSequentialList<>(mapc(map)));
+    }
+    
     public <S> TList<List<S>> transpose(Function<T, List<S>> map) {
         return new TListRandom<>(new TransposeList<>(map(map)));
+    }
+    
+    public <S> TList<TList<S>> transposeT(Function<T, List<S>> map) {
+        return transpose(map).map(l->TList.set(l));
     }
     
     public <S> TList<S> heap(S start, BiFunction<T, S, S> map) {
@@ -172,6 +239,33 @@ public class TList<T> extends TListWrapper<T> {
     public TList<T> preheap(BiFunction<T, T, T> map) {
         return subList(1, size()).heap(get(0), map);
     }
+    
+//-----------Calculating
+    
+    public double averageD(ToDoubleFunction<T> f) {
+        return stream().mapToDouble(f).average().orElse(0);
+    }
+
+    public double averageL(ToLongFunction<T> f) {
+        return stream().mapToLong(f).average().orElse(0);
+    }
+
+    public double averageI(ToIntFunction<T> f) {
+        return stream().mapToInt(f).average().orElse(0);
+    }
+
+    public double sumD(ToDoubleFunction<T> f) {
+        return stream().mapToDouble(f).sum();
+    }
+    
+    public long sumL(ToLongFunction<T> f) {
+        return stream().mapToLong(f).sum();
+    }
+    
+    public int sumI(ToIntFunction<T> f) {
+        return stream().mapToInt(f).sum();
+    }
+    
 //---------- Filtering
     
     public int indexOf(Predicate<T> cond) {
@@ -323,6 +417,10 @@ public class TList<T> extends TListWrapper<T> {
             return TList.concat(subList(size()+x, size()), subList(0, size()+x));
     }
     
+    public TList<TList<T>> fold(int n) {
+        return set(new FoldList<>(this,n));
+    }
+    
     public TList<TList<T>> divide(T division) {
         int index = indexOf(division);
         if (index == -1) 
@@ -338,7 +436,7 @@ public class TList<T> extends TListWrapper<T> {
     TList<TList<T>> chunk(TList<TList<T>> current, TList<T> remain, Predicate<T> pred) {
         TList<T> divides = remain.filter(pred);
         if (divides.isEmpty())
-            return current;
+            return current.addOne(remain);
         TList<TList<T>> divided = remain.divide(divides.get(0));
         return chunk(current.addOne(divided.get(0)), divided.get(1), pred);
     }
@@ -461,6 +559,10 @@ public class TList<T> extends TListWrapper<T> {
     
     //----------- combination theory
     
+    static public <T> TList<T> nCopies(int n, T x) {
+        return TList.set(Collections.nCopies(n, x));
+    }
+    
     static private TList<TList<Integer>> permulationx(int a, int b, TList<TList<Integer>> prev) {
         assert a>=0 && b>=0;
         TList<Integer> base = range(0, a);
@@ -508,22 +610,22 @@ public class TList<T> extends TListWrapper<T> {
         return prev.map(m->range(m.last()+1, a)).pair(prev).flatMap(p->p.l().map(i->TList.concat(p.r(), wrap(i))));
     }
     
-    static private TList<TList<Integer>> combinationx(int a, int b) {
+    static public TList<TList<Integer>> combinationT(int a, int b) {
         if (b == 0) 
             return combinationx(a, b, null);
-        return combinationx(a, b, combinationx(a, b-1));
+        return combinationx(a, b, combinationT(a, b-1));
     }
     
     static private TList<TList<TList<Integer>>> combinationxUpTo(int a, int b) {
         TList<TList<TList<Integer>>> retval = c();
-        retval.add(combinationx(a, 0));
+        retval.add(combinationT(a, 0));
         for (int i=1; i<=b; i++) 
             retval.add(combinationx(a, i, retval.last()).fix());
         return retval;
     }
     
     static public TList<List<Integer>> combination(int a, int b) {
-        return combinationx(a, b).map(l->(List<Integer>)l);
+        return combinationT(a, b).map(l->(List<Integer>)l);
     }
     
     public TList<List<T>> combination(int n) {
@@ -548,8 +650,12 @@ public class TList<T> extends TListWrapper<T> {
         return retval;
     }
     
+    static public TList<TList<Integer>> homogeneousProductBorders(int a, int b) {
+        return combinationT(a+b-1, b-1);
+    }
+    
     static private TList<TList<Integer>> homogeneousProductx(int a, int b) {
-        return combinationx(a+b-1, b-1).map(border->paint(a, border));
+        return homogeneousProductBorders(a, b).map(border->paint(a, border));
     }
     
     static public TList<List<Integer>> homogeneousProduct(int a, int b) {
@@ -561,6 +667,14 @@ public class TList<T> extends TListWrapper<T> {
         return homogeneousProduct(a, size()).map(m->pickUp(m));
     }
     
+    public int numberOfChanges(BiPredicate<T, T> equality) {
+        return diff((a,b)->equality.negate().test(a, b)).filter(x->x).size();
+    }
+    
+    public int numberOfChanges() {
+        return numberOfChanges((a,b)->a.equals(b));
+    }
+        
     //------------ T series compatible wrapping
 
     @Override
@@ -574,14 +688,50 @@ public class TList<T> extends TListWrapper<T> {
     }
 
     @Override
+    public TIterator<T> iterator() {
+        return new TIterator<>(body.iterator());
+    }
+    
+    @Override
     public TList<T> subList(int fromIndex, int toIndex) {
         return new TList<>(body.subList(fromIndex, toIndex));
     }
     
+    public TList<T> subList(Range<Integer> range) {
+        return subList(range.start(), range.end());
+    }
+    
     //
     public String toWrappedString() {
+        return toCatenatedString("\n");
+    }
+    
+    public String toFlatString() {
+        return toCatenatedString("");
+    }
+        
+    public String toDelimitedString(String delimiter) {
+        return toCatenatedString(delimiter);
+    }
+    
+    public String toCatenatedString(String x) {
         if (isEmpty())
             return "";
-        return subList(1, size()).map(o->o.toString()).heap(new StringBuffer(get(0).toString()), (String a, StringBuffer b)->b.append("\n").append(a)).last().toString();
+        return subList(1, size()).map(o->o.toString()).heap(new StringBuilder(get(0).toString()), (String a, StringBuilder b)->b.append(x).append(a)).last().toString();
+    }
+        
+    static public <T> Collector<T, ?, TList<T>> toTList() {
+        return Collector.of((Supplier<List<T>>)ArrayList::new, List::add, (left,right)->{left.addAll(right);return left;}, TList::set);
+    }
+    
+    public Object[][] dataProvider() {
+        return map(e->lineOfData(e)).toArray(new Object[][]{});
+    }
+    
+    Object[] lineOfData(Object e) {
+        if (e instanceof P)
+            return ((P) e).toArray();
+        else
+            return new Object[]{e};
     }
 }

@@ -228,6 +228,8 @@ public class Message {
     }
     
     public <T> Message csv(List<T> list, Function<T, Object>item, String delimiter) {
+        if (list.isEmpty())
+            return this;
         if (list.size() > 0)
             c(item.apply(list.get(0)));
         list.subList(1, list.size()).forEach(l->c(delimiter).c(item.apply(l)));

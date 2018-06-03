@@ -24,6 +24,7 @@ import function.IntHolder;
 import function.NoReach;
 import function.TSupplier;
 import static iterator.Iterators.toStream;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.function.*;
 import java.util.stream.Stream;
@@ -172,6 +173,12 @@ public class TIterator<T> implements Iterator<T> {
     public <S> TIterator<S> heap(S start, BiFunction<T, S, S> map) {
         Holder<S> h = new Holder<>(start);
         return of(start).concat(map(e->h.set(map.apply(e, h.get()))));
+    }
+    
+    public TIterator<T> heap(BinaryOperator<T> map) {
+        if (!hasNext())
+            return set(Collections.emptyIterator());
+        return heap(next(), map);
     }
     
     public Stream<T> stream() {

@@ -13,27 +13,21 @@
    See the License for the specific language governing permissions and limitations under the License.
  */
 
-package viewlist;
+package iterator;
 
-import function.TIntSupplier;
 import java.util.AbstractList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.IntUnaryOperator;
-import java.util.function.Predicate;
-import static java.util.stream.Collectors.toList;
 
 /**
  *
  * @author mtomono
  * @param <E>
  */
-public class View<E> extends AbstractList<Optional<E>> {
-    int index;
+public class RingBufferView<E> extends AbstractList<Optional<E>> {
     List<E> target;
     IntUnaryOperator at;
-    TIntSupplier start;
-    TIntSupplier end;
     int size;
     /**
      * let the size be 5, initial state will be like this
@@ -44,8 +38,8 @@ public class View<E> extends AbstractList<Optional<E>> {
      * @param buflen
      * @return 
      */
-    public static <E> View<E> pre(List<E> target, int buflen) {
-        return new View(target, buflen).offset().reverse();
+    public static <E> RingBufferView<E> pre(List<E> target, int buflen) {
+        return new RingBufferView(target, buflen, n->(buflen-1)-n);
     }
     /**
      * let the size be 5, initial state will be like this
@@ -56,69 +50,18 @@ public class View<E> extends AbstractList<Optional<E>> {
      * @param buflen
      * @return 
      */
-    public static <E> View<E> fore(List<E> target, int buflen) {
-        return new View(target, buflen);
+    public static <E> RingBufferView<E> fore(List<E> target, int buflen) {
+        return new RingBufferView(target, buflen);
     }
     
-    public View(List<E> target, int size) {
+    public RingBufferView(List<E> target, int size) {
+        this(target, size, n->n);
+    }
+    
+    public RingBufferView(List<E> target, int size, IntUnaryOperator at) {
         this.target = target;
-        this.index = 0;
-        this.at = (int n) -> n + this.index;
-        this.start = ()->0;
-        this.end = this.target::size;
+        this.at = at;
         this.size = size;
-    }
-    
-    /**
-     * t(rue) 
-     * element at index is empty or true to Predicate t
-     * @param index
-     * @param t
-     * @return 
-     */
-    public boolean t(int index, Predicate<E> t) {
-        return !get(index).isPresent() || t.test(get(index).get());
-    }
-    
-    /**
-     * g(et)
-     * get element at index stripped out of Optional 
-     * @param index
-     * @return 
-     */
-    public E g(int index) {
-        return get(index).get();
-    }
-    
-    public TIntSupplier start() {
-        return start;
-    }
-    
-    public TIntSupplier end() {
-        return end;
-    }
-    
-    public View<E> offset() {
-        return offset(size-1);
-    }
-    
-    /**
-     * get the index offset
-     * @param offset
-     * @return 
-     */
-    public View<E> offset(int offset) {
-        at = at.compose(n->n+offset);
-        return this;
-    }
-    
-    /**
-     * get the index direction reverse
-     * @return 
-     */
-    public View<E> reverse() {
-        at = at.compose(n->-n);
-        return this;
     }
     
     /**
@@ -126,27 +69,17 @@ public class View<E> extends AbstractList<Optional<E>> {
      * @param index
      * @return 
      */
-    public boolean has(int index) {
-        return start.getAsInt() <= at.applyAsInt(index) && at.applyAsInt(index) < end.getAsInt();
+    boolean indexIsValid(int index) {
+        return 0 <= at.applyAsInt(index) && at.applyAsInt(index) < target.size();
     }
     
     public int at(int index) {
         return at.applyAsInt(index);
     }
     
-    
-    public View<E> index(int index) {
-        this.index = index;
-        return this;
-    }
-    
-    public List<E> values() {
-        return this.stream().map(v->v.get()).collect(toList());
-    }
-    
     @Override
     public Optional<E> get(int index) {
-        if (has(index))
+        if (indexIsValid(index))
             return Optional.ofNullable(target.get(at(index)));
         return Optional.empty();
     }

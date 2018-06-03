@@ -16,12 +16,13 @@
 package collection;
 
 import java.util.AbstractList;
+import java.util.RandomAccess;
 
 /**
  *
  * @author masao
  */
-public class Scale extends AbstractList<Integer> {
+public class Scale extends AbstractList<Integer> implements RandomAccess {
     public static Scale scale = scale();
     
     static public Scale scale() {

@@ -15,6 +15,7 @@
 
 package string;
 
+import collection.TList;
 import java.util.AbstractList;
 import java.util.Arrays;
 import java.util.List;
@@ -51,5 +52,30 @@ public class Strings {
     
     static public String nullableToString(Object o) {
         return o!=null ? o.toString() : "null";
+    }
+    
+    static public String concat(List<String> strs) {
+        StringBuilder sb = new StringBuilder();
+        strs.stream().forEachOrdered(s->sb.append(s));
+        return sb.toString();
+    }
+    
+    static public TList<Character> asCharList(String str) {
+        return TList.set(new AbstractList<Character>() {
+            @Override
+            public Character get(int index) {
+                return str.charAt(index);
+            }
+
+            @Override
+            public int size() {
+                return str.length();
+            }
+            
+        });
+    }
+    
+    static public String wrap(String str, int len) {
+        return asCharList(str).fold(len).map(l->l.toFlatString()).toWrappedString();
     }
 }

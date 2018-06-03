@@ -6,6 +6,7 @@
 package collection;
 
 import static org.testng.Assert.*;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 /**
@@ -55,5 +56,22 @@ public class PairNGTest {
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertNotEquals(result, expected);
+    }
+    
+    @DataProvider(name="toList")
+    public Object[][] toList() {
+        return new Object[][] {
+                {P.p(0,1), TList.of(0,1)},
+                {P.p(P.p(0, 1),2), TList.of(0,1,2)},
+                {P.p(0,P.p(1,2)), TList.of(0,1,2)},
+        };
+    }
+    @Test(dataProvider="toList")
+    public void testToList(P p, TList expected) {
+        System.out.println(test.TestUtils.methodName(0));
+        TList result = p.toList();
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result, expected);
     }
 }

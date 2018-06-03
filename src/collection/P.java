@@ -16,6 +16,8 @@
 package collection;
 
 import static collection.c.a2l;
+import java.util.AbstractList;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
 import string.Message;
@@ -24,7 +26,7 @@ import string.Message;
  * P(air) of objects
  * @author mtomono
  */
-public class P<L, R> {
+public class P<L, R> extends AbstractList<Object>{
     L l;
     R r;
     
@@ -76,5 +78,35 @@ public class P<L, R> {
     @Override
     public String toString() {
         return Message.nl().csv(a2l(l,r)).p("{", "}").toString();
+    }
+    
+    TList<Object> toList(Object o) {
+        if (o instanceof P)
+            return TList.set(((P)o));
+        else
+            return TList.wrap(o);
+    }
+    
+    public TList<Object> toList() {
+        return toList(l).append(toList(r));
+    }
+    
+    @Override
+    public Object[] toArray() {
+        return toList().toArray();
+    }
+
+    @Override
+    public Object get(int index) {
+        if (index==0)
+            return l;
+        if (index==1)
+            return r;
+        throw new NoSuchElementException("P has only 2 elements.");
+    }
+
+    @Override
+    public int size() {
+        return 2;
     }
 }

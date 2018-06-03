@@ -15,6 +15,8 @@
 
 package shape;
 
+import collection.TList;
+import static collection.c.a2l;
 import static java.lang.Math.abs;
 
 /**
@@ -60,6 +62,12 @@ public class ShapeUtil {
     }
     public static TVector3d vector3(double x, double y, double z) {
         return new TVector3d(x, y, z);
+    }
+    public static TPoint2i p2i(int x, int y) {
+        return new TPoint2i(x,y);
+    }
+    public static TList<TPoint2i> p2is(Integer... v) {
+        return TList.set(a2l(v)).fold(2).map(l->p2i(l.get(0), l.get(1)));
     }
     public static double sin(TVector2d from, TVector2d to) {
         assert epsilonEquals(from.length(), 1, err);

@@ -38,21 +38,30 @@ public class ListIteratorIterator<T> implements ListIterator<T>{
     
     static public <T> ListIteratorIterator<T> create(List<List<T>> t, int index) {
         List<List<T>> target = new FilterList<>(t, l->!l.isEmpty());
-        P<Integer, Integer> focus = TIterable.set(target).map(l->l.size()).heap(0, (a,b)->a+b).filter(i->i<=index).pair(scale()).iterator().last();
-        List<ListIterator<T>> before = MapList.create(target.subList(0, focus.r()), e->endIterator(e));
-        List<ListIterator<T>> very = MapList.create(target.subList(focus.r(), min(target.size(), focus.r()+1)), e->e.listIterator(index - focus.l()));
-        List<ListIterator<T>> after = MapList.create(target.subList(min(target.size(), focus.r()+1), target.size()), e->e.listIterator());
+        P<Integer, Integer> focus = TIterable.set(target).map(l->l.size()).heap(0,(a,b)->a+b).filter(i->i<=index).
+                pair(scale()).iterator().last();
+        List<ListIterator<T>> before = MapList.create(
+                target.subList(0, focus.r()), e->endIterator(e));
+        List<ListIterator<T>> very = MapList.create(
+                target.subList(focus.r(), min(target.size(), focus.r()+1)), e->e.listIterator(index - focus.l()));
+        List<ListIterator<T>> after = MapList.create(
+                target.subList(min(target.size(), focus.r()+1), target.size()), e->e.listIterator());
         return new ListIteratorIterator<>(new ArrayList<>(new ListRandomList<>(before, very, after)).listIterator(focus.r()), index);
     }
     
     static public <T> ListIteratorIterator<T> create(List<List<T>> t) {
         return create(t, 0);
     }
-    
+        
     ListIteratorIterator(ListIterator<ListIterator<T>> body, int index) {
         this.body = body;
-        this.iter = Collections.emptyListIterator();
+        this.iter = body.hasNext()?body.next():Collections.emptyListIterator();
         this.index = index;
+        this.dir = hasNextBase()?Dir.next:Dir.prev;
+    }
+    
+    private boolean hasNextBase() {
+        return iter.hasNext()||body.hasNext();
     }
     
     private ListIterator<T> nextIter() {
@@ -73,7 +82,7 @@ public class ListIteratorIterator<T> implements ListIterator<T>{
 
     @Override
     public boolean hasNext() {
-        return iter.hasNext() || body.hasNext();
+        return hasNextBase();
     }
 
     @Override
@@ -90,7 +99,9 @@ public class ListIteratorIterator<T> implements ListIterator<T>{
     @Override
     public T previous() {
         index--;
-        return iter.hasPrevious() ? iter.previous() : previousIter().previous();
+        return iter.hasPrevious() ? 
+                iter.previous() : 
+                previousIter().previous();
     }
 
     @Override

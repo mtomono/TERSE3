@@ -15,6 +15,7 @@
 
 package shape;
 
+import collection.TList;
 import java.util.function.Consumer;
 import javax.vecmath.Matrix3d;
 import javax.vecmath.Point3d;
@@ -26,6 +27,8 @@ import javax.vecmath.Vector3d;
  * @author masao
  */
 public class TPoint3d extends Point3d {
+    static public TPoint3d zero = new TPoint3d(0, 0, 0);
+
     public TPoint3d() {
         super();
     }
@@ -117,6 +120,29 @@ public class TPoint3d extends Point3d {
         return TVector3d.c(from, this);
     }
     
+    public TPoint3d setXR(double v1) {
+        return retval(v->v.setX(v1));
+    }
+    
+    public TPoint3d setXS(double v1) {
+        return self(v->v.setX(v1));
+    }
+    
+    public TPoint3d setYR(double v1) {
+        return retval(v->v.setY(v1));
+    }
+    
+    public TPoint3d setYS(double v1) {
+        return self(v->v.setY(v1));
+    }
+    
+    public TPoint3d setZR(double v1) {
+        return retval(v->v.setZ(v1));
+    }
+    
+    public TPoint3d setZS(double v1) {
+        return self(v->v.setZ(v1));
+    }
     public TPoint3d transformR(Matrix3d m) {
         return retval(p->m.transform(p));
     }
@@ -127,5 +153,13 @@ public class TPoint3d extends Point3d {
     
     public TPoint2d shrink() {
         return new TPoint2d(x, y);
+    }
+
+    public TPoint3d flip() {
+        return new TPoint3d(y, x, z);
+    }
+
+    static public TPoint3d average(TList<? extends Tuple3d> ps) {
+        return new TPoint3d(ps.averageD(p->p.x), ps.averageD(p->p.y), ps.averageD(p->p.z));
     }
 }

@@ -6,12 +6,14 @@
 package collection;
 
 import static collection.TList.set;
+import static collection.TList.toTList;
 import static collection.c.a2l;
 import debug.Print;
 import static function.ComparePolicy.inc;
 import function.Holder;
 import iterator.TListIterator;
 import java.util.*;
+import orderedSet.Range;
 import static org.testng.Assert.*;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -486,6 +488,16 @@ public class TListNGTest {
         System.out.println(test.TestUtils.methodName(0));
         TList<TList<Integer>> result = TList.ofStatic(1, 3, 7, 9, 11, 2, 3, 8, 9, 11, 9, 9, 12).chunk(i->i>10);
         TList<TList<Integer>> expected = TList.ofStatic(TList.ofStatic(1, 3, 7, 9, 11), TList.ofStatic(2, 3, 8, 9, 11), TList.ofStatic(9, 9, 12));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    
+    @Test
+    public void testChunk2() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<TList<Integer>> result = TList.ofStatic(1, 3, 7, 9, 11, 2, 3, 8, 9, 11, 9, 9, 12, 3, 2).chunk(i->i>10);
+        TList<TList<Integer>> expected = TList.ofStatic(TList.ofStatic(1, 3, 7, 9, 11), TList.ofStatic(2, 3, 8, 9, 11), TList.ofStatic(9, 9, 12), TList.of(3, 2));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
@@ -1257,6 +1269,90 @@ public class TListNGTest {
         System.out.println(test.TestUtils.methodName(0));
         Optional<Integer> result = TList.of(0, 1, 2).lastOpt(3);
         Optional<Integer> expected = Optional.empty();
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testForAll() {
+        System.out.println(test.TestUtils.methodName(0));
+        boolean result = TList.of(0,2,4,6).forAll(i->i%2==0);
+        boolean expected = true;
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testForAllFalse() {
+        System.out.println(test.TestUtils.methodName(0));
+        boolean result = TList.of(0,2,3,6).forAll(i->i%2==0);
+        boolean expected = false;
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testExists() {
+        System.out.println(test.TestUtils.methodName(0));
+        boolean result = TList.of(0,2,3,6).exists(i->i%2!=0);
+        boolean expected = true;
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testExistsFalse() {
+        System.out.println(test.TestUtils.methodName(0));
+        boolean result = TList.of(0,2,4,6).exists(i->i%2!=0);
+        boolean expected = false;
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testNCopies() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> result = TList.nCopies(4, 0);
+        TList<Integer> expected = TList.of(0,0,0,0);
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testNumberOfChanges_BiPredicate() {
+    }
+
+    @Test
+    public void testNumberOfChanges_0args() {
+        System.out.println(test.TestUtils.methodName(0));
+        int result = TList.of(0,0,1,0,1,1,1,0).numberOfChanges();
+        int expected = 4;
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testToTList() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> result = a2l(0,1,2,3,4).stream().collect(toTList());
+        TList<Integer> expected = TList.of(0,1,2,3,4);
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testSubList_Range() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> result = TList.range(0, 20).subList(new Range<>(1, 5));
+        TList<Integer> expected = TList.range(1,5);
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
         assertEquals(result, expected);
