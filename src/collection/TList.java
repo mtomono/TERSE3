@@ -90,6 +90,14 @@ public class TList<T> extends TListWrapper<T> {
         });
     }
     
+    public TList<T> teep(String mark) {
+        return tee(e->System.out.println(mark+e));
+    }
+    
+    public TList<T> teep() {
+        return teep("");
+    }
+    
     public TList<T> accept(Consumer<TList<T>> c) {
         c.accept(this);
         return this;
