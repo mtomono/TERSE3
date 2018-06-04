@@ -17,8 +17,10 @@ package shape;
 
 import collection.TList;
 import static collection.TList.toTList;
+import static collection.c.a2l;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
@@ -30,7 +32,7 @@ import javax.vecmath.Vector3d;
  *
  * @author masao
  */
-public class TVector3d extends Vector3d {
+public class TVector3d extends Vector3d implements List<Double> {
     static public TVector3d zero = new TVector3d(0, 0, 0);
     static public TVector3d x1 = new TVector3d(1, 0, 0);
     static public TVector3d y1 = new TVector3d(0, 1, 0);
@@ -267,5 +269,139 @@ public class TVector3d extends Vector3d {
 
     public String toCsv() {
         return Double.toString(x)+","+Double.toString(y)+","+Double.toString(z);
+    }
+    
+    //--------- compatibility with list
+    
+    public List<Double> asList() {
+        return a2l(x,y,z);
+    }
+
+    @Override
+    public int size() {
+        return 3;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return false;
+    }
+
+    @Override
+    public boolean contains(Object o) {
+        if (!(o instanceof Double))
+            return false;
+        Double t = (Double) o;
+        return t==x||t==y||t==z;
+    }
+
+    @Override
+    public Iterator<Double> iterator() {
+        return asList().iterator();
+    }
+
+    @Override
+    public Object[] toArray() {
+        return new Double[]{x,y,z};
+    }
+
+    @Override
+    public <T> T[] toArray(T[] a) {
+        return asList().toArray(a);
+    }
+
+    @Override
+    public boolean add(Double e) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean remove(Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean containsAll(Collection<?> c) {
+        return asList().containsAll(c);
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends Double> c) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean addAll(int index, Collection<? extends Double> c) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void clear() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Double get(int index) {
+        switch (index) {
+            case 0: return x;
+            case 1: return y;
+            case 2: return z;
+            default: throw new NoSuchElementException("TVector3d#get index was "+index);
+        }
+    }
+
+    @Override
+    public Double set(int index, Double element) {
+        switch (index) {
+            case 0: {x=element;return x;}
+            case 1: {y=element;return y;}
+            case 2: {z=element;return z;}
+            default: throw new NoSuchElementException("TVector3d#get index was "+index);
+        }
+    }
+
+    @Override
+    public void add(int index, Double element) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Double remove(int index) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int indexOf(Object o) {
+        return asList().indexOf(o);
+    }
+
+    @Override
+    public int lastIndexOf(Object o) {
+        return asList().lastIndexOf(o);
+    }
+
+    @Override
+    public ListIterator<Double> listIterator() {
+        return asList().listIterator();
+    }
+
+    @Override
+    public ListIterator<Double> listIterator(int index) {
+        return asList().listIterator(index);
+    }
+
+    @Override
+    public List<Double> subList(int fromIndex, int toIndex) {
+        return asList().subList(fromIndex, toIndex);
     }
 }

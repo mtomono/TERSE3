@@ -16,7 +16,9 @@
 package shape;
 
 import collection.TList;
+import static collection.c.a2l;
 import static java.lang.Math.abs;
+import java.util.*;
 import java.util.function.Consumer;
 import javax.vecmath.Point2i;
 import javax.vecmath.Tuple2i;
@@ -25,7 +27,7 @@ import javax.vecmath.Tuple2i;
  *
  * @author masao
  */
-public class TPoint2i extends Point2i {
+public class TPoint2i extends Point2i implements List<Integer> {
     static public TPoint2i zero = new TPoint2i(0, 0);
     static public TPoint2i x1 = new TPoint2i(1, 0);
     static public TPoint2i y1 = new TPoint2i(0, 1);
@@ -129,5 +131,137 @@ public class TPoint2i extends Point2i {
     );
     static TPoint2i quadrant(int i) {
         return quadrants.get(i);
+    }
+
+    //--------- compatibility with list
+    
+    public List<Integer> asList() {
+        return a2l(x,y);
+    }
+
+    @Override
+    public int size() {
+        return 2;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return false;
+    }
+
+    @Override
+    public boolean contains(Object o) {
+        if (!(o instanceof Double))
+            return false;
+        Double t = (Double) o;
+        return t==x||t==y;
+    }
+
+    @Override
+    public Iterator<Integer> iterator() {
+        return asList().iterator();
+    }
+
+    @Override
+    public Object[] toArray() {
+        return new Integer[]{x,y};
+    }
+
+    @Override
+    public <T> T[] toArray(T[] a) {
+        return asList().toArray(a);
+    }
+
+    @Override
+    public boolean add(Integer e) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean remove(Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean containsAll(Collection<?> c) {
+        return asList().containsAll(c);
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends Integer> c) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean addAll(int index, Collection<? extends Integer> c) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void clear() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Integer get(int index) {
+        switch (index) {
+            case 0: return x;
+            case 1: return y;
+            default: throw new NoSuchElementException("TVector3d#get index was "+index);
+        }
+    }
+
+    @Override
+    public Integer set(int index, Integer element) {
+        switch (index) {
+            case 0: {x=element;return x;}
+            case 1: {y=element;return y;}
+            default: throw new NoSuchElementException("TVector3d#get index was "+index);
+        }
+    }
+
+    @Override
+    public void add(int index, Integer element) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Integer remove(int index) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int indexOf(Object o) {
+        return asList().indexOf(o);
+    }
+
+    @Override
+    public int lastIndexOf(Object o) {
+        return asList().lastIndexOf(o);
+    }
+
+    @Override
+    public ListIterator<Integer> listIterator() {
+        return asList().listIterator();
+    }
+
+    @Override
+    public ListIterator<Integer> listIterator(int index) {
+        return asList().listIterator(index);
+    }
+
+    @Override
+    public List<Integer> subList(int fromIndex, int toIndex) {
+        return asList().subList(fromIndex, toIndex);
     }
 }

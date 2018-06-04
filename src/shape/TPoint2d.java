@@ -16,6 +16,8 @@
 package shape;
 
 import collection.TList;
+import static collection.c.a2l;
+import java.util.*;
 import java.util.function.Consumer;
 import javax.vecmath.*;
 
@@ -23,7 +25,7 @@ import javax.vecmath.*;
  *
  * @author masao
  */
-public class TPoint2d extends Point2d {
+public class TPoint2d extends Point2d implements List<Double> {
     static public TPoint2d zero = new TPoint2d(0, 0);
 
     public TPoint2d() {
@@ -156,5 +158,137 @@ public class TPoint2d extends Point2d {
     
     static public TPoint2d average(TList<? extends Tuple2d> ps) {
         return new TPoint2d(ps.averageD(p->p.x), ps.averageD(p->p.y));
+    }
+
+    //--------- compatibility with list
+    
+    public List<Double> asList() {
+        return a2l(x,y);
+    }
+
+    @Override
+    public int size() {
+        return 2;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return false;
+    }
+
+    @Override
+    public boolean contains(Object o) {
+        if (!(o instanceof Double))
+            return false;
+        Double t = (Double) o;
+        return t==x||t==y;
+    }
+
+    @Override
+    public Iterator<Double> iterator() {
+        return asList().iterator();
+    }
+
+    @Override
+    public Object[] toArray() {
+        return new Double[]{x,y};
+    }
+
+    @Override
+    public <T> T[] toArray(T[] a) {
+        return asList().toArray(a);
+    }
+
+    @Override
+    public boolean add(Double e) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean remove(Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean containsAll(Collection<?> c) {
+        return asList().containsAll(c);
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends Double> c) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean addAll(int index, Collection<? extends Double> c) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void clear() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Double get(int index) {
+        switch (index) {
+            case 0: return x;
+            case 1: return y;
+            default: throw new NoSuchElementException("TVector3d#get index was "+index);
+        }
+    }
+
+    @Override
+    public Double set(int index, Double element) {
+        switch (index) {
+            case 0: {x=element;return x;}
+            case 1: {y=element;return y;}
+            default: throw new NoSuchElementException("TVector3d#get index was "+index);
+        }
+    }
+
+    @Override
+    public void add(int index, Double element) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Double remove(int index) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int indexOf(Object o) {
+        return asList().indexOf(o);
+    }
+
+    @Override
+    public int lastIndexOf(Object o) {
+        return asList().lastIndexOf(o);
+    }
+
+    @Override
+    public ListIterator<Double> listIterator() {
+        return asList().listIterator();
+    }
+
+    @Override
+    public ListIterator<Double> listIterator(int index) {
+        return asList().listIterator(index);
+    }
+
+    @Override
+    public List<Double> subList(int fromIndex, int toIndex) {
+        return asList().subList(fromIndex, toIndex);
     }
 }

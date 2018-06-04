@@ -18,6 +18,7 @@ package shape;
 import collection.TList;
 import static collection.c.a2l;
 import static java.lang.Math.abs;
+import java.util.List;
 
 /**
  *
@@ -45,8 +46,14 @@ public class ShapeUtil {
     public static TPoint2d point2(double x, double y) {
         return new TPoint2d(x, y);
     }
+    public static TPoint2d point2(List<Double> vs) {
+        return point2(vs.get(0),vs.get(1));
+    }
     public static TVector2d vector2(double x, double y) {
         return new TVector2d(x, y);
+    }
+    public static TVector2d vector2(List<Double> vs) {
+        return vector2(vs.get(0),vs.get(1));
     }
     public static Line3d line3(double x1, double y1, double z1, double x2, double y2, double z2) {
         return new Line3d(new TPoint3d(x1, y1, z1), new TVector3d(x2, y2, z2));
@@ -60,11 +67,20 @@ public class ShapeUtil {
     public static TPoint3d point3(double x, double y, double z) {
         return new TPoint3d(x, y, z);
     }
+    public static TPoint3d point3(List<Double> vs) {
+        return point3(vs.get(0),vs.get(1),vs.get(2));
+    }
     public static TVector3d vector3(double x, double y, double z) {
         return new TVector3d(x, y, z);
     }
+    public static TVector3d vector3(List<Double> vs) {
+        return vector3(vs.get(0),vs.get(1),vs.get(2));
+    }
     public static TPoint2i p2i(int x, int y) {
         return new TPoint2i(x,y);
+    }
+    public static TPoint2i p2i(List<Integer> vs) {
+        return p2i(vs.get(0), vs.get(1));
     }
     public static TList<TPoint2i> p2is(Integer... v) {
         return TList.set(a2l(v)).fold(2).map(l->p2i(l.get(0), l.get(1)));
