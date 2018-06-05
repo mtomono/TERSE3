@@ -95,6 +95,14 @@ public class TPoint2i extends Point2i implements List<Integer> {
         return new TVector2d(x,y).scaleS(scale);
     }
     
+    public TPoint2i negateR() {
+        return retval(v->v.negate());
+    }
+    
+    public TPoint2i negateS() {
+        return self(v->v.negate());
+    }
+    
     public int det(Tuple2i other) {
         return x*other.y-other.x*y;
     }
