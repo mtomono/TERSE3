@@ -23,8 +23,13 @@ import java.util.Optional;
 import string.Message;
 
 /**
- * P(air) of objects
+ * P(air) of objects.
+ * this is the very the basis for typed list of objects.
+ * by using this type recursively, you can build any sequence of objects which
+ * are typed.
  * @author mtomono
+ * @param <L>
+ * @param <R>
  */
 public class P<L, R> extends AbstractList<Object>{
     L l;

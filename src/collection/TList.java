@@ -37,27 +37,71 @@ public class TList<T> extends TListWrapper<T> {
         super(body);
     }
     
+    /**
+     * last item of the list.
+     * when you want the first item, you can get it by .get(0).
+     * compared to that simplisity, you have to call .get(size()-1) to get the
+     * last item. simply i thought it's not fair. that's the reason why i prepared
+     * this method.
+     * @return 
+     */
     public T last() {
         return last(0);
     }
     
+    /**
+     * nth item from last.
+     * variation of get() starting from the end of this list.
+     * @param n
+     * @return 
+     */
     public T last(int n) {
         return get(size()-1-n);
     }
     
+    /**
+     * set the part of this list nth from the last.
+     * this list has last(nth). why not setLast(nth).
+     * @param n
+     * @param o
+     * @return 
+     */
     public T setLast(int n, T o) {
         return set(size()-1-n, o);
     }
     
+    /**
+     * method chain friendly version of add.
+     * @param added
+     * @return 
+     */
     public TList<T> addOne(T added) {
         this.add(added);
         return this;
     }
     
+    /**
+     * fix the calculation.
+     * basically, TList accepts calculation requests but keep the actual calculation
+     * to happen until the content is required. this idea works good in some senarios, 
+     * but imagine when the content is required repeatedly or when you want to take a
+     * snapshot of the content at some time.
+     * @return 
+     */
     public TList<T> fix() {
         return new TListRandom<>(new ArrayList<>(this));
     }
     
+    /**
+     * fix with debug print.
+     * when you fix a list, it will try to calculate all the items. in debugging
+     * phase, it should be a good time to print out contents of list. you can do
+     * that simply by tee (or teep for more convenience). but what if you have 
+     * so many number of items in the list? this method is for that situation.
+     * the list is supposed to be 
+     * @param interval
+     * @return 
+     */
     public TList<T> fixDebug(int interval) {
         List<T> retval = new ArrayList<>();
         Iterator<T> iter = iterator();
@@ -79,10 +123,27 @@ public class TList<T> extends TListWrapper<T> {
         return fixDebug(1000);
     }
     
+    /**
+     * fix to sequential list.
+     * mostly the functionalities of this list rely upon the RandomAccess list.
+     * of course, that cannot be a reason to deny the convenience of sequential
+     * list. you can fix the list into a LinkedList by this.
+     * @return 
+     */
     public TList<T> fix2seq() {
         return new TList<>(new LinkedList<>(this));
     }
     
+    /**
+     * something like unix tee.
+     * this list will encourage you to use method chain. you will find how good 
+     * it is to write your concept in short sentence. i guess you will feel more
+     * concentrated by seeing concentrated definition of the logics than get distracted.
+     * but the trait comes with some tradeoffs. where can you put debug print?
+     * here's the method for that purpose.
+     * @param c
+     * @return 
+     */
     public TList<T> tee(Consumer<T> c) {
         return map(t->{
             c.accept(t);
@@ -90,14 +151,32 @@ public class TList<T> extends TListWrapper<T> {
         });
     }
     
+    /**
+     * tee() for print out.
+     * tee which is specialized for printing. takes a String parameter to mark 
+     * that the String on display is printed out by a certain teep().
+     * @param mark
+     * @return 
+     */
     public TList<T> teep(String mark) {
         return tee(e->System.out.println(mark+e));
     }
     
+    /**
+     * convenient form of teep().
+     * @return 
+     */
     public TList<T> teep() {
         return teep("");
     }
     
+    /**
+     * give all the items in this list to Consumer.
+     * note even after 'consuming', my wild guess is all the items remain in the
+     * list.
+     * @param c Consumer who eats all the items in this list.
+     * @return 
+     */
     public TList<T> accept(Consumer<TList<T>> c) {
         c.accept(this);
         return this;
@@ -108,7 +187,14 @@ public class TList<T> extends TListWrapper<T> {
     }
 
 //-----------Generating
-    
+    /**
+     * wrap an object as this list.
+     * if you want to let a single object be compatible with this list, it's the time 
+     * to use this method.
+     * @param <T>
+     * @param target
+     * @return 
+     */
     static public <T> TList<T> wrap(T target) {
         return set(Collections.singletonList(target));
     }
@@ -123,6 +209,15 @@ public class TList<T> extends TListWrapper<T> {
         return rangeBase(from, to+1);
     }
     
+    /**
+     * generate a list of integers in a row.
+     * simple. list of integers ranging between parameters. 
+     * this method goes with the same policy as the original List is taking on 
+     * the subList(). from is contained. to is not contained.
+     * @param from
+     * @param to
+     * @return 
+     */
     static public TList<Integer> range(int from, int to) {
         if (from <= to)
             return rangeBase(from, to);
@@ -130,6 +225,19 @@ public class TList<T> extends TListWrapper<T> {
             return rangeBase(to, from).reverse();
     }
     
+    /**
+     * generate a list of integers in a row, but...
+     * yeah. there was a time i believed in a faith that goes like, "every range
+     * can be expressed in the way an array is expressed." from included, to excluded.
+     * well. that principle works in most cases. but when i looked at a 2d grid,
+     * where you don't find where is 'upper' or 'lower', i was compelled to admit
+     * that i need to have this method.
+     * still, i believe this only happens because of the symmetry of space, so 
+     * i named this method after "range with symmetry".
+     * @param from
+     * @param to
+     * @return 
+     */
     static public TList<Integer> rangeSym(int from, int to) {
         if (from <= to)
             return rangeBaseSym(from, to);
@@ -137,74 +245,182 @@ public class TList<T> extends TListWrapper<T> {
             return rangeBaseSym(to, from).reverse();
     }
     
+    /**
+     * range method which takes the Range<Integer> as parameter.
+     * 
+     * @param range
+     * @return 
+     */
     static public TList<Integer> range(Range<Integer> range) {
         return rangeBase(range.start(), range.end());
     }
     
+    /**
+     * empty list.
+     * @param <T>
+     * @return 
+     */
     static public <T> TList<T> empty() {
         return new TList<>(Collections.emptyList());
     }
     
+    /**
+     * add functionalities to another list.
+     * @param <T>
+     * @param body
+     * @return 
+     */
     static public <T> TList<T> set(List<T> body) {
         return (body instanceof RandomAccess) ? new TListRandom<>(body) : new TList<>(body);
     }
-    
+    /**
+     * add functionalities to another collection.
+     * @param <T>
+     * @param body
+     * @return 
+     */
     static public <T> TList<T> set(Collection<T> body) {
         return set(new ArrayList<>(body));
     }
     
+    /**
+     * create new list.
+     * @param <T>
+     * @return 
+     */
     static public <T> TList<T> c() {
         return new TListRandom<>(new ArrayList<>());
     }
     
+    /**
+     * create new list from an array of items.
+     * @param <T>
+     * @param t
+     * @return 
+     */
     static public <T> TList<T> of(T... t) {
         return new TListRandom<>(new ArrayList<>(a2l(t)));
     }
     
+    /**
+     * create new list from an array of items.
+     * this variation of of make use of list based on array
+     * (notice this is different from ArrayList). that list
+     * is very efficient in time and space but there is a 
+     * limitation in functionality(i.e. the list cannot extend further).
+     * @param <T>
+     * @param t
+     * @return 
+     */
     static public <T> TList<T> ofStatic(T... t) {
         return new TListRandom<>(a2l(t));
     }
     
 //--------- Judging
-    
+    /**
+     * check whether all the elements are the same.
+     * @return 
+     */
     public boolean isUniform() {
         return distinctLocally().isEmpty();
     }
-        
+    
+    /**
+     * check whether all the elements are in the ascending order.
+     * and not any two elements are equal.
+     * @param comp
+     * @return 
+     */
     public boolean isAscending(Comparator<T> comp) {
         return diff((a,b)->comp.compare(a,b)).filter(d->d>=0).isEmpty();
     }
     
+    /**
+     * check whether all the elements are in the descending order.
+     * and not any two elements are equal.
+     * @param comp
+     * @return 
+     */
     public boolean isDescending(Comparator<T> comp) {
         return diff((a,b)->comp.compare(a,b)).filter(d->d<=0).isEmpty();
     }
     
+    /**
+     * check whether all the elements are in the ascending order.
+     * and allows several elements to be equal.
+     * @param comp
+     * @return 
+     */
     public boolean isAscendingOrEqual(Comparator<T> comp) {
         return diff((a,b)->comp.compare(a,b)).filter(d->d>0).isEmpty();
     }
     
+    /**
+     * check whether all the elements are in the descending order.
+     * and allows several elements to be equal.
+     * @param comp
+     * @return 
+     */
     public boolean isDescendingOrEqual(Comparator<T> comp) {
         return diff((a,b)->comp.compare(a,b)).filter(d->d<0).isEmpty();
     }
     
+    /**
+     * check whether a predicate applies to all the elements in the list.
+     * @param pred
+     * @return 
+     */
     public boolean forAll(Predicate<T> pred) {
         return filter(pred.negate()).isEmpty();
     }
     
+    /**
+     * check whether a predicate applies to at least one element in the list.
+     * @param pred
+     * @return 
+     */
     public boolean exists(Predicate<T> pred) {
         return !filter(pred).isEmpty();
     }
     
 //--------- Transforming
-    
+    /**
+     * apply a function to the list itself.
+     * if you are really eager to continue the method chain, the hurdle is when you 
+     * need to use a list at two or more place. here is the method to overcome that
+     * limitation.
+     * note something this method offering is merely a certain programming style and 
+     * you always have equivalent ways of expression in other forms. 
+     * @param <S>
+     * @param map
+     * @return 
+     */
     public <S> S transform(Function<TList<T>, S> map) {
         return map.apply(this);
     }
     
+    /**
+     * map.
+     * this version of map requires reverse mapping to make the resulting list editable.
+     * of course it's not always the case you can find reverse mapping and in that case
+     * you should gracefully give up to make it editable and use the map() below.
+     * @param <S>
+     * @param map
+     * @param rmap
+     * @return 
+     */
     public <S> TList<S> map(Function<T, S> map, Function<S, T> rmap) {
         return (body instanceof RandomAccess) ? new TListRandom<>(new MapRandomList<T, S>(this, map, rmap)) : new TList<>(new MapSequentialList<>(this, map, rmap));
     }
     
+    /**
+     * map.
+     * very basic operation to a list. map each element by Function given as a parameter.
+     * another name for this method would be 'collect'.
+     * @param <S>
+     * @param map
+     * @return 
+     */
     public <S> TList<S> map(Function<T, S> map) {
         return map(map, e->{throw new RuntimeException("NoReach : ");});
     }
@@ -213,6 +429,15 @@ public class TList<T> extends TListWrapper<T> {
         return map(map).cache();
     }
     
+    /**
+     * flat map.
+     * flat the nested list while mapping.
+     * you can use this method only to flat the nested list by giving e->e
+     * (i.e. identical mapping) as parameter.
+     * @param <S>
+     * @param map
+     * @return 
+     */
     public <S> TList<S> flatMap(Function<T, List<S>> map) {
         return (body instanceof RandomAccess) ? new TListRandom<>(new ListRandomList<>(map(map))) : new TList<>(new ListSequentialList<>(map(map)));
     }
@@ -221,20 +446,52 @@ public class TList<T> extends TListWrapper<T> {
         return (body instanceof RandomAccess) ? new TListRandom<>(new ListRandomList<>(mapc(map))) : new TList<>(new ListSequentialList<>(mapc(map)));
     }
     
+    /**
+     * transpose.
+     * remember matrix operation. in some way, this method has something common
+     * with flatMap. in flatMap, each element is mapped to a list of something
+     * and after that they are concatenated. also in this method each element is
+     * mapped to a list of something but they are sliced in to another set of 
+     * lists.
+     * @param <S>
+     * @param map
+     * @return 
+     */
     public <S> TList<List<S>> transpose(Function<T, List<S>> map) {
         return new TListRandom<>(new TransposeList<>(map(map)));
     }
     
+    /**
+     * TList<TList<..>> version of transpose.
+     * @param <S>
+     * @param map
+     * @return 
+     */
     public <S> TList<TList<S>> transposeT(Function<T, List<S>> map) {
         return transpose(map).map(l->TList.set(l));
     }
     
+    /**
+     * heap.
+     * basically what it does is very similar to the 'reduce' of stream.
+     * the difference is, contrary to the result of reduce, the result of this 
+     * method still have the list representing the intermedeate values that 
+     * lead to the result of reduce. by this, you can find where the threshold
+     * is broken.
+     * @param <S>
+     * @param start
+     * @param map
+     * @return 
+     */
     public <S> TList<S> heap(S start, BiFunction<T, S, S> map) {
         return set(new IteratorCache<>(TIterator.set(iterator()).heap(start, map)));
     }
     
     /**
-     * heap which takes first item of the list as start
+     * heap which takes first item of the list as start.
+     * in some cases, a list which all corresponds to the original item is needed.
+     * but when you use heap(), it adds an element at the head of the list in excess.
+     * to avoid that, you can use this.
      * @param <S>
      * @param first
      * @param map
@@ -244,42 +501,88 @@ public class TList<T> extends TListWrapper<T> {
         return subList(1, size()).heap(first.apply(get(0)), map);
     }
     
+    /**
+     * simpler version of preheap.
+     * only applicable when the first item itself can be the first item of the
+     * result of preheap().
+     * @param map
+     * @return 
+     */
     public TList<T> preheap(BiFunction<T, T, T> map) {
         return subList(1, size()).heap(get(0), map);
     }
     
 //-----------Calculating
-    
+    /**
+     * map each item to double value and take average of them.
+     * @param f
+     * @return 
+     */
     public double averageD(ToDoubleFunction<T> f) {
         return stream().mapToDouble(f).average().orElse(0);
     }
 
+    /**
+     * map each item to long value and take average of them.
+     * @param f
+     * @return 
+     */
     public double averageL(ToLongFunction<T> f) {
         return stream().mapToLong(f).average().orElse(0);
     }
 
+    /**
+     * map each item to int value and take average of them.
+     * @param f
+     * @return 
+     */
     public double averageI(ToIntFunction<T> f) {
         return stream().mapToInt(f).average().orElse(0);
     }
 
+    /**
+     * map each item to double value and take sum of them.
+     * @param f
+     * @return 
+     */
     public double sumD(ToDoubleFunction<T> f) {
         return stream().mapToDouble(f).sum();
     }
     
+    /**
+     * map each item to long value and take average of them.
+     * @param f
+     * @return 
+     */
     public long sumL(ToLongFunction<T> f) {
         return stream().mapToLong(f).sum();
     }
     
+    /**
+     * map each item to int value and take average of them.
+     * @param f
+     * @return 
+     */
     public int sumI(ToIntFunction<T> f) {
         return stream().mapToInt(f).sum();
     }
     
 //---------- Filtering
-    
+    /**
+     * indexOf variant which is specified by Predicate.
+     * @param cond
+     * @return 
+     */
     public int indexOf(Predicate<T> cond) {
         return TList.range(0, size()).filter(i->cond.test(get(i))).getOpt(0).orElse(-1);
     }
     
+    /**
+     * subList() variant which is receptive of irrelevant indices as parameters.
+     * @param from
+     * @param to
+     * @return 
+     */
     public TList<T> subListAnyway(int from, int to) {
         if (from >= to)
             return TList.empty();
@@ -290,6 +593,11 @@ public class TList<T> extends TListWrapper<T> {
         return subList(from, to);
     }
     
+    /**
+     * get() variant which is receptive of irrelevant index as parameter.
+     * @param index
+     * @return 
+     */
     public Optional<T> getOpt(int index) {
         if (body instanceof RandomAccess)
             return index<size()?Optional.of(get(index)):Optional.empty();
@@ -300,16 +608,29 @@ public class TList<T> extends TListWrapper<T> {
         return number==index?Optional.of(retval):Optional.empty();
     }
     
+    /**
+     * last() variant which is receptive of irrelevant index as parameter.
+     * @param index
+     * @return 
+     */
     public Optional<T> lastOpt(int index) {
         return index<size()?Optional.of(last(index)):Optional.empty();
     }
     
+    /**
+     * filter.
+     * very basic operation to a list. check each element falls on a category 
+     * described by Predicate given as a parameter.
+     * another name for this method would be 'select'.
+     * @param cond
+     * @return 
+     */
     public TList<T> filter(Predicate<T> cond) {
         return new TList<>(new FilterList<>(this, cond));
     }
     
     /**
-     * remove all the equivalent item only in vicinity.
+     * hide all the equivalent item only in vicinity.
      * when the list is sorted in the order which reflects the equivalency, this is 
      * good enough to leave only distinct elements.
      * @return 
@@ -319,7 +640,7 @@ public class TList<T> extends TListWrapper<T> {
     }
     
     /**
-     * remove all the equivalent item in terms of Comparator only in vicinity.
+     * hide all the equivalent item in terms of Comparator only in vicinity.
      * when the list is sorted in the order of given comparator c, this is 
      * good enough to leave only distinct elements.
      * @param c 
@@ -329,10 +650,22 @@ public class TList<T> extends TListWrapper<T> {
         return diff().filter(p->c.compare(p.l(), p.r())!=0).transform(dediff());
     }
     
+    /**
+     * convenient method to build a BitSet described by parameter indices.
+     * @param size
+     * @param indices
+     * @return 
+     */
     public static BitSet toMask(int size, List<Integer> indices) {
         return toMask(size, l2aInt(indices));
     }
     
+    /**
+     * array version of toMask().
+     * @param size
+     * @param indices
+     * @return 
+     */
     public static BitSet toMask(int size, int[] indices) {
         BitSet retval = new BitSet(size);
         for (int i : indices) {
@@ -341,28 +674,61 @@ public class TList<T> extends TListWrapper<T> {
         return retval;
     }
     
+    /**
+     * show the only items specified by indices.
+     * mask() is behind.
+     * @param indices
+     * @return 
+     */
     public TList<T> show(List<Integer> indices) {
         return mask(toMask(this.size(), indices));
     }
     
+    /**
+     * hide the items specified by indices.
+     * mask() is behind.
+     * @param indices
+     * @return 
+     */
     public TList<T> hide(List<Integer> indices) {
         BitSet mask = toMask(this.size(), indices);
         mask.flip(0, this.size());
         return mask(mask);
     }
-        
+    
+    /**
+     * show the items specified by mask.
+     * @param mask
+     * @return 
+     */
     public TList<T> mask(BitSet mask) {
         return new TList<>(new MaskedList<>(this, mask));
     }
     
+    /**
+     * show the items specified by indices.
+     * the specification is very similar to show or mask.
+     * but this implementation is preferred when the choices are sparse.
+     * remember TList sometimes conveys purely calculated objects.
+     * @param indices
+     * @return 
+     */
     public TList<T> pickUp(List<Integer> indices) {
         return set(indices).map(i->get(i));
     }
 
+    /**
+     * list made of subList of a list which extends from start to end.
+     * @return 
+     */
     public TList<TList<T>> startings() {
         return range(1, size()+1).map(end->subList(0, end));
     }
     
+    /**
+     * list made of subList of a list which extends from end to start.
+     * @return 
+     */
     public TList<TList<T>> endings() {
         return range(0, size()).map(start->subList(start, size()));
     }
@@ -374,7 +740,8 @@ public class TList<T> extends TListWrapper<T> {
      * Unlike the List#sort(), this method returns new list. Mainly because an instance
      * of TList is highly manipulated by its methods and sort method is unlikely to be 
      * applicable.
-     * @param c
+     * recommend you to use fix() right before this method, when the list is long enough.
+     * @param c 
      * @return 
      */
     public TList<T> sortTo(Comparator<T> c) {
@@ -383,32 +750,75 @@ public class TList<T> extends TListWrapper<T> {
         return set(retval);
     }
 
+    /**
+     * returns minimum item in terms of comp.
+     * @param comp
+     * @return 
+     */
     public Optional<T> min(Comparator<T> comp) {
         return stream().min(comp);
     }
     
+    /**
+     * returns minimum item in terms of func.
+     * values are compared in terms of the result of func, but the 
+     * value returned is the item in the list.
+     * @param <S>
+     * @param func
+     * @return 
+     */
     public <S extends Comparable<S>> Optional<T> min(Function<T, S> func) {
         return min(inc(func));
     }
     
+    /**
+     * returns maximum item in terms of comp.
+     * @param comp
+     * @return 
+     */
     public Optional<T> max(Comparator<T> comp) {
         return stream().max(comp);
     }
     
+    /**
+     * returns maximum item in terms of func.
+     * values are compared in terms of the result of func, but the 
+     * value returned is the item in the list.
+     * @param <S>
+     * @param func
+     * @return 
+     */
     public <S extends Comparable<S>> Optional<T> max(Function<T, S> func) {
         return max(inc(func));
     }
     
+    /**
+     * hide start or end of the list.
+     * if the parameter seek is positive, the number of items specified by the 
+     * parameter is hidden. otherwise, the number of items specifed by the
+     * absolute of the parameter is hidden.
+     * @param seek
+     * @return 
+     */
     public TList<T> seek(int seek) {
         assert -size() <= seek && seek <= size();
         return seek>0?subList(seek, size()):subList(0, size()+seek);
     }
 
+    /**
+     * show the list in the way upside down.
+     * @return 
+     */
     public TList<T> reverse() {
         return (body instanceof RandomAccess) ? new TListRandom<>(new ReverseRandomList<>(body)) : new TList<>(new ReverseSequentialList<>(body));
     }
     
-    
+    /**
+     * repetitive access to the list.
+     * index designates the item to start.
+     * @param index
+     * @return 
+     */
     public TListIterator<T> repeat(int index) {
         return new TListIterator<>(new RotateListIterator<>(this, index));
     }
@@ -417,6 +827,14 @@ public class TList<T> extends TListWrapper<T> {
         return TList.this.repeat(0);
     }
     
+    /**
+     * rotate the list.
+     * if the parameter x is positive, the result should start from xth item 
+     * and end with x-1th item. otherwise, it should start from size()+xth and 
+     * end with size()+x-1th item.
+     * @param x
+     * @return 
+     */
     public TList<T> rotate(int x) {
         assert -size()<x && x<size();
         if (0<x)
@@ -425,10 +843,22 @@ public class TList<T> extends TListWrapper<T> {
             return TList.concat(subList(size()+x, size()), subList(0, size()+x));
     }
     
+    /**
+     * divide the list as lists which have certain number of items(except the last
+     * one).
+     * @param n
+     * @return 
+     */
     public TList<TList<T>> fold(int n) {
         return set(new FoldList<>(this,n));
     }
     
+    /**
+     * divide the list by occurence of the item equals to division.
+     * think of the parameter division as a delimiter.
+     * @param division
+     * @return 
+     */
     public TList<TList<T>> divide(T division) {
         int index = indexOf(division);
         if (index == -1) 
@@ -436,6 +866,11 @@ public class TList<T> extends TListWrapper<T> {
         return TList.ofStatic(subList(0, indexOf(division) + 1), subList(indexOf(division) + 1, size()));
     }
     
+    /**
+     * divide the lsit by occurence of the item which matches with pred.
+     * @param pred
+     * @return 
+     */
     public TList<TList<T>> chunk(Predicate<T> pred) {
         TList<TList<T>> retval = TList.c();
         return chunk(retval, this, pred);
@@ -450,73 +885,212 @@ public class TList<T> extends TListWrapper<T> {
     }
     
 //----------- Composing
-    
+    /**
+     * concatenate lists in parameters.
+     * @param <T>
+     * @param t
+     * @return 
+     */
     static public <T> TList<T> concat(List<T>... t) {
         return concat(new ArrayList<>(a2l(t)));
     }
     
+    /**
+     * concatenate lists in a list.
+     * @param <T>
+     * @param t
+     * @return 
+     */
     static public <T> TList<T> concat(List<List<T>> t) {
         return t.stream().allMatch(e->(e instanceof RandomAccess)) ? new TListRandom<>(new ListRandomList<>(t)) : new TList<>(new ListSequentialList<>(t));
     }
     
+    /**
+     * append lists after this list.
+     * @param t
+     * @return 
+     */
     public TList<T> append(List<T>... t) {
         return append(a2l(t));
     }
     
+    /**
+     * append lists after this list.
+     * @param t
+     * @return 
+     */
     public TList<T> append(List<List<T>> t) {
         List<List<T>> l = new ArrayList<>(a2l(this));
         l.addAll(t);
         return concat(l);
     }
     
+    /**
+     * merge sort.
+     * this list and the merged list are assumed to be sorted by means of c.
+     * @param merged
+     * @param c
+     * @return 
+     */
     public TList<T> merge(List<T> merged, Comparator<T> c) {
         return set(new MergeList<>(this, merged, c));
     }
     
+    /**
+     * handle two lists in parallel.
+     * note here i don't mean any parallelism. it's all about the order of lists.
+     * take one item from each lists is what this method is doing.
+     * this version generates P anyway.
+     * @param <S>
+     * @param add
+     * @return 
+     */
     public <S> TList<P<T, S>> pair(List<S> add) {
         return (body instanceof RandomAccess) && (add instanceof RandomAccess) ? new TListRandom<>(new ZipRandomList<>(body, add)) : new TList<>(new ZipSequentialList<>(body, add));
     }
     
+    /**
+     * handle two lists in parallel.
+     * note here i don't mean any parallelism. it's all about the order of lists.
+     * take one item from each lists is what this method is doing.
+     * you can avoid generating P by specifying map. 
+     * sometimes, filtering can be made faster by producing Boolean by this method
+     * than to produce P by the other variation of pair().
+     * @param <S>
+     * @param <U>
+     * @param add
+     * @param map
+     * @return 
+     */
     public <S, U> TList<U> pair(List<S> add, BiFunction<T, S, U> map) {
         return (body instanceof RandomAccess) && (add instanceof RandomAccess) ? new TListRandom<>(new PairRandomList<>(body, add, map)) : new TList<>(new PairSequentialList<>(body, add, map));
     }
     
-    public TList<P<T, T>> w() {
-        return pair(this);
-    }
-    
+    /**
+     * pair by itself with map.
+     * this is a flavor of pair() for someone wants to continue method chain.
+     * the motivation behind is very similar to transform().
+     * @param <S>
+     * @param <U>
+     * @param funcL
+     * @param funcR
+     * @return 
+     */
     public <S, U> TList<P<S, U>> w(Function<T, S>funcL, Function<T, U>funcR) {
         return map(funcL).pair(map(funcR));
     }
     
+    /**
+     * pair by itself with map.
+     * this is a flavor of pair() for someone wants to continue method chain.
+     * the motivation behind is very similar to transform().
+     * @return 
+     */
+    public TList<P<T, T>> w() {
+        return pair(this);
+    }
+    
+    /**
+     * differential pair.
+     * very typical variation of pair. this will save you the burden to construct
+     * buffer on every pre-post comparison. this will help you a lot. believe me.
+     * @return 
+     */
     public TList<P<T, T>> diff() {
         return diff(1);
     }
     
+    /**
+     * differential pair with specified number of gap.
+     * very typical variation of pair. this will save you the burden to construct
+     * buffer on every pre-post comparison. this will help you a lot. believe me.
+     * @param seek
+     * @return 
+     */
     public TList<P<T, T>> diff(int seek) {
         return pair(seek(seek));
     }
     
+    /**
+     * differential pair.
+     * very typical variation of pair. this will save you the burden to construct
+     * buffer on every pre-post comparison. this will help you a lot. believe me.
+     * and this variation saves generation of P.
+     * @return 
+     */
     public <U> TList<U> diff(BiFunction<T, T, U> map) {
         return diff(1, map);
     }
     
+    /**
+     * differential pair with specified number of gap.
+     * very typical variation of pair. this will save you the burden to construct
+     * buffer on every pre-post comparison. this will help you a lot. believe me.
+     * and this variation saves generation of P.
+     * @return 
+     */
     public <U> TList<U> diff(int seek, BiFunction<T, T, U> map) {
         return pair(seek(seek), map);
     }
     
+    /**
+     * de-differencing.
+     * diff()-ed list is easily be rebuilt as the list it used to be by 
+     * map()ping the diff()-ed map with this function.
+     * @param <T>
+     * @return 
+     */
     static public <T> Function<TList<P<T, T>>, TList<T>> dediff() {
         return l->l.isEmpty()?TList.empty():concat(wrap(l.get(0).l()), l.map(p->p.r()));
     }
 
+    /**
+     * cross product of two lists.
+     * the most basic combination of two lists are cross product. i don't agree
+     * with any other opinion.
+     * and here is the method to produce the cross product of two lists as P.
+     * this list will be the major and the other(meaning the parameter 'target') 
+     * will be the minor, meaning the item from this list is put as the first item. 
+     * item from this list is incremented only after the items from the other list are
+     * all numerated. 
+     * @param <S>
+     * @param target
+     * @return 
+     */
     public <S> TList<P<T, S>> cross(List<S> target) {
         return cross(target, (t,s)->P.p(t,s));
     }
     
+    /**
+     * cross product of two lists.
+     * the most basic combination of two lists are cross product. i don't agree
+     * with any other opinion.
+     * and here is the method to produce the cross product of two lists as the 
+     * result of func applied to those items.
+     * this list will be the major and the other(meaning the parameter 'target') 
+     * will be the minor, meaning the item from this list is put as the first item. 
+     * item from this list is incremented only after the items from the other list are
+     * all numerated. 
+     * @param <S>
+     * @param target
+     * @return 
+     */
     public <S, U> TList<U> cross(List<S> target, BiFunction<T, S, U> func) {
         return flatMap(t->set(target).map(s->func.apply(t, s)));
     }
     
+    /**
+     * weave up lists in lists.
+     * when list are generated from the each item of this list(remember which is always
+     * the case when all the items of this list are list and mapping applied is l->l(meaning
+     * idential mapping)), you can also have list that goes widthwise.
+     * it's very similar to the transpose except this doesn't require all the result of mapping
+     * to have the similar length. and differs in the point of efficiency when it is used over 
+     * sequential list.
+     * @param <S>
+     * @param map
+     * @return 
+     */
     public <S> TList<S> weave(Function<T, List<S>> map) {
         return (body instanceof RandomAccess) && map(map).stream().allMatch(l->l instanceof Random) ? new TListRandom<>(new WeaveRandomList<>(map(map))) : new TList<>(new WeaveSequentialList<>(map(map)));
     }
@@ -531,10 +1105,21 @@ public class TList<T> extends TListWrapper<T> {
         return new TOptionalList<>(flatMap(map));
     }
     
+    /**
+     * show items which match test.
+     * but in position preserving manner in comparison to filter().
+     * @param test
+     * @return 
+     */
     public TOptionalList<T> show(Predicate<T> test) {
         return new TOptionalList<>(map(e->test.test(e) ? Optional.of(e) : Optional.empty()));
     }
     
+    /**
+     * negative version of show.
+     * @param test
+     * @return 
+     */
     public TOptionalList<T> hide(Predicate<T> test) {
         return show(test.negate());
     }
@@ -567,6 +1152,14 @@ public class TList<T> extends TListWrapper<T> {
     
     //----------- combination theory
     
+    /**
+     * nCopies.
+     * only for convenience. to shorten the statement. DUH.
+     * @param <T>
+     * @param n
+     * @param x
+     * @return 
+     */
     static public <T> TList<T> nCopies(int n, T x) {
         return TList.set(Collections.nCopies(n, x));
     }
