@@ -492,24 +492,41 @@ public class TList<T> extends TListWrapper<T> {
      * in some cases, a list which all corresponds to the original item is needed.
      * but when you use heap(), it adds an element at the head of the list in excess.
      * to avoid that, you can use this.
+     * once i called this method as 'preheap', but i wanted more self-explaining name
+     * for this function and thus the today's name.
+     * 
+     * very important application of this function is to put something between items
+     * in this list. very the exemplar usage is toCatenatedString() of this class.
+     * when you put something between items, this can be the simplest answer.
      * @param <S>
      * @param first
      * @param map
      * @return 
      */
-    public <S> TList<S> preheap(Function<T, S> first, BiFunction<T, S, S> map) {
+    public <S> TList<S> heapFromStart(Function<T, S> first, BiFunction<T, S, S> map) {
         return subList(1, size()).heap(first.apply(get(0)), map);
     }
     
+    @Deprecated
+    public <S> TList<S> preheap(Function<T, S> first, BiFunction<T, S, S> map) {
+        return TList.this.heapFromStart(first, map);
+    }
+
+    
     /**
-     * simpler version of preheap.
+     * simpler version of heapFromStart.
      * only applicable when the first item itself can be the first item of the
-     * result of preheap().
+     * result of heapFromStart().
      * @param map
      * @return 
      */
-    public TList<T> preheap(BiFunction<T, T, T> map) {
+    public TList<T> heapFromStart(BiFunction<T, T, T> map) {
         return subList(1, size()).heap(get(0), map);
+    }
+    
+    @Deprecated
+    public TList<T> preheap(BiFunction<T, T, T> map) {
+        return heapFromStart(map);
     }
     
 //-----------Calculating
@@ -867,7 +884,14 @@ public class TList<T> extends TListWrapper<T> {
     }
     
     /**
-     * divide the lsit by occurence of the item which matches with pred.
+     * divide the list by occurence of the item which matches with pred.
+     * the dividing item is contained as the last item of sublist.
+     * 
+     * if you want it to be otherwise (meaning the dividing item to be the
+     * first item of sublist), follow these steps:
+     * 1. reverse the list
+     * 2. chunk it up
+     * 3. reverse those sublists all by map
      * @param pred
      * @return 
      */
@@ -1096,11 +1120,25 @@ public class TList<T> extends TListWrapper<T> {
     }
     
 //--------- Positioning
-    
+    /**
+     * get a Optional-wrapped version of this list.
+     * especially when you are coping with something very position-sensitive,
+     * this might be a choice.
+     * @param <S>
+     * @param map
+     * @return 
+     */
     public <S> TOptionalList<S> optionalMap(Function<T, Optional<S>> map) {
         return new TOptionalList<>(map(map));
     }
     
+    /**
+     * flatMap version of optionalMap.
+     * 
+     * @param <S>
+     * @param map
+     * @return 
+     */
     public <S> TOptionalList<S> optionalFlatMap(Function<T, List<Optional<S>>> map) {
         return new TOptionalList<>(flatMap(map));
     }
@@ -1124,14 +1162,30 @@ public class TList<T> extends TListWrapper<T> {
         return show(test.negate());
     }
     
+    /**
+     * simplest version of optionalMap().
+     * @return 
+     */
     public TOptionalList<T> optional() {
         return new TOptionalList<>(map(e->Optional.of(e)));
     }
     
+    /**
+     * fill a part of this list with Optional.empty.
+     * 
+     * @param at
+     * @param length
+     * @return 
+     */
     public TOptionalList<T> fill(int at, int length) {
         return new TOptionalList<>(TList.concat(subList(0, at).optional(), new Filler<>(length), subList(at, size()).optional()));
     }
     
+    @Deprecated
+    /**
+     * @TODO
+     * i need to come up with more sophisticated definition for this method.
+     */
     public TOptionalList<T> shift(int shift) {
         return shift < 0 ? subList(-shift, size()).optional() : fill(0, shift);
     }
@@ -1164,7 +1218,7 @@ public class TList<T> extends TListWrapper<T> {
         return TList.set(Collections.nCopies(n, x));
     }
     
-    static private TList<TList<Integer>> permulationx(int a, int b, TList<TList<Integer>> prev) {
+    static private TList<TList<Integer>> permutationx(int a, int b, TList<TList<Integer>> prev) {
         assert a>=0 && b>=0;
         TList<Integer> base = range(0, a);
         if (b == 0)
@@ -1174,32 +1228,32 @@ public class TList<T> extends TListWrapper<T> {
         return prev.map(m->base.hide(m)).pair(prev).flatMap(p->p.l().map(i->TList.concat(p.r(), wrap(i))));
     }
     
-    static private TList<TList<Integer>> permulationx(int a, int b) {
+    static private TList<TList<Integer>> permutationx(int a, int b) {
         if (b == 0)
-            return permulationx(a, b, null);
-        return permulationx(a, b, permulationx(a, b-1));
+            return permutationx(a, b, null);
+        return permutationx(a, b, permutationx(a, b-1));
     }
     
-    static private TList<TList<TList<Integer>>> permulationxUpTo(int a, int b) {
+    static private TList<TList<TList<Integer>>> permutationUpTo(int a, int b) {
         TList<TList<TList<Integer>>> retval = c();
-        retval.add(permulationx(a, 0, null));
+        retval.add(permutationx(a, 0, null));
         for (int i=1; i<=b; i++)
-            retval.add(permulationx(a, i, retval.last()).fix());
+            retval.add(permutationx(a, i, retval.last()).fix());
         return retval;
     }
     
-    static public TList<List<Integer>> permulation(int a, int b) {
-        return permulationx(a, b).map(l->(List<Integer>)l);
+    static public TList<List<Integer>> permutation(int a, int b) {
+        return permutationx(a, b).map(l->(List<Integer>)l);
     }
 
-    public TList<List<T>> permulation(int a) {
+    public TList<List<T>> permutation(int a) {
         assert a >= 0;
-        return permulation(size(), a).map(p->pickUp(p));
+        return TList.this.permutation(size(), a).map(p->pickUp(p));
     }
     
-    public TList<List<List<T>>> permulationUpTo(int a) {
+    public TList<List<List<T>>> permutationUpTo(int a) {
         assert a >= 0;
-        return permulationxUpTo(size(), a).map(l->l.map(p->pickUp(p)));
+        return TList.this.permutationUpTo(size(), a).map(l->l.map(p->pickUp(p)));
     }
     
     static private TList<TList<Integer>> combinationx(int a, int b, TList<TList<Integer>> prev) {
@@ -1302,29 +1356,56 @@ public class TList<T> extends TListWrapper<T> {
         return subList(range.start(), range.end());
     }
     
-    //
+    /**
+     * a variant of toString() which returns wrapped string for item by item.
+     * @return 
+     */
     public String toWrappedString() {
         return toCatenatedString("\n");
     }
     
+    /**
+     * a variant of toString() which returns simply concatenated string.
+     * @return 
+     */
     public String toFlatString() {
         return toCatenatedString("");
     }
         
+    /**
+     * a variant of toString() which returns string concatenated with a delimiter.
+     * this is another name for toCatenatedString()
+     * @param delimiter
+     * @return 
+     */
     public String toDelimitedString(String delimiter) {
         return toCatenatedString(delimiter);
     }
     
+    /**
+     * a variant of toString() which returns string concatenated with a delimiter.
+     * @param x
+     * @return 
+     */
     public String toCatenatedString(String x) {
         if (isEmpty())
             return "";
-        return subList(1, size()).map(o->o.toString()).heap(new StringBuilder(get(0).toString()), (String a, StringBuilder b)->b.append(x).append(a)).last().toString();
+        return map(o->o.toString()).heapFromStart(s->new StringBuilder(s), (String a, StringBuilder b)->b.append(x).append(a)).last().toString();
     }
-        
+    
+    /**
+     * collector method for Stream#collect().
+     * @param <T>
+     * @return 
+     */
     static public <T> Collector<T, ?, TList<T>> toTList() {
         return Collector.of((Supplier<List<T>>)ArrayList::new, List::add, (left,right)->{left.addAll(right);return left;}, TList::set);
     }
     
+    /**
+     * a method compatible with TestNG's data provider.
+     * @return 
+     */
     public Object[][] dataProvider() {
         return map(e->lineOfData(e)).toArray(new Object[][]{});
     }
