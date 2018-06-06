@@ -15,7 +15,9 @@
 
 package test;
 
+import collection.TList;
 import static collection.c.a2l;
+import java.util.function.BinaryOperator;
 
 /**
  *
@@ -120,4 +122,11 @@ public class TestUtils {
         return true;
     }
     
+    static public String toStringCode(String source) {
+        TList<String> lines = TList.set(a2l(source.split("\n")));
+        BinaryOperator<String> toLine = (s,e)->"                + \""+s+e+"\"";
+        return "\"\" \n"+
+        lines.seek(-1).map(s->toLine.apply(s, "\\n")).toWrappedString()+ "\n" +
+        toLine.apply(lines.last(), "")+";";
+    }
 }
