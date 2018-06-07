@@ -18,6 +18,7 @@ package test;
 import collection.TList;
 import static collection.c.a2l;
 import java.util.function.BinaryOperator;
+import string.Strings;
 
 /**
  *
@@ -123,7 +124,7 @@ public class TestUtils {
     }
     
     static public String toStringCode(String source) {
-        TList<String> lines = TList.set(a2l(source.split("\n")));
+        TList<String> lines = TList.set(a2l(source.split("\n", -1)));
         return "\"\" \n"+
         lines.map(s->"                + \""+s).toDelimitedString("\\n\"\n")+("\";");
     }
