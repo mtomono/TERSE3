@@ -49,7 +49,7 @@ public interface Divide<T> {
     }
     
     static public TList<TList<Integer>> dividesAtLeast(int target, int divideNum, int min) {
-        return integerDivide(target, divideNum, min).map(l->l.subList(0, l.size()-1).iterator().heap((a,b)->a+b).stream().collect(toTList()));
+        return integerDivide(target, divideNum, min).map(l->l.subList(0, l.size()-1).iterator().accum((a,b)->a+b).stream().collect(toTList()));
     }
     
     static public TList<TList<Range<Integer>>> ranges(int target, TList<TList<Integer>> divides) {

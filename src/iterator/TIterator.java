@@ -170,15 +170,25 @@ public class TIterator<T> implements Iterator<T> {
         return set(new LimitIterator<>(this, limit));
     }
     
-    public <S> TIterator<S> heap(S start, BiFunction<T, S, S> map) {
+    public <S> TIterator<S> accum(S start, BiFunction<S, T, S> map) {
         Holder<S> h = new Holder<>(start);
-        return of(start).concat(map(e->h.set(map.apply(e, h.get()))));
+        return of(start).concat(map(e->h.set(map.apply(h.get(), e))));
     }
     
-    public TIterator<T> heap(BinaryOperator<T> map) {
+    @Deprecated
+    public <S> TIterator<S> heap(S start, BiFunction<T, S, S> map) {
+        return accum(start, (a,b)->map.apply(b, a));
+    }
+    
+    public TIterator<T> accum(BinaryOperator<T> map) {
         if (!hasNext())
             return set(Collections.emptyIterator());
-        return heap(next(), map);
+        return accum(next(), map);
+    }
+    
+    @Deprecated
+    public TIterator<T> heap(BinaryOperator<T> map) {
+        return accum((a,b)->map.apply(b,a));
     }
     
     public Stream<T> stream() {

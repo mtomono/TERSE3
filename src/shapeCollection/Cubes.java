@@ -78,11 +78,11 @@ public class Cubes {
     }
 
     static TList<List<Integer>> hitToCube(List<Integer> start, TList<P<Double, Hit>> hits) {
-        return hits.heap(start, (a, b)->a.r().hit(b));
+        return hits.accum(start, (a, b)->b.r().hit(a));
     }
 
     static TList<Integer[]> hitToCubeArr(TList<P<Double, Hit>> hits, Integer[] start) {
-        return hits.heap(start, (a, b)->a.r().hit(b));
+        return hits.accum(start, (a, b)->b.r().hit(a));
     }
 
     static TList<List<Integer>> toCubes(List<Double> zero, List<Double> factor, List<Double> from, List<Double> to, double norm) {

@@ -143,8 +143,13 @@ public class TIterable<T> implements Iterable<T> {
         return pair(map(map));
     }
     
+    public <S> TIterable<S> accum(S start, BiFunction<S, T, S> map) {
+        return new TIterable<>(()->iterator().accum(start, map));
+    }
+    
+    @Deprecated
     public <S> TIterable<S> heap(S start, BiFunction<T, S, S> map) {
-        return new TIterable<>(()->iterator().heap(start, map));
+        return accum(start, (a,b)->map.apply(b,a));
     }
     
     public Stream<T> stream() {

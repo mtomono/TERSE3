@@ -207,7 +207,7 @@ public class TVector2d extends Vector2d implements List<Double> {
     }
     
     public TList<TVector2d> disrelative(TList<TVector2d> relativeSeq) {
-        return relativeSeq.iterator().heap(this, (a,b)->a.addR(b)).stream().collect(toTList());
+        return relativeSeq.iterator().accum(this, (a,b)->a.addR(b)).stream().collect(toTList());
     }
         
     static public TList<TVector2d> relative(TList<TVector2d> concreteSeq) {

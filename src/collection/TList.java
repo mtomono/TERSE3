@@ -472,25 +472,37 @@ public class TList<T> extends TListWrapper<T> {
     }
     
     /**
-     * heap.
+     * accum.
      * basically what it does is very similar to the 'reduce' of stream.
      * the difference is, contrary to the result of reduce, the result of this 
      * method still have the list representing the intermedeate values that 
      * lead to the result of reduce. by this, you can find where the threshold
      * is broken.
+     * once it was called as 'heap', actually i liked that name but i left that 
+     * name for compatibility problem with diff. heap had a BiFunction as parameter
+     * but the order of the input values for it was T, S. S is supposed to be the
+     * formar value and T should be the newly applied value taken from this. This
+     * is quite awkward when you look at this situation through the light of 
+     * parameter order of BiFunction taken by diff, in which first one comes first.
+     * here i prioritized the order than name.
      * @param <S>
      * @param start
      * @param map
      * @return 
      */
+    public <S> TList<S> accum(S start, BiFunction<S, T, S> map) {
+        return set(new IteratorCache<>(TIterator.set(iterator()).accum(start, map)));
+    }
+    
+    @Deprecated
     public <S> TList<S> heap(S start, BiFunction<T, S, S> map) {
-        return set(new IteratorCache<>(TIterator.set(iterator()).heap(start, map)));
+        return accum(start, (a,b)->map.apply(b, a));
     }
     
     /**
-     * heap which takes first item of the list as start.
+     * accum which takes first item of the list as start.
      * in some cases, a list which all corresponds to the original item is needed.
-     * but when you use heap(), it adds an element at the head of the list in excess.
+     * but when you use accum(), it adds an element at the head of the list in excess.
      * to avoid that, you can use this.
      * once i called this method as 'preheap', but i wanted more self-explaining name
      * for this function and thus the today's name.
@@ -503,10 +515,16 @@ public class TList<T> extends TListWrapper<T> {
      * @param map
      * @return 
      */
-    public <S> TList<S> heapFromStart(Function<T, S> first, BiFunction<T, S, S> map) {
-        return subList(1, size()).heap(first.apply(get(0)), map);
+    public <S> TList<S> accumFromStart(Function<T, S> first, BiFunction<S, T, S> map) {
+        if (isEmpty())
+            return TList.empty();
+        return subList(1, size()).accum(first.apply(get(0)), map);
     }
     
+    @Deprecated
+    public <S> TList<S> heapFromStart(Function<T, S> first, BiFunction<T, S, S> map) {
+        return accumFromStart(first, (a,b)->map.apply(b,a));
+    }
     @Deprecated
     public <S> TList<S> preheap(Function<T, S> first, BiFunction<T, S, S> map) {
         return TList.this.heapFromStart(first, map);
@@ -514,16 +532,20 @@ public class TList<T> extends TListWrapper<T> {
 
     
     /**
-     * simpler version of heapFromStart.
+     * simpler version of accumFromStart.
      * only applicable when the first item itself can be the first item of the
-     * result of heapFromStart().
+     * result of accumFromStart().
      * @param map
      * @return 
      */
-    public TList<T> heapFromStart(BiFunction<T, T, T> map) {
-        return subList(1, size()).heap(get(0), map);
+    public TList<T> accumFromStart(BiFunction<T, T, T> map) {
+        return subList(1, size()).accum(get(0), map);
     }
-    
+
+    @Deprecated
+    public TList<T> heapFromStart(BiFunction<T, T, T> map) {
+        return accumFromStart((a,b)->map.apply(a,b));
+    }
     @Deprecated
     public TList<T> preheap(BiFunction<T, T, T> map) {
         return heapFromStart(map);
@@ -1390,7 +1412,7 @@ public class TList<T> extends TListWrapper<T> {
     public String toCatenatedString(String x) {
         if (isEmpty())
             return "";
-        return map(o->o.toString()).heapFromStart(s->new StringBuilder(s), (String a, StringBuilder b)->b.append(x).append(a)).last().toString();
+        return map(o->o.toString()).accumFromStart(s->new StringBuilder(s), (a,b)->a.append(x).append(b)).last().toString();
     }
     
     /**

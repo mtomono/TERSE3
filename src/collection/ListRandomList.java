@@ -42,7 +42,7 @@ public class ListRandomList<T> extends AbstractList<T> {
     }
         
     P<List<T>, Integer> position(int index) {
-        return TIterator.set(body.iterator()).pair(TIterator.set(body.iterator()).map(l->l.size()).heap(0, (a, b)->a+b)).filter(p->p.r()<=index).last();
+        return TIterator.set(body.iterator()).pair(TIterator.set(body.iterator()).map(l->l.size()).accum(0, (a, b)->a+b)).filter(p->p.r()<=index).last();
     }
     
     @Override

@@ -810,7 +810,7 @@ public class TListNGTest {
     @Test
     public void testPermulation_int_int() {
         System.out.println(methodName(0));
-        List<List<Integer>> result = TList.permulation(5, 2);
+        List<List<Integer>> result = TList.permutation(5, 2);
         List<List<Integer>> expected = a2l(a2l(0, 1), a2l(0, 2), a2l(0, 3), a2l(0, 4), 
                                            a2l(1, 0), a2l(1, 2), a2l(1, 3), a2l(1, 4), 
                                            a2l(2, 0), a2l(2, 1), a2l(2, 3), a2l(2, 4), 
@@ -824,7 +824,7 @@ public class TListNGTest {
     @Test
     public void testPermulation_int() {
         System.out.println(methodName(0));
-        List<List<Integer>> result = TList.range(0, 5).permulation(2);
+        List<List<Integer>> result = TList.range(0, 5).permutation(2);
         List<List<Integer>> expected = a2l(a2l(0, 1), a2l(0, 2), a2l(0, 3), a2l(0, 4), 
                                            a2l(1, 0), a2l(1, 2), a2l(1, 3), a2l(1, 4), 
                                            a2l(2, 0), a2l(2, 1), a2l(2, 3), a2l(2, 4), 
@@ -891,7 +891,7 @@ public class TListNGTest {
     @Test
     public void testPermulationUpTo() {
         System.out.println(test.TestUtils.methodName(0));
-        TList<List<List<Integer>>> result = TList.of(0, 1, 2, 3).permulationUpTo(2);
+        TList<List<List<Integer>>> result = TList.of(0, 1, 2, 3).permutationUpTo(2);
         List<List<List<Integer>>> expected = a2l(a2l(), 
                                                  a2l(a2l(0), a2l(1), a2l(2), a2l(3)),
                                                  a2l(a2l(0, 1), a2l(0, 2), a2l(0, 3), 
@@ -1086,7 +1086,7 @@ public class TListNGTest {
     @Test
     public void testPreheap_BiFunction() {
         System.out.println(test.TestUtils.methodName(0));
-        TList<String> result = TList.of(0, 1, 2, 3).map(p->p.toString()).preheap((a,b)->b+a);
+        TList<String> result = TList.of(0, 1, 2, 3).map(p->p.toString()).heapFromStart((a,b)->b+a);
         TList<String> expected = TList.of("0", "01", "012", "0123");
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
@@ -1096,7 +1096,7 @@ public class TListNGTest {
     @Test
     public void testPreheap_Function_BiFunction() {
         System.out.println(test.TestUtils.methodName(0));
-        TList<String> result = TList.of(0, 1, 2, 3).preheap(f->Integer.toString(f), (a,b)->b+Integer.toString(a));
+        TList<String> result = TList.of(0, 1, 2, 3).heapFromStart(f->Integer.toString(f), (a,b)->b+Integer.toString(a));
         TList<String> expected = TList.of("0", "01", "012", "0123");
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);

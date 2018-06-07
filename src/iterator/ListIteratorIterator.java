@@ -38,7 +38,7 @@ public class ListIteratorIterator<T> implements ListIterator<T>{
     
     static public <T> ListIteratorIterator<T> create(List<List<T>> t, int index) {
         List<List<T>> target = new FilterList<>(t, l->!l.isEmpty());
-        P<Integer, Integer> focus = TIterable.set(target).map(l->l.size()).heap(0,(a,b)->a+b).filter(i->i<=index).
+        P<Integer, Integer> focus = TIterable.set(target).map(l->l.size()).accum(0,(a,b)->a+b).filter(i->i<=index).
                 pair(scale()).iterator().last();
         List<ListIterator<T>> before = MapList.create(
                 target.subList(0, focus.r()), e->endIterator(e));
