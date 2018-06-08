@@ -13,13 +13,13 @@
    See the License for the specific language governing permissions and limitations under the License.
  */
 
-package optimize;
+package solver;
 
 import collection.TList;
 import java.util.Collection;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
-import static optimize.AStarStatus.*;
+import static solver.AStarStatus.*;
 import shapeCollection.Grid;
 import shape.TPoint2i;
 
