@@ -16,10 +16,8 @@
 package collection;
 
 import static collection.c.a2l;
-import java.util.AbstractList;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import orderedSet.Comparators;
 import string.Message;
 
 /**
@@ -113,5 +111,29 @@ public class P<L, R> extends AbstractList<Object>{
     @Override
     public int size() {
         return 2;
+    }
+    
+    public P<R,L> re() {
+        return P.p(r,l);
+    }
+    
+    
+    static public <L, R> Comparator<P<L,R>> pcomp(Comparator<P<L,R>> l, Comparator<P<L,R>> r) {
+        return Comparators.<P<L,R>>c((a,b)->l.compare(a, b)).thenComparing((a,b)->r.compare(a, b));
+    }
+    static public <L, R> Comparator<P<L,R>> comp(Comparator<L> l, Comparator<R> r) {
+        return P.<L,R>pcomp((a,b)->l.compare(a.l(), b.l()), (a,b)->r.compare(a.r(), b.r()));
+    }
+    static public <L extends Comparable<L>, R extends Comparable<R>> Comparator<P<L,R>> comp() {
+        return comp(Comparator.<L>naturalOrder(), Comparator.<R>naturalOrder());
+    }
+    static public <L, R> Comparator<P<L,R>> rpcomp(Comparator<P<L,R>> l, Comparator<P<L,R>> r) {
+        return Comparators.<P<L,R>>c((a,b)->r.compare(a, b)).thenComparing((a,b)->l.compare(a, b));
+    }
+    static public <L, R> Comparator<P<L,R>> rcomp(Comparator<L> l, Comparator<R> r) {
+        return P.<L,R>rpcomp((a,b)->l.compare(a.l(), b.l()), (a,b)->r.compare(a.r(), b.r()));
+    }
+    static public <L extends Comparable<L>, R extends Comparable<R>> Comparator<P<L,R>> rcomp() {
+        return rcomp(Comparator.<L>naturalOrder(), Comparator.<R>naturalOrder());
     }
 }
