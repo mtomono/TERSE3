@@ -1357,5 +1357,16 @@ public class TListNGTest {
         System.out.println("expected: "+expected);
         assertEquals(result, expected);
     }
+    
+    @Test
+    public void testAppend() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> result = TList.of(0, 1, 2);
+        result.append(TList.of(3,4,5));
+        TList<Integer> expected = TList.of(0,1,2);
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result, expected);
+    }
 
 }
