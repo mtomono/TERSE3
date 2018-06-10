@@ -25,9 +25,9 @@ import java.util.Map;
  * @author masao
  */
 public class KnapsackMemo extends Knapsack {
-    Map<P<Integer, Integer>, KnapsackResult>memo;
+    Map<P<Integer, Integer>, Result>memo;
 
-    public KnapsackMemo(Map<P<Integer, Integer>, KnapsackResult> memo) {
+    public KnapsackMemo(Map<P<Integer, Integer>, Result> memo) {
         super();
         this.memo = memo;
     }
@@ -37,7 +37,7 @@ public class KnapsackMemo extends Knapsack {
     }
     
     @Override
-    public KnapsackResult value(int i, int rest, KnapsackResult r, TList<P<Integer,Integer>>t) {
+    public Result value(int i, int rest, Result r, TList<P<Integer,Integer>>t) {
         return memo.computeIfAbsent(P.p(i,rest),p->super.value(i,rest,r,t));
     }
         

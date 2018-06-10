@@ -26,6 +26,22 @@ import java.util.function.ToIntFunction;
  * @author masao
  */
 public class Knapsack {
+    public class Result {
+        final TList<Integer> content;
+        final int value;
+        public Result() {
+            this(TList.c(), 0);
+        }
+
+        public Result(TList<Integer> content, int value) {
+            this.content = content;
+            this.value = value;
+        }
+
+        public Result add(int addedIndex, int addedValue) {
+            return new Result(content.append(TList.wrap(addedIndex)), value+addedValue);
+        }
+    }
     public Knapsack() {
     }
     
@@ -37,7 +53,7 @@ public class Knapsack {
      * @param t target list of elements.
      * @return 
      */
-    KnapsackResult value(int i, int rest, KnapsackResult r, TList<P<Integer, Integer>> t) {
+    Result value(int i, int rest, Result r, TList<P<Integer, Integer>> t) {
         if (i==t.size())
             return r;
         if (rest<t.get(i).l())
@@ -45,17 +61,16 @@ public class Knapsack {
         return TList.ofStatic(value(i+1,rest,r,t), value(i+1,rest-t.get(i).l(),r,t).add(i,t.get(i).r())).max(inc(x->x.value)).get();
     }
     
-    public KnapsackResult solve(int capacity, TList<P<Integer, Integer>> c) {
-        return value(0, capacity, new KnapsackResult(), c);
+    public Result solve(int capacity, TList<P<Integer, Integer>> c) {
+        return value(0, capacity, new Result(), c);
     }
     
-    
-    static public <T> KnapsackResult solve(Knapsack k, int capacity, TList<T> target, ToIntFunction<T> volume, ToIntFunction<T> value) {
+    static public <T> Result solve(Knapsack k, int capacity, TList<T> target, ToIntFunction<T> volume, ToIntFunction<T> value) {
         return k.solve(capacity, target.map(x->P.p(volume.applyAsInt(x),value.applyAsInt(x))));
     }
     
     static public <T> TList<T> solveElements(Knapsack k, int capacity, TList<T> target, ToIntFunction<T> volume, ToIntFunction<T> value) {
-        KnapsackResult result = solve(k,capacity,target,volume,value);
+        Result result = solve(k,capacity,target,volume,value);
         return target.pickUp(result.content);
     }
     
