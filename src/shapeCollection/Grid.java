@@ -47,6 +47,22 @@ public class Grid<T> implements Cloneable {
         return new Grid<>(from, to, (a,b)->safe).mark(blocked, p->block);
     }
     
+    public Grid<T> reFix() {
+        return new Grid<>(from, to, x, y, xr, yr, togo, sigTogo, reFixSpace());
+    }
+    
+    public Grid<T> reSFix() {
+        return new Grid<>(from, to, x, y, xr, yr, togo, sigTogo, reSfixSpace());
+    }
+    
+    TList<TList<T>> reFixSpace() {
+        return space.map(l->l.fix()).fix();
+    }
+    
+    TList<TList<T>> reSfixSpace() {
+        return space.map(l->l.sfix()).sfix();
+    }
+    
     public Grid(TPoint2i from, TPoint2i to, BiFunction<Integer, Integer, T> f) {
         this.from = from;
         this.to = to;
@@ -56,7 +72,7 @@ public class Grid<T> implements Cloneable {
         this.yr = new Range<>(min(from.y, to.y), max(from.y, to.y)+1);
         this.togo = from.to(to);
         this.sigTogo = new TPoint2i(signum(togo.x), signum(togo.y));
-        this.space = y.map(n->x.map(m->f.apply(m,n)).fix()).fix();
+        this.space = y.map(n->x.map(m->f.apply(m,n)).sfix()).sfix();
     }
     
     public Grid(TPoint2i from, TPoint2i to, TList<T> l) {
@@ -89,7 +105,7 @@ public class Grid<T> implements Cloneable {
     }
     
     public Grid<T> mark(Collection<TPoint2i> points, Function<TPoint2i, T> f) {
-        points.forEach(p->set(p, f.apply(p)));
+        points.forEach(p->Grid.this.cset(p, f.apply(p)));
         return this;
     }
     
@@ -129,13 +145,37 @@ public class Grid<T> implements Cloneable {
         return space.get(yInList(y)).get(xInList(x));
     }
     
-    public Grid<T> set(TPoint2i at, T v) {
+    /**
+     * c(hained)set.
+     * set method for chained method.
+     * @param at
+     * @param v
+     * @return 
+     */
+    public Grid<T> cset(TPoint2i at, T v) {
+        return cset(at.x, at.y, v);
+    }
+    
+    /**
+     * c(hained)set.
+     * set method for chained method.
+     * @param x
+     * @param y
+     * @param v
+     * @return 
+     */
+    public Grid<T> cset(int x, int y, T v) {
+        set(x,y,v);
+        return this;
+    }
+    
+    public T set(TPoint2i at, T v) {
         return set(at.x, at.y, v);
     }
     
-    public Grid<T> set(int x, int y, T v) {
+    public T set(int x, int y, T v) {
         space.get(yInList(y)).set(xInList(x), v);
-        return this;
+        return v;
     }
     
     public TList<T> getY(int y) {
@@ -148,8 +188,7 @@ public class Grid<T> implements Cloneable {
     
     public Grid<T> setY(int y, TList<T> l) {
         assert l.size() == x.size();
-        space.get(yInList(y)).clear();
-        space.get(yInList(y)).addAll(l);
+        x.forEach(x->space.get(yInList(y)).set(xInList(x), l.get(xInList(x))));
         return this;
     }
     
@@ -162,12 +201,12 @@ public class Grid<T> implements Cloneable {
     
     public Grid<T> setX(int x, TList<T>l) {
         assert l.size() == y.size();
-        y.stream().forEach(y->space.get(yInList(y)).set(xInList(x), l.get(yInList(y))));
+        y.forEach(y->space.get(yInList(y)).set(xInList(x), l.get(yInList(y))));
         return this;
     }
     
     public Grid<T> set(Grid<T> other) {
-        x.stream().forEach(x->y.stream().forEach(y->set(new TPoint2i(x,y), other.get(x,y))));
+        x.forEach(x->y.forEach(y->Grid.this.cset(new TPoint2i(x,y), other.get(x,y))));
         return this;
     }
     
@@ -232,11 +271,11 @@ public class Grid<T> implements Cloneable {
     } 
     
     public Grid<T> reverseY() {
-        return new Grid<>(new TPoint2i(from.x, to.y), new TPoint2i(to.x, from.y), x, y.reverse(), xr, yr, new TPoint2i(togo.x, -togo.y), new TPoint2i(sigTogo.x, -sigTogo.y), space.reverse().fix());
+        return new Grid<>(new TPoint2i(from.x, to.y), new TPoint2i(to.x, from.y), x, y.reverse(), xr, yr, new TPoint2i(togo.x, -togo.y), new TPoint2i(sigTogo.x, -sigTogo.y), space.reverse().sfix());
     }
 
     public Grid<T> reverseX() {
-        return new Grid<>(new TPoint2i(to.x, from.y), new TPoint2i(from.x, to.y), x.reverse(), y, xr, yr, new TPoint2i(-togo.x, togo.y), new TPoint2i(-sigTogo.x, sigTogo.y), space.map(l->l.reverse().fix()));
+        return new Grid<>(new TPoint2i(to.x, from.y), new TPoint2i(from.x, to.y), x.reverse(), y, xr, yr, new TPoint2i(-togo.x, togo.y), new TPoint2i(-sigTogo.x, sigTogo.y), space.map(l->l.reverse().sfix()));
     }
     
     public Grid<T> reverseXY() {
@@ -262,6 +301,13 @@ public class Grid<T> implements Cloneable {
     
     public boolean contains(TPoint2i p) {
         return contains(p.x, p.y);
+    }
+    
+    public T computeIfNull(int x, int y, BiFunction<Integer, Integer, T> f) {
+        T old = get(x,y);
+        if (old != null)
+            return old;
+        return set(x,y,f.apply(x,y));
     }
     
     public String toFlatTestString() {
