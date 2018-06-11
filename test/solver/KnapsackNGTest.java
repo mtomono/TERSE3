@@ -11,6 +11,7 @@ import static orderedSet.Comparators.sof;
 import static org.testng.Assert.*;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import static shape.ShapeUtil.p2i;
 import static shape.TPoint2i.xc;
 import static shape.TPoint2i.yc;
 import test.TestUtils;
@@ -293,4 +294,22 @@ public class KnapsackNGTest {
         assertEquals(result, expected);
     }
 
+    @Test
+    public void testKnapsackFlat() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Luggage> tested = TList.of(
+                new Luggage(11,15),
+                new Luggage(4,4),
+                new Luggage(2,3),
+                new Luggage(1,2),
+                new Luggage(3,1),
+                new Luggage(5,8)
+        );
+        
+        Integer result = KnapsackFlat.solve(tested.map(l->p2i(l.weight(),l.value())),15).get(0,15);
+        Integer expected = 20;
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result, expected);
+    }
 }
