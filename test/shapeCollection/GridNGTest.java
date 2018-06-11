@@ -5,7 +5,6 @@
  */
 package shapeCollection;
 
-import shapeCollection.Grid;
 import collection.TList;
 import static org.testng.Assert.*;
 import org.testng.annotations.BeforeMethod;
@@ -131,7 +130,7 @@ public class GridNGTest {
     public void testSet() {
         System.out.println(test.TestUtils.methodName(0));
         Grid<TPoint2i> tested = new Grid<>(new TPoint2i(5, 2), new TPoint2i(3, 5), (a, b)->new TPoint2i(a, b));
-        tested.set(p2i(5, 3), TPoint2i.zero);
+        tested.cset(p2i(5, 3), TPoint2i.zero);
         TList<TList<TPoint2i>> result = tested.getX();
         TList<TList<TPoint2i>> expected = TList.of(
                 TList.of(p2i(5, 2), p2i(0, 0), p2i(5, 4), p2i(5, 5)),
