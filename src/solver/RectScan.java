@@ -46,7 +46,7 @@ public class RectScan {
     }
     
     public RectScan mark(Collection<TPoint2i> mark) {
-        mark.stream().forEach(p->rect.set(p, 1));
+        mark.stream().forEach(p->rect.cset(p, 1));
         return this;
     }
     
@@ -60,7 +60,7 @@ public class RectScan {
     }
     
     TList<Grid<Integer>> rotate() {
-        return TList.ofStatic(
+        return TList.sof(
             rect.pushHeadX(wallOfX()),
             rect.pushTailX(wallOfX()),
             rect.pushHeadY(wallOfY()),

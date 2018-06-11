@@ -201,7 +201,7 @@ public class Polygon2d extends TList<TPoint2d> {
      * @return 
      */
     public Polygon2d firstCutByClosestPoints(TPoint2d from, TPoint2d to) {
-        TList<P<TPoint2d, Double>> cutters = TList.ofStatic(from, to).map(p->closestPointPosition(p)).fix();
+        TList<P<TPoint2d, Double>> cutters = TList.sof(from, to).map(p->closestPointPosition(p)).fix();
         assert cutters.isAscending(inc(p->p.r()));
         return Polygon2d.c(TList.wrap(cutters.get(0).l()).append(subList((int)ceil(cutters.get(0).r()), (int)ceil(cutters.get(1).r()))).append(TList.wrap(cutters.get(1).l())).fix());
     }
@@ -214,7 +214,7 @@ public class Polygon2d extends TList<TPoint2d> {
      */
     public Polygon2d anotherCutByClosestPoints(TPoint2d from, TPoint2d to) {
         assert isClosed();
-        TList<P<TPoint2d, Double>> cutters = TList.ofStatic(from, to).map(p->closestPointPosition(p)).fix();
+        TList<P<TPoint2d, Double>> cutters = TList.sof(from, to).map(p->closestPointPosition(p)).fix();
         assert cutters.isDescending(inc(p->p.r()));
         Polygon2d rotated = Polygon2d.c(rotate((int)floor(cutters.get(0).r())).fix());
         if (ceil(cutters.get(0).r())==ceil(cutters.get(1).r()))
@@ -229,7 +229,7 @@ public class Polygon2d extends TList<TPoint2d> {
      * @return 
      */
     public Polygon2d cutByClosestPoints(TPoint2d from, TPoint2d to) {
-        TList<P<TPoint2d, Double>> cutters = TList.ofStatic(from, to).map(p->closestPointPosition(p)).fix();
+        TList<P<TPoint2d, Double>> cutters = TList.sof(from, to).map(p->closestPointPosition(p)).fix();
         if (cutters.isAscending(inc(p->p.r())))
             return firstCutByClosestPoints(from, to);
         else

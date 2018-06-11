@@ -19,6 +19,8 @@ import collection.P;
 import collection.TList;
 import static function.ComparePolicy.inc;
 import java.util.function.ToIntFunction;
+import static shape.ShapeUtil.p2i;
+import shape.TPoint2i;
 
 /**
  * Knapsack problem solver.
@@ -42,33 +44,42 @@ public class Knapsack {
             return new Result(content.append(TList.wrap(addedIndex)), value+addedValue);
         }
     }
+    TList<TPoint2i> c;
+    
     public Knapsack() {
+    }
+    
+    public <T> Knapsack init(TList<T> body, ToIntFunction<T> volume, ToIntFunction<T> value) {
+        return init(body.map(x->p2i(volume.applyAsInt(x),value.applyAsInt(x))));
+    }
+    
+    public Knapsack init(TList<TPoint2i> c) {
+        this.c = c;
+        return this;
     }
     
     /**
      * 
      * @param i from here to the end of the list are candidate elements to be used
      * @param rest remaining space
-     * @param r seed of result
-     * @param t target list of elements.
+     * @param c target list of elements.
      * @return 
      */
-    Result value(int i, int rest, Result r, TList<P<Integer, Integer>> t) {
-        if (i==t.size())
-            return r;
-        if (rest<t.get(i).l())
-            return value(i+1,rest,r,t);
-        return TList.ofStatic(value(i+1,rest,r,t), value(i+1,rest-t.get(i).l(),r,t).add(i,t.get(i).r())).max(inc(x->x.value)).get();
+    Result value(int i, int rest) {
+        if (i==c.size())
+            return new Result();
+        if (rest<c.get(i).x)
+            return value(i+1,rest);
+        return TList.sof(value(i+1,rest), value(i+1,rest-c.get(i).x).add(i,c.get(i).y)).max(inc(x->x.value)).get();
     }
     
-    public Result solve(int capacity, TList<P<Integer, Integer>> c) {
-        return value(0, capacity, new Result(), c);
+    public Result solve(int capacity) {
+        return value(0, capacity);
     }
-    
+        
     static public <T> Result solve(Knapsack k, int capacity, TList<T> target, ToIntFunction<T> volume, ToIntFunction<T> value) {
-        return k.solve(capacity, target.map(x->P.p(volume.applyAsInt(x),value.applyAsInt(x))));
+        return k.init(target.map(x->p2i(volume.applyAsInt(x),value.applyAsInt(x)))).solve(capacity);
     }
-    
     static public <T> TList<T> solveElements(Knapsack k, int capacity, TList<T> target, ToIntFunction<T> volume, ToIntFunction<T> value) {
         Result result = solve(k,capacity,target,volume,value);
         return target.pickUp(result.content);

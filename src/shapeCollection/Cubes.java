@@ -53,7 +53,7 @@ public class Cubes {
 
     static TList<Integer> toStartingCube(List<Double> factor, List<Double> from) {
         assert factor.size()==from.size();
-        return TList.ofStatic(factor, from).transpose(l->l).map(l->(int) ceil.o(l.get(1)/l.get(0)));
+        return TList.sof(factor, from).transpose(l->l).map(l->(int) ceil.o(l.get(1)/l.get(0)));
     }
 
     static Integer[] toStartingCubeArr(List<Double> factor, List<Double> from) {
@@ -61,8 +61,8 @@ public class Cubes {
     }
 
     static TList<ScaledAxis> toAxis(List<Double> zero, List<Double> factor, List<Double> from, List<Double> to) {
-        assert TList.ofStatic(zero, factor, from, to).map(l->l.size()).isUniform();
-        return TList.ofStatic(zero, factor, from, to).transpose(l->l).map(l->new ScaledAxis(l.get(0), l.get(1), l.get(2), l.get(3)));
+        assert TList.sof(zero, factor, from, to).map(l->l.size()).isUniform();
+        return TList.sof(zero, factor, from, to).transpose(l->l).map(l->new ScaledAxis(l.get(0), l.get(1), l.get(2), l.get(3)));
     }
 
     static TList<ScaledAxis> normalize(TList<ScaledAxis> scales, double normalSize) {

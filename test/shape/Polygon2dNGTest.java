@@ -116,7 +116,7 @@ public class Polygon2dNGTest {
     public void testChunk() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Polygon2d> result = tested.chunk(300);
-        TList<Polygon2d> expected = TList.ofStatic(Polygon2d.c(tested.subList(0, 300)), Polygon2d.c(tested.subList(300, 600)), Polygon2d.c(tested.subList(600, 900)), Polygon2d.c(tested.subList(700, 1000)));
+        TList<Polygon2d> expected = TList.sof(Polygon2d.c(tested.subList(0, 300)), Polygon2d.c(tested.subList(300, 600)), Polygon2d.c(tested.subList(600, 900)), Polygon2d.c(tested.subList(700, 1000)));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);

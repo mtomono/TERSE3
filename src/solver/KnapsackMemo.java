@@ -15,19 +15,19 @@
 
 package solver;
 
-import collection.P;
-import collection.TList;
 import java.util.HashMap;
 import java.util.Map;
+import static shape.ShapeUtil.p2i;
+import shape.TPoint2i;
 
 /**
  * Memo recursive version of Knapsack.
  * @author masao
  */
 public class KnapsackMemo extends Knapsack {
-    Map<P<Integer, Integer>, Result>memo;
+    Map<TPoint2i, Result>memo;
 
-    public KnapsackMemo(Map<P<Integer, Integer>, Result> memo) {
+    public KnapsackMemo(Map<TPoint2i, Result> memo) {
         super();
         this.memo = memo;
     }
@@ -37,9 +37,7 @@ public class KnapsackMemo extends Knapsack {
     }
     
     @Override
-    public Result value(int i, int rest, Result r, TList<P<Integer,Integer>>t) {
-        return memo.computeIfAbsent(P.p(i,rest),p->super.value(i,rest,r,t));
+    public Result value(int i, int rest) {
+        return memo.computeIfAbsent(p2i(i,rest),p->super.value(i,rest));
     }
-        
-
 }

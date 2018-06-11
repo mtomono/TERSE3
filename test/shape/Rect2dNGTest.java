@@ -88,7 +88,7 @@ public class Rect2dNGTest {
         System.out.println(test.TestUtils.methodName(0));
         Rect2d tested = Rect2d.c(point2(0.5, 1.5), point2(1.5, 0.5));
         TList<Boolean> result = points.map(p->tested.inX(p));
-        TList<Boolean> expected = TList.ofStatic(
+        TList<Boolean> expected = TList.sof(
                 false, true, false, 
                 false, true, false, 
                 false, true, false);
@@ -102,7 +102,7 @@ public class Rect2dNGTest {
         System.out.println(test.TestUtils.methodName(0));
         Rect2d tested = Rect2d.c(point2(0.5, 1.5), point2(1.5, 0.5));
         TList<Boolean> result = points.map(p->tested.inY(p));
-        TList<Boolean> expected = TList.ofStatic(
+        TList<Boolean> expected = TList.sof(
                 false, false, false, 
                 true, true, true, 
                 false, false, false);
@@ -116,7 +116,7 @@ public class Rect2dNGTest {
         System.out.println(test.TestUtils.methodName(0));
         Rect2d tested = Rect2d.c(point2(0.5, 1.5), point2(1.5, 0.5));
         TList<Boolean> result = points.map(p->tested.contains(p));
-        TList<Boolean> expected = TList.ofStatic(
+        TList<Boolean> expected = TList.sof(
                 false, false, false, 
                 false, true, false, 
                 false, false, false);
@@ -130,7 +130,7 @@ public class Rect2dNGTest {
         System.out.println(test.TestUtils.methodName(0));
         Rect2d tested = Rect2d.c(point2(0.5, 1.5), point2(1.5, 0.5));
         TList<Double> result = points.map(p->tested.distance(p));
-        TList<Double> expected = TList.ofStatic(
+        TList<Double> expected = TList.sof(
                 sqrt(0.5), 0.5, sqrt(0.5), 
                 0.5, 0.0, 0.5, 
                 sqrt(0.5), 0.5, sqrt(0.5));
@@ -144,7 +144,7 @@ public class Rect2dNGTest {
         System.out.println(test.TestUtils.methodName(0));
         Rect2d tested = Rect2d.c(point2(0.5, 1.5), point2(1.5, 0.5));
         TList<Boolean> result = points.map(p->tested.in1quad(p));
-        TList<Boolean> expected = TList.ofStatic(
+        TList<Boolean> expected = TList.sof(
                 false, false, false, 
                 false, false, false, 
                 false, false, true);
@@ -158,7 +158,7 @@ public class Rect2dNGTest {
         System.out.println(test.TestUtils.methodName(0));
         Rect2d tested = Rect2d.c(point2(0.5, 1.5), point2(1.5, 0.5));
         TList<Boolean> result = points.map(p->tested.in2quad(p));
-        TList<Boolean> expected = TList.ofStatic(
+        TList<Boolean> expected = TList.sof(
                 false, false, false, 
                 false, false, false, 
                 true, false, false);
@@ -172,7 +172,7 @@ public class Rect2dNGTest {
         System.out.println(test.TestUtils.methodName(0));
         Rect2d tested = Rect2d.c(point2(0.5, 1.5), point2(1.5, 0.5));
         TList<Boolean> result = points.map(p->tested.in3quad(p));
-        TList<Boolean> expected = TList.ofStatic(
+        TList<Boolean> expected = TList.sof(
                 true, false, false, 
                 false, false, false, 
                 false, false, false);
@@ -186,7 +186,7 @@ public class Rect2dNGTest {
         System.out.println(test.TestUtils.methodName(0));
         Rect2d tested = Rect2d.c(point2(0.5, 1.5), point2(1.5, 0.5));
         TList<Boolean> result = points.map(p->tested.in4quad(p));
-        TList<Boolean> expected = TList.ofStatic(
+        TList<Boolean> expected = TList.sof(
                 false, false, true, 
                 false, false, false, 
                 false, false, false);
@@ -200,7 +200,7 @@ public class Rect2dNGTest {
         System.out.println(test.TestUtils.methodName(0));
         Rect2d tested = Rect2d.c(point2(0.5, 1.5), point2(1.5, 0.5));
         TList<Boolean> result = points.map(p->Rect2d.c(point2(0.2, 0.2), p).contains(tested));
-        TList<Boolean> expected = TList.ofStatic(
+        TList<Boolean> expected = TList.sof(
                 false, false, false, 
                 false, false, false, 
                 false, false, true);
@@ -214,7 +214,7 @@ public class Rect2dNGTest {
         System.out.println(test.TestUtils.methodName(0));
         Rect2d tested = Rect2d.c(point2(0.5, 1.5), point2(1.5, 0.5));
         TList<Boolean> result = points.map(p->Rect2d.c(point2(0.2, 0.2), p).overlaps(tested));
-        TList<Boolean> expected = TList.ofStatic(
+        TList<Boolean> expected = TList.sof(
                 false, false, false, 
                 false, true, true, 
                 false, true, true);
@@ -247,7 +247,7 @@ public class Rect2dNGTest {
         System.out.println(test.TestUtils.methodName(0));
         Rect2d tested = Rect2d.c(point2(0.5, 1.5), point2(1.5, 0.5));
         TList<Rect2d> result = points.map(p->Rect2d.c(point2(0.2, 0.2), p).cover(tested));
-        TList<Rect2d> expected = TList.ofStatic(
+        TList<Rect2d> expected = TList.sof(
                 Rect2d.c(0, 0, 1.5, 1.5), Rect2d.c(0.2, 0, 1.5, 1.5), Rect2d.c(0.2, 0, 2, 1.5), 
                 Rect2d.c(0, 0.2, 1.5, 1.5), Rect2d.c(0.2, 0.2, 1.5, 1.5), Rect2d.c(0.2, 0.2, 2, 1.5), 
                 Rect2d.c(0, 0.2, 1.5, 2), Rect2d.c(0.2, 0.2, 1.5, 2), Rect2d.c(0.2, 0.2, 2, 2));
@@ -261,7 +261,7 @@ public class Rect2dNGTest {
         System.out.println(test.TestUtils.methodName(0));
         Rect2d tested = Rect2d.c(point2(0.5, 1.5), point2(1.5, 0.5));
         TList<Optional<Rect2d>> result = points.map(p->Rect2d.c(point2(0.2, 0.2), p).intersect(tested));
-        TList<Optional<Rect2d>> expected = TList.ofStatic(
+        TList<Optional<Rect2d>> expected = TList.sof(
                 Optional.empty(), Optional.empty(), Optional.empty(), 
                 Optional.empty(), Optional.of(Rect2d.c(0.5, 0.5, 1, 1)), Optional.of(Rect2d.c(0.5, 0.5, 1.5, 1)), 
                 Optional.empty(), Optional.of(Rect2d.c(0.5, 0.5, 1, 1.5)), Optional.of(Rect2d.c(0.5, 0.5, 1.5, 1.5)));
@@ -275,7 +275,7 @@ public class Rect2dNGTest {
         System.out.println(test.TestUtils.methodName(0));
         Rect2d tested = Rect2d.c(point2(0.5, 1.5), point2(1.5, 0.5));
         TList<Optional<Rect2d>> result = points.map(p->Rect2d.c(point2(1.8, 1.8), p).intersect(tested));
-        TList<Optional<Rect2d>> expected = TList.ofStatic(
+        TList<Optional<Rect2d>> expected = TList.sof(
                 Optional.of(Rect2d.c(0.5, 0.5, 1.5, 1.5)), Optional.of(Rect2d.c(1, 0.5, 1.5, 1.5)), Optional.empty(), 
                 Optional.of(Rect2d.c(0.5, 1, 1.5, 1.5)), Optional.of(Rect2d.c(1, 1, 1.5, 1.5)), Optional.empty(), 
                 Optional.empty(), Optional.empty(), Optional.empty());
@@ -290,7 +290,7 @@ public class Rect2dNGTest {
         System.out.println(test.TestUtils.methodName(0));
         Rect2d tested = Rect2d.c(point2(0.5, 1.5), point2(1.5, 0.5));
         TList<Optional<Rect2d>> result = points2.map(p->Rect2d.c(point2(1.0, 1.0), p).intersect(tested));
-        TList<Optional<Rect2d>> expected = TList.ofStatic(
+        TList<Optional<Rect2d>> expected = TList.sof(
                 Optional.of(Rect2d.c(0.5, 0.7, 1, 1)), Optional.of(Rect2d.c(1.2, 0.5, 1, 1)), 
                 Optional.of(Rect2d.c(1, 1, 1.5, 1.2)), Optional.of(Rect2d.c(1, 1, 0.7, 1.5)));
         System.out.println("result  : " + result);
@@ -303,7 +303,7 @@ public class Rect2dNGTest {
         System.out.println(test.TestUtils.methodName(0));
         Rect2d tested = Rect2d.c(point2(0.5, 1.5), point2(1.5, 0.5));
         TList<Double> result = points.map(p->tested.farthest(p));
-        TList<Double> expected = TList.ofStatic(
+        TList<Double> expected = TList.sof(
                 sqrt(1.5*1.5*2), sqrt(1.5*1.5+0.5*0.5), sqrt(1.5*1.5*2), 
                 sqrt(1.5*1.5+0.5*0.5), sqrt(0.5), sqrt(1.5*1.5+0.5*0.5), 
                 sqrt(1.5*1.5*2), sqrt(1.5*1.5+0.5*0.5), sqrt(1.5*1.5*2));

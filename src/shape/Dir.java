@@ -49,6 +49,6 @@ public enum Dir {
     }
     
     static public TList<Dir> dirs() {
-        return TList.ofStatic(Dir.values());
+        return TList.sof(Dir.values());
     }
 }

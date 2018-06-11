@@ -179,7 +179,7 @@ public class TListNGTest {
     public void testAddOne() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Integer> result = TList.<Integer>c().addOne(1);
-        TList<Integer> expected = TList.ofStatic(1);
+        TList<Integer> expected = TList.sof(1);
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
@@ -476,8 +476,8 @@ public class TListNGTest {
     @Test
     public void testDivide() {
         System.out.println(test.TestUtils.methodName(0));
-        TList<TList<Integer>> result = TList.ofStatic(1, 3, 7, 9, 11, 2, 3, 8, 9, 11, 9).divide(11);
-        TList<TList<Integer>> expected = TList.ofStatic(TList.ofStatic(1, 3, 7, 9, 11), TList.ofStatic(2, 3, 8, 9, 11, 9));
+        TList<TList<Integer>> result = TList.sof(1, 3, 7, 9, 11, 2, 3, 8, 9, 11, 9).divide(11);
+        TList<TList<Integer>> expected = TList.sof(TList.sof(1, 3, 7, 9, 11), TList.sof(2, 3, 8, 9, 11, 9));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
@@ -486,8 +486,8 @@ public class TListNGTest {
     @Test
     public void testChunk() {
         System.out.println(test.TestUtils.methodName(0));
-        TList<TList<Integer>> result = TList.ofStatic(1, 3, 7, 9, 11, 2, 3, 8, 9, 11, 9, 9, 12).chunk(i->i>10);
-        TList<TList<Integer>> expected = TList.ofStatic(TList.ofStatic(1, 3, 7, 9, 11), TList.ofStatic(2, 3, 8, 9, 11), TList.ofStatic(9, 9, 12));
+        TList<TList<Integer>> result = TList.sof(1, 3, 7, 9, 11, 2, 3, 8, 9, 11, 9, 9, 12).chunk(i->i>10);
+        TList<TList<Integer>> expected = TList.sof(TList.sof(1, 3, 7, 9, 11), TList.sof(2, 3, 8, 9, 11), TList.sof(9, 9, 12));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
@@ -496,8 +496,8 @@ public class TListNGTest {
     @Test
     public void testChunk2() {
         System.out.println(test.TestUtils.methodName(0));
-        TList<TList<Integer>> result = TList.ofStatic(1, 3, 7, 9, 11, 2, 3, 8, 9, 11, 9, 9, 12, 3, 2).chunk(i->i>10);
-        TList<TList<Integer>> expected = TList.ofStatic(TList.ofStatic(1, 3, 7, 9, 11), TList.ofStatic(2, 3, 8, 9, 11), TList.ofStatic(9, 9, 12), TList.of(3, 2));
+        TList<TList<Integer>> result = TList.sof(1, 3, 7, 9, 11, 2, 3, 8, 9, 11, 9, 9, 12, 3, 2).chunk(i->i>10);
+        TList<TList<Integer>> expected = TList.sof(TList.sof(1, 3, 7, 9, 11), TList.sof(2, 3, 8, 9, 11), TList.sof(9, 9, 12), TList.of(3, 2));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
