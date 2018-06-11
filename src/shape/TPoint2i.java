@@ -28,9 +28,11 @@ import javax.vecmath.Tuple2i;
  * @author masao
  */
 public class TPoint2i extends Point2i implements List<Integer> {
-    static public TPoint2i zero = new TPoint2i(0, 0);
-    static public TPoint2i x1 = new TPoint2i(1, 0);
-    static public TPoint2i y1 = new TPoint2i(0, 1);
+    final static public TPoint2i zero = new TPoint2i(0, 0);
+    final static public TPoint2i x1 = new TPoint2i(1, 0);
+    final static public TPoint2i y1 = new TPoint2i(0, 1);
+    final static public Comparator<Point2i> xc = Comparator.<Point2i>comparingInt(p->p.x);
+    final static public Comparator<Point2i> yc = Comparator.<Point2i>comparingInt(p->p.y);
 
     public TPoint2i() {
         super();
@@ -131,7 +133,7 @@ public class TPoint2i extends Point2i implements List<Integer> {
         return 3-abs(x*2+y+1);
     }
     
-    final static public TList<TPoint2i> quadrants = TList.ofStatic(
+    final static public TList<TPoint2i> quadrants = TList.sof(
             new TPoint2i(1, 0),
             new TPoint2i(0, 1),
             new TPoint2i(-1,0),

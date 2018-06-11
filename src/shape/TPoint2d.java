@@ -26,7 +26,9 @@ import javax.vecmath.*;
  * @author masao
  */
 public class TPoint2d extends Point2d implements List<Double> {
-    static public TPoint2d zero = new TPoint2d(0, 0);
+    final static public TPoint2d zero = new TPoint2d(0, 0);
+    final static public Comparator<Point2d> xc = Comparator.<Point2d>comparingDouble(p->p.x);
+    final static public Comparator<Point2d> yc = Comparator.<Point2d>comparingDouble(p->p.y);
 
     public TPoint2d() {
         super();
@@ -159,7 +161,7 @@ public class TPoint2d extends Point2d implements List<Double> {
     static public TPoint2d average(TList<? extends Tuple2d> ps) {
         return new TPoint2d(ps.averageD(p->p.x), ps.averageD(p->p.y));
     }
-
+    
     //--------- compatibility with list
     
     public List<Double> asList() {

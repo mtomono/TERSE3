@@ -29,7 +29,10 @@ import javax.vecmath.Vector3d;
  * @author masao
  */
 public class TPoint3d extends Point3d implements List<Double> {
-    static public TPoint3d zero = new TPoint3d(0, 0, 0);
+    final static public TPoint3d zero = new TPoint3d(0, 0, 0);
+    final static public Comparator<Point3d> xc = Comparator.<Point3d>comparingDouble(p->p.x);
+    final static public Comparator<Point3d> yc = Comparator.<Point3d>comparingDouble(p->p.y);
+    final static public Comparator<Point3d> zc = Comparator.<Point3d>comparingDouble(p->p.z);
 
     public TPoint3d() {
         super();

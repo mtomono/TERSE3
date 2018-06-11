@@ -33,10 +33,13 @@ import javax.vecmath.Vector3d;
  * @author masao
  */
 public class TVector3d extends Vector3d implements List<Double> {
-    static public TVector3d zero = new TVector3d(0, 0, 0);
-    static public TVector3d x1 = new TVector3d(1, 0, 0);
-    static public TVector3d y1 = new TVector3d(0, 1, 0);
-    static public TVector3d z1 = new TVector3d(0, 0, 1);
+    final static public TVector3d zero = new TVector3d(0, 0, 0);
+    final static public TVector3d x1 = new TVector3d(1, 0, 0);
+    final static public TVector3d y1 = new TVector3d(0, 1, 0);
+    final static public TVector3d z1 = new TVector3d(0, 0, 1);
+    final static public Comparator<Vector3d> xc = Comparator.<Vector3d>comparingDouble(p->p.x);
+    final static public Comparator<Vector3d> yc = Comparator.<Vector3d>comparingDouble(p->p.y);
+    final static public Comparator<Vector3d> zc = Comparator.<Vector3d>comparingDouble(p->p.z);
     
     public TVector3d() {
         super();

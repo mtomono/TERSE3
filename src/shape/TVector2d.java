@@ -31,7 +31,9 @@ import javax.vecmath.*;
  * @author masao
  */
 public class TVector2d extends Vector2d implements List<Double> {
-    static public TVector2d zero = new TVector2d(0, 0);
+    final static public TVector2d zero = new TVector2d(0, 0);
+    final static public Comparator<Vector2d> xc = Comparator.<Vector2d>comparingDouble(p->p.x);
+    final static public Comparator<Vector2d> yc = Comparator.<Vector2d>comparingDouble(p->p.y);
 
     public TVector2d() {
         super();
@@ -224,6 +226,7 @@ public class TVector2d extends Vector2d implements List<Double> {
     public String toCsv() {
         return Double.toString(x)+","+Double.toString(y);
     }
+
 
     //--------- compatibility with list
     

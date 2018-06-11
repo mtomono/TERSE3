@@ -6,6 +6,7 @@
 package collection;
 
 import java.util.Comparator;
+import orderedSet.Comparators;
 import static org.testng.Assert.*;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -79,7 +80,7 @@ public class PairNGTest {
     @Test
     public void testLcomp_Comparator() {
         System.out.println(test.TestUtils.methodName(0));
-        Comparator<P<Integer, P<Integer, Integer>>> tested = P.<Integer, P<Integer,Integer>>comp(Comparator.naturalOrder(), P.comp(Comparator.<Integer>naturalOrder(), Comparator.<Integer>naturalOrder()));
+        Comparator<P<Integer, P<Integer, Integer>>> tested = Comparators.<P<Integer,P<Integer,Integer>>>sof(p->p.l(),p->p.r().l(),p->p.r().r()).compile();
         int result = tested.compare(P.p(0,P.p(1, 2)), P.p(0, P.p(2, 1)));
         int expected = -1;
         System.out.println("result  : "+result);
@@ -90,7 +91,7 @@ public class PairNGTest {
     @Test
     public void testRLcomp_Comparator() {
         System.out.println(test.TestUtils.methodName(0));
-        Comparator<P<Integer, P<Integer, Integer>>> tested = P.<Integer, P<Integer,Integer>>rcomp(Comparator.naturalOrder(), P.rcomp(Comparator.<Integer>naturalOrder(), Comparator.<Integer>naturalOrder()));
+        Comparator<P<Integer, P<Integer, Integer>>> tested = Comparators.<P<Integer,P<Integer,Integer>>>sof(p->p.r().r(),p->p.r().l(),p->p.l()).compile();
         int result = tested.compare(P.p(0,P.p(1, 2)), P.p(0, P.p(2, 1)));
         int expected = 1;
         System.out.println("result  : "+result);
@@ -101,9 +102,9 @@ public class PairNGTest {
     @Test
     public void testRcomp_Comparator() {
         System.out.println(test.TestUtils.methodName(0));
-        Comparator<P<P<Integer, Integer>, Integer>> tested = P.<P<Integer,Integer>, Integer>comp(P.comp(Comparator.<Integer>naturalOrder(), Comparator.<Integer>naturalOrder()),Comparator.naturalOrder());
+        Comparator<P<P<Integer, Integer>, Integer>> tested = Comparators.<P<P<Integer,Integer>,Integer>>sof(p->p.r(),p->p.l().r(),p->p.l().l()).compile();
         int result = tested.compare(P.p(P.p(1, 2),0), P.p(P.p(2, 1),0));
-        int expected = -1;
+        int expected = 1;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
         assertEquals(result, expected);
