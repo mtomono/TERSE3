@@ -30,6 +30,7 @@ import orderedSet.Range;
 /**
  *
  * @author masao
+ * @param <T>
  */
 public class TList<T> extends TListWrapper<T> {
     
@@ -90,6 +91,10 @@ public class TList<T> extends TListWrapper<T> {
      */
     public TList<T> fix() {
         return new TListRandom<>(new ArrayList<>(this));
+    }
+    
+    public TList<T> sfix() {
+        return new TListRandom<>(a2l((T[])toArray()));
     }
     
     /**
@@ -185,7 +190,7 @@ public class TList<T> extends TListWrapper<T> {
     public TList<T> cache() {
         return set(new CacheList(this));
     }
-
+    
 //-----------Generating
     /**
      * wrap an object as this list.
@@ -246,7 +251,7 @@ public class TList<T> extends TListWrapper<T> {
     }
     
     /**
-     * range method which takes the Range<Integer> as parameter.
+     * range method which takes the {@code Range<Integer>} as parameter.
      * 
      * @param range
      * @return 
@@ -312,8 +317,13 @@ public class TList<T> extends TListWrapper<T> {
      * @param t
      * @return 
      */
-    static public <T> TList<T> ofStatic(T... t) {
+    static public <T> TList<T> sof(T... t) {
         return new TListRandom<>(a2l(t));
+    }
+    
+    @Deprecated
+    static public <T> TList<T> ofStatic(T... t) {
+        return sof(t);
     }
     
 //--------- Judging
@@ -410,7 +420,7 @@ public class TList<T> extends TListWrapper<T> {
      * @return 
      */
     public <S> TList<S> map(Function<T, S> map, Function<S, T> rmap) {
-        return (body instanceof RandomAccess) ? new TListRandom<>(new MapRandomList<T, S>(this, map, rmap)) : new TList<>(new MapSequentialList<>(this, map, rmap));
+        return (body instanceof RandomAccess) ? new TListRandom<>(new MapRandomList<>(this, map, rmap)) : new TList<>(new MapSequentialList<>(this, map, rmap));
     }
     
     /**
@@ -901,8 +911,8 @@ public class TList<T> extends TListWrapper<T> {
     public TList<TList<T>> divide(T division) {
         int index = indexOf(division);
         if (index == -1) 
-            return TList.ofStatic(this);
-        return TList.ofStatic(subList(0, indexOf(division) + 1), subList(indexOf(division) + 1, size()));
+            return TList.sof(this);
+        return TList.sof(subList(0, indexOf(division) + 1), subList(indexOf(division) + 1, size()));
     }
     
     /**
@@ -1062,6 +1072,8 @@ public class TList<T> extends TListWrapper<T> {
      * very typical variation of pair. this will save you the burden to construct
      * buffer on every pre-post comparison. this will help you a lot. believe me.
      * and this variation saves generation of P.
+     * @param <U>
+     * @param map
      * @return 
      */
     public <U> TList<U> diff(BiFunction<T, T, U> map) {
@@ -1073,6 +1085,9 @@ public class TList<T> extends TListWrapper<T> {
      * very typical variation of pair. this will save you the burden to construct
      * buffer on every pre-post comparison. this will help you a lot. believe me.
      * and this variation saves generation of P.
+     * @param <U>
+     * @param seek
+     * @param map
      * @return 
      */
     public <U> TList<U> diff(int seek, BiFunction<T, T, U> map) {
@@ -1118,7 +1133,9 @@ public class TList<T> extends TListWrapper<T> {
      * item from this list is incremented only after the items from the other list are
      * all numerated. 
      * @param <S>
+     * @param <U>
      * @param target
+     * @param func
      * @return 
      */
     public <S, U> TList<U> cross(List<S> target, BiFunction<T, S, U> func) {
@@ -1270,12 +1287,12 @@ public class TList<T> extends TListWrapper<T> {
 
     public TList<List<T>> permutation(int a) {
         assert a >= 0;
-        return TList.this.permutation(size(), a).map(p->pickUp(p));
+        return permutation(size(), a).map(p->pickUp(p));
     }
     
     public TList<List<List<T>>> permutationUpTo(int a) {
         assert a >= 0;
-        return TList.this.permutationUpTo(size(), a).map(l->l.map(p->pickUp(p)));
+        return permutationUpTo(size(), a).map(l->l.map(p->pickUp(p)));
     }
     
     static private TList<TList<Integer>> combinationx(int a, int b, TList<TList<Integer>> prev) {
