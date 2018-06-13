@@ -554,7 +554,7 @@ public class TList<T> extends TListWrapper<T> {
 
     @Deprecated
     public TList<T> heapFromStart(BiFunction<T, T, T> map) {
-        return accumFromStart((a,b)->map.apply(a,b));
+        return accumFromStart((a,b)->map.apply(b,a));
     }
     @Deprecated
     public TList<T> preheap(BiFunction<T, T, T> map) {

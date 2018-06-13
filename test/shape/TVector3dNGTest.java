@@ -394,7 +394,7 @@ public class TVector3dNGTest {
         TVector3d result = origin.rotCcw();
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
-        assertEquals(result, expected);
+        assertTrue(result.epsilonEquals(expected,err));
     }
 
     @DataProvider(name="rotcw")
@@ -412,7 +412,7 @@ public class TVector3dNGTest {
         TVector3d result = origin.rotCw();
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
-        assertEquals(result, expected);
+        assertTrue(result.epsilonEquals(expected,err));
     }
 
     @Test
