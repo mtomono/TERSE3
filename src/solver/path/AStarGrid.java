@@ -13,13 +13,13 @@
    See the License for the specific language governing permissions and limitations under the License.
  */
 
-package solver;
+package solver.path;
 
 import collection.TList;
 import java.util.Collection;
 import java.util.Optional;
-import static solver.AStarStatus.BLOCKED;
-import static solver.AStarStatus.NONE;
+import static solver.path.AStarStatus.BLOCKED;
+import static solver.path.AStarStatus.NONE;
 import shapeCollection.Grid;
 import shape.TPoint2i;
 
@@ -55,12 +55,17 @@ public class AStarGrid extends AStar<AStarNodeGrid> {
 
     @Override
     public TList<AStarNodeGrid> candidates(AStarNodeGrid astar) {
-        return TPoint2i.quadrants.map(q->q.addR(astar.point)).filter(p->space.contains(p)).map(p->space.get(p));
+        return TPoint2i.quadrants.map(q->q.addR(astar.point)).filter(p->space.contains(p)&&space.get(p).status!=BLOCKED).map(p->space.get(p));
     }
     
     @Override
     public AStarNodeGrid getStart() {
         return space.get(from);
+    }
+    
+    @Override
+    public AStarNodeGrid getGoal() {
+        return space.get(to);
     }
 
     @Override

@@ -13,7 +13,7 @@
    See the License for the specific language governing permissions and limitations under the License.
  */
 
-package solver;
+package solver.path;
 
 import collection.TList;
 import java.util.Collection;

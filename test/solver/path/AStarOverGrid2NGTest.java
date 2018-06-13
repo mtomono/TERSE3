@@ -3,15 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package solver;
+package solver.path;
 
-import solver.AStarGrid;
-import solver.AStarNodeGrid;
+import solver.path.AStarGrid;
+import solver.path.AStarNodeGrid;
 import collection.P;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import static solver.AStarStatus.*;
+import static solver.path.AStarStatus.*;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import shapeCollection.Grid;

@@ -13,22 +13,29 @@
    See the License for the specific language governing permissions and limitations under the License.
  */
 
-package solver;
+package solver.path;
+
+import shape.TPoint2i;
 
 /**
- *
+ * Node for Grid2 A Star.
  * @author masao
  */
-public enum AStarStatus {
-    NONE(" "),
-    BLOCKED("X"),
-    OPEN("o"),
-    CLOSE("-"),
-    ;
+public class AStarNodeGrid extends AStarNode{
+    final public TPoint2i point;
     
-    final public String display;
-    
-    private AStarStatus(String display) {
-        this.display = display;
+    public AStarNodeGrid(TPoint2i point, AStarStatus status) {
+        this.point = point;
+        this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return status+"@"+point;
+    }
+
+    public String toDetailedString() {
+        return status+"@"+point+":"+costToCome+":"+costToGo;
+    }
+
 }

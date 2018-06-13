@@ -13,29 +13,28 @@
    See the License for the specific language governing permissions and limitations under the License.
  */
 
-package solver;
+package solver.path;
 
-import shape.TPoint2i;
+import collection.P;
+import java.util.Map;
+import java.util.Optional;
+import java.util.TreeMap;
+import orderedSet.Comparators;
 
 /**
- * Node for Grid2 A Star.
+ * Shortest path search with memo.
  * @author masao
+ * @param <N>
  */
-public class AStarNodeGrid extends AStarNode{
-    final public TPoint2i point;
+public class ShortestPathMemo<N extends Comparable<N>> extends ShortestPathNoRevisit<N> {
+    Map<P<N,N>, Optional<Integer>> memo;
+    public ShortestPathMemo(Map<P<N, N>, Integer> graph) {
+        super(graph);
+        this.memo = new TreeMap<>(Comparators.<P<N,N>>sof(p->p.l(),p->p.r()).compile());
+    }
     
-    public AStarNodeGrid(TPoint2i point, AStarStatus status) {
-        this.point = point;
-        this.status = status;
-    }
-
     @Override
-    public String toString() {
-        return status+"@"+point;
+    public Optional<Integer> find(N from, N to) {
+        return memo.computeIfAbsent(P.p(from,to), p->super.find(p.l(),p.r()));
     }
-
-    public String toDetailedString() {
-        return status+"@"+point+":"+costToCome+":"+costToGo;
-    }
-
 }

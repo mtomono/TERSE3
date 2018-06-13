@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package solver;
+package solver.path;
 
-import solver.RectScan;
+import solver.path.RectScan;
 import java.util.HashSet;
 import java.util.Set;
 import org.testng.annotations.BeforeMethod;
