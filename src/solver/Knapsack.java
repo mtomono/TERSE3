@@ -19,7 +19,6 @@ import collection.TList;
 import static function.ComparePolicy.inc;
 import java.util.function.BiFunction;
 import java.util.function.ToIntFunction;
-import static shape.ShapeUtil.p2i;
 import shape.TPoint2i;
 import static solver.Solvers.extract2i;
 
@@ -52,15 +51,6 @@ public class Knapsack {
     public Knapsack(int capacity,TList<TPoint2i>c) {
         this.c=c;
         this.capacity=capacity;
-    }
-    
-    public <T> Knapsack init(TList<T> body, ToIntFunction<T> volume, ToIntFunction<T> value) {
-        return init(body.map(x->p2i(volume.applyAsInt(x),value.applyAsInt(x))));
-    }
-    
-    public Knapsack init(TList<TPoint2i> c) {
-        this.c = c;
-        return this;
     }
     
     /**

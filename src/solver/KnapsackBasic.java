@@ -25,11 +25,11 @@ import shape.TPoint2i;
  * @author masao
  */
 public class KnapsackBasic {
-    TList<TPoint2i> candidates; //x:volume y:value
+    TList<TPoint2i> c; //x:volume y:value
     int capacity;
     
     public KnapsackBasic(int capacity, TList<TPoint2i> candidates) {
-        this.candidates = candidates;
+        this.c = candidates;
         this.capacity = capacity;
     }
     
@@ -42,12 +42,11 @@ public class KnapsackBasic {
      * @return 
      */
     int value(int i, int rest) {
-        if (i==candidates.size())
+        if (i==c.size())
             return 0;
-        TPoint2i candidate = candidates.get(i);
-        if (rest<candidate.x)
+        if (rest<c.get(i).x)
             return value(i+1, rest);
-        return max(value(i+1,rest), value(i+1,rest-candidate.x)+candidate.y);
+        return max(value(i+1,rest), value(i+1,rest-c.get(i).x)+c.get(i).y);
     }
     
     public int solve() {
