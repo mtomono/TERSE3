@@ -27,7 +27,7 @@ import shape.TPoint2i;
  * @author masao
  */
 public class KnapsackMemoSparse extends Knapsack {
-    Map<TPoint2i,Result> memo;
+    Map<TPoint2i,SearchResult> memo;
 
     public KnapsackMemoSparse(int capacity, TList<TPoint2i>c) {
         super(capacity,c);
@@ -35,7 +35,7 @@ public class KnapsackMemoSparse extends Knapsack {
     }
     
     @Override
-    public Result value(int i, int rest) {
+    public SearchResult value(int i, int rest) {
         return memo.computeIfAbsent(p2i(i,rest),p->super.value(i,rest));
     }
 }

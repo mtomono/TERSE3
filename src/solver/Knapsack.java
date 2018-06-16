@@ -27,24 +27,7 @@ import static solver.Solvers.extract2i;
  * 
  * @author masao
  */
-public class Knapsack {
-    public class Result {
-        final TList<Integer> content;
-        final int value;
-        public Result() {
-            this(TList.c(), 0);
-        }
-
-        public Result(TList<Integer> content, int value) {
-            this.content = content;
-            this.value = value;
-        }
-
-        public Result add(int addedIndex, int addedValue) {
-            return new Result(content.append(TList.wrap(addedIndex)), value+addedValue);
-        }
-    }
-    
+public class Knapsack {    
     TList<TPoint2i> c;
     int capacity;
     
@@ -60,23 +43,23 @@ public class Knapsack {
      * @param c target list of elements.
      * @return 
      */
-    Result value(int i, int rest) {
+    SearchResult value(int i, int rest) {
         if (i==c.size())
-            return new Result();
+            return new SearchResult();
         if (rest<c.get(i).x)
             return value(i+1,rest);
         return TList.sof(value(i+1,rest), value(i+1,rest-c.get(i).x).add(i,c.get(i).y)).max(inc(x->x.value)).get();
     }
     
-    public Result solve() {
+    public SearchResult solve() {
         return value(0, capacity);
     }
         
-    static public <T> Result solve(BiFunction<Integer,TList<TPoint2i>,Knapsack> k, int capacity, TList<T> target, ToIntFunction<T> volume, ToIntFunction<T> value) {
+    static public <T> SearchResult solve(BiFunction<Integer,TList<TPoint2i>,Knapsack> k, int capacity, TList<T> target, ToIntFunction<T> volume, ToIntFunction<T> value) {
         return k.apply(capacity,extract2i(target,volume, value)).solve();
     }
     static public <T> TList<T> solveElements(BiFunction<Integer,TList<TPoint2i>,Knapsack> k, int capacity, TList<T> target, ToIntFunction<T> volume, ToIntFunction<T> value) {
-        Result result = solve(k,capacity,target,volume,value);
+        SearchResult result = solve(k,capacity,target,volume,value);
         return target.pickUp(result.content);
     }
 }

@@ -24,7 +24,7 @@ import shapeCollection.Grid;
  * @author masao
  */
 public class KnapsackMemo extends Knapsack {
-    Grid<Result> memo;
+    Grid<SearchResult> memo;
 
     public KnapsackMemo(int capacity, TList<TPoint2i>c) {
         super(capacity,c);
@@ -32,7 +32,7 @@ public class KnapsackMemo extends Knapsack {
     }
     
     @Override
-    public Result value(int i, int rest) {
+    public SearchResult value(int i, int rest) {
         return memo.computeIfNull(i,rest,super::value);
     }
 }
