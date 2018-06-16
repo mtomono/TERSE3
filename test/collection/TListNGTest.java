@@ -243,9 +243,9 @@ public class TListNGTest {
     }
 
     @Test
-    public void testHeap() {
+    public void testAccum() {
         System.out.println(test.TestUtils.methodName(0));
-        List<Integer> result = TList.of(1, 2, 4, 8).heap(0, (a,b)->a+b);
+        List<Integer> result = TList.of(1, 2, 4, 8).accum(0, (a,b)->a+b);
         List<Integer> expected = a2l(0, 1, 3, 7, 15);
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
@@ -1084,9 +1084,9 @@ public class TListNGTest {
     }
     
     @Test
-    public void testPreheap_BiFunction() {
+    public void testAccumFromStart_BiFunction() {
         System.out.println(test.TestUtils.methodName(0));
-        TList<String> result = TList.of(0, 1, 2, 3).map(p->p.toString()).heapFromStart((a,b)->b+a);
+        TList<String> result = TList.of(0, 1, 2, 3).map(p->p.toString()).accumFromStart((a,b)->a+b);
         TList<String> expected = TList.of("0", "01", "012", "0123");
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
@@ -1094,9 +1094,9 @@ public class TListNGTest {
     }
 
     @Test
-    public void testPreheap_Function_BiFunction() {
+    public void testAccumFromStart_Function_BiFunction() {
         System.out.println(test.TestUtils.methodName(0));
-        TList<String> result = TList.of(0, 1, 2, 3).heapFromStart(f->Integer.toString(f), (a,b)->b+Integer.toString(a));
+        TList<String> result = TList.of(0, 1, 2, 3).accumFromStart(f->Integer.toString(f), (a,b)->a+Integer.toString(b));
         TList<String> expected = TList.of("0", "01", "012", "0123");
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);

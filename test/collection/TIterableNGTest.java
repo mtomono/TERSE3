@@ -216,9 +216,9 @@ public class TIterableNGTest {
     }
 
     @Test
-    public void testHeap() {
+    public void testAccum() {
         System.out.println(methodName(0));
-        check3(generate(()->()->1).limit(4).heap(1, (a, b)->a+b));
+        check3(generate(()->()->1).limit(4).accum(1, (a, b)->a+b));
     }
 
     @Test
