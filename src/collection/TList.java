@@ -1210,7 +1210,7 @@ public class TList<T> extends TListWrapper<T> {
     }
     
     /**
-     * fill a part of this list with Optional.empty.
+     * add an Optional.empty filling of length at a part of this list.
      * 
      * @param at
      * @param length
@@ -1220,20 +1220,32 @@ public class TList<T> extends TListWrapper<T> {
         return new TOptionalList<>(TList.concat(subList(0, at).optional(), new Filler<>(length), subList(at, size()).optional()));
     }
     
-    @Deprecated
     /**
-     * @TODO
-     * i need to come up with more sophisticated definition for this method.
+     * shift the start of this list.
+     * @param shift
+     * @return 
      */
     public TOptionalList<T> shift(int shift) {
         return shift < 0 ? subList(-shift, size()).optional() : fill(0, shift);
     }
     
+    /**
+     * add filling Optional.empty-s until result of map becomes rectangle.
+     * @param <S>
+     * @param map
+     * @return 
+     */
     public <S> TList<List<Optional<S>>> rectangle(Function<T, List<S>> map) {
         int length = maxLength(map);
         return map(map).map(l->set(l).fill(l.size(), length-l.size()));
     }
     
+    /**
+     * add filling Optional.empty-s until result of map becomes square.
+     * @param <S>
+     * @param map
+     * @return 
+     */
     public <S> TList<List<Optional<S>>> square(Function<T, List<S>> map) {
         int length = maxLength(map);
         return length > size() ? TList.concat(this.rectangle(map), Filler.filler(length, length-size())) : TList.concat(this.rectangle(map).transpose(l->l), Filler.filler(size(), size()-length)).transpose(l->l);
