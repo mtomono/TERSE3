@@ -16,23 +16,26 @@
 package solver;
 
 import collection.TList;
+import java.util.Map;
+import java.util.TreeMap;
+import orderedSet.Comparators;
+import static shape.ShapeUtil.p2i;
 import shape.TPoint2i;
-import shapeCollection.Grid;
 
 /**
  * Memo recursive version of Knapsack.
  * @author masao
  */
-public class KnapsackMemo extends Knapsack {
-    Grid<Result> memo;
+public class KnapsackMemoSparse extends Knapsack {
+    Map<TPoint2i,Result> memo;
 
-    public KnapsackMemo(int capacity, TList<TPoint2i>c) {
+    public KnapsackMemoSparse(int capacity, TList<TPoint2i>c) {
         super(capacity,c);
-        this.memo=new Grid<>(TPoint2i.zero,new TPoint2i(c.size(),capacity),(x,y)->null);
+        this.memo=new TreeMap<>(Comparators.<TPoint2i>sof(p->p.x, p->p.y).compile());
     }
     
     @Override
     public Result value(int i, int rest) {
-        return memo.computeIfNull(i,rest,super::value);
+        return memo.computeIfAbsent(p2i(i,rest),p->super.value(i,rest));
     }
 }
