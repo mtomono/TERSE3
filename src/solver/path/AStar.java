@@ -44,36 +44,27 @@ public abstract class AStar<T extends AStarNode> {
         this.queue = new PriorityQueue<>(Comparator.comparing(n->n.score()));
     }
         
-    public Optional<T> search() {
-        open(getStart(),Optional.empty());
-        queue.offer(getStart());
-        return searchx();
-    }
-        
-    T open(T target, Optional<T> parent) {
-        target.open(parent, costToCome(target,parent), costToGo(target));
-        return target;
-    }
-    
     int costToCome(T target, Optional<T> parent) {
         return parent.map(a->a.costToCome).orElse(0)+costToMove(parent, target);
     }
     
-    T better(T astar, Optional<T> parent, BiFunction<T, Optional<T>, T> f) {
-        return astar.costToCome > costToCome(astar,parent)+costToGo(astar)?
-                f.apply(astar,parent):astar;
+    T openIfBetter(T astar, Optional<T> parent) {
+        return astar.status==NONE||astar.costToCome > costToCome(astar,parent)+costToGo(astar)?
+                open(astar,parent):astar;
     }
         
-    T requeue(T t) {
-        queue.remove(t);
-        return enque(t);
+    T open(T target, Optional<T> parent) {
+        if (target.status==OPEN) queue.remove(target);
+        target.open(parent, costToCome(target,parent), costToGo(target));
+        queue.offer(target);
+        return target;
     }
     
-    T enque(T t) {
-        queue.offer(t);
-        return t;
+    public Optional<T> search() {
+        open(getStart(),Optional.empty());
+        return searchx();
     }
-    
+        
     Optional<T> searchx() {
         while (true) {
             if (queue.isEmpty())
@@ -84,9 +75,7 @@ public abstract class AStar<T extends AStarNode> {
                 return Optional.of(target);
             TList<T> candidates = candidates(target).fix();
             Optional<T> parent = Optional.of(target);
-            candidates.filter(n->n.status==NONE).forEach(a->enque(open(a,parent)));
-            candidates.filter(n->n.status==OPEN).forEach(a->better(a, parent, (x,y)->requeue(open(x,y))));
-            candidates.filter(n->n.status==CLOSE).forEach(a->better(a, parent, (x,y)->enque(open(x,y))));
+            candidates.forEach(a->openIfBetter(a,parent));
         }
     }
 
