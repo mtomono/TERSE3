@@ -6,16 +6,12 @@
 package solver;
 
 import collection.TList;
-import java.util.TreeMap;
-import static orderedSet.Comparators.sof;
 import static org.testng.Assert.*;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import static shape.ShapeUtil.p2i;
-import static shape.TPoint2i.xc;
-import static shape.TPoint2i.yc;
+import shape.TPoint2i;
 import test.TestUtils;
-import static solver.Knapsack.t2i;
 
 /**
  *
@@ -33,16 +29,16 @@ public class KnapsackNGTest {
     @Test
     public void testBasic() {
         System.out.println(test.TestUtils.methodName(0));
-        TList<Luggage> tested = TList.of(
-                new Luggage(11,15),
-                new Luggage(4,4),
-                new Luggage(2,3),
-                new Luggage(1,2),
-                new Luggage(3,1),
-                new Luggage(5,8)
+        TList<TPoint2i> tested = TList.of(
+                new TPoint2i(11,15),
+                new TPoint2i(4,4),
+                new TPoint2i(2,3),
+                new TPoint2i(1,2),
+                new TPoint2i(3,1),
+                new TPoint2i(5,8)
         );
         
-        int result = new KnapsackBasic<>(tested, Luggage::weight, Luggage::value).solve(15);
+        int result = new KnapsackBasic(15,tested).solve();
         int expected = 20;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
@@ -52,52 +48,52 @@ public class KnapsackNGTest {
     @Test(enabled=false)
     public void testBasicLarge() {
         System.out.println(test.TestUtils.methodName(0));
-        TList<Luggage> tested = TList.of(
-                new Luggage(11,15),
-                new Luggage(4,4),
-                new Luggage(2,3),
-                new Luggage(1,2),
-                new Luggage(3,1),
-                new Luggage(5,8),
-                new Luggage(11,15),
-                new Luggage(4,4),
-                new Luggage(2,3),
-                new Luggage(1,2),
-                new Luggage(3,1),
-                new Luggage(5,8),
-                new Luggage(11,15),
-                new Luggage(4,4),
-                new Luggage(2,3),
-                new Luggage(1,2),
-                new Luggage(3,1),
-                new Luggage(5,8),
-                new Luggage(11,15),
-                new Luggage(4,4),
-                new Luggage(2,3),
-                new Luggage(1,2),
-                new Luggage(3,1),
-                new Luggage(5,8),
-                new Luggage(11,15),
-                new Luggage(4,4),
-                new Luggage(2,3),
-                new Luggage(1,2),
-                new Luggage(3,1),
-                new Luggage(5,8),
-                new Luggage(11,15),
-                new Luggage(4,4),
-                new Luggage(2,3),
-                new Luggage(1,2),
-                new Luggage(3,1),
-                new Luggage(5,8),
-                new Luggage(11,15),
-                new Luggage(4,4),
-                new Luggage(2,3),
-                new Luggage(1,2),
-                new Luggage(3,1),
-                new Luggage(5,8)
+        TList<TPoint2i> tested = TList.of(
+                new TPoint2i(11,15),
+                new TPoint2i(4,4),
+                new TPoint2i(2,3),
+                new TPoint2i(1,2),
+                new TPoint2i(3,1),
+                new TPoint2i(5,8),
+                new TPoint2i(11,15),
+                new TPoint2i(4,4),
+                new TPoint2i(2,3),
+                new TPoint2i(1,2),
+                new TPoint2i(3,1),
+                new TPoint2i(5,8),
+                new TPoint2i(11,15),
+                new TPoint2i(4,4),
+                new TPoint2i(2,3),
+                new TPoint2i(1,2),
+                new TPoint2i(3,1),
+                new TPoint2i(5,8),
+                new TPoint2i(11,15),
+                new TPoint2i(4,4),
+                new TPoint2i(2,3),
+                new TPoint2i(1,2),
+                new TPoint2i(3,1),
+                new TPoint2i(5,8),
+                new TPoint2i(11,15),
+                new TPoint2i(4,4),
+                new TPoint2i(2,3),
+                new TPoint2i(1,2),
+                new TPoint2i(3,1),
+                new TPoint2i(5,8),
+                new TPoint2i(11,15),
+                new TPoint2i(4,4),
+                new TPoint2i(2,3),
+                new TPoint2i(1,2),
+                new TPoint2i(3,1),
+                new TPoint2i(5,8),
+                new TPoint2i(11,15),
+                new TPoint2i(4,4),
+                new TPoint2i(2,3),
+                new TPoint2i(1,2),
+                new TPoint2i(3,1),
+                new TPoint2i(5,8)
         );
         
-        int result = new KnapsackBasic<>(tested, Luggage::weight, Luggage::value).solve(60);
+        int result = new KnapsackBasic(60,tested).solve();
         int expected = 95;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
@@ -107,16 +103,16 @@ public class KnapsackNGTest {
     @Test
     public void testBasicMemo() {
         System.out.println(test.TestUtils.methodName(0));
-        TList<Luggage> tested = TList.of(
-                new Luggage(11,15),
-                new Luggage(4,4),
-                new Luggage(2,3),
-                new Luggage(1,2),
-                new Luggage(3,1),
-                new Luggage(5,8)
+        TList<TPoint2i> tested = TList.of(
+                new TPoint2i(11,15),
+                new TPoint2i(4,4),
+                new TPoint2i(2,3),
+                new TPoint2i(1,2),
+                new TPoint2i(3,1),
+                new TPoint2i(5,8)
         );
         
-        int result = new KnapsackBasicMemo<>(tested, Luggage::weight, Luggage::value, new TreeMap<>(sof(xc,yc).compile())).solve(15);
+        int result = new KnapsackBasicMemo(15,tested).solve();
         int expected = 20;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
@@ -126,52 +122,52 @@ public class KnapsackNGTest {
     @Test
     public void testBasicMemoLarge() {
         System.out.println(test.TestUtils.methodName(0));
-        TList<Luggage> tested = TList.of(
-                new Luggage(11,15),
-                new Luggage(4,4),
-                new Luggage(2,3),
-                new Luggage(1,2),
-                new Luggage(3,1),
-                new Luggage(5,8),
-                new Luggage(11,15),
-                new Luggage(4,4),
-                new Luggage(2,3),
-                new Luggage(1,2),
-                new Luggage(3,1),
-                new Luggage(5,8),
-                new Luggage(11,15),
-                new Luggage(4,4),
-                new Luggage(2,3),
-                new Luggage(1,2),
-                new Luggage(3,1),
-                new Luggage(5,8),
-                new Luggage(11,15),
-                new Luggage(4,4),
-                new Luggage(2,3),
-                new Luggage(1,2),
-                new Luggage(3,1),
-                new Luggage(5,8),
-                new Luggage(11,15),
-                new Luggage(4,4),
-                new Luggage(2,3),
-                new Luggage(1,2),
-                new Luggage(3,1),
-                new Luggage(5,8),
-                new Luggage(11,15),
-                new Luggage(4,4),
-                new Luggage(2,3),
-                new Luggage(1,2),
-                new Luggage(3,1),
-                new Luggage(5,8),
-                new Luggage(11,15),
-                new Luggage(4,4),
-                new Luggage(2,3),
-                new Luggage(1,2),
-                new Luggage(3,1),
-                new Luggage(5,8)
+    TList<TPoint2i> tested = TList.of(
+                new TPoint2i(11,15),
+                new TPoint2i(4,4),
+                new TPoint2i(2,3),
+                new TPoint2i(1,2),
+                new TPoint2i(3,1),
+                new TPoint2i(5,8),
+                new TPoint2i(11,15),
+                new TPoint2i(4,4),
+                new TPoint2i(2,3),
+                new TPoint2i(1,2),
+                new TPoint2i(3,1),
+                new TPoint2i(5,8),
+                new TPoint2i(11,15),
+                new TPoint2i(4,4),
+                new TPoint2i(2,3),
+                new TPoint2i(1,2),
+                new TPoint2i(3,1),
+                new TPoint2i(5,8),
+                new TPoint2i(11,15),
+                new TPoint2i(4,4),
+                new TPoint2i(2,3),
+                new TPoint2i(1,2),
+                new TPoint2i(3,1),
+                new TPoint2i(5,8),
+                new TPoint2i(11,15),
+                new TPoint2i(4,4),
+                new TPoint2i(2,3),
+                new TPoint2i(1,2),
+                new TPoint2i(3,1),
+                new TPoint2i(5,8),
+                new TPoint2i(11,15),
+                new TPoint2i(4,4),
+                new TPoint2i(2,3),
+                new TPoint2i(1,2),
+                new TPoint2i(3,1),
+                new TPoint2i(5,8),
+                new TPoint2i(11,15),
+                new TPoint2i(4,4),
+                new TPoint2i(2,3),
+                new TPoint2i(1,2),
+                new TPoint2i(3,1),
+                new TPoint2i(5,8)
         );
         
-        int result = new KnapsackBasicMemo<>(tested, Luggage::weight, Luggage::value, new TreeMap<>(sof(xc,yc).compile())).solve(60);
+        int result = new KnapsackBasicMemo(60,tested).solve();
         int expected = 95;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
@@ -191,7 +187,7 @@ public class KnapsackNGTest {
                 new Luggage(5,8)
         );
         
-        int result = new Knapsack(15,t2i(tested,Luggage::weight,Luggage::value)).solve().value;
+        int result = new Knapsack(15,Solvers.extract2i(tested,Luggage::weight,Luggage::value)).solve().value;
         int expected = 20;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);

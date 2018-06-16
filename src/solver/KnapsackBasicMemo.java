@@ -16,26 +16,24 @@
 package solver;
 
 import collection.TList;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.function.ToIntFunction;
+import java.util.TreeMap;
+import static orderedSet.Comparators.sof;
 import static shape.ShapeUtil.p2i;
 import shape.TPoint2i;
+import static shape.TPoint2i.xc;
+import static shape.TPoint2i.yc;
 
 /**
  * Memo recursive version of Knapsack.
  * @author masao
  */
-public class KnapsackBasicMemo<T> extends KnapsackBasic<T> {
+public class KnapsackBasicMemo extends KnapsackBasic {
     Map<TPoint2i, Integer>memo;
 
-    public KnapsackBasicMemo(TList<T> candidates, ToIntFunction<T> volume, ToIntFunction<T> value, Map<TPoint2i, Integer> memo) {
-        super(candidates, volume, value);
-        this.memo = memo;
-    }
-    
-    public KnapsackBasicMemo(TList<T> candidates, ToIntFunction<T> volume, ToIntFunction<T> value) {
-        this(candidates, volume, value, new HashMap<>());
+    public KnapsackBasicMemo(int capacity, TList<TPoint2i> candidates) {
+        super(capacity, candidates);
+        this.memo = new TreeMap<>(sof(xc,yc).compile());
     }
     
     /**

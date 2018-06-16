@@ -17,22 +17,20 @@ package solver;
 
 import collection.TList;
 import static java.lang.Integer.max;
-import java.util.function.ToIntFunction;
+import shape.TPoint2i;
 
 /**
  * Knapsack problem solver.
  * 
  * @author masao
  */
-public class KnapsackBasic<T> {
-    TList<T> candidates;
-    ToIntFunction<T> volume;
-    ToIntFunction<T> value;
+public class KnapsackBasic {
+    TList<TPoint2i> candidates; //x:volume y:value
+    int capacity;
     
-    public KnapsackBasic(TList<T> candidates, ToIntFunction<T> volume, ToIntFunction<T> value) {
+    public KnapsackBasic(int capacity, TList<TPoint2i> candidates) {
         this.candidates = candidates;
-        this.volume = volume;
-        this.value = value;
+        this.capacity = capacity;
     }
     
     /**
@@ -46,13 +44,13 @@ public class KnapsackBasic<T> {
     int value(int i, int rest) {
         if (i==candidates.size())
             return 0;
-        T candidate = candidates.get(i);
-        if (rest<volume.applyAsInt(candidate))
+        TPoint2i candidate = candidates.get(i);
+        if (rest<candidate.x)
             return value(i+1, rest);
-        return max(value(i+1,rest), value(i+1,rest-volume.applyAsInt(candidate))+value.applyAsInt(candidate));
+        return max(value(i+1,rest), value(i+1,rest-candidate.x)+candidate.y);
     }
     
-    public int solve(int capacity) {
+    public int solve() {
         return value(0, capacity);
     }
 }

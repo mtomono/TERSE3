@@ -21,6 +21,7 @@ import java.util.function.BiFunction;
 import java.util.function.ToIntFunction;
 import static shape.ShapeUtil.p2i;
 import shape.TPoint2i;
+import static solver.Solvers.extract2i;
 
 /**
  * Knapsack problem solver.
@@ -43,10 +44,6 @@ public class Knapsack {
         public Result add(int addedIndex, int addedValue) {
             return new Result(content.append(TList.wrap(addedIndex)), value+addedValue);
         }
-    }
-    
-    public static <T> TList<TPoint2i> t2i(TList<T> body, ToIntFunction<T> volume, ToIntFunction<T> value) {
-        return body.map(x->p2i(volume.applyAsInt(x),value.applyAsInt(x))).fix();
     }
     
     TList<TPoint2i> c;
@@ -86,7 +83,7 @@ public class Knapsack {
     }
         
     static public <T> Result solve(BiFunction<Integer,TList<TPoint2i>,Knapsack> k, int capacity, TList<T> target, ToIntFunction<T> volume, ToIntFunction<T> value) {
-        return k.apply(capacity,t2i(target,volume, value)).solve();
+        return k.apply(capacity,extract2i(target,volume, value)).solve();
     }
     static public <T> TList<T> solveElements(BiFunction<Integer,TList<TPoint2i>,Knapsack> k, int capacity, TList<T> target, ToIntFunction<T> volume, ToIntFunction<T> value) {
         Result result = solve(k,capacity,target,volume,value);
