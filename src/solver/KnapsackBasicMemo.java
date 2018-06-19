@@ -31,8 +31,7 @@ import static shape.TPoint2i.yc;
 public class KnapsackBasicMemo extends KnapsackBasic {
     Map<TPoint2i, Integer>memo;
 
-    public KnapsackBasicMemo(int capacity, TList<TPoint2i> candidates) {
-        super(capacity, candidates);
+    public KnapsackBasicMemo() {
         this.memo = new TreeMap<>(sof(xc,yc).compile());
     }
     
@@ -48,11 +47,12 @@ public class KnapsackBasicMemo extends KnapsackBasic {
      * already similar). so it lead me to add the method like computeIfNull to Grid class.
      * @param i
      * @param rest
+     * @param c
      * @return 
      */
     @Override
-    public int value(int i, int rest) {
-        return memo.computeIfAbsent(p2i(i,rest),p->super.value(i,rest));
+    public int value(int i, int rest, TList<TPoint2i> c) {
+        return memo.computeIfAbsent(p2i(i,rest),p->super.value(i,rest,c));
     }
         
 

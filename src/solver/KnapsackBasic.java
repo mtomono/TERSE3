@@ -24,15 +24,10 @@ import shape.TPoint2i;
  * 
  * @author masao
  */
-public class KnapsackBasic {
-    TList<TPoint2i> c; //x:volume y:value
-    int capacity;
-    
-    public KnapsackBasic(int capacity, TList<TPoint2i> candidates) {
-        this.c = candidates;
-        this.capacity = capacity;
+public class KnapsackBasic {    
+    public KnapsackBasic() {
     }
-    
+        
     /**
      * core mothod of this algorithm.
      * returns the biggest value possibly be made from i to n-1th items when 
@@ -41,15 +36,15 @@ public class KnapsackBasic {
      * @param rest
      * @return 
      */
-    int value(int i, int rest) {
+    int value(int i, int rest, TList<TPoint2i> c) {//x:volume y:value
         if (i==c.size())
             return 0;
         if (rest<c.get(i).x)
-            return value(i+1, rest);
-        return max(value(i+1,rest), value(i+1,rest-c.get(i).x)+c.get(i).y);
+            return value(i+1, rest, c);
+        return max(value(i+1,rest,c), value(i+1,rest-c.get(i).x,c)+c.get(i).y);
     }
     
-    public int solve() {
-        return value(0, capacity);
+    public int solve(int capacity, TList<TPoint2i>c) {
+        return value(0, capacity,c);
     }
 }

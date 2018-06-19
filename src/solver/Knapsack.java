@@ -17,6 +17,7 @@ package solver;
 
 import collection.TList;
 import static function.ComparePolicy.inc;
+import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.ToIntFunction;
 import shape.TPoint2i;
@@ -28,12 +29,8 @@ import static solver.Solvers.extract2i;
  * @author masao
  */
 public class Knapsack {    
-    TList<TPoint2i> c;
-    int capacity;
     
-    public Knapsack(int capacity,TList<TPoint2i>c) {
-        this.c=c;
-        this.capacity=capacity;
+    public Knapsack() {
     }
     
     /**
@@ -43,23 +40,23 @@ public class Knapsack {
      * @param c target list of elements.
      * @return 
      */
-    SearchResult value(int i, int rest) {
+    Result<Integer> value(int i, int rest, TList<TPoint2i> c) {
         if (i==c.size())
-            return new SearchResult();
+            return new Result<>(0);
         if (rest<c.get(i).x)
-            return value(i+1,rest);
-        return TList.sof(value(i+1,rest), value(i+1,rest-c.get(i).x).add(i,c.get(i).y)).max(inc(x->x.value)).get();
+            return value(i+1,rest,c);
+        return TList.sof(value(i+1,rest,c), value(i+1,rest-c.get(i).x,c).add(i,v->v+c.get(i).y)).max(inc(x->x.value)).get();
     }
     
-    public SearchResult solve() {
-        return value(0, capacity);
+    public Result<Integer> solve(int capacity, TList<TPoint2i> c) {
+        return value(0, capacity, c);
     }
         
-    static public <T> SearchResult solve(BiFunction<Integer,TList<TPoint2i>,Knapsack> k, int capacity, TList<T> target, ToIntFunction<T> volume, ToIntFunction<T> value) {
-        return k.apply(capacity,extract2i(target,volume, value)).solve();
+    static public <T> Result<Integer> solve(Knapsack k, int capacity, TList<T> target, ToIntFunction<T> volume, ToIntFunction<T> value) {
+        return k.solve(capacity, extract2i(target,volume, value));
     }
-    static public <T> TList<T> solveElements(BiFunction<Integer,TList<TPoint2i>,Knapsack> k, int capacity, TList<T> target, ToIntFunction<T> volume, ToIntFunction<T> value) {
-        SearchResult result = solve(k,capacity,target,volume,value);
+    static public <T> TList<T> solveElements(Knapsack k, int capacity, TList<T> target, ToIntFunction<T> volume, ToIntFunction<T> value) {
+        Result<Integer> result = solve(k,capacity,target,volume,value);
         return target.pickUp(result.content);
     }
 }
