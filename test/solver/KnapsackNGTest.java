@@ -38,7 +38,7 @@ public class KnapsackNGTest {
                 new TPoint2i(5,8)
         );
         
-        int result = new KnapsackBasic(15,tested).solve();
+        int result = new KnapsackBasic().solve(15,tested);
         int expected = 20;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
@@ -93,7 +93,7 @@ public class KnapsackNGTest {
                 new TPoint2i(5,8)
         );
         
-        int result = new KnapsackBasic(60,tested).solve();
+        int result = new KnapsackBasic().solve(60,tested);
         int expected = 95;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
@@ -112,7 +112,7 @@ public class KnapsackNGTest {
                 new TPoint2i(5,8)
         );
         
-        int result = new KnapsackBasicMemo(15,tested).solve();
+        int result = new KnapsackBasicMemo().solve(15,tested);
         int expected = 20;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
@@ -167,7 +167,7 @@ public class KnapsackNGTest {
                 new TPoint2i(5,8)
         );
         
-        int result = new KnapsackBasicMemo(60,tested).solve();
+        int result = new KnapsackBasicMemo().solve(60,tested);
         int expected = 95;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
@@ -187,7 +187,7 @@ public class KnapsackNGTest {
                 new Luggage(5,8)
         );
         
-        int result = new Knapsack(15,Solvers.extract2i(tested,Luggage::weight,Luggage::value)).solve().value;
+        int result = new Knapsack().solve(15,Solvers.extract2i(tested,Luggage::weight,Luggage::value)).value;
         int expected = 20;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
@@ -206,7 +206,7 @@ public class KnapsackNGTest {
                 new Luggage(5,8)
         );
         
-        int result = Knapsack.solve(Knapsack::new, 15,tested,Luggage::weight,Luggage::value).value;
+        int result = Knapsack.solve(new Knapsack(), 15,tested,Luggage::weight,Luggage::value).value;
         int expected = 20;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
@@ -225,7 +225,7 @@ public class KnapsackNGTest {
                 new Luggage(5,8)
         );
         
-        int result = Knapsack.solve(KnapsackMemo::new,15,tested,Luggage::weight,Luggage::value).value;
+        int result = Knapsack.solve(new KnapsackMemoMap(tested.size(),15),15,tested,Luggage::weight,Luggage::value).value;
         int expected = 20;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
@@ -280,7 +280,7 @@ public class KnapsackNGTest {
                 new Luggage(5,8)
         );
         
-        int result = Knapsack.solve(KnapsackMemo::new,60,tested,Luggage::weight,Luggage::value).value;
+        int result = Knapsack.solve(new KnapsackMemoMap(tested.size(),60),60,tested,Luggage::weight,Luggage::value).value;
         int expected = 95;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
@@ -299,7 +299,7 @@ public class KnapsackNGTest {
                 new Luggage(5,8)
         );
         
-        String result = Knapsack.solveElements(Knapsack::new,15,tested,Luggage::weight,Luggage::value).toWrappedString();
+        String result = Knapsack.solveElements(new Knapsack(),15,tested,Luggage::weight,Luggage::value).toWrappedString();
         String expected = "" 
                 + "weight:1 value:2\n"
                 + "weight:2 value:3\n"
@@ -322,7 +322,7 @@ public class KnapsackNGTest {
                 new Luggage(5,8)
         );
         
-        int result = Knapsack.solve(KnapsackMemoSparse::new,15,tested,Luggage::weight,Luggage::value).value;
+        int result = Knapsack.solve(new KnapsackMemoSparse(),15,tested,Luggage::weight,Luggage::value).value;
         int expected = 20;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
