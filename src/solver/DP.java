@@ -19,21 +19,23 @@ import shapeCollection.Grid;
  * @author masao
  */
 abstract public class DP<T> {
-    static <T> Function<TPoint2i,Result<T>> basic(DP<T> k, TList<TPoint2i> c) {
+    static <T> Function<TPoint2i,T> basic(DP<T> k, TList<TPoint2i> c) {
         return pi->k.valueCore(pi.x, pi.y, c);
     }
 
-    static <T> Function<TPoint2i,Result<T>> memo(DP<T> k, Map<TPoint2i, Result<T>> map) {
-        final Function<TPoint2i, Result<T>> f = k.value;
+    static <T> Function<TPoint2i,T> memo(DP<T> k, Map<TPoint2i, T> map) {
+        final Function<TPoint2i, T> f = k.value;
         return pi->map.computeIfAbsent(pi, f);
     }
     
-    static <T> Function<TPoint2i,Result<T>> memo(DP<T> k, Grid<Result<T>> map) {
-        final Function<TPoint2i, Result<T>> f = k.value;
+    static <T> Function<TPoint2i,T> memo(DP<T> k, Grid<T> map) {
+        final Function<TPoint2i, T> f = k.value;
         return pi->map.computeIfNull(pi, f);
     }
 
-    Function<TPoint2i, Result<T>> value;
+    abstract T valueCore(int i, int rest, TList<TPoint2i> c);
+
+    Function<TPoint2i, T> value;
         
     public DP() {
     }
@@ -45,7 +47,7 @@ abstract public class DP<T> {
      * @param map
      * @return 
      */
-    public DP<T> memo(Map<TPoint2i, Result<T>> map) {
+    public DP<T> memo(Map<TPoint2i, T> map) {
         return setValue(memo(this,map));
     }
     
@@ -53,7 +55,7 @@ abstract public class DP<T> {
         return memo(new TreeMap<>(Comparators.<TPoint2i>sof(p->p.x, p->p.y).compile()));
     }
     
-    public DP<T> memo(Grid<Result<T>> map) {
+    public DP<T> memo(Grid<T> map) {
         return setValue(memo(this,map));
     }
     
@@ -61,18 +63,17 @@ abstract public class DP<T> {
         return setValue(basic(this,c));
     }
     
-    public DP<T> setValue(Function<TPoint2i, Result<T>> value) {
+    public DP<T> setValue(Function<TPoint2i, T> value) {
         this.value = value;
         return this;
     }
     
-    Result<T> value(int i, int rest) {
+    T value(int i, int rest) {
         return value.apply(p2i(i,rest));
     }
     
-    abstract Result<T> valueCore(int i, int rest, TList<TPoint2i> c);
     
-    public Result<T> solve(int capacity) {
+    public T solve(int capacity) {
         return value(0, capacity);
     }
 }
