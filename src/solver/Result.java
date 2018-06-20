@@ -29,4 +29,8 @@ public class Result<T> {
         return new Result<>(content.append(TList.wrap(addedIndex)), add.apply(value));
     }
     
+    public <S> TList<S> render(TList<S> target) {
+        return target.pickUp(content);
+    }
+    
 }

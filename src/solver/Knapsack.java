@@ -17,19 +17,15 @@ package solver;
 
 import collection.TList;
 import static function.ComparePolicy.inc;
-import java.util.List;
-import java.util.function.BiFunction;
-import java.util.function.ToIntFunction;
 import shape.TPoint2i;
-import static solver.Solvers.extract2i;
 
 /**
  * Knapsack problem solver.
  * 
  * @author masao
  */
-public class Knapsack {    
-    
+public class Knapsack extends DP<Integer>{
+        
     public Knapsack() {
     }
     
@@ -40,23 +36,12 @@ public class Knapsack {
      * @param c target list of elements.
      * @return 
      */
-    Result<Integer> value(int i, int rest, TList<TPoint2i> c) {
+    @Override
+    Result<Integer> valueCore(int i, int rest, TList<TPoint2i> c) {
         if (i==c.size())
             return new Result<>(0);
         if (rest<c.get(i).x)
-            return value(i+1,rest,c);
-        return TList.sof(value(i+1,rest,c), value(i+1,rest-c.get(i).x,c).add(i,v->v+c.get(i).y)).max(inc(x->x.value)).get();
-    }
-    
-    public Result<Integer> solve(int capacity, TList<TPoint2i> c) {
-        return value(0, capacity, c);
-    }
-        
-    static public <T> Result<Integer> solve(Knapsack k, int capacity, TList<T> target, ToIntFunction<T> volume, ToIntFunction<T> value) {
-        return k.solve(capacity, extract2i(target,volume, value));
-    }
-    static public <T> TList<T> solveElements(Knapsack k, int capacity, TList<T> target, ToIntFunction<T> volume, ToIntFunction<T> value) {
-        Result<Integer> result = solve(k,capacity,target,volume,value);
-        return target.pickUp(result.content);
+            return value(i+1,rest);
+        return TList.sof(value(i+1,rest), value(i+1,rest-c.get(i).x).add(i,v->v+c.get(i).y)).max(inc(x->x.value)).get();
     }
 }

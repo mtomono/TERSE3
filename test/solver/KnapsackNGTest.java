@@ -6,11 +6,15 @@
 package solver;
 
 import collection.TList;
+import java.util.TreeMap;
+import orderedSet.Comparators;
 import static org.testng.Assert.*;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import static shape.ShapeUtil.p2i;
 import shape.TPoint2i;
+import shapeCollection.Grid;
+import static solver.Solvers.extract2i;
 import test.TestUtils;
 
 /**
@@ -187,26 +191,7 @@ public class KnapsackNGTest {
                 new Luggage(5,8)
         );
         
-        int result = new Knapsack().solve(15,Solvers.extract2i(tested,Luggage::weight,Luggage::value)).value;
-        int expected = 20;
-        System.out.println("result  : "+result);
-        System.out.println("expected: "+expected);
-        assertEquals(result, expected);
-    }
-
-    @Test
-    public void testKnapsack2() {
-        System.out.println(test.TestUtils.methodName(0));
-        TList<Luggage> tested = TList.of(
-                new Luggage(11,15),
-                new Luggage(4,4),
-                new Luggage(2,3),
-                new Luggage(1,2),
-                new Luggage(3,1),
-                new Luggage(5,8)
-        );
-        
-        int result = Knapsack.solve(new Knapsack(), 15,tested,Luggage::weight,Luggage::value).value;
+        int result = new Knapsack().target(Solvers.extract2i(tested,Luggage::weight,Luggage::value)).solve(15).value;
         int expected = 20;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
@@ -225,7 +210,7 @@ public class KnapsackNGTest {
                 new Luggage(5,8)
         );
         
-        int result = Knapsack.solve(new KnapsackMemoMap(tested.size(),15),15,tested,Luggage::weight,Luggage::value).value;
+        int result = new Knapsack().target(extract2i(tested,Luggage::weight,Luggage::value)).memo(new Grid<>(tested.size(),15)).solve(15).value;
         int expected = 20;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
@@ -280,7 +265,7 @@ public class KnapsackNGTest {
                 new Luggage(5,8)
         );
         
-        int result = Knapsack.solve(new KnapsackMemoMap(tested.size(),60),60,tested,Luggage::weight,Luggage::value).value;
+        int result = new Knapsack().target(extract2i(tested,Luggage::weight,Luggage::value)).memo(new Grid<>(tested.size(),60)).solve(60).value;
         int expected = 95;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
@@ -299,7 +284,7 @@ public class KnapsackNGTest {
                 new Luggage(5,8)
         );
         
-        String result = Knapsack.solveElements(new Knapsack(),15,tested,Luggage::weight,Luggage::value).toWrappedString();
+        String result = new Knapsack().target(extract2i(tested,Luggage::weight,Luggage::value)).memo().solve(15).render(tested).toWrappedString();
         String expected = "" 
                 + "weight:1 value:2\n"
                 + "weight:2 value:3\n"
@@ -322,7 +307,7 @@ public class KnapsackNGTest {
                 new Luggage(5,8)
         );
         
-        int result = Knapsack.solve(new KnapsackMemoSparse(),15,tested,Luggage::weight,Luggage::value).value;
+        int result = new Knapsack().target(extract2i(tested,Luggage::weight,Luggage::value)).memo(new TreeMap<>(Comparators.<TPoint2i>sof(p->p.x, p->p.y).compile())).solve(15).value;
         int expected = 20;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
