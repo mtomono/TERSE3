@@ -19,7 +19,7 @@ import collection.TList;
 import static java.lang.Integer.max;
 import static java.lang.Integer.min;
 import static java.lang.Integer.signum;
-import java.util.Collection;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -78,6 +78,10 @@ public class Grid<T> implements Cloneable {
     public Grid(TPoint2i from, TPoint2i to, TList<T> l) {
         this(from,to,(a,b)->l.get((a-from.x)+(b-from.y)*(to.x-from.x+1)));
         assert l.size() >= (to.x-from.x+1)*(to.y-from.y+1);
+    }
+    
+    public Grid(int x, int y) {
+        this(TPoint2i.zero, new TPoint2i(x,y), (xx,yy)->null);
     }
         
     Grid(TPoint2i from, TPoint2i to, TList<Integer> x, TList<Integer> y, Range<Integer> xr, Range<Integer> yr, TPoint2i togo, TPoint2i sigTogo, TList<TList<T>> space) {
@@ -140,7 +144,7 @@ public class Grid<T> implements Cloneable {
     public T get(TPoint2i at) {
         return get(at.x, at.y);
     }
-    
+
     public T get(int x, int y) {
         return space.get(yInList(y)).get(xInList(x));
     }
@@ -308,6 +312,10 @@ public class Grid<T> implements Cloneable {
         if (old != null)
             return old;
         return set(x,y,f.apply(x,y));
+    }
+    
+    public T computeIfNull(TPoint2i p, Function<TPoint2i,T> f) {
+        return computeIfNull(p.x,p.y,(x,y)->f.apply(new TPoint2i(x,y)));
     }
     
     public String toFlatTestString() {
