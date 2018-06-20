@@ -24,7 +24,7 @@ import shape.TPoint2i;
  * 
  * @author masao
  */
-public class Knapsack extends DP<Result<Integer>>{
+public class Knapsack extends DP<TPoint2i, Result<Integer>>{
         
     public Knapsack() {
     }

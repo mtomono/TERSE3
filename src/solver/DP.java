@@ -18,24 +18,24 @@ import shapeCollection.Grid;
  *
  * @author masao
  */
-abstract public class DP<T> {
-    static <T> Function<TPoint2i,T> basic(DP<T> k, TList<TPoint2i> c) {
+abstract public class DP<S,R> {
+    static <S,R> Function<TPoint2i,R> basic(DP<S,R> k, TList<S> c) {
         return pi->k.valueCore(pi.x, pi.y, c);
     }
 
-    static <T> Function<TPoint2i,T> memo(DP<T> k, Map<TPoint2i, T> map) {
-        final Function<TPoint2i, T> f = k.value;
+    static <S,R> Function<TPoint2i,R> memo(DP<S,R> k, Map<TPoint2i, R> map) {
+        final Function<TPoint2i, R> f = k.value;
         return pi->map.computeIfAbsent(pi, f);
     }
     
-    static <T> Function<TPoint2i,T> memo(DP<T> k, Grid<T> map) {
-        final Function<TPoint2i, T> f = k.value;
+    static <S,R> Function<TPoint2i,R> memo(DP<S,R> k, Grid<R> map) {
+        final Function<TPoint2i, R> f = k.value;
         return pi->map.computeIfNull(pi, f);
     }
 
-    abstract T valueCore(int i, int rest, TList<TPoint2i> c);
+    abstract R valueCore(int i, int rest, TList<S> c);
 
-    Function<TPoint2i, T> value;
+    Function<TPoint2i, R> value;
         
     public DP() {
     }
@@ -47,33 +47,33 @@ abstract public class DP<T> {
      * @param map
      * @return 
      */
-    public DP<T> memo(Map<TPoint2i, T> map) {
+    public DP<S,R> memo(Map<TPoint2i, R> map) {
         return setValue(memo(this,map));
     }
     
-    public DP<T> memo() {
+    public DP<S,R> memo() {
         return memo(new TreeMap<>(Comparators.<TPoint2i>sof(p->p.x, p->p.y).compile()));
     }
     
-    public DP<T> memo(Grid<T> map) {
+    public DP<S,R> memo(Grid<R> map) {
         return setValue(memo(this,map));
     }
     
-    public DP<T> target(TList<TPoint2i> c) {
+    public DP<S,R> target(TList<S> c) {
         return setValue(basic(this,c));
     }
     
-    public DP<T> setValue(Function<TPoint2i, T> value) {
+    public DP<S,R> setValue(Function<TPoint2i, R> value) {
         this.value = value;
         return this;
     }
     
-    T value(int i, int rest) {
+    R value(int i, int rest) {
         return value.apply(p2i(i,rest));
     }
     
     
-    public T solve(int capacity) {
+    public R solve(int capacity) {
         return value(0, capacity);
     }
 }

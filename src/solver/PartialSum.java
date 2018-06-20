@@ -23,11 +23,7 @@ import static function.ComparePolicy.inc;
  * 
  * @author masao
  */
-public class PartialSum {
-    
-    public PartialSum() {
-    }
-    
+public class PartialSum extends DP<Integer,Result<Boolean>>{
     /**
      * core mothod of this algorithm.
      * returns the biggest value possibly be made from i to n-1th items when 
@@ -36,16 +32,11 @@ public class PartialSum {
      * @param rest
      * @return 
      */
-    Result<Boolean> value(int i, int rest, TList<Integer> c) {
+    Result<Boolean> valueCore(int i, int rest, TList<Integer> c) {
         if (i==c.size() || rest==0)
             return new Result<>(rest==0);
         if (rest<c.get(i))
-            return value(i+1,rest,c);
-        return TList.sof(value(i+1,rest,c),value(i+1,rest-c.get(i),c).add(i, b->b)).max(inc(r->r.value?1:0)).get();
-        
-    }
-    
-    public Result<Boolean> solve(int target, TList<Integer>c) {
-        return value(0, target,c);
+            return value(i+1,rest);
+        return TList.sof(value(i+1,rest),value(i+1,rest-c.get(i)).add(i, b->b)).max(inc(r->r.value?1:0)).get();
     }
 }

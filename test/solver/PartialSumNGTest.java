@@ -27,7 +27,7 @@ public class PartialSumNGTest {
     public void testBasic() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Integer> tested = TList.sof(5,2,1,7,6);
-        Result<Boolean> result = new PartialSum().solve(15,tested);
+        Result<Boolean> result = new PartialSum().target(tested).solve(15);
         boolean expected = true;
         if (result.value) System.out.println(tested.pickUp(result.content));
         System.out.println("result  : "+result);
@@ -38,7 +38,7 @@ public class PartialSumNGTest {
     public void testBasic14() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Integer> tested = TList.sof(5,2,1,7,6);
-        Result<Boolean> result = new PartialSum().solve(14,tested);
+        Result<Boolean> result = new PartialSum().target(tested).solve(14);
         boolean expected = true;
         if (result.value) System.out.println(tested.pickUp(result.content));
         System.out.println("result  : "+result);
@@ -49,7 +49,7 @@ public class PartialSumNGTest {
     public void testBasic10() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Integer> tested = TList.sof(5,2,12,7,23);
-        Result<Boolean> result = new PartialSum().solve(10,tested);
+        Result<Boolean> result = new PartialSum().target(tested).solve(10);
         boolean expected = false;
         if (result.value) System.out.println(tested.pickUp(result.content));
         System.out.println("result  : "+result);
