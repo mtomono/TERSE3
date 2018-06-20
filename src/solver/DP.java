@@ -25,7 +25,14 @@ import shape.TPoint2i;
 import shapeCollection.Grid;
 
 /**
- *
+ * Dynamic Programming.
+ * this is another answer to make memo recursion.
+ * instead of making the calling sequence complicated, this enables to reuse the 
+ * applying and memoing structure.
+ * in this class, something which can be called as 'method wrapping' is realized.
+ * this technique allows conformation separated from the implementation (especially 
+ * that of the memory structure).
+ * the implementation of this class casts a good contrast with KnapsackBasicMemo.
  * @author masao
  */
 abstract public class DP<S,R> {
@@ -34,7 +41,7 @@ abstract public class DP<S,R> {
     }
 
     static <S,R> Function<TPoint2i,R> memo(DP<S,R> k, Map<TPoint2i, R> map) {
-        final Function<TPoint2i, R> f = k.value;
+        final Function<TPoint2i, R> f = k.value; //this is very the necessary step to fix the function this method is wrapping.
         return pi->map.computeIfAbsent(pi, f);
     }
     
@@ -45,10 +52,10 @@ abstract public class DP<S,R> {
 
     abstract R valueCore(int i, int rest, TList<S> c);
 
-    Function<TPoint2i, R> value;
+    Function<TPoint2i, R> value; //this class cannot be an interface because of the existance of this value.
         
     public DP() {
-        value=p->{throw new RuntimeException("DP:value function is not set");};
+        value=p->{throw new RuntimeException("DP:value function is not set");}; //reports when value is called before it is set.
     }
     
     /**
@@ -79,7 +86,7 @@ abstract public class DP<S,R> {
         return this;
     }
     
-    R value(int i, int rest) {
+    public R value(int i, int rest) {
         return value.apply(p2i(i,rest));
     }
     
