@@ -34,6 +34,8 @@ import shapeCollection.Grid;
  * that of the memory structure).
  * the implementation of this class casts a good contrast with KnapsackBasicMemo.
  * @author masao
+ * @param <S>
+ * @param <R>
  */
 abstract public class DP<S,R> {
     abstract R valueCore(int i, int rest, TList<S> c);
