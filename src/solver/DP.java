@@ -36,20 +36,6 @@ import shapeCollection.Grid;
  * @author masao
  */
 abstract public class DP<S,R> {
-    static <S,R> Function<TPoint2i,R> basic(DP<S,R> k, TList<S> c) {
-        return pi->k.valueCore(pi.x, pi.y, c);
-    }
-
-    static <S,R> Function<TPoint2i,R> memo(DP<S,R> k, Map<TPoint2i, R> map) {
-        final Function<TPoint2i, R> f = k.value; //this is very the necessary step to fix the function this method is wrapping.
-        return pi->map.computeIfAbsent(pi, f);
-    }
-    
-    static <S,R> Function<TPoint2i,R> memo(DP<S,R> k, Grid<R> map) {
-        final Function<TPoint2i, R> f = k.value;
-        return pi->map.computeIfNull(pi, f);
-    }
-
     abstract R valueCore(int i, int rest, TList<S> c);
 
     Function<TPoint2i, R> value; //this class cannot be an interface because of the existance of this value.
@@ -66,7 +52,8 @@ abstract public class DP<S,R> {
      * @return 
      */
     public DP<S,R> memo(Map<TPoint2i, R> map) {
-        return setValue(memo(this,map));
+        final Function<TPoint2i, R> f = value; //this is very the necessary step to fix the function this method is wrapping.
+        return setValue(pi->map.computeIfAbsent(pi, f));
     }
     
     public DP<S,R> memo() {
@@ -74,11 +61,12 @@ abstract public class DP<S,R> {
     }
     
     public DP<S,R> memo(Grid<R> map) {
-        return setValue(memo(this,map));
+        final Function<TPoint2i, R> f = value; //this is very the necessary step to fix the function this method is wrapping.
+        return setValue(pi->map.computeIfNull(pi, f));
     }
     
     public DP<S,R> target(TList<S> c) {
-        return setValue(basic(this,c));
+        return setValue(pi->valueCore(pi.x, pi.y, c));
     }
     
     public DP<S,R> setValue(Function<TPoint2i, R> value) {
