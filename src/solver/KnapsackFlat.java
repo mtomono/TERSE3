@@ -23,6 +23,7 @@ import shapeCollection.Grid;
 /**
  * Non-recursive way of Knapsack solver.
  * @author masao
+ * @param <T>
  */
 public class KnapsackFlat<T> {
     static public Grid<Integer> solve(TList<TPoint2i> items, int capacity) {

@@ -31,6 +31,7 @@ public class PartialSumCount extends DP<Integer, Integer>{
      * @param rest
      * @return 
      */
+    @Override
     Integer valueCore(int i, int rest, TList<Integer> c) {
         if (i==c.size() || rest==0)
             return rest==0?1:0;

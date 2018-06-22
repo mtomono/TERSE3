@@ -21,6 +21,7 @@ import java.util.function.UnaryOperator;
 /**
  *
  * @author masao
+ * @param <T>
  */
 public class Result<T> {
     final TList<Integer> content;

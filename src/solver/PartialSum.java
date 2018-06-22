@@ -32,6 +32,7 @@ public class PartialSum extends DP<Integer,Result<Boolean>>{
      * @param rest
      * @return 
      */
+    @Override
     Result<Boolean> valueCore(int i, int rest, TList<Integer> c) {
         if (i==c.size() || rest==0)
             return new Result<>(rest==0);
