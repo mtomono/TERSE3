@@ -20,6 +20,8 @@ import java.util.Objects;
 /**
  *
  * @author masao
+ * @param <S>
+ * @param <T>
  */
 public abstract class Source<S, T> {
     int pos;

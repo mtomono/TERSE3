@@ -18,12 +18,14 @@ package parser;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import collection.P;
-import static function.TIntSupplier.f;
 import java.util.function.Predicate;
 
 /**
  *
  * @author masao
+ * @param <S>
+ * @param <T>
+ * @param <U>
  */
 @FunctionalInterface
 public interface Parser<S, T, U> {
