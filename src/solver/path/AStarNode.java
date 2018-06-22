@@ -24,8 +24,8 @@ import static solver.path.AStarStatus.*;
  * @author masao
  * @param <T>
  */
-public abstract class AStarNode<T> {
-    Optional<AStarNode> parent;
+public abstract class AStarNode<T extends AStarNode> {
+    Optional<T> parent;
     AStarStatus status;
     int costToCome;
     int costToGo;
@@ -41,12 +41,12 @@ public abstract class AStarNode<T> {
         return status;
     }
     
-    public AStarNode open(Optional<AStarNode> parent, int costToCome, int costToGo) {
+    public T open(Optional<T> parent, int costToCome, int costToGo) {
         this.status = OPEN;
         this.parent = parent;
         this.costToCome = costToCome;
         this.costToGo = costToGo;
-        return this;
+        return (T)this;
     }
     
     public int score() {
@@ -57,13 +57,13 @@ public abstract class AStarNode<T> {
         this.status=CLOSE;
     }
             
-    public TList<AStarNode> result() {
-        TList<AStarNode> retval = TList.c();
+    public TList<T> result() {
+        TList<T> retval = TList.c();
         result(retval);
         return retval;
     }
     
-    public void result(TList<AStarNode> retval) {
-        retval.add(parent.map(p->{p.result(retval);return this;}).orElse(this));
+    public void result(TList<T> retval) {
+        retval.add(parent.map(p->{p.result(retval);return (T)this;}).orElse((T)this));
     }
 }

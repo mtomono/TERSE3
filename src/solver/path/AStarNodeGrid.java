@@ -21,7 +21,7 @@ import shape.TPoint2i;
  * Node for Grid2 A Star.
  * @author masao
  */
-public class AStarNodeGrid extends AStarNode{
+public class AStarNodeGrid extends AStarNode<AStarNodeGrid>{
     final public TPoint2i point;
     
     public AStarNodeGrid(TPoint2i point, AStarStatus status) {

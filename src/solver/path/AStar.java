@@ -77,5 +77,4 @@ public abstract class AStar<T extends AStarNode> {
             candidates.forEach(a->openIfBetter(a,parent));
         }
     }
-
 }
