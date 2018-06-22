@@ -23,6 +23,7 @@ import shape.TPoint2i;
 /**
  *
  * @author masao
+ * @param <T>
  */
 public class GridMap<T> extends AbstractMap<TPoint2i, T> {
     Grid<T> body;

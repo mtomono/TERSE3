@@ -31,6 +31,7 @@ import shape.TPoint2i;
 /**
  *
  * @author masao
+ * @param <T>
  */
 public class Grid<T> implements Cloneable {
     final public TPoint2i from;
@@ -127,7 +128,7 @@ public class Grid<T> implements Cloneable {
     public Grid<T> clone() throws CloneNotSupportedException {
         super.clone();
         Grid<T> retval = new Grid<>(from, to, (a,b)->null);
-        y.forEach(y->retval.setY(y, getY(y)));
+        y.forEach(yy->retval.setY(yy, getY(yy)));
         return retval;
     }
     
@@ -192,7 +193,7 @@ public class Grid<T> implements Cloneable {
     
     public Grid<T> setY(int y, TList<T> l) {
         assert l.size() == x.size();
-        x.forEach(x->space.get(yInList(y)).set(xInList(x), l.get(xInList(x))));
+        x.forEach(xx->space.get(yInList(y)).set(xInList(xx), l.get(xInList(xx))));
         return this;
     }
     
@@ -205,12 +206,12 @@ public class Grid<T> implements Cloneable {
     
     public Grid<T> setX(int x, TList<T>l) {
         assert l.size() == y.size();
-        y.forEach(y->space.get(yInList(y)).set(xInList(x), l.get(yInList(y))));
+        y.forEach(yy->space.get(yInList(yy)).set(xInList(x), l.get(yInList(yy))));
         return this;
     }
     
     public Grid<T> set(Grid<T> other) {
-        x.forEach(x->y.forEach(y->Grid.this.cset(new TPoint2i(x,y), other.get(x,y))));
+        x.forEach(xx->y.forEach(yy->Grid.this.cset(new TPoint2i(xx,yy), other.get(xx,yy))));
         return this;
     }
     
@@ -315,7 +316,7 @@ public class Grid<T> implements Cloneable {
     }
     
     public T computeIfNull(TPoint2i p, Function<TPoint2i,T> f) {
-        return computeIfNull(p.x,p.y,(x,y)->f.apply(new TPoint2i(x,y)));
+        return computeIfNull(p.x,p.y,(xx,yy)->f.apply(new TPoint2i(xx,yy)));
     }
     
     public String toFlatTestString() {
@@ -353,5 +354,14 @@ public class Grid<T> implements Cloneable {
             return false;
         Grid<T> t = (Grid<T>) e;
         return getY().equals(t.getY());
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 79*hash+Objects.hashCode(this.from);
+        hash = 79*hash+Objects.hashCode(this.to);
+        hash = 79*hash+Objects.hashCode(this.space);
+        return hash;
     }
 }
