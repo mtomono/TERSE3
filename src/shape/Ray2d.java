@@ -43,6 +43,7 @@ public class Ray2d {
         return direction.normalizeR();
     }
     
+    @Override
     public boolean equals(Object o) {
         if (!(o instanceof Ray2d))
             return false;

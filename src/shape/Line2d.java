@@ -38,6 +38,7 @@ public class Line2d {
         return direction.normalizeR();
     }
     
+    @Override
     public boolean equals(Object o) {
         if (!(o instanceof Line2d))
             return false;

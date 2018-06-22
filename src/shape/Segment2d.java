@@ -36,6 +36,7 @@ public class Segment2d {
         return asVector().normalizeS();
     }
         
+    @Override
     public boolean equals(Object o) {
         if (!(o instanceof Segment2d))
             return false;
