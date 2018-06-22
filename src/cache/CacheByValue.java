@@ -22,6 +22,8 @@ import java.util.function.Function;
 /**
  * Cache which comes with parameter
  * @author masao
+ * @param <K>
+ * @param <V>
  */
 public class CacheByValue<K,V> {
     Map<K,V> map;

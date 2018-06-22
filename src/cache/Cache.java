@@ -20,6 +20,7 @@ import java.util.function.Supplier;
 /**
  *
  * @author mtomono
+ * @param <T>
  */
 public class Cache<T> {
     boolean cached;
