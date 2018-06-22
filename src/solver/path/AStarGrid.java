@@ -40,7 +40,7 @@ public class AStarGrid extends AStar<AStarNodeGrid> {
         this.from = from;
         this.to = to;
         TList<AStarNodeGrid> rawPath = search().map(a->a.result()).orElse(TList.empty());
-        this.path = rawPath.map(a->a.point);;
+        this.path = rawPath.map(a->a.point);
     }
     
     @Override

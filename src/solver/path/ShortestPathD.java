@@ -23,6 +23,7 @@ import static solver.path.ShortestPathD.NodeStatus.*;
 /**
  * shortest path with dijkstra algorithm
  * @author masao
+ * @param <N>
  */
 public class ShortestPathD<N> {
     public enum NodeStatus {

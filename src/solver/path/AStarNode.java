@@ -22,6 +22,7 @@ import static solver.path.AStarStatus.*;
 /**
  * Node for A Star.
  * @author masao
+ * @param <T>
  */
 public abstract class AStarNode<T> {
     Optional<AStarNode> parent;
