@@ -22,7 +22,6 @@ import java.util.function.*;
  *
  * @author mtomono
  * @param <IN>
- * @param <OUT>
  */
 @FunctionalInterface
 public interface TSupplier<IN> extends Supplier<IN> {

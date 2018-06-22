@@ -25,6 +25,7 @@ package function;
  *         return h.push(h.get()*2);
  *     }
  * @author mtgetmgetnget
+ * @param <T>
  */
 public class Holder<T> {
     T value;

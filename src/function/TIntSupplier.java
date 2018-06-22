@@ -20,7 +20,6 @@ import java.util.function.*;
 /**
  *
  * @author mtomono
- * @param <IN>
   */
 @FunctionalInterface
 public interface TIntSupplier extends IntSupplier {

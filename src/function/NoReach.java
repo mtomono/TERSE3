@@ -20,6 +20,7 @@ import java.util.function.Supplier;
 /**
  *
  * @author masao
+ * @param <T>
  */
 public class NoReach<T> implements Supplier<T> {
     @Override

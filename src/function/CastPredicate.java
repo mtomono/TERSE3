@@ -20,6 +20,7 @@ import java.util.function.Predicate;
 /**
  *
  * @author masao
+ * @param <T>
  */
 public class CastPredicate<T> implements Predicate<Object>{
     Class<T> clazz;
