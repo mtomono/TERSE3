@@ -88,7 +88,6 @@ public class Message {
     /**
      * New Line
      * start a message with empty String
-     * @param body
      * @return 
      */
     public static Message nl() {
@@ -103,7 +102,6 @@ public class Message {
      * Concatenate
      * add String after message
      * @param msg
-     * @param body
      * @return 
      */
     public Message c(String msg) {
@@ -115,7 +113,6 @@ public class Message {
      * Concatenate
      * add char after message
      * @param msg
-     * @param body
      * @return 
      */
     public Message c(char msg) {
@@ -127,7 +124,6 @@ public class Message {
      * Concatenate
      * add double after message
      * @param msg
-     * @param body
      * @return 
      */
     public Message c(double msg) {
@@ -139,7 +135,6 @@ public class Message {
      * Concatenate
      * add int after message
      * @param msg
-     * @param body
      * @return 
      */
     public Message c(int msg) {
@@ -151,7 +146,6 @@ public class Message {
      * Concatenate
      * add long after message
      * @param msg
-     * @param body
      * @return 
      */
     public Message c(long msg) {
@@ -163,7 +157,6 @@ public class Message {
      * Concatenate
      * add Object::toString() after message
      * @param o
-     * @param body
      * @return 
      */
     public Message c(Object o) {
@@ -180,7 +173,6 @@ public class Message {
      * Space
      * add n spaces after message
      * @param n
-     * @param body
      * @return 
      */
     public Message s(int n) {
@@ -191,7 +183,6 @@ public class Message {
     /**
      * Space
      * add 1 spaces after message
-     * @param body
      * @return 
      */
     public Message s() {
@@ -205,7 +196,6 @@ public class Message {
      * needs fixing : to deal with the situation where there already is a cr 
      * in the message
      * @param n
-     * @param body
      * @return 
      */
     public Message sto(int n) {
@@ -220,7 +210,6 @@ public class Message {
     /**
      * Carriage Return
      * add return after message
-     * @param body
      * @return 
      */
     public Message cr() {
@@ -243,7 +232,6 @@ public class Message {
      * @param <T>
      * @param list
      * @param line
-     * @param body
      * @return 
      */
     public <T> Message lines(List<T> list, Function<T, Object> line) {
