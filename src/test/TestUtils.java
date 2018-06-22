@@ -17,8 +17,6 @@ package test;
 
 import collection.TList;
 import static collection.c.a2l;
-import java.util.function.BinaryOperator;
-import string.Strings;
 
 /**
  *

@@ -23,6 +23,8 @@ import java.util.Set;
  * wrapper for map to get print out for put and get.
  * wrapper for debugging and testing.
  * @author masao
+ * @param <K>
+ * @param <V>
  */
 public class TeeMap<K,V> implements Map<K,V> {
     Map<K,V> body;

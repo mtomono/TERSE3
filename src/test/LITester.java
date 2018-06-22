@@ -24,6 +24,7 @@ import static test.TestUtils.pr;
 /**
  *
  * @author masao
+ * @param <T>
  */
 public class LITester<T> implements ListIterator<T> {
     ListIterator<T> body;

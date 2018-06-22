@@ -57,6 +57,7 @@ public class I {
         return t.body.equals(this.body);
     }
     
+    @Override
     public String toString() {
         return "I" + body.toString();
     }
