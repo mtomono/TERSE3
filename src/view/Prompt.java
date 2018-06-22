@@ -24,6 +24,7 @@ import parser.StrSource;
 /**
  *
  * @author masao
+ * @param <S>
  */
 public class Prompt<S> {
     Parser<String, Character, S> p;
