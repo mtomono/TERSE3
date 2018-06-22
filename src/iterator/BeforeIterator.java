@@ -21,6 +21,7 @@ import java.util.function.Predicate;
 /**
  *
  * @author masao
+ * @param <T>
  */
 public class BeforeIterator<T> extends AbstractBufferedIterator<T> {
     Predicate<? super T> terminator;

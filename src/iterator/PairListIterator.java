@@ -21,6 +21,9 @@ import java.util.function.BiFunction;
 /**
  *
  * @author masao
+ * @param <S>
+ * @param <T>
+ * @param <U>
  */
 public class PairListIterator<S, T, U> implements ListIterator<U> {
     ListIterator<S> left;

@@ -20,6 +20,7 @@ import java.util.Iterator;
 /**
  *
  * @author masao
+ * @param <T>
  */
 public class LocallyUniqueIterator<T> extends AbstractBufferedIterator<T> {
     Iterator<T> base;

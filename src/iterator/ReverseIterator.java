@@ -20,6 +20,7 @@ import java.util.ListIterator;
 /**
  *
  * @author mtomono
+ * @param <T>
  */
 public class ReverseIterator<T> implements ListIterator<T> {
     ListIterator<T> body;

@@ -21,6 +21,7 @@ import java.util.function.Supplier;
 /**
  *
  * @author masao
+ * @param <T>
  */
 public class Delimiter<T> extends AbstractBufferedIterator<T> {
     Iterator<T> body;

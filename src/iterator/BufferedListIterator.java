@@ -21,6 +21,7 @@ import java.util.Optional;
 /**
  * a listiterator which only can previous() limited times at once.
  * @author mtomono
+ * @param <T>
  */
 abstract public class BufferedListIterator<T> implements ListIterator<T> {
     public Optional<T> peek() {

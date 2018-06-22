@@ -20,6 +20,7 @@ import java.util.Iterator;
 /**
  *
  * @author masao
+ * @param <T>
  */
 public class LimitIterator<T> implements Iterator<T> {
     Iterator<T> body;

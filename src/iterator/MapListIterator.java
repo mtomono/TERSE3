@@ -21,6 +21,8 @@ import java.util.function.Function;
 /**
  *
  * @author masao
+ * @param <S>
+ * @param <T>
  */
 public class MapListIterator<S, T> implements ListIterator<T> {
     ListIterator<S> body;

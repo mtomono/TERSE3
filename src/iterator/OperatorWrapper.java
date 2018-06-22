@@ -23,6 +23,7 @@ import java.util.function.UnaryOperator;
  * Iterator made of Operator.
  * generates value by adopting operator repeatedly.
  * @author masao
+ * @param <T>
  */
 public class OperatorWrapper<T> implements Iterator<T> {
     Holder<T> h;

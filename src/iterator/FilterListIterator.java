@@ -24,6 +24,7 @@ import java.util.function.Predicate;
 /**
  *
  * @author masao
+ * @param <T>
  */
 public class FilterListIterator<T> implements ListIterator<T> {
     ListIterator<T> iter;

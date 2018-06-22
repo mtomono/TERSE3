@@ -22,6 +22,7 @@ import java.util.*;
  * because this is a list, you can take iterators as many as you like.
  * they all refers to the same cache and let it grow as they need.
  * @author mtomono
+ * @param <T>
  */
 public class IteratorCache<T> extends AbstractList<T> {
     ArrayList<T> cache;

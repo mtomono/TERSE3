@@ -20,6 +20,7 @@ import java.util.ListIterator;
 /**
  *
  * @author masao
+ * @param <T>
  */
 public class TListIterator<T> implements ListIterator<T> {
     ListIterator<T> body;

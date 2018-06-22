@@ -20,6 +20,7 @@ import java.util.ListIterator;
 /**
  * ListIterator which is truncated by from and to
  * @author mtomono
+ * @param <T>
  */
 public class SubListIterator<T> implements ListIterator<T> {
     ListIterator<T> body;

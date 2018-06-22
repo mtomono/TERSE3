@@ -23,6 +23,7 @@ import java.util.List;
 /**
  *
  * @author masao
+ * @param <T>
  */
 public class WeaveIterator<T> extends AbstractBufferedIterator<T> {
     Iterable<Iterator<T>> body;

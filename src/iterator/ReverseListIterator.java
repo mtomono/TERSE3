@@ -20,6 +20,7 @@ import java.util.ListIterator;
 /**
  *
  * @author masao
+ * @param <T>
  */
 public class ReverseListIterator<T> extends ReverseIterator<T> {
     int size;

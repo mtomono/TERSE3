@@ -22,6 +22,8 @@ import java.util.ListIterator;
 /**
  *
  * @author masao
+ * @param <S>
+ * @param <T>
  */
 public class ZLI<S, T> extends ZLIbase<S, T> {
     int index;

@@ -22,6 +22,7 @@ import java.util.NoSuchElementException;
  * Base implementation of Select
  * Iterator
  * @author mtomono
+ * @param <T>
  */
 abstract public class AbstractBufferedIterator<T> implements Iterator<T> {
     T buffer;

@@ -40,6 +40,7 @@ public class RingBufferedListIterator<T> extends BufferedListIterator<T> {
         this.observer = view.listIterator();
     }
     
+    @Override
     public Optional<T> pre(int index) {
         return view.get(index);
     }

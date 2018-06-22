@@ -21,6 +21,7 @@ import java.util.function.Predicate;
 /**
  * an iterator which stops when the terminator returns true.
  * @author mtomono
+ * @param <T>
  */
 public class YABeforeIterator<T> extends AbstractBufferedIterator<T> {
     Predicate<? super T> terminator;

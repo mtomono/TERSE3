@@ -22,6 +22,7 @@ import java.util.ListIterator;
 /**
  *
  * @author masao
+ * @param <T>
  */
 public class RotateListIterator<T> implements ListIterator<T> {
     List<T> base;

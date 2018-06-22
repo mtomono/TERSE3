@@ -22,6 +22,7 @@ import java.util.Iterator;
 /**
  *
  * @author masao
+ * @param <T>
  */
 public class IteratorIterator<T> extends AbstractBufferedIterator<T> {
     Iterator<Iterator<T>> body;

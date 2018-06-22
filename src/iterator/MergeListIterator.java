@@ -22,6 +22,7 @@ import java.util.NoSuchElementException;
 /**
  *
  * @author masao
+ * @param <T>
  */
 public class MergeListIterator<T> implements ListIterator<T> {
     ListIterator<T> left;

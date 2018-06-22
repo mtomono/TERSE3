@@ -21,6 +21,8 @@ import java.util.ListIterator;
 /**
  * Z(ip)L(ist)I(terator) base.
  * @author masao
+ * @param <S>
+ * @param <T>
  */
 public class ZLIbase<S, T> implements ListIterator<P<S, T>> {
     ListIterator<S> iterL;

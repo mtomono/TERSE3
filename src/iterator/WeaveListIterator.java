@@ -24,6 +24,7 @@ import static java.util.stream.Collectors.toList;
 /**
  *
  * @author masao
+ * @param <T>
  */
 public class WeaveListIterator<T> implements ListIterator<T> {
     List<ListIterator<T>> body;

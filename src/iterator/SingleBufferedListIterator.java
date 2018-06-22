@@ -21,6 +21,7 @@ import java.util.NoSuchElementException;
 /**
  * a listiterator which only can previous() once at a time.
  * @author mtomono
+ * @param <T>
  */
 public class SingleBufferedListIterator<T> extends BufferedListIterator<T> {
     Iterator<T> body;

@@ -21,6 +21,7 @@ import java.util.function.Supplier;
 /**
  *
  * @author masao
+ * @param <T>
  */
 public class SupplierWrapper<T> implements Iterator<T> {
     Supplier<T> body;

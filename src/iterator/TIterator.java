@@ -32,6 +32,7 @@ import java.util.stream.Stream;
 /**
  *
  * @author masao
+ * @param <T>
  */
 public class TIterator<T> implements Iterator<T> {
     Iterator<T> body;
