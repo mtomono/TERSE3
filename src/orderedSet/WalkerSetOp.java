@@ -25,6 +25,9 @@ import walker.WalkerIterator;
 /**
  *
  * @author masao
+ * @param <S>
+ * @param <T>
+ * @param <U>
  */
 public abstract class WalkerSetOp<S, T, U> extends AbstractWalker<S, T> {
     public abstract boolean overlaps(S left, T right);

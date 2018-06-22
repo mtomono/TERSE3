@@ -20,6 +20,7 @@ import java.util.Comparator;
 /**
  *
  * @author mtomono
+ * @param <T>
  */
 public class OrderComparator<T extends Comparable<T>> implements Comparator<T> {
     Order<T> body;

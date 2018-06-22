@@ -21,6 +21,7 @@ import java.util.ListIterator;
 /**
  *
  * @author mtomono
+ * @param <T>
  */
 public class Accumulation<T extends Comparable<T>> extends ArrayList<RangeSet<T>> {
     

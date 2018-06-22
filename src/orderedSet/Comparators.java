@@ -24,6 +24,7 @@ import java.util.function.Function;
  * TList of Comparators.
  * provides convenient ways to define composite comparators.
  * @author masao
+ * @param <T>
  */
 public class Comparators<T> {
     TList<Comparator<T>> body;
@@ -67,8 +68,6 @@ public class Comparators<T> {
     /**
      * comparator combinator.
      * equivalent of chained application of thenComparing()
-     * @param <T>
-     * @param comps
      * @return 
      */
     public Comparator<T> compile() {

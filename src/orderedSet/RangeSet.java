@@ -93,6 +93,7 @@ public class RangeSet<T extends Comparable<T>> extends AbstractList<Range<T>> {
         this(Default.order, range);
     }
     
+    @Override
     public boolean isEmpty() {
         return elements.isEmpty();
     }
