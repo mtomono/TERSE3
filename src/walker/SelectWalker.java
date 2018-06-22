@@ -22,6 +22,8 @@ import java.util.function.BiPredicate;
  * SelectWalker
  * SelectWalker is a Walker which is like SelectIterator for Iterator.
  * @author masao
+ * @param <S>
+ * @param <T>
  */
 public class SelectWalker<S, T> extends AbstractBufferedWalker<S, T> {
     Walker<S, T> base;

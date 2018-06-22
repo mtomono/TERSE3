@@ -20,6 +20,8 @@ import java.util.Iterator;
 /**
  * Base imprementation for Walker
  * @author mtomono
+ * @param <S>
+ * @param <T>
  */
 public abstract class AbstractWalker<S, T> implements Walker<S, T> {
 

@@ -20,6 +20,7 @@ import java.util.Iterator;
 /**
  * Iterator with buffer
  * @author mtomono
+ * @param <T>
  */
 public class Leg<T> implements Iterator<T> {
 

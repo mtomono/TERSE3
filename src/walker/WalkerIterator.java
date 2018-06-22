@@ -21,6 +21,9 @@ import java.util.function.BiFunction;
 /**
  *
  * @author masao
+ * @param <S>
+ * @param <T>
+ * @param <U>
  */
 public class WalkerIterator<S, T, U> implements Iterator<U> {
     Walker<S, T> base;
