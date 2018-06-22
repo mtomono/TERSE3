@@ -24,6 +24,7 @@ import java.util.RandomAccess;
 /**
  *
  * @author masao
+ * @param <T>
  */
 public class ListRandomList<T> extends AbstractList<T> {
     

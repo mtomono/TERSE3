@@ -21,6 +21,7 @@ import java.util.RandomAccess;
 /**
  *
  * @author masao
+ * @param <T>
  */
 public class TListRandom<T> extends TList<T> implements RandomAccess {
     public TListRandom(List<T> body) {

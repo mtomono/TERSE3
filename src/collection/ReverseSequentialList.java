@@ -23,6 +23,7 @@ import java.util.ListIterator;
 /**
  *
  * @author masao
+ * @param <T>
  */
 public class ReverseSequentialList<T> extends AbstractSequentialList<T> {
     List<T> body;

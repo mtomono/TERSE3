@@ -25,6 +25,7 @@ import static collection.ListOperations.checkOrdered;
 /**
  *
  * @author masao
+ * @param <T>
  */
 public class MergeList<T> extends AbstractSequentialList<T> {
     List<T> left;

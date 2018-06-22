@@ -21,6 +21,7 @@ import java.util.function.Supplier;
 /**
  *
  * @author masao
+ * @param <T>
  */
 public class IterableSupplier<T> implements Supplier<T> {
     Iterable<T> body;

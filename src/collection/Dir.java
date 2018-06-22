@@ -23,6 +23,7 @@ import java.util.function.Consumer;
 /**
  *
  * @author mtomono
+ * @param <T>
  */
 public class Dir<T> {
     Optional<Dir<T>> upper;

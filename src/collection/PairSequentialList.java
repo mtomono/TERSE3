@@ -25,6 +25,9 @@ import java.util.function.BiFunction;
 /**
  *
  * @author masao
+ * @param <S>
+ * @param <T>
+ * @param <U>
  */
 public class PairSequentialList<S, T, U> extends AbstractSequentialList<U> {
     List<S> left;

@@ -24,6 +24,7 @@ import java.util.ListIterator;
 /**
  *
  * @author masao
+ * @param <T>
  */
 public class WeaveSequentialList<T> extends AbstractSequentialList<T> {
     List<List<T>> body;

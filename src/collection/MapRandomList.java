@@ -23,6 +23,8 @@ import java.util.function.Function;
 /**
  *
  * @author masao
+ * @param <S>
+ * @param <T>
  */
 public class MapRandomList<S, T> extends AbstractList<T> implements RandomAccess {
     List<S> base;
@@ -59,6 +61,7 @@ public class MapRandomList<S, T> extends AbstractList<T> implements RandomAccess
         return map.apply(base.set(i, rmap.apply(o)));
     }
     
+    @Override
     public void add(int i, T o) {
         base.add(i, rmap.apply(o));
     }

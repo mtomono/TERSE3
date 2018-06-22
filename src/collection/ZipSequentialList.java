@@ -24,6 +24,8 @@ import java.util.ListIterator;
 /**
  *
  * @author masao
+ * @param <S>
+ * @param <T>
  */
 public class ZipSequentialList<S, T> extends AbstractSequentialList<P<S, T>> {
     List<S> left;

@@ -20,6 +20,7 @@ import static collection.TList.toTList;
 /**
  *
  * @author masao
+ * @param <T>
  */
 public class HomogeneousPermutation<T> {
     

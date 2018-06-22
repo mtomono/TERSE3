@@ -20,6 +20,7 @@ import java.util.*;
 /**
  *
  * @author masao
+ * @param <T>
  */
 public class CacheList<T> extends AbstractList<T> {
     List<T> body;

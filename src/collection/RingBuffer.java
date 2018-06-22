@@ -24,6 +24,7 @@ import java.util.List;
  * Ring Buffer based on fixed length ArrayList
  * something pushed goes to the end of the buffer.
  * @author mtomono
+ * @param <T>
  */
 public class RingBuffer<T> extends AbstractList<T> {
     List<T> body;

@@ -23,6 +23,9 @@ import java.util.function.BiFunction;
 /**
  *
  * @author masao
+ * @param <S>
+ * @param <T>
+ * @param <U>
  */
 public class PairRandomList<S, T, U> extends AbstractList<U> {
     List<S> left;

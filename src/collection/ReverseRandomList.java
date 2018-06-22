@@ -22,6 +22,7 @@ import java.util.RandomAccess;
 /**
  *
  * @author masao
+ * @param <T>
  */
 public class ReverseRandomList<T> extends AbstractList<T> implements RandomAccess{
     List<T> body;

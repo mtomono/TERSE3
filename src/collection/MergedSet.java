@@ -22,6 +22,7 @@ import java.util.Set;
 /**
  *
  * @author masao
+ * @param <T>
  */
 public class MergedSet<T> implements Set<T> {
     TList<Set<T>> body;

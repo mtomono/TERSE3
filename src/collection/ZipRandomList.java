@@ -23,6 +23,8 @@ import java.util.RandomAccess;
 /**
  *
  * @author masao
+ * @param <S>
+ * @param <T>
  */
 public class ZipRandomList<S, T> extends AbstractList<P<S, T>> implements RandomAccess {
     List<S> left;

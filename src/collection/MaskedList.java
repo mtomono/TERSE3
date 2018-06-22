@@ -24,6 +24,7 @@ import java.util.ListIterator;
 /**
  *
  * @author masao
+ * @param <T>
  */
 public class MaskedList<T> extends AbstractSequentialList<T> {
     List<T> body;

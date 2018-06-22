@@ -24,6 +24,7 @@ import java.util.ListIterator;
 /**
  *
  * @author masao
+ * @param <T>
  */
 public class ListSequentialList<T> extends AbstractSequentialList<T> {
     @Override

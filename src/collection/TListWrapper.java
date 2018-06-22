@@ -20,6 +20,7 @@ import java.util.*;
 /**
  * base implementation for TList
  * @author masao
+ * @param <T>
  */
 public class TListWrapper<T> implements List<T> {
     List<T> body;

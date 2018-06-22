@@ -21,6 +21,7 @@ import orderedSet.Range;
 /**
  *
  * @author masao
+ * @param <T>
  */
 public interface Divide<T> {
     /**

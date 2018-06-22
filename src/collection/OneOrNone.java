@@ -21,6 +21,7 @@ import java.util.Optional;
 /**
  * A wrapper which handles Optional as a List which has an element at most.
  * @author mtomono
+ * @param <T>
  */
 public class OneOrNone<T> extends AbstractList<T> {
     T body;

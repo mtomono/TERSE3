@@ -20,6 +20,7 @@ import java.util.Iterator;
 /**
  *
  * @author masao
+ * @param <T>
  */
 public class OneTimeIterable<T> implements Iterable<T> {
     Iterator<T> body;

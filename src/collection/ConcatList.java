@@ -24,6 +24,7 @@ import java.util.List;
 /**
  *
  * @author masao
+ * @param <T>
  */
 public class ConcatList<T> extends AbstractList<T> {
     class SubList {

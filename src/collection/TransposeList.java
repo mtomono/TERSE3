@@ -22,6 +22,7 @@ import java.util.List;
 /**
  *
  * @author masao
+ * @param <T>
  */
 public class TransposeList<T> extends AbstractList<List<T>> {
     List<List<T>> body;

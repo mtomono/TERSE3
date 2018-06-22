@@ -24,6 +24,8 @@ import java.util.function.Function;
 /**
  *
  * @author masao
+ * @param <S>
+ * @param <T>
  */
 public class MapSequentialList<S, T> extends AbstractSequentialList<T> {
     List<S> body;

@@ -23,6 +23,8 @@ import java.util.function.Function;
  * 
  *  
  * @author masao
+ * @param <K>
+ * @param <V>
  */
 public class MVMap<K, V> implements Map<K, TList<V>> {
     Map<K, TList<V>> body;

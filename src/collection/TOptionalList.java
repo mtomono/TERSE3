@@ -37,6 +37,7 @@ import java.util.function.ToDoubleFunction;
  * you can call TList#optionalMap(l->l). Or if you know that only temporarily
  * handle TList<Optional<>>, in that case, asList(Function) is handy.
  * @author masao
+ * @param <T>
  */
 public class TOptionalList<T> extends TListWrapper<Optional<T>> {
     TList<Optional<T>> bodyx;
