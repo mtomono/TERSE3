@@ -24,6 +24,7 @@ import orderedSet.Range;
  * Unlike list, index of the start of view is arbitrary. 
  * It has several ways to interprete as a List.
  * @author masao
+ * @param <T>
  */
 public class ListView<T> {
     TList<T> body;
