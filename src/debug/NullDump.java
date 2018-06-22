@@ -27,6 +27,7 @@ public class NullDump implements Dump{
         return object;
     }
 
+    @Override
     public <T, S> T set(String name, T object, Function<T, S> func) {
         return object;
     }
@@ -36,6 +37,7 @@ public class NullDump implements Dump{
         return object;
     }
     
+    @Override
     public <T, S> T add(String name, T object, Function<T, S> func) {
         return object;
     }

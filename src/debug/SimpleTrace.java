@@ -15,7 +15,6 @@
 
 package debug;
 
-import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.function.Function;
@@ -41,6 +40,7 @@ public class SimpleTrace implements Trace {
         this.indentUnit = indentUnit;
     }
     
+    @Override
     public boolean cr() {
         output.flush();
         return true;

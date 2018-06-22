@@ -39,6 +39,7 @@ public class StackTraceDump {
         this.methodName = methodName(depth);
     }
     
+    @Override
     public String toString() {
         return className+"#"+methodName+":"+dump.toString();
     }

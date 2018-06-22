@@ -15,7 +15,6 @@
 
 package debug;
 
-import java.io.PrintStream;
 import java.util.function.Consumer;
 
 /**

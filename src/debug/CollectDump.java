@@ -56,6 +56,7 @@ public class CollectDump implements Dump{
         return object;
     }
     
+    @Override
     public <T, S> T add(String name, T object, Function<T, S> func) {
         add(name, func.apply(object));
         return object;
