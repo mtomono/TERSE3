@@ -22,7 +22,7 @@ import collection.TList;
  * 
  * @author masao
  */
-public class PartialSumCount extends DP<Integer, Integer>{
+public class PartialSumCount extends DP<Integer, TList<Result<Boolean>>>{
     /**
      * core mothod of this algorithm.
      * returns the biggest value possibly be made from i to n-1th items when 
@@ -32,12 +32,13 @@ public class PartialSumCount extends DP<Integer, Integer>{
      * @return 
      */
     @Override
-    Integer valueCore(int i, int rest, TList<Integer> c) {
-        if (i==c.size() || rest==0)
-            return rest==0?1:0;
+    TList<Result<Boolean>> valueCore(int i, int rest, TList<Integer> c) {
+        if (rest==0)
+            return TList.wrap(new Result<>(true));
+        if (i==c.size())
+            return TList.empty();
         if (rest<c.get(i))
             return value(i+1, rest);
-        return value(i+1, rest)+value(i+1,rest-c.get(i));
-        
+        return value(i+1, rest).append(value(i+1,rest-c.get(i)).map(r->r.add(i, b->b)).filter(r->r.value)).fix();
     }
 }

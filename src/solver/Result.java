@@ -44,4 +44,8 @@ public class Result<T> {
         return target.pickUp(content);
     }
     
+    @Override
+    public String toString() {
+        return value.toString()+":"+content;
+    }
 }
