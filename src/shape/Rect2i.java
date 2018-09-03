@@ -31,6 +31,20 @@ public class Rect2i {
         this.two = two;
     }
     
+    public Rect2i(TList<TPoint2i> ps) {
+        this(ps.get(0), ps.get(1));
+    }
+    
+    static boolean containSym(int a, int b, int v) {
+        if (a <= b)
+            return a<=v&&v<=b;
+        return b<=v&&v<=a;
+    }
+    
+    public boolean contains(TPoint2i p) {
+        return containSym(one.x, two.x, p.x)&&containSym(one.y, two.y, p.y);
+    }
+    
     /**
      * one->(one.x,two.y)->two->(two.x,one.y)->one
      * @return 
@@ -65,5 +79,9 @@ public class Rect2i {
         if (edge3().isEmpty())
             return edge2();
         return edge2().subList(0,abs(one.y-two.y)).append(edge3());
+    }
+    
+    public String toString() {
+        return one.toString()+"<->"+two;
     }
 }
