@@ -176,6 +176,10 @@ public class TPoint3d extends Point3d implements List<Double> {
         return new TPoint3d(ps.averageD(p->p.x), ps.averageD(p->p.y), ps.averageD(p->p.z));
     }
     
+    public String toCsv() {
+        return Double.toString(x)+","+Double.toString(y)+","+Double.toString(z);
+    }
+
     //--------- compatibility with list
     
     public List<Double> asList() {
