@@ -6,13 +6,12 @@
 package shape;
 
 import collection.TList;
-import java.util.List;
 import static org.testng.Assert.*;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import static shape.Rect2i.containSym;
 import static shape.ShapeUtil.p2i;
-import static shape.ShapeUtil.p2is;
 
 /**
  *
@@ -152,6 +151,28 @@ public class Rect2iNGTest {
     public void testEdge3(TPoint2i from, TPoint2i to, TList<TPoint2i> expected) {
         System.out.println(test.TestUtils.methodName(0));
         TList<TPoint2i> result = new Rect2i(from, to).edge3();
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testContains() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Rect2i> tested = TList.sof(new Rect2i(p2i(0,0),p2i(2,2)),new Rect2i(p2i(0,2),p2i(2,0)),new Rect2i(p2i(2,2),p2i(0,0)));
+        TList<TPoint2i> po = TList.sof(p2i(-1, 1), p2i(1, 1));
+        TList<Boolean> result = tested.cross(po,(r,p)->r.contains(p));
+        TList<Boolean> expected = TList.sof(false,true,false,true,false,true);
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testContainSym() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Boolean> result = TList.sof(containSym(0,2,1),containSym(2,0,1),containSym(0,2,2),containSym(0,2,0),containSym(2,0,2),containSym(2,0,0),containSym(0,2,3),containSym(0,2,-1),containSym(2,0,-1),containSym(2,0,3));
+        TList<Boolean> expected = TList.nCopies(6, true).append(TList.nCopies(4, false));
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
         assertEquals(result, expected);
