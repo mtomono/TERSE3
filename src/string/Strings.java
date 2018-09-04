@@ -78,4 +78,22 @@ public class Strings {
     static public String wrap(String str, int len) {
         return asCharList(str).fold(len).map(l->l.toFlatString()).toWrappedString();
     }
+    
+    static public String escape(String str) {
+        return str.replace("\\", "\\\\").replace("\n", "\\n").replace("\t", "\\t").
+                   replace("\"",""+"\\\"").replace("\'","\\\'").
+                   replace("\f", "\\f").replace("\b", "\\b").replace("\r", "\\r");
+    }
+    
+    static public String doubleQuote(String str) {
+        return '"'+str+'"';
+    }
+    
+    static public String singleQuote(char str) {
+        return "'"+str+"'";
+    }
+    
+    static public String asString(String str) {
+        return doubleQuote(escape(str));
+    }
 }
