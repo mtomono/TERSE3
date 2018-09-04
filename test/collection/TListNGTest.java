@@ -574,6 +574,16 @@ public class TListNGTest {
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
     }
+    
+    @Test
+    public void testDelimit() {
+        System.out.println(test.TestUtils.methodName(0));
+        List<String> result = TList.sof(0,1,3,4,2,5).delimit(i->Integer.toString(i), (a,b)->a<b?"<":">");
+        List<String> expected = TList.sof("0","<","1","<","3","<","4",">","2","<","5");
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result, expected);
+    }
 
     @Test
     public void testMerge() {
