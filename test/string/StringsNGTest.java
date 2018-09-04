@@ -73,5 +73,28 @@ public class StringsNGTest {
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
     }
+
+    @Test
+    public void testConcat() {
+    }
+
+    @Test
+    public void testAsCharList() {
+    }
+
+    @Test
+    public void testWrap() {
+    }
+
+    @Test
+    public void testEscape() {
+        System.out.println(test.TestUtils.methodName(0));
+        String tested = "yes\nthere\tis\ra\flight\bin\"x\'\\";
+        String result = Strings.escape(tested);
+        String expected = "yes\\nthere\\tis\\ra\\flight\\bin\\\"x\\\'\\\\";
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result, expected);
+    }
     
 }
