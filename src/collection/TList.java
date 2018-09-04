@@ -1158,6 +1158,21 @@ public class TList<T> extends TListWrapper<T> {
         return (body instanceof RandomAccess) && map(map).stream().allMatch(l->l instanceof Random) ? new TListRandom<>(new WeaveRandomList<>(map(map))) : new TList<>(new WeaveSequentialList<>(map(map)));
     }
     
+    /**
+     * add delimitter to a list.
+     * and the delimitter do not have to be uniform between elements.
+     * @param <S>
+     * @param map
+     * @param delimit
+     * @return 
+     */
+    public <S> TList<S> delimit(Function<T,S> map, BiFunction<T,T,S> delimit) {
+        return TList.sof(map(map), diff(delimit)).weave(l->l);
+    }
+    
+    public <S> TList<S> delimitByValue(Function<T,S> map, S delimit) {
+        return delimit(map, (a,b)->delimit);
+    }
 //--------- Positioning
     /**
      * get a Optional-wrapped version of this list.
