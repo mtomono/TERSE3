@@ -81,6 +81,14 @@ public class TList<T> extends TListWrapper<T> {
         return this;
     }
     
+    public TList<T> insertAt(int at,TList<T> t) {
+        return subList(0,at).append(t).append(subList(at,size()));
+    }
+    
+    public TList<T> insertAt(int at, T t) {
+        return insertAt(at, wrap(t));
+    }
+    
     /**
      * fix the calculation.
      * basically, TList accepts calculation requests but keep the actual calculation
@@ -432,7 +440,7 @@ public class TList<T> extends TListWrapper<T> {
      * @return 
      */
     public <S> TList<S> map(Function<T, S> map) {
-        return map(map, e->{throw new RuntimeException("NoReach : ");});
+        return map(map, e->{throw new RuntimeException("Tried to change a list mapped without reverse map");});
     }
     
     public <S> TList<S> mapc(Function<T, S> map) {
@@ -970,6 +978,10 @@ public class TList<T> extends TListWrapper<T> {
         return append(a2l(t));
     }
     
+    public TList<T> append(T... t) {
+        return append(TList.sof(t));
+    }
+    
     /**
      * append lists after this list.
      * @param t
@@ -1140,6 +1152,28 @@ public class TList<T> extends TListWrapper<T> {
      */
     public <S, U> TList<U> cross(List<S> target, BiFunction<T, S, U> func) {
         return flatMap(t->set(target).map(s->func.apply(t, s)));
+    }
+    
+    /**
+     * similar to cross product, but keep the structure.
+     * @param <S>
+     * @param target
+     * @return 
+     */
+    public <S> TList<TList<P<T, S>>> matrix(List<S> target) {
+        return matrix(target, (t,s)->P.p(t,s));
+    }
+    
+    /**
+     * similar to cross product, but keep the structure.
+     * @param <S>
+     * @param <U>
+     * @param target
+     * @param func
+     * @return 
+     */
+    public <S, U> TList<TList<U>> matrix(List<S> target, BiFunction<T, S, U> func) {
+        return map(t->set(target).map(s->func.apply(t,s)));
     }
     
     /**
