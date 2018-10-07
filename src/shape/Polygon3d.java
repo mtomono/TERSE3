@@ -17,7 +17,10 @@ package shape;
 
 import collection.TList;
 import java.util.List;
+import java.util.function.BiPredicate;
+import java.util.function.Function;
 import static shape.ShapeUtil.err;
+import static shape.TPoint3d.zero;
 
 /**
  *
@@ -66,6 +69,56 @@ public class Polygon3d extends TList<TPoint3d> {
     
     public Polygon2d shrink() {
         return Polygon2d.c(map(p->p.shrink()));
+    }
+    
+    @Override
+    public Polygon3d fix() {
+        return new Polygon3d(super.fix());
+    }
+    
+    @Override
+    public Polygon3d sfix() {
+        return new Polygon3d(super.sfix());
+    }
+    
+    public Polygon3d apply(Function<Polygon3d, TList<TPoint3d>> f) {
+        return new Polygon3d(f.apply(this));
+    }
+    
+    public Polygon3d reduceDuplicatePoint(double err) {
+        return apply(p->reduceDuplicatePoint(this, err));
+    }
+    
+    public Polygon3d reduceInLinePoint(double err) {
+        return apply(p->reduceInLinePoint(this,err));
+    }
+    
+    public Polygon3d reducePointBetweenShortEdges(double err) {
+        return new Polygon3d(reducePointBetweenShortEdges(this, err));
+    }
+    
+    static public TList<TPoint3d> reduceDuplicatePoint(TList<TPoint3d> body, double err) {
+        if (body.size()<2)
+            return body;
+        return body.subList(1,body.size()-1).pair(
+                body.diff((a,b)->a.to(b))
+        ).filter(p->!p.r().epsilonEquals(zero, err)).map(p->p.l()).
+                insertAt(0, body.get(0));
+    }
+    
+    static public TList<TPoint3d> filterByPreAndPost(TList<TPoint3d> body, BiPredicate<TVector3d, TVector3d> pred) {
+        if (body.size()<3)
+            return body;
+        return body.subList(1,body.size()-1).pair(
+                        body.diff((a,b)->a.to(b)).diff((a,b)->pred.test(a, b))
+                ).filter(p->!p.r()).map(p->p.l()).
+                        insertAt(0, body.get(0)).append(body.last());
+    }
+    static public TList<TPoint3d> reduceInLinePoint(TList<TPoint3d> body, double err) {
+        return filterByPreAndPost(body, (a,b)->b.normalizeS().subS(a.normalizeS()).length()<err);
+    }
+    static public TList<TPoint3d> reducePointBetweenShortEdges(TList<TPoint3d> body, double err) {
+        return filterByPreAndPost(body, (a,b)->a.length()<err&&b.length()<err);
     }
     
     //todo
