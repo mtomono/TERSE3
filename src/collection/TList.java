@@ -790,6 +790,10 @@ public class TList<T> extends TListWrapper<T> {
         return range(0, size()).map(start->subList(start, size()));
     }
     
+    public TList<TList<T>> subLists(int length) {
+        return range(0,size()-length).map(i->subList(i,i+length));
+    }
+    
 //------- Ordering
     
     /**
