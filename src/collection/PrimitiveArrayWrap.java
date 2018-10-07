@@ -30,6 +30,9 @@ public class PrimitiveArrayWrap {
     public static List<java.lang.Integer> wrap(int[] body) {
         return new Integer(body);
     }
+    public static List<java.lang.Byte> wrap(byte[] body) {
+        return new Byte(body);
+    }
     public static List<java.lang.Long> wrap(long[] body) {
         return new Long(body);
     }
@@ -44,6 +47,14 @@ public class PrimitiveArrayWrap {
     public static int[] unwrapI(List<java.lang.Integer> body) {
         int[] retval = new int[body.size()];
         Iterator<java.lang.Integer> iter = body.iterator();
+        int i = 0;
+        while (iter.hasNext())
+            retval[i++]=iter.next();
+        return retval;
+    }
+    public static byte[] unwrapB(List<java.lang.Byte> body) {
+        byte[] retval = new byte[body.size()];
+        Iterator<java.lang.Byte> iter = body.iterator();
         int i = 0;
         while (iter.hasNext())
             retval[i++]=iter.next();
@@ -76,6 +87,30 @@ public class PrimitiveArrayWrap {
         @Override
         public java.lang.Double set(int index, java.lang.Double v) {
             java.lang.Double retval = body[index];
+            body[index] = v;
+            return retval;
+        }
+    }
+
+    public static class Byte extends AbstractList<java.lang.Byte> {
+        byte[] body;
+        public Byte(byte[] body) {
+            this.body = body;
+        }
+
+        @Override
+        public java.lang.Byte get(int index) {
+            return body[index];
+        }
+
+        @Override
+        public int size() {
+            return body.length;
+        }
+        
+        @Override
+        public java.lang.Byte set(int index, java.lang.Byte v) {
+            java.lang.Byte retval = body[index];
             body[index] = v;
             return retval;
         }
