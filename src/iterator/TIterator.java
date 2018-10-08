@@ -109,6 +109,10 @@ public class TIterator<T> implements Iterator<T> {
         return set(new SelectIterator<>(this, pred));
     }
     
+    public TIterator<T> skip(BiPredicate<T,T> pred) {
+        return set(new SkipIterator<>(this, pred));
+    }
+    
     public <S> TIterator<S> flatMap(Function<T, Iterator<S>> map) {
         return set(new IteratorIterator<>(new MapIterator<>(this, map)));
     }
