@@ -5,6 +5,7 @@
  */
 package json;
 
+import static collection.PrimitiveArrayWrap.wrap;
 import collection.TList;
 import static org.testng.Assert.*;
 import org.testng.annotations.BeforeMethod;
@@ -51,11 +52,11 @@ public class JsonizeNGTest {
         x.<String>object(
                 x.attr("2",x.chara(s->s.charAt(2))),
                 x.attr("4",x.chara(s->s.charAt(4))),
-                x.attr("12",x.object(s->s.substring(1,3),x.chara(s->s.charAt(0)))),
+                x.attr("12",x.object(s->s.substring(1,3),x.attr("0",x.chara(s->s.charAt(0))))),
                 x.attr("6",x.value(s->s.length()))
         ).accept(sb, tested);
         String result = sb.toString();
-        String expected = "{\"2\":'2',\"4\":'4',\"12\":{'1'},\"6\":6}";
+        String expected = "{\"2\":'2',\"4\":'4',\"12\":{\"0\":'1'},\"6\":6}";
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
         assertEquals(result, expected);
@@ -93,4 +94,23 @@ public class JsonizeNGTest {
         assertEquals(result, expected);
     }
 
+    @Test
+    public void testArrayNestedInObject() {
+        System.out.println(test.TestUtils.methodName(0));
+        String tested = "012345";
+        Jsonize x = Jsonize.c();
+        StringBuilder sb = new StringBuilder();
+        x.<String>object(
+                x.attr("2",x.chara(s->s.charAt(2))),
+                x.attr("4",x.chara(s->s.charAt(4))),
+                x.attr("12",x.object(s->s.substring(1,3),x.attr("0",x.chara(s->s.charAt(0))))),
+                x.attr("6",x.value(s->s.length())),
+                x.attr("array",x.<String,Byte>array(s->wrap(s.getBytes()), x.object(x.attr("1", x.value(i->i)))))
+        ).accept(sb, tested);
+        String result = sb.toString();
+        String expected = "{\"2\":'2',\"4\":'4',\"12\":{\"0\":'1'},\"6\":6,\"array\":[{\"1\":48},{\"1\":49},{\"1\":50},{\"1\":51},{\"1\":52},{\"1\":53}]}";
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result, expected);
+    }
 }
