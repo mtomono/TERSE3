@@ -100,9 +100,9 @@ public class Polygon3d extends TList<TPoint3d> {
     static public TList<TPoint3d> reduceDuplicatePoint(TList<TPoint3d> body, double err) {
         if (body.size()<2)
             return body;
-        return body.subList(1,body.size()-1).pair(
+        return body.subList(1,body.size()).pair(
                 body.diff((a,b)->a.to(b))
-        ).filter(p->!p.r().epsilonEquals(zero, err)).map(p->p.l()).
+        ).filter(p->p.r().length()>err).map(p->p.l()).
                 insertAt(0, body.get(0));
     }
     
