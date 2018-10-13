@@ -1,68 +1,66 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ Copyright 2017, 2018 Masao Tomono
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.
  */
+
 package json;
 
-import collection.TList;
+import generator.Generator;
 import java.util.Collection;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.function.Function;
-import static string.Strings.asString;
-import static string.Strings.doubleQuote;
-import static string.Strings.singleQuote;
+import generator.Generators;
+import java.util.Optional;
+import string.Strings;
 
 /**
  *
  * @author masao
  */
-public interface Jsonize {
+public interface Jsonize extends Generators{
     static public Jsonize c() {
         return new Jsonize() {};
     }
-    default public <S,T> BiConsumer<StringBuilder,S> value(Function<S,T> f) {
+    default public <T,S> Generator<T> value(Function<T,S> f) {
         return (sb, t)->sb.append(f.apply(t));
     }
-    default public <T> BiConsumer<StringBuilder,T> string(Function<T,String> f) {
+    default public <T> Generator<T> string(Function<T,String> f) {
         return simpleString(f);
     }
-    default public <T> BiConsumer<StringBuilder,T> simpleString(Function<T,String> f) {
-        return (sb, t)->sb.append(doubleQuote(f.apply(t)));
+    default public <T> Generator<T> simpleString(Function<T,String> f) {
+        return value(f.andThen(Strings::doubleQuote));
     }
-    default public <T> BiConsumer<StringBuilder,T> escapedString(Function<T,String> f) {
-        return (sb, t)->sb.append(asString(f.apply(t)));
+    default public <T> Generator<T> escapedString(Function<T,String> f) {
+        return value(f.andThen(Strings::asString));
     }
-    default public <T> BiConsumer<StringBuilder,T> chara(Function<T,Character> f) {
-        return (sb, t)->sb.append(singleQuote(f.apply(t)));
+    default public <T> Generator<T> chara(Function<T,Character> f) {
+        return value(f.andThen(Strings::singleQuote));
     }
-    default public <S,T> BiConsumer<StringBuilder,S> object(Function<S,T> f, BiConsumer<StringBuilder,T>... cs) {
-        return (sb, s)->{
-            T t = f.apply(s);
-            sb.append('{');
-            TList.sof(cs).delimitByValue(c->c, (sx,tx)->sx.append(',')).forEach(c->c.accept(sb,t));
-            sb.append('}');
-        };
+    default public <T,S> Generator<T> object(Function<T,S> f, Generator<S>... cs) {
+        return (sb,t)->seq(f.apply(t),cs).delimit(",").enclose(brace).congregate(sb);
     }
-    default public <T> BiConsumer<StringBuilder,T> object(BiConsumer<StringBuilder,T>... cs) {
+    default public <T> Generator<T> object(Generator<T>... cs) {
         return object(o->o, cs);
     }
-    default public <S,T> BiConsumer<StringBuilder,Collection<S>> array(Function<S,T> f, BiConsumer<StringBuilder,T> cs) {
-        return (sb, ts)->{
-            sb.append('[');
-            TList.set(ts).<Consumer<StringBuilder>>delimitByValue(t->(s->cs.accept(s, f.apply(t))), s->s.append(',')).forEach(c->c.accept(sb));
-            sb.append(']');
-        };
+    default public <T,S> Generator<T> array(Function<T,Collection<S>> f, Generator<S> cs) {
+        return (sb,t)->rep(f.apply(t),cs).delimit(",").enclose(bracket).congregate(sb);
     }
-    default public <T> BiConsumer<StringBuilder,Collection<T>> array(BiConsumer<StringBuilder,T> cs) {
+    default public <T> Generator<Collection<T>> array(Generator<T> cs) {
         return array(o->o, cs);
     }
-    default public <T> BiConsumer<StringBuilder, T> attr(String name, BiConsumer<StringBuilder, T> c) {
-        return (sb, t)->{
-            sb.append(doubleQuote(name));
-            sb.append(':');
-            c.accept(sb,t);
-        };
+    default public <T> Generator<T> attr(String name, Generator<T> c) {
+        return (sb,t)->seq(t, string(x->name), c).delimit(":").congregate(sb);
+    }
+    default public <T> Generator<Optional<T>> optional(String name, Generator<T> c) {
+        return (sb,t)->opt(t, attr(name, c)).congregate(sb);
     }
 }
