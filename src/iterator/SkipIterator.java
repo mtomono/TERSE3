@@ -20,7 +20,8 @@ import java.util.Optional;
 import java.util.function.BiPredicate;
 
 /**
- *
+ * Iterator which skips items until the predicate between the last returned item
+ * and next item holds true;
  * @author masao
  */
 public class SkipIterator<T> extends AbstractBufferedIterator<T> {
