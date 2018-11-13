@@ -15,10 +15,15 @@
 
 package shape;
 
+import collection.P;
+import collection.TList;
+import static function.ComparePolicy.inc;
 import java.util.function.Consumer;
 import javax.vecmath.Matrix3d;
 import javax.vecmath.Tuple3d;
 import javax.vecmath.Vector3d;
+import static shape.ShapeUtil.err;
+import static shape.ShapeUtil.vector3;
 
 /**
  *
@@ -111,5 +116,78 @@ public class TMatrix3d extends Matrix3d {
     
     public TPoint3d transformToPoint(Tuple3d t) {
         return new TPoint3d(t).self(v->transform(v));
+    }
+    
+    public TList<Double> toList() {
+        return TList.sof(m00,m01,m02,m10,m11,m12,m20,m21,m22);
+    }
+    
+    /**
+     * eigen vector of eigen value of maximum absolute value.
+     * application of the power method.
+     * @param start
+     * @return 
+     */
+    public TVector3d maxEigenVectorOld(TVector3d start) {
+        TVector3d current = start.normalizeR();
+        TVector3d post;
+        TVector3d next;
+        int count = 0;
+        while (true) {
+            post = current;
+            next = transformToVector(current);
+            current = next.normalizeR();
+            if (current.epsilonEquals(post, err))
+                break;
+            count++;
+            assert count < 1000 : "too slow to converge";
+        }
+        assert count != 0 : "initial value hit any eigen vector; there's no guarantee this is the eigenvector of the biggest eigenvalue";
+        if (count==0) throw new RuntimeException("initial value hit any eigen vector; there's no guarantee this is the eigenvector of the biggest eigenvalue");
+        double eigenValue = next.dot(post)/post.dot(post);
+        System.out.println(count +":"+eigenValue);
+        return next;
+    }
+
+    /**
+     * eigen vector of eigen value of maximum absolute value.
+     * application of the power method.
+     * @param start
+     * @return 
+     * @throws shape.EigenValuesAreTooCloseException 
+     */
+    public P<P<TVector3d,Double>,Integer> maxEigenVectorCandidate(TVector3d start) {
+        TVector3d current = start.normalizeR();
+        TVector3d post;
+        TVector3d next;
+        int count = 0;
+        while (true) {
+            post = current;
+            next = transformToVector(current);
+            current = next.normalizeR();
+            if (current.epsilonEquals(post, err))
+                break;
+            count++;
+            if (count > 1000) throw new EigenValuesAreTooCloseException.Runtime();
+            assert count < 1000 : "too slow to converge";
+        }
+        double eigenValue = next.dot(post)/post.dot(post);
+        return P.p(current, eigenValue).addP(count);
+    }
+
+    /**
+     * eigen vector of eigen value of maximum absolute value.
+     * application of the power method.
+     * @param start
+     * @return 
+     * @throws shape.EigenValuesAreTooCloseException 
+     */
+    public P<TVector3d,Double> maxEigen() {
+        TList<TVector3d> initials = TList.sof(TVector3d.x1, TVector3d.y1, TVector3d.z1, vector3(1,1,1));
+        return initials.map(i->maxEigenVectorCandidate(i)).max(inc(p->p.l().r())).get().l();
+    }
+    
+    public TVector3d maxEigenVector() {
+        return maxEigen().l();
     }
 }
