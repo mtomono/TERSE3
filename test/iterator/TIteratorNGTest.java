@@ -261,4 +261,13 @@ public class TIteratorNGTest {
         assertEquals(result, expected);
     }
 
+    @Test
+    public void testLast_Int() {
+        System.out.println(test.TestUtils.methodName(0));
+        List<Integer> result = TIterator.range(0, 10).last(3);
+        List<Integer> expected = TList.range(7,10);
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result, expected);
+    }
 }

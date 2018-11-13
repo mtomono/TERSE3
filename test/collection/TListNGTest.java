@@ -503,6 +503,16 @@ public class TListNGTest {
         assertEquals(result, expected);
     }
     
+    @Test
+    public void testChunk3() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<TList<Integer>> result = TList.sof(11, 1, 3, 7, 9, 11, 2, 3, 8, 9, 11, 9, 9, 12, 3, 2, 11).chunk(i->i>10);
+        TList<TList<Integer>> expected = TList.sof(TList.sof(11),TList.sof(1, 3, 7, 9, 11), TList.sof(2, 3, 8, 9, 11), TList.sof(9, 9, 12), TList.sof(3, 2, 11), TList.sof());
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    
 //-----------------Composing
     
     @Test
@@ -1379,4 +1389,266 @@ public class TListNGTest {
         assertEquals(result, expected);
     }
 
+    @Test
+    public void testInsertAt_int_TList() {
+    }
+
+    @Test
+    public void testInsertAt_int_GenericType() {
+    }
+
+    @Test
+    public void testSfix() {
+    }
+
+    @Test
+    public void testFixDebug_int() {
+    }
+
+    @Test
+    public void testFixDebug_0args() {
+    }
+
+    @Test
+    public void testTeep_String() {
+    }
+
+    @Test
+    public void testTeep_0args() {
+    }
+
+    @Test
+    public void testCache() {
+    }
+
+    @Test
+    public void testRange_int_int() {
+    }
+
+    @Test
+    public void testRangeSym() {
+    }
+
+    @Test
+    public void testRange_Range() {
+    }
+
+    @Test
+    public void testSet_List() {
+    }
+
+    @Test
+    public void testSet_Collection() {
+    }
+
+    @Test
+    public void testSof() {
+    }
+
+    @Test
+    public void testIsAscending() {
+    }
+
+    @Test
+    public void testIsDescending() {
+    }
+
+    @Test
+    public void testIsAscendingOrEqual() {
+    }
+
+    @Test
+    public void testIsDescendingOrEqual() {
+    }
+
+    @Test
+    public void testMapc() {
+    }
+
+    @Test
+    public void testFlatMapc() {
+    }
+
+    @Test
+    public void testTransposeT() {
+    }
+
+    @Test
+    public void testHeap() {
+    }
+
+    @Test
+    public void testHeapFromStart_Function_BiFunction() {
+    }
+
+    @Test
+    public void testPreheap_Function_BiFunction() {
+    }
+
+    @Test
+    public void testHeapFromStart_BiFunction() {
+    }
+
+    @Test
+    public void testPreheap_BiFunction() {
+    }
+
+    @Test
+    public void testAverageD() {
+    }
+
+    @Test
+    public void testAverageL() {
+    }
+
+    @Test
+    public void testAverageI() {
+    }
+
+    @Test
+    public void testSumD() {
+    }
+
+    @Test
+    public void testSumL() {
+    }
+
+    @Test
+    public void testSumI() {
+    }
+
+    @Test
+    public void testSubLists() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<TList<Integer>> result = TList.sof(0,1,2,3,4,5).subLists(3);
+        TList<TList<Integer>> expected = TList.range(0,3).map(i->TList.range(i,i+3));
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testFold() {
+    }
+
+    @Test
+    public void testAppend_GenericType() {
+    }
+
+    @Test
+    public void testMatrix_List() {
+    }
+
+    @Test
+    public void testMatrix_List_BiFunction() {
+    }
+
+    @Test
+    public void testDelimitByValue() {
+    }
+
+    @Test
+    public void testToWrappedString() {
+    }
+
+    @Test
+    public void testToFlatString() {
+    }
+
+    @Test
+    public void testToDelimitedString() {
+    }
+
+    @Test
+    public void testToCatenatedString() {
+    }
+
+    @Test
+    public void testDataProvider() {
+    }
+
+    @Test
+    public void testPermutation_int_int() {
+    }
+
+    @Test
+    public void testPermutation_int() {
+    }
+
+    @Test
+    public void testPermutationUpTo() {
+    }
+
+    @Test
+    public void testCombinationT() {
+    }
+
+    @Test
+    public void testHomogeneousProductBorders() {
+    }
+
+    @Test
+    public void testIterator() {
+        // test is omitted.
+    }
+
+    @Test
+    public void testSubList_int_int() {
+        // test is omitted.
+    }
+    
+    @Test
+    public void skipRange() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> result = TList.skipRange(new Range<>(5,55), 10);
+        TList<Integer> expected = TList.sof(5,15,25,35,45);
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void skipRange2() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> result = TList.skipRange(new Range<>(5,56), 10);
+        TList<Integer> expected = TList.sof(5,15,25,35,45,55);
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void skipRange3() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> result = TList.skipRange(new Range<>(0,100), 10);
+        TList<Integer> expected = TList.sof(0,10,20,30,40,50,60,70,80,90);
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result, expected);
+    }
+    
+    @Test
+    public void testDiffChunk() {
+        System.out.println(test.TestUtils.methodName(0));
+        Integer[][] resultO = {{0,1},{0,2},{1,2},{1,3},{2,4},{2,5},{2,6},{3,7},{3,8}};
+        TList<TList<Integer>> tested = TList.sof(resultO).map(a->TList.sof(a));
+        TList<TList<TList<Integer>>> result = tested.diffChunk((a,b)->!a.get(0).equals(b.get(0)));
+        Integer[][][] expectedO = {{{0,1},{0,2}},{{1,2},{1,3}},{{2,4},{2,5},{2,6}},{{3,7},{3,8}}};
+        TList<TList<TList<Integer>>> expected = TList.sof(expectedO).map(aa->TList.sof(aa).map(a->TList.sof(a))).sfix();
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result, expected);
+    }
+    @Test
+    public void testDiffChunk2() {
+        System.out.println(test.TestUtils.methodName(0));
+        Integer[][] resultO = {{0,1},{0,2},{1,2},{1,3},{2,4},{2,5},{2,6},{3,7},{3,8},{4,9}};
+        TList<TList<Integer>> tested = TList.sof(resultO).map(a->TList.sof(a));
+        TList<TList<TList<Integer>>> result = tested.diffChunk((a,b)->!a.get(0).equals(b.get(0)));
+        Integer[][][] expectedO = {{{0,1},{0,2}},{{1,2},{1,3}},{{2,4},{2,5},{2,6}},{{3,7},{3,8}},{{4,9}}};
+        TList<TList<TList<Integer>>> expected = TList.sof(expectedO).map(aa->TList.sof(aa).map(a->TList.sof(a))).sfix();
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result, expected);
+    }
 }

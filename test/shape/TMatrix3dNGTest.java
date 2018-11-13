@@ -11,6 +11,7 @@ import javax.vecmath.Vector3d;
 import static org.testng.Assert.*;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import static shape.ShapeUtil.vector3;
 
 /**
  *
@@ -234,4 +235,14 @@ public class TMatrix3dNGTest {
         assertEquals(result, expected);
     }
     
+    @Test
+    public void maxEigenVector() {
+        System.out.println(test.TestUtils.methodName(0));
+        TMatrix3d tested = new TMatrix3d(1,1,2,0,2,-1,0,0,3);
+        TVector3d result = tested.maxEigenVector();
+        TVector3d expected = vector3(1,-2,2);
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result.cross(expected).length(), 0.0, 0.0000001);
+    }
 }

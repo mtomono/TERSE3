@@ -57,6 +57,19 @@ public class CubesNGTest {
     }
     
     @Test
+    public void testToCubesNegativeScale2() {
+        TVector3d zero = vector3(-0.5,-0.5,0.0);
+        TVector3d factor = vector3(1.0, 1.0, 1.0);
+        TVector3d from = vector3(0.0,0.0,0.0);
+        TVector3d to = vector3(3.0,6.0,0.0);
+        System.out.println(test.TestUtils.methodName(0));
+        TList<List<Integer>> result = toCubes(zero, factor, from, to, 1.0);
+        TList<List<Integer>> expected = TList.of(a2l(0,0,0),a2l(0,-1,0),a2l(1,-1,0),a2l(1,-2,0),a2l(1,-3,0),a2l(2,-3,0),a2l(2,-4,0),a2l(2,-5,0),a2l(3,-5,0),a2l(3,-6,0));
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result, expected);
+    }
+    @Test
     public void testToCubes3() {
         TVector3d zero = vector3(-0.5,-0.5,0.0);
         TVector3d factor = vector3(1.0, 1.0, 1.0);

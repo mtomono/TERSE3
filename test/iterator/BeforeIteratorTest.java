@@ -30,4 +30,13 @@ public class BeforeIteratorTest {
         List<Integer> expected = Arrays.asList(1, 2, 3, 4);
         assertEquals(toStream(tested).collect(toList()), expected);
     }
+
+    @Test
+    public void testEnd() {
+        List<Integer> base = Arrays.asList(1, 2, 3, 4, 9, 1, 2, 3);
+        Iterator<Integer> tested = new BeforeIterator<>(base.listIterator(), n->n > 10);
+        List<Integer> expected = Arrays.asList(1, 2, 3, 4, 9, 1, 2, 3);
+        assertEquals(toStream(tested).collect(toList()), expected);
+    }
+
 }
