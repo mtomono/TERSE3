@@ -111,4 +111,12 @@ public class P<L, R> extends AbstractList<Object>{
     public int size() {
         return 2;
     }
+    
+    public <U> P<P<L,R>,U> addP(U a) {
+        return p(this, a);
+    }
+    
+    public P<R,L> flip() {
+        return P.p(r,l);
+    }
 }
