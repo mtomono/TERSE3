@@ -18,6 +18,7 @@ package iterator;
 import static collection.c.a2i;
 import collection.OneTimeIterable;
 import collection.P;
+import collection.RingBuffer;
 import static collection.c.i2l;
 import function.Holder;
 import function.IntHolder;
@@ -26,6 +27,7 @@ import function.TSupplier;
 import static iterator.Iterators.toStream;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.function.*;
 import java.util.stream.Stream;
 
@@ -90,10 +92,17 @@ public class TIterator<T> implements Iterator<T> {
     }
     
     public T last() {
-        assert hasNext();
+        assert hasNext() : "last() is called when no item is left in this iterator";
         T retval = next();
         for (T t : this.i())
             retval = t;
+        return retval;
+    }
+    
+    public List<T> last(int i) {
+        RingBuffer<T> retval = new RingBuffer<>(i);
+        for (T t: this.i())
+            retval.push(t);
         return retval;
     }
     
