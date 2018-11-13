@@ -183,6 +183,11 @@ public class TList<T> extends TListWrapper<T> {
         return teep("");
     }
     
+    public T getDebug(int at) {
+        System.out.println(""+at+":"+get(at));
+        return get(at);
+    }
+    
     /**
      * give all the items in this list to Consumer.
      * note even after 'consuming', my wild guess is all the items remain in the
@@ -266,6 +271,10 @@ public class TList<T> extends TListWrapper<T> {
      */
     static public TList<Integer> range(Range<Integer> range) {
         return rangeBase(range.start(), range.end());
+    }
+    
+    static public TList<Integer> skipRange(Range<Integer> range, int interval) {
+        return rangeBase(0, (range.end()-range.start()-1)/interval+1).map(i->range.start()+i*interval);
     }
     
     /**
@@ -624,6 +633,30 @@ public class TList<T> extends TListWrapper<T> {
         return stream().mapToInt(f).sum();
     }
     
+    public double averageSampleD(ToDoubleFunction<T> f) {
+        return stream().mapToDouble(f).sum()/(size()-1);
+    }
+
+    /**
+     * map each item to long value and take average of them.
+     * @param f
+     * @return 
+     */
+    public double averageSampleL(ToLongFunction<T> f) {
+        return (double)stream().mapToLong(f).sum()/(size()-1);
+    }
+
+    /**
+     * map each item to int value and take average of them.
+     * @param f
+     * @return 
+     */
+    public double averageSampleI(ToIntFunction<T> f) {
+        return (double)stream().mapToInt(f).sum()/(size()-1);
+    }
+
+    
+    
 //---------- Filtering
     /**
      * indexOf variant which is specified by Predicate.
@@ -832,6 +865,10 @@ public class TList<T> extends TListWrapper<T> {
         return min(inc(func));
     }
     
+    public <S extends Comparable<S>> Optional<S> minval(Function<T,S> func) {
+        return map(func).min(inc(x->x));
+    }
+    
     /**
      * returns maximum item in terms of comp.
      * @param comp
@@ -851,6 +888,10 @@ public class TList<T> extends TListWrapper<T> {
      */
     public <S extends Comparable<S>> Optional<T> max(Function<T, S> func) {
         return max(inc(func));
+    }
+    
+    public <S extends Comparable<S>> Optional<S> maxval(Function<T,S> func) {
+        return map(func).max(inc(x->x));
     }
     
     /**
@@ -915,7 +956,7 @@ public class TList<T> extends TListWrapper<T> {
     }
     
     /**
-     * divide the list by occurence of the item equals to division.
+     * divide the list into two by the first occurence of the item equals to division.
      * think of the parameter division as a delimiter.
      * @param division
      * @return 
@@ -950,6 +991,15 @@ public class TList<T> extends TListWrapper<T> {
             return current.addOne(remain);
         TList<TList<T>> divided = remain.divide(divides.get(0));
         return chunk(current.addOne(divided.get(0)), divided.get(1), pred);
+    }
+    
+    public TList<TList<T>> diffChunk(BiPredicate<T,T> pred) {
+        return map(e->Optional.of(e)).sfix().diffChunkWithSentinel((a,b)->a.isPresent()&&b.isPresent()?pred.test(a.get(),b.get()):true, Optional.empty()).map(l->l.map(o->o.get())).filter(l->!l.isEmpty());
+    }
+    
+    public TList<TList<T>> diffChunkWithSentinel(BiPredicate<T,T> pred, T sentinel) {
+        assert !contains(sentinel);
+        return append(sentinel).diff().chunk(p->pred.test(p.l(),p.r())).map(pl->pl.map(p->p.l()));
     }
     
 //----------- Composing
