@@ -162,6 +162,10 @@ public class TPoint2d extends Point2d implements List<Double> {
         return new TPoint2d(ps.averageD(p->p.x), ps.averageD(p->p.y));
     }
     
+    public String toCsv() {
+        return Double.toString(x)+","+Double.toString(y);
+    }
+
     //--------- compatibility with list
     
     public List<Double> asList() {
