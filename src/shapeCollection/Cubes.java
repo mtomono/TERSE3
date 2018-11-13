@@ -19,7 +19,7 @@ import collection.P;
 import collection.Scale;
 import collection.TList;
 import static collection.c.a2l;
-import static java.lang.Math.floor;
+import static java.lang.Math.signum;
 import java.util.List;
 
 /**
@@ -74,7 +74,7 @@ public class Cubes {
     }
 
     static TList<P<Double, Hit>> mergeAndSortHits(TList<List<P<Double, Hit>>> list) {
-        return list.flatMap(l->l).sortTo((a, b)->(int) floor(a.l()-b.l()));
+        return list.flatMap(l->l).sortTo((a, b)->(int)signum(a.l()-b.l()));
     }
 
     static TList<List<Integer>> hitToCube(List<Integer> start, TList<P<Double, Hit>> hits) {
@@ -85,13 +85,13 @@ public class Cubes {
         return hits.accum(start, (a, b)->b.r().hit(a));
     }
 
-    static TList<List<Integer>> toCubes(List<Double> zero, List<Double> factor, List<Double> from, List<Double> to, double norm) {
+    static public TList<List<Integer>> toCubes(List<Double> zero, List<Double> factor, List<Double> from, List<Double> to, double norm) {
         TList<Integer> initial = toStartingCube(factor, from).fix();
         TList<ScaledAxis> axis = toAxis(zero, factor, from, to);
         return hitToCube(initial, mergeAndSortHits(hits(normalize(axis, norm).fix(), axis).fix()));
     }
 
-    static TList<Integer> add(TList<Integer> cube, List<Integer> vector) {
+    static public TList<Integer> add(TList<Integer> cube, List<Integer> vector) {
         return cube.pair(vector, (a, b)->a+b);
     }
 
