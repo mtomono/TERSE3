@@ -53,7 +53,7 @@ public class Cubes {
 
     static TList<Integer> toStartingCube(List<Double> factor, List<Double> from) {
         assert factor.size()==from.size();
-        return TList.sof(factor, from).transpose(l->l).map(l->(int) ceil.o(l.get(1)/l.get(0)));
+        return TList.sof(factor, from).transpose(l->l).map(l->(int) ceil.o(l.get(1)/l.get(0))).sfix();
     }
 
     static Integer[] toStartingCubeArr(List<Double> factor, List<Double> from) {
@@ -62,23 +62,23 @@ public class Cubes {
 
     static TList<ScaledAxis> toAxis(List<Double> zero, List<Double> factor, List<Double> from, List<Double> to) {
         assert TList.sof(zero, factor, from, to).map(l->l.size()).isUniform();
-        return TList.sof(zero, factor, from, to).transpose(l->l).map(l->new ScaledAxis(l.get(0), l.get(1), l.get(2), l.get(3)));
+        return TList.sof(zero, factor, from, to).transpose(l->l).map(l->new ScaledAxis(l.get(0), l.get(1), l.get(2), l.get(3))).sfix();
     }
 
     static TList<ScaledAxis> normalize(TList<ScaledAxis> scales, double normalSize) {
-        return scales.map(scale->scale.fit(0d, normalSize));
+        return scales.map(scale->scale.fit(0d, normalSize)).sfix();
     }
 
-    static TList<List<P<Double, Hit>>> hits(TList<ScaledAxis> normalized, TList<ScaledAxis> original) {
-        return normalized.pair(new Scale(), (scale, i)->TList.set(scale).map(d->P.p(d, new Hit(i, (int) original.get(i).dir()))));
+    static TList<TList<P<Double, Hit>>> hits(TList<ScaledAxis> normalized, TList<ScaledAxis> original) {
+        return normalized.pair(new Scale(), (scale, i)->TList.set(scale).map(d->P.p(d, new Hit(i, (int) original.get(i).dir()))).sfix()).sfix();
     }
 
-    static TList<P<Double, Hit>> mergeAndSortHits(TList<List<P<Double, Hit>>> list) {
-        return list.flatMap(l->l).sortTo((a, b)->(int)signum(a.l()-b.l()));
+    static TList<P<Double, Hit>> mergeAndSortHits(TList<TList<P<Double, Hit>>> list) {
+        return list.flatMap(l->l).sortTo((a, b)->(int)signum(a.l()-b.l())).sfix();
     }
 
     static TList<List<Integer>> hitToCube(List<Integer> start, TList<P<Double, Hit>> hits) {
-        return hits.accum(start, (a, b)->b.r().hit(a));
+        return hits.accum(start, (a, b)->b.r().hit(a)).sfix();
     }
 
     static TList<Integer[]> hitToCubeArr(TList<P<Double, Hit>> hits, Integer[] start) {
@@ -86,9 +86,9 @@ public class Cubes {
     }
 
     static public TList<List<Integer>> toCubes(List<Double> zero, List<Double> factor, List<Double> from, List<Double> to, double norm) {
-        TList<Integer> initial = toStartingCube(factor, from).fix();
+        TList<Integer> initial = toStartingCube(factor, from);
         TList<ScaledAxis> axis = toAxis(zero, factor, from, to);
-        return hitToCube(initial, mergeAndSortHits(hits(normalize(axis, norm).fix(), axis).fix()));
+        return hitToCube(initial, mergeAndSortHits(hits(normalize(axis, norm), axis)));
     }
 
     static public TList<Integer> add(TList<Integer> cube, List<Integer> vector) {
