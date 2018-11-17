@@ -26,6 +26,7 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collector;
 import orderedSet.Range;
+import test.Performance;
 
 /**
  *
@@ -157,7 +158,7 @@ public class TList<T> extends TListWrapper<T> {
      * @param c
      * @return 
      */
-    public TList<T> tee(Consumer<T> c) {
+    public TList<T> tee(Consumer<? super T> c) {
         return map(t->{
             c.accept(t);
             return t;
@@ -939,10 +940,19 @@ public class TList<T> extends TListWrapper<T> {
      */
     public TList<T> rotate(int x) {
         assert -size()<x && x<size();
+        if (x==0)
+            return this;
         if (0<x)
             return TList.concat(subList(x, size()), subList(0, x));
         else
             return TList.concat(subList(size()+x, size()), subList(0, size()+x));
+    }
+    
+    public TList<T> skip(int n) {
+        assert n>=1 : "no skip less than 1";
+        if (n==1)
+            return this;
+        return set(new SkipList<>(this,n));
     }
     
     /**
@@ -977,6 +987,8 @@ public class TList<T> extends TListWrapper<T> {
      * 1. reverse the list
      * 2. chunk it up
      * 3. reverse those sublists all by map
+     * 
+     * the result is sfix-ed, because it has a tremendous influence in performance.
      * @param pred
      * @return 
      */
@@ -984,22 +996,45 @@ public class TList<T> extends TListWrapper<T> {
         TList<TList<T>> retval = TList.c();
         return chunk(retval, this, pred);
     }
-        
+    
+    /**
+     * main body of chunk.
+     * recursive function to chunk up the list.
+     * result is sfix-ed for memo.
+     * @param current
+     * @param remain
+     * @param pred
+     * @return 
+     */
     TList<TList<T>> chunk(TList<TList<T>> current, TList<T> remain, Predicate<T> pred) {
         TList<T> divides = remain.filter(pred);
         if (divides.isEmpty())
             return current.addOne(remain);
         TList<TList<T>> divided = remain.divide(divides.get(0));
-        return chunk(current.addOne(divided.get(0)), divided.get(1), pred);
+        return chunk(current.addOne(divided.get(0).sfix()), divided.get(1).sfix(), pred);
     }
     
+    /**
+     * chunk thie list up with relationship with next item.
+     * this version creates sentinel using Optional.
+     * the result is sfix-ed because it has tremendous influence in performance.
+     * @param pred
+     * @return 
+     */
     public TList<TList<T>> diffChunk(BiPredicate<T,T> pred) {
-        return map(e->Optional.of(e)).sfix().diffChunkWithSentinel((a,b)->a.isPresent()&&b.isPresent()?pred.test(a.get(),b.get()):true, Optional.empty()).map(l->l.map(o->o.get())).filter(l->!l.isEmpty());
+        return map(e->Optional.of(e)).sfix().diffChunk((a,b)->a.isPresent()&&b.isPresent()?pred.test(a.get(),b.get()):true, Optional.empty()).map(l->l.map(o->o.get()).sfix());
     }
     
-    public TList<TList<T>> diffChunkWithSentinel(BiPredicate<T,T> pred, T sentinel) {
+    /**
+     * chunk the list up with relationship with next item.
+     * the result is sfix-ed because it has tremendous influence in performance.
+     * @param pred
+     * @param sentinel an item which is not contained in list to show the end of the list
+     * @return 
+     */
+    public TList<TList<T>> diffChunk(BiPredicate<T,T> pred, T sentinel) {
         assert !contains(sentinel);
-        return append(sentinel).diff().chunk(p->pred.test(p.l(),p.r())).map(pl->pl.map(p->p.l()));
+        return append(sentinel).diff().sfix().chunk(p->pred.test(p.l(),p.r())).sfix().filter(l->!l.isEmpty()).sfix().map(pl->pl.map(p->p.l())).sfix();
     }
     
 //----------- Composing
