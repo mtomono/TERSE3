@@ -63,10 +63,18 @@ public class P<L, R> extends AbstractList<Object>{
     
     @Override
     public boolean equals(Object e) {
+        if (e==null)
+            return false;
         if (!(e instanceof P))
             return false;
         P t = (P) e;
-        return t.l.equals(this.l)&&t.r.equals(this.r);
+        if (l!=null&&r!=null)
+            return l.equals(t.l)&&r.equals(t.r);
+        if (l==null&&r!=null)
+            return t.l==null&&r.equals(t.r);
+        if (l!=null&&r==null)
+            return l.equals(t.r)&&t.r==null;
+        return l==t.l&&r==t.r;
     }
 
     @Override
