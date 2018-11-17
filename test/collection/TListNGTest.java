@@ -474,6 +474,16 @@ public class TListNGTest {
     }
     
     @Test
+    public void testSkip() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> result = TList.range(0,10).skip(4);
+        TList<Integer> expected = TList.sof(0,4,8);
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result, expected);
+    }
+    
+    @Test
     public void testDivide() {
         System.out.println(test.TestUtils.methodName(0));
         TList<TList<Integer>> result = TList.sof(1, 3, 7, 9, 11, 2, 3, 8, 9, 11, 9).divide(11);
