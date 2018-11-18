@@ -44,6 +44,7 @@ public class Progress implements Consumer<Object>{
     }
     public Progress(PrintStream pstr, int whole) {
         this(pstr,whole,1);
+        pstr.println("progress meter start");
     }
     @Override
     public void accept(Object t) {
