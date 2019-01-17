@@ -32,6 +32,19 @@ public interface Parser<S, T, U> {
     U parse(Source<S, T> s) throws ParseException;
     
     /**
+     * parse without exception
+     * @param s
+     * @return 
+     */
+    default U parse0(Source<S,T> s) {
+        try {
+            return parse(s);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    /**
      * get parsed section;
      * @param s
      * @return
@@ -190,6 +203,12 @@ public interface Parser<S, T, U> {
         return s-> f.apply(parse(s), p.parse(s));
     }
     
+    /**
+     * do the sequential parsing and returns previous one.
+     * @param <V>
+     * @param p
+     * @return 
+     */
     default <V> Parser<S, T, U> prev(Parser<S, T, V> p) {
         return s-> {
             U ret = parse(s);
@@ -198,6 +217,12 @@ public interface Parser<S, T, U> {
         };
     }
     
+    /**
+     * do the sequential parsing and returns latter one.
+     * @param <V>
+     * @param p
+     * @return 
+     */
     default <V> Parser<S, T, V> next(Parser<S, T, V> p) {
         return s-> {
             parse(s);
@@ -205,6 +230,12 @@ public interface Parser<S, T, U> {
         };
     }
     
+    /**
+     * do the sequential parse and returns pair of them
+     * @param <V>
+     * @param p
+     * @return 
+     */
     default <V> Parser<S, T, P<U, V>> and(Parser<S, T, V> p) {
         return s-> {
             return new P<>(parse(s), p.parse(s));
