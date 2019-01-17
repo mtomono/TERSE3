@@ -704,6 +704,28 @@ public class TListNGTest {
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
     }
+    
+    @Test
+    public void testDiffn() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<List<Integer>> result = TList.sof(0,1,2,3,4).diffn(3);
+        Integer[][] expected0 = {{0,1,2},{1,2,3},{2,3,4}};
+        TList<List<Integer>> expected = TList.sof(expected0).map(aa->TList.sof(aa));
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testDiffnn() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<List<Integer>> result = TList.sof(0,1,2,3,4).diffnn(0,2,1);
+        Integer[][] expected0 = {{0,2,1},{1,3,2},{2,4,3}};
+        TList<List<Integer>> expected = TList.sof(expected0).map(aa->TList.sof(aa));
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result, expected);
+    }
 
 //------------------- Positioning
     
