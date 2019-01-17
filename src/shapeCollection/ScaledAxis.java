@@ -37,8 +37,15 @@ public class ScaledAxis extends AbstractList<Double> {
     int size;
     double dir;
     
+    /**
+     * @param zero
+     * @param pitch
+     * @param from
+     * @param to 
+     */
     public ScaledAxis(double zero, double pitch, double from, double to) {
-        assert pitch>0;
+        assert pitch>0 : "pitch for scaled axis has to be positive";
+        // if pitch gets negative, size gets negative.
         this.zero = zero;
         this.pitch = pitch;
         this.from = from;
@@ -56,7 +63,7 @@ public class ScaledAxis extends AbstractList<Double> {
     @Override
     public Double get(int index) {
         if (index<0||index>size())
-            throw new NoSuchElementException("Scale#get()");
+            throw new NoSuchElementException("ScaleAxis#get()");
         return zero+(fromStep+index)*pitch*dir();
     }
 
