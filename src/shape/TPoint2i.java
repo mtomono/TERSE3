@@ -124,7 +124,7 @@ public class TPoint2i extends Point2i implements List<Integer> {
     /**
      * judge the quadrant.
      * only applicable to unit point.
-     * 0:x+ 1:y+ 2:x- 3:y-
+     * 0:x+y+ 1:x-y+ 2:x-y- 3:x+y-
      * @return 
      */
     public int quadrant() {
