@@ -56,10 +56,19 @@ public class CubesNGTest {
         assertEquals(result, expected);
     }
     
-    @Test
+    /**
+     * this is not a test.
+     * this is not executable because factor has negative value in it.
+     * i leave this here as it is, because i can get back to the similar idea someday.
+     * the idea behind is flipping coordination along some axis. specifically in this case,
+     * it is Y-axis.
+     * but this doesn't work because ScaleAxis behind Cube is implemented as a List, but having
+     * negative value for pitch (which is taken from factor) means the size of ScaleAxis gets
+     * negative, and it is not acceptable.
+     */
     public void testToCubesNegativeScale2() {
         TVector3d zero = vector3(-0.5,-0.5,0.0);
-        TVector3d factor = vector3(1.0, 1.0, 1.0);
+        TVector3d factor = vector3(1.0, -1.0, 1.0);
         TVector3d from = vector3(0.0,0.0,0.0);
         TVector3d to = vector3(3.0,6.0,0.0);
         System.out.println(test.TestUtils.methodName(0));
@@ -69,6 +78,7 @@ public class CubesNGTest {
         System.out.println("expected: "+expected);
         assertEquals(result, expected);
     }
+    
     @Test
     public void testToCubes3() {
         TVector3d zero = vector3(-0.5,-0.5,0.0);
