@@ -15,7 +15,9 @@
 
 package orderedSet;
 
+import static java.lang.Math.abs;
 import java.util.*;
+import java.util.function.Function;
 import string.Message;
 
 /**
@@ -24,9 +26,9 @@ import string.Message;
  * @param <T>
  */
 public class Range<T extends Comparable<T>> {
-    T start;
-    T end;
-    Order<T> order;
+    public final T start;
+    public final T end;
+    public final Order<T> order;
     
     @Override
     public boolean equals(Object o) {
@@ -42,10 +44,6 @@ public class Range<T extends Comparable<T>> {
         hash = 29 * hash + Objects.hashCode(this.end);
         hash = 29 * hash + Objects.hashCode(this.order);
         return hash;
-    }
-
-    protected Range() {
-        
     }
     
     @Override
@@ -221,6 +219,15 @@ public class Range<T extends Comparable<T>> {
     public Optional<Range<T>> getUpperRoomIn(Range<T> another) {
         return another.getUpper(end);
     }
+    
+    public double width(Function<T,Double> f) {
+        return abs(f.apply(end)-f.apply(start));
+    }
+    
+    public double interpolate(Function<T,Double> f, double rate) {
+        return f.apply(start)*(1-rate)+f.apply(end)*rate;
+    }
+
     @Override
     public String toString() {
         return Message.nl(start).c("<->").c(end).toString();
