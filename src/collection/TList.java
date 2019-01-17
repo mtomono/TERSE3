@@ -1205,6 +1205,38 @@ public class TList<T> extends TListWrapper<T> {
     static public <T> Function<TList<P<T, T>>, TList<T>> dediff() {
         return l->l.isEmpty()?TList.empty():concat(wrap(l.get(0).l()), l.map(p->p.r()));
     }
+    
+    /**
+     * multiple diff.
+     * if you want diff with n consecutive items, this is the method you should turn to.
+     * @param steps
+     * @return 
+     */
+    public TList<List<T>> diffn(int steps) {
+        return diffnn(range(0,steps));
+    }
+    
+    /**
+     * multiple diff.
+     * if you want multiple items diff but they are not in consecutive order, still you can use this.
+     * @param steps
+     * @return 
+     */
+    public TList<List<T>> diffnn(TList<Integer> steps) {
+        assert steps.size() >=1 : "min length of steps is 1";
+        int length = size()-steps.maxval(i->i).get();
+        return steps.transpose(i->seek(i).subList(0,length));
+    }
+
+    /**
+     * multiple diff.
+     * you can designate items conveniently.
+     * @param steps
+     * @return 
+     */
+    public TList<List<T>> diffnn(Integer... steps) {
+        return diffnn(TList.sof(steps));
+    }
 
     /**
      * cross product of two lists.
