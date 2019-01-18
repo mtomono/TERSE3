@@ -1,3 +1,5 @@
 /.jacocoverage/
 /work/
 /release/
+/nbproject/private/
+/build/
