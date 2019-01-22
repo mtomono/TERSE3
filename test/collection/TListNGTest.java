@@ -1683,4 +1683,58 @@ public class TListNGTest {
         System.out.println("expected: "+expected);
         assertEquals(result, expected);
     }
+    
+    @Test
+    public void testIntersect() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> tested = TList.sof(10000,10001,10002,1003,10004,10005);
+        TList<Integer> other1 = TList.sof(9999,10001,10002,10005);
+        TList<Integer> other2 = TList.sof(10001,10002,10006);
+        TList<Integer> result = tested.intersect(other1,other2);
+        TList<Integer> expected = TList.sof(10001,10002);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    
+    @Test
+    public void testIntersectByIdentity() {
+        System.out.println(test.TestUtils.methodName(0));
+        Integer i = 10001;
+        Integer j = 10002;
+        TList<Integer> tested = TList.sof(10000,i,j,10003,10004,10005);
+        TList<Integer> other1 = TList.sof(9999,i,j,10003,10005);
+        TList<Integer> other2 = TList.sof(i,j,10003,10006);
+        TList<Integer> result = tested.intersectByIdentity(other1,other2);
+        TList<Integer> expected = TList.sof(10001,10002);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    
+    @Test
+    public void testIntersect_Function() {
+        System.out.println(test.TestUtils.methodName(0));
+        Integer i = 10001;
+        Integer j = 10002;
+        Set<Integer> result = TList.sof(TList.sof(9999,i,j,10003,10005),TList.sof(i,j,10003,10006)).intersect(l->l);
+        Set<Integer> expected = TList.sof(10001,10002,10003).toSet();
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    
+
+    @Test
+    public void testIntersectByIdentity_Function() {
+        System.out.println(test.TestUtils.methodName(0));
+        Integer i = 10001;
+        Integer j = 10002;
+        Set<Integer> result = TList.sof(TList.sof(9999,i,j,10003,10005),TList.sof(i,j,10003,10006)).intersectByIdentity(l->l);
+        Set<Integer> expected = TList.sof(i,j).toIdentitySet();
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    
 }

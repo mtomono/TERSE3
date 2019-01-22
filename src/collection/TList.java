@@ -26,7 +26,6 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collector;
 import orderedSet.Range;
-import test.Performance;
 
 /**
  *
@@ -1423,6 +1422,46 @@ public class TList<T> extends TListWrapper<T> {
     
     public <S> int maxLength(Function<T, List<S>> map) {
         return map(map).stream().mapToInt(l->l.size()).max().orElse(0);
+    }
+    
+    //----------- set
+    
+    public Set<T> toIdentitySet() {
+        Map<T,Object> retval = new IdentityHashMap<>();
+        forEach(t->retval.put(t,t));
+        return retval.keySet();
+    }
+    
+    public Set<T> toSet() {
+        return new HashSet<>(this);
+    }
+    
+    public TList<T> intersect(TList<T>... others) {
+        return intersect(TList.sof(others));
+    }
+    
+    public TList<T> intersect(TList<TList<T>> others) {
+        TList<T> retval = fix();
+        others.map(l->l.toSet()).forEach(retval::retainAll);
+        return retval;
+    }
+    
+    public <S> Set<S> intersect(Function<T,TList<S>> f) {
+        return map(f).map(l->l.toSet()).stream().reduce((a,b)->{a.retainAll(b);return a;}).orElse(Collections.emptySet());
+    }
+    
+    public TList<T> intersectByIdentity(TList<T>... others) {
+        return intersectByIdentity(TList.sof(others));
+    }
+        
+    public TList<T> intersectByIdentity(TList<TList<T>> others) {
+        TList<T> retval = fix();
+        others.map(l->l.toIdentitySet()).forEach(retval::retainAll);
+        return retval;
+    }
+    
+    public <S> Set<S> intersectByIdentity(Function<T,TList<S>> f) {
+        return map(f).map(l->l.toIdentitySet()).stream().reduce((a,b)->{a.retainAll(b);return a;}).orElse(Collections.emptySet());
     }
     
     //----------- combination theory
