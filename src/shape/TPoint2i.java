@@ -274,4 +274,9 @@ public class TPoint2i extends Point2i implements List<Integer> {
     public List<Integer> subList(int fromIndex, int toIndex) {
         return asList().subList(fromIndex, toIndex);
     }
+    
+    @Override
+    public String toString() {
+        return "("+x+","+y+")";
+    }
 }
