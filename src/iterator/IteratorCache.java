@@ -39,9 +39,8 @@ public class IteratorCache<T> extends AbstractList<T> {
     
     @Override
     public T get(int index) {
-        if (index < cache.size()) {
+        if (index < cache.size()) 
             return cache.get(index);
-        }
         T retval = null;
         for (int i = cache.size(); i <= index; i++) {
             if (!body.hasNext())
@@ -60,10 +59,8 @@ public class IteratorCache<T> extends AbstractList<T> {
      */
     @Override
     public int size() {
-        
-        while (body.hasNext()) {
+        while (body.hasNext())
             cache.add(body.next());
-        }
         return cache.size();
     }
     
