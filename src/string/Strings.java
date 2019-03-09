@@ -96,4 +96,8 @@ public class Strings {
     static public String asString(String str) {
         return doubleQuote(escape(str));
     }
+
+    static public String indent(String s) {
+        return TList.sof(s.split("\n")).map(l->"\t"+l+"\n").toFlatString();
+    }
 }
