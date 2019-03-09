@@ -23,18 +23,20 @@ import java.util.ListIterator;
 import static java.lang.Integer.min;
 import java.util.ArrayList;
 import static collection.Scale.scale;
+import java.util.NoSuchElementException;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
- *
+ * ListIterator of ListIterator.
+ * 
  * @author masao
  * @param <T>
  */
 public class ListIteratorIterator<T> implements ListIterator<T>{
-    enum Dir {next, prev}
     ListIterator<ListIterator<T>> body;
     ListIterator<T> iter;
     int index;
-    Dir dir;
     
     static public <T> ListIteratorIterator<T> create(List<List<T>> t, int index) {
         List<List<T>> target = new FilterList<>(t, l->!l.isEmpty());
@@ -57,51 +59,47 @@ public class ListIteratorIterator<T> implements ListIterator<T>{
         this.body = body;
         this.iter = body.hasNext()?body.next():Collections.emptyListIterator();
         this.index = index;
-        this.dir = hasNextBase()?Dir.next:Dir.prev;
     }
     
-    private boolean hasNextBase() {
-        return iter.hasNext()||body.hasNext();
+    public boolean has(Predicate<ListIterator> hasNext, Function<ListIterator<ListIterator<T>>,ListIterator<T>> next) {
+        if (hasNext.test(iter))
+            return true;
+        if (!hasNext.test(body))
+            return false;
+        ListIterator<T> candidate = next.apply(body);
+        if (iter != candidate)
+            iter = candidate;
+        else if (hasNext.test(body))
+            iter = next.apply(body);
+        else
+            return false;
+        return has(hasNext,next);
     }
     
-    private ListIterator<T> nextIter() {
-        if (dir == Dir.prev)
-            body.next();
-        iter = body.next();
-        dir = Dir.next;
-        return iter;
-    }
-    
-    private ListIterator<T> previousIter() {
-        if (dir == Dir.next)
-            body.previous();
-        iter = body.previous();
-        dir = Dir.prev;
-        return iter;
-    }
-
     @Override
     public boolean hasNext() {
-        return hasNextBase();
+        return has(i->i.hasNext(), i->i.next());
     }
 
     @Override
     public T next() {
+        if (!hasNext())
+            throw new NoSuchElementException("ListIteratorIterator: no such element");
         index++;
-        return iter.hasNext() ? iter.next() : nextIter().next();
+        return iter.next();
     }
 
     @Override
     public boolean hasPrevious() {
-        return iter.hasPrevious() || body.hasPrevious();
+        return has(i->i.hasPrevious(), i->i.previous());
     }
 
     @Override
     public T previous() {
+        if (!hasPrevious())
+            throw new NoSuchElementException("ListIteratorIterator: no such element");
         index--;
-        return iter.hasPrevious() ? 
-                iter.previous() : 
-                previousIter().previous();
+        return iter.previous();
     }
 
     @Override
