@@ -15,6 +15,7 @@
 
 package collection;
 
+import debug.Monitorable;
 import static java.lang.Integer.min;
 import java.util.AbstractList;
 import java.util.List;
@@ -26,7 +27,7 @@ import java.util.RandomAccess;
  * @param <S>
  * @param <T>
  */
-public class ZipRandomList<S, T> extends AbstractList<P<S, T>> implements RandomAccess {
+public class ZipRandomList<S, T> extends AbstractList<P<S, T>> implements RandomAccess,Monitorable {
     List<S> left;
     List<T> right;
     
@@ -45,4 +46,8 @@ public class ZipRandomList<S, T> extends AbstractList<P<S, T>> implements Random
         return min(left.size(), right.size());
     }
     
+    @Override
+    public String monitor() {
+        return "ZipRandomList:\n"+indent(left)+indent(right);
+    }
 }

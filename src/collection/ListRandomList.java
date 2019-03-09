@@ -16,6 +16,7 @@
 package collection;
 
 import static collection.c.a2l;
+import debug.Monitorable;
 import iterator.TIterator;
 import java.util.AbstractList;
 import java.util.List;
@@ -26,7 +27,7 @@ import java.util.RandomAccess;
  * @author masao
  * @param <T>
  */
-public class ListRandomList<T> extends AbstractList<T> {
+public class ListRandomList<T> extends AbstractList<T> implements Monitorable {
     
     public static <T> boolean isRandom(List<List<T>> target) {
         return (target instanceof RandomAccess) && target.stream().allMatch(l->(l instanceof RandomAccess));
@@ -73,5 +74,10 @@ public class ListRandomList<T> extends AbstractList<T> {
     public void add(int i, T o) {
         P<List<T>, Integer> in = position(i);
         in.l().add(i-in.r(), o);
+    }
+
+    @Override
+    public String monitor() {
+        return "ListRandomList of "+body.size()+" lists:\n"+TList.set(body).map(l->indent(l)).toFlatString();
     }
 }

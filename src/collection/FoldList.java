@@ -15,13 +15,14 @@
 
 package collection;
 
+import debug.Monitorable;
 import java.util.AbstractList;
 
 /**
  *
  * @author masao
  */
-public class FoldList<T> extends AbstractList<TList<T>> {
+public class FoldList<T> extends AbstractList<TList<T>> implements Monitorable {
     TList<T> body;
     int length;
     public FoldList(TList<T> body, int length) {
@@ -36,5 +37,10 @@ public class FoldList<T> extends AbstractList<TList<T>> {
     @Override
     public int size() {
         return body.size()/length + (body.size()%length==0?0:1);
+    }
+
+    @Override
+    public String monitor() {
+        return "FoldList:\n"+indent(body);
     }
 }

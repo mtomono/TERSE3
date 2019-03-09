@@ -15,6 +15,7 @@
 
 package collection;
 
+import debug.Monitorable;
 import java.util.AbstractList;
 import java.util.List;
 import java.util.RandomAccess;
@@ -26,7 +27,7 @@ import java.util.function.Function;
  * @param <S>
  * @param <T>
  */
-public class MapRandomList<S, T> extends AbstractList<T> implements RandomAccess {
+public class MapRandomList<S, T> extends AbstractList<T> implements RandomAccess,Monitorable {
     List<S> base;
     Function<S, T> map;
     Function<T, S> rmap;
@@ -64,5 +65,10 @@ public class MapRandomList<S, T> extends AbstractList<T> implements RandomAccess
     @Override
     public void add(int i, T o) {
         base.add(i, rmap.apply(o));
+    }
+
+    @Override
+    public String monitor() {
+        return "MapRandomList of "+base.size()+" elements:\n"+indent(base);
     }
 }

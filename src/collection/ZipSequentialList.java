@@ -15,6 +15,7 @@
 
 package collection;
 
+import debug.Monitorable;
 import iterator.ZLI;
 import static java.lang.Integer.min;
 import java.util.AbstractSequentialList;
@@ -27,7 +28,7 @@ import java.util.ListIterator;
  * @param <S>
  * @param <T>
  */
-public class ZipSequentialList<S, T> extends AbstractSequentialList<P<S, T>> {
+public class ZipSequentialList<S, T> extends AbstractSequentialList<P<S, T>> implements Monitorable {
     List<S> left;
     List<T> right;
     
@@ -46,4 +47,8 @@ public class ZipSequentialList<S, T> extends AbstractSequentialList<P<S, T>> {
         return min(left.size(), right.size());
     }
     
+    @Override
+    public String monitor() {
+        return "ZipSequentialList:\n"+indent(left)+indent(right);
+    }
 }

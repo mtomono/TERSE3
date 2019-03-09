@@ -15,6 +15,7 @@
 
 package collection;
 
+import debug.Monitorable;
 import iterator.FilterListIterator;
 import static iterator.Iterators.count;
 import java.util.AbstractSequentialList;
@@ -27,7 +28,7 @@ import java.util.function.Predicate;
  * @author masao
  * @param <T>
  */
-public class FilterList<T> extends AbstractSequentialList<T> {
+public class FilterList<T> extends AbstractSequentialList<T> implements Monitorable {
     List<T> base;
     Predicate<T> cond;
     public FilterList(List<T> base, Predicate<T> cond) {
@@ -46,5 +47,9 @@ public class FilterList<T> extends AbstractSequentialList<T> {
     public int size() {
         return count(listIterator());
     }
-    
+
+    @Override
+    public String monitor() {
+        return "FilterList of "+base.size()+" elements:\n"+indent(base);
+    }
 }

@@ -16,6 +16,7 @@
 package collection;
 
 import static collection.c.a2i;
+import debug.Monitorable;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -26,8 +27,8 @@ import java.util.List;
  * @author masao
  * @param <T>
  */
-public class ConcatList<T> extends AbstractList<T> {
-    class SubList {
+public class ConcatList<T> extends AbstractList<T> implements Monitorable {
+    class SubList implements Monitorable {
         List<T> target;
         SubList prev;
         
@@ -81,6 +82,10 @@ public class ConcatList<T> extends AbstractList<T> {
         public int totalSize() {
             return prevTotalSize() + target.size();
         }
+        @Override
+        public String monitor() {
+            return "ConcatList.SubList:\n"+indent(target);
+        }
     }
     
     SubList r;
@@ -122,5 +127,10 @@ public class ConcatList<T> extends AbstractList<T> {
     public int size() {
         return r.totalSize();
     }
-    
+
+    @Override
+    public String monitor() {
+        return "ConcatList:\n"+indent(r);
+    }
+
 }

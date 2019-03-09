@@ -15,6 +15,7 @@
 
 package collection;
 
+import debug.Monitorable;
 import java.util.AbstractList;
 import java.util.List;
 import java.util.RandomAccess;
@@ -24,7 +25,7 @@ import java.util.RandomAccess;
  * @author masao
  * @param <T>
  */
-public class ReverseRandomList<T> extends AbstractList<T> implements RandomAccess{
+public class ReverseRandomList<T> extends AbstractList<T> implements RandomAccess,Monitorable {
     List<T> body;
     
     public ReverseRandomList(List<T> body) {
@@ -41,4 +42,8 @@ public class ReverseRandomList<T> extends AbstractList<T> implements RandomAcces
         return body.size();
     }
     
+    @Override
+    public String monitor() {
+        return "ReverseRandomList of "+body.size()+" elements:\n"+indent(body);
+    }
 }

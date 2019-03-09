@@ -15,6 +15,7 @@
 
 package collection;
 
+import debug.Monitorable;
 import iterator.MapListIterator;
 import java.util.AbstractSequentialList;
 import java.util.List;
@@ -27,7 +28,7 @@ import java.util.function.Function;
  * @param <S>
  * @param <T>
  */
-public class MapSequentialList<S, T> extends AbstractSequentialList<T> {
+public class MapSequentialList<S, T> extends AbstractSequentialList<T> implements Monitorable {
     List<S> body;
     Function<S, T> map;
     Function<T, S> rmap;
@@ -51,4 +52,8 @@ public class MapSequentialList<S, T> extends AbstractSequentialList<T> {
         return body.size();
     }
     
+    @Override
+    public String monitor() {
+        return "MapSequentialList of "+body.size()+" elements:\n"+indent(body);
+    }
 }

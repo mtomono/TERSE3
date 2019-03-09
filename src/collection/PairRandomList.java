@@ -15,6 +15,7 @@
 
 package collection;
 
+import debug.Monitorable;
 import static java.lang.Integer.min;
 import java.util.AbstractList;
 import java.util.List;
@@ -27,7 +28,7 @@ import java.util.function.BiFunction;
  * @param <T>
  * @param <U>
  */
-public class PairRandomList<S, T, U> extends AbstractList<U> {
+public class PairRandomList<S, T, U> extends AbstractList<U> implements Monitorable {
     List<S> left;
     List<T> right;
     BiFunction<S, T, U> map;
@@ -48,4 +49,8 @@ public class PairRandomList<S, T, U> extends AbstractList<U> {
         return min(left.size(), right.size());
     }
     
+    @Override
+    public String monitor() {
+        return "PairRandomList:\n"+indent(left)+indent(right);
+    }
 }

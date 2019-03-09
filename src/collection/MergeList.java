@@ -21,13 +21,14 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.ListIterator;
 import static collection.ListOperations.checkOrdered;
+import debug.Monitorable;
 
 /**
  *
  * @author masao
  * @param <T>
  */
-public class MergeList<T> extends AbstractSequentialList<T> {
+public class MergeList<T> extends AbstractSequentialList<T> implements Monitorable {
     List<T> left;
     List<T> right;
     Comparator<T> c;
@@ -48,5 +49,10 @@ public class MergeList<T> extends AbstractSequentialList<T> {
     @Override
     public int size() {
         return left.size() + right.size();
+    }
+
+    @Override
+    public String monitor() {
+        return "MergeList\n"+indent(left)+indent(right);
     }
 }

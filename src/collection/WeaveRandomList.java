@@ -15,6 +15,7 @@
 
 package collection;
 
+import debug.Monitorable;
 import java.util.AbstractList;
 import java.util.List;
 import java.util.RandomAccess;
@@ -24,7 +25,7 @@ import java.util.RandomAccess;
  * @author masao
  * @param <T>
  */
-public class WeaveRandomList<T> extends AbstractList<T> implements RandomAccess {
+public class WeaveRandomList<T> extends AbstractList<T> implements RandomAccess,Monitorable {
     List<List<T>> base;
     
     public WeaveRandomList(List<List<T>> base) {
@@ -42,4 +43,8 @@ public class WeaveRandomList<T> extends AbstractList<T> implements RandomAccess 
         return base.stream().mapToInt(l->l.size()).sum();
     }
     
+    @Override
+    public String monitor() {
+        return "WeaveRandomList:\n"+TList.set(base).map(l->indent(l)).toFlatString();
+    }
 }

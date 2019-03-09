@@ -15,6 +15,7 @@
 
 package collection;
 
+import debug.Monitorable;
 import iterator.ListIteratorIterator;
 import iterator.TIterator;
 import java.util.AbstractSequentialList;
@@ -26,7 +27,7 @@ import java.util.ListIterator;
  * @author masao
  * @param <T>
  */
-public class ListSequentialList<T> extends AbstractSequentialList<T> {
+public class ListSequentialList<T> extends AbstractSequentialList<T> implements Monitorable {
     @Override
     public ListIterator<T> listIterator(int index) {
         return ListIteratorIterator.create(body, index);
@@ -70,5 +71,9 @@ public class ListSequentialList<T> extends AbstractSequentialList<T> {
         P<List<T>, Integer> in = position(i);
         in.l().add(i-in.r(), o);
     }
-    
+
+    @Override
+    public String monitor() {
+        return "ListSequentialList of "+body.size()+" lists:\n"+TList.set(body).map(l->indent(l)).toFlatString();
+    }
 }

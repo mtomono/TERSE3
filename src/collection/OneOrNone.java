@@ -15,6 +15,7 @@
 
 package collection;
 
+import debug.Monitorable;
 import java.util.AbstractList;
 import java.util.Optional;
 
@@ -23,7 +24,7 @@ import java.util.Optional;
  * @author mtomono
  * @param <T>
  */
-public class OneOrNone<T> extends AbstractList<T> {
+public class OneOrNone<T> extends AbstractList<T> implements Monitorable {
     T body;
     boolean has;
     
@@ -80,5 +81,10 @@ public class OneOrNone<T> extends AbstractList<T> {
         T pre = body;
         body = o;
         return pre;
+    }
+
+    @Override
+    public String monitor() {
+        return "OneOrNone:\n"+indent(body);
     }
 }

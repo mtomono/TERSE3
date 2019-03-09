@@ -15,6 +15,7 @@
 
 package collection;
 
+import debug.Monitorable;
 import iterator.WeaveListIterator;
 import java.util.AbstractSequentialList;
 import java.util.Iterator;
@@ -26,7 +27,7 @@ import java.util.ListIterator;
  * @author masao
  * @param <T>
  */
-public class WeaveSequentialList<T> extends AbstractSequentialList<T> {
+public class WeaveSequentialList<T> extends AbstractSequentialList<T> implements Monitorable {
     List<List<T>> body;
     
     public static <T> boolean weavable(List<List<T>> body) {
@@ -59,4 +60,8 @@ public class WeaveSequentialList<T> extends AbstractSequentialList<T> {
         return body.stream().mapToInt(l->l.size()).sum();
     }
     
+    @Override
+    public String monitor() {
+        return "WeaveSequentialList:\n"+TList.set(body).map(l->indent(l)).toFlatString();
+    }
 }

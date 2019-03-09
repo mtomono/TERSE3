@@ -16,6 +16,7 @@
 package collection;
 
 import static collection.ListOperations.checkOrdered;
+import debug.Monitorable;
 import java.util.AbstractList;
 import java.util.List;
 
@@ -24,7 +25,7 @@ import java.util.List;
  * @author masao
  * @param <T>
  */
-public class TransposeList<T> extends AbstractList<List<T>> {
+public class TransposeList<T> extends AbstractList<List<T>> implements Monitorable {
     List<List<T>> body;
     
     public TransposeList(List<List<T>> body) {
@@ -41,5 +42,9 @@ public class TransposeList<T> extends AbstractList<List<T>> {
     public int size() {
         return body.isEmpty() ? 0 : body.get(0).size();
     }
-    
+
+    @Override
+    public String monitor() {
+        return "TransposeList:\n"+TList.set(body).map(l->indent(l)).toFlatString();
+    }
 }

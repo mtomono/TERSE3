@@ -16,6 +16,7 @@
 package collection;
 
 import static collection.c.a2l;
+import debug.Monitorable;
 import java.util.*;
 import string.Message;
 
@@ -28,7 +29,7 @@ import string.Message;
  * @param <L>
  * @param <R>
  */
-public class P<L, R> extends AbstractList<Object>{
+public class P<L, R> extends AbstractList<Object> implements Monitorable {
     L l;
     R r;
     
@@ -127,4 +128,10 @@ public class P<L, R> extends AbstractList<Object>{
     public P<R,L> flip() {
         return P.p(r,l);
     }
+    
+    @Override
+    public String monitor() {
+        return "P:\n"+indent(l)+indent(r);
+    }
+
 }

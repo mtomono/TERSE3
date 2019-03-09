@@ -15,6 +15,7 @@
 
 package collection;
 
+import debug.Monitorable;
 import iterator.MaskedListIterator;
 import java.util.AbstractSequentialList;
 import java.util.BitSet;
@@ -26,7 +27,7 @@ import java.util.ListIterator;
  * @author masao
  * @param <T>
  */
-public class MaskedList<T> extends AbstractSequentialList<T> {
+public class MaskedList<T> extends AbstractSequentialList<T> implements Monitorable {
     List<T> body;
     BitSet mask;
     
@@ -47,5 +48,10 @@ public class MaskedList<T> extends AbstractSequentialList<T> {
     @Override
     public int size() {
         return mask.cardinality();
+    }
+
+    @Override
+    public String monitor() {
+        return "MaskedList of "+body.size()+" elements:\n"+indent(body);
     }
 }

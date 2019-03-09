@@ -15,6 +15,7 @@
 
 package collection;
 
+import debug.Monitorable;
 import iterator.ReverseListIterator;
 import java.util.AbstractSequentialList;
 import java.util.List;
@@ -25,7 +26,7 @@ import java.util.ListIterator;
  * @author masao
  * @param <T>
  */
-public class ReverseSequentialList<T> extends AbstractSequentialList<T> {
+public class ReverseSequentialList<T> extends AbstractSequentialList<T> implements Monitorable {
     List<T> body;
     
     public ReverseSequentialList(List<T> body) {
@@ -42,4 +43,8 @@ public class ReverseSequentialList<T> extends AbstractSequentialList<T> {
         return body.size();
     }
     
+    @Override
+    public String monitor() {
+        return "ReverseSequentialList of "+body.size()+" elements:\n"+indent(body);
+    }
 }

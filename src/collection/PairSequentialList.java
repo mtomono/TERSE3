@@ -15,6 +15,7 @@
 
 package collection;
 
+import debug.Monitorable;
 import iterator.PairListIterator;
 import static java.lang.Integer.min;
 import java.util.AbstractSequentialList;
@@ -29,7 +30,7 @@ import java.util.function.BiFunction;
  * @param <T>
  * @param <U>
  */
-public class PairSequentialList<S, T, U> extends AbstractSequentialList<U> {
+public class PairSequentialList<S, T, U> extends AbstractSequentialList<U> implements Monitorable {
     List<S> left;
     List<T> right;
     BiFunction<S, T, U> map;
@@ -49,4 +50,10 @@ public class PairSequentialList<S, T, U> extends AbstractSequentialList<U> {
     public int size() {
         return min(left.size(), right.size());
     }
+
+    @Override
+    public String monitor() {
+        return "PairSequentialList:\n"+indent(left)+indent(right);
+    }
+
 }

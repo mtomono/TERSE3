@@ -17,6 +17,7 @@ package collection;
 
 import static collection.c.a2l;
 import static collection.c.l2aInt;
+import debug.Monitorable;
 import static function.ComparePolicy.inc;
 import iterator.IteratorCache;
 import iterator.RotateListIterator;
@@ -32,7 +33,7 @@ import orderedSet.Range;
  * @author masao
  * @param <T>
  */
-public class TList<T> extends TListWrapper<T> {
+public class TList<T> extends TListWrapper<T> implements Monitorable {
     
     public TList(List<T> body) {
         super(body);
@@ -283,7 +284,7 @@ public class TList<T> extends TListWrapper<T> {
      * @return 
      */
     static public <T> TList<T> empty() {
-        return new TList<>(Collections.emptyList());
+        return set(Collections.emptyList());
     }
     
     /**
@@ -1676,4 +1677,10 @@ public class TList<T> extends TListWrapper<T> {
         else
             return new Object[]{e};
     }
+    
+    @Override
+    public String monitor() {
+        return "TList of "+body.size()+" elements:\n"+indent(body);
+    }
+
 }
