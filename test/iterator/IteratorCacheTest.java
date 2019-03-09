@@ -4,6 +4,7 @@
  */
 package iterator;
 
+import collection.TList;
 import collection.c;
 import java.util.Iterator;
 import java.util.List;
@@ -157,5 +158,16 @@ public class IteratorCacheTest extends ListIteratorWorkbench {
     @Override
     public ListIterator<Integer> listIterator2() {
         return new IteratorCache<>(subject2.iterator()).listIterator();
+    }
+    
+    @Test
+    public void testAsList() {
+        System.out.println(test.TestUtils.methodName(0));
+        IteratorCache<Integer> ic = new IteratorCache<>(TList.sof(0,1,2,3,4).iterator());
+        List<Integer> result = new IteratorCache<>(ic.listIterator(1));
+        List<Integer> expected = TList.sof(1,2,3,4);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
     }
 }
