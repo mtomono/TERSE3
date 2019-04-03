@@ -148,6 +148,10 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
         return new TList<>(new LinkedList<>(this));
     }
     
+    public TList<T> unmod() {
+        return TList.set(Collections.unmodifiableList(this));
+    }
+    
     /**
      * something like unix tee.
      * this list will encourage you to use method chain. you will find how good 
@@ -720,6 +724,10 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
         return new TList<>(new FilterList<>(this, cond));
     }
     
+    public TList<Integer> filterAt(Predicate<T> cond) {
+        return pair(new Scale()).filter(p->cond.test(p.l())).map(p->p.r());
+    }
+    
     /**
      * hide all the equivalent item only in vicinity.
      * when the list is sorted in the order which reflects the equivalency, this is 
@@ -904,7 +912,7 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
      * @return 
      */
     public TList<T> seek(int seek) {
-        assert -size() <= seek && seek <= size();
+        assert -size() <= seek && seek <= size() : "seek steps get out of range:"+seek+" was asked when size was "+size();
         return seek>0?subList(seek, size()):subList(0, size()+seek);
     }
 
@@ -997,6 +1005,47 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
         return chunk(retval, this, pred);
     }
     
+    public TList<TList<T>> filterChunk(Predicate<T> pred, BiFunction<TList<T>,Predicate<T>,TList<TList<T>>> chunk) {
+        return chunk.apply(this,pred).filter(l->!l.filter(pred.negate()).isEmpty());
+    }
+    
+    static public <T> BiFunction<TList<T>,Predicate<T>,TList<TList<T>>> chunk() {
+        return (a,b)->a.chunk(b);
+    }
+    static public <T> BiFunction<TList<T>,Predicate<T>,TList<TList<T>>> reverseChunk() {
+        return (a,b)->a.reverseChunk(b);
+    }
+    static public <T> BiFunction<TList<T>,Predicate<T>,TList<TList<T>>> trimmedChunk() {
+        return (a,b)->a.trimmedChunk(b);
+    }
+    static public <T> BiFunction<TList<T>,Predicate<T>,TList<TList<T>>> envelopChunk() {
+        return (a,b)->a.envelopChunk(b);
+    }
+        
+    /**
+     * chunk which do not contain item which divide the list.
+     * @param pred
+     * @return 
+     */
+    public TList<TList<T>> trimmedChunk(Predicate<T> pred) {
+        return chunk(pred).map(l->l.filter(pred.negate()));
+    }
+    
+    public TList<TList<T>> envelopChunk(Predicate<T> pred) {
+        TList<TList<T>> chunk = chunk(pred);
+        Iterator<TList<T>> iter = chunk.iterator();
+        if (!iter.hasNext())
+            return chunk;
+        iter.next();
+        if (!iter.hasNext())
+            return chunk;
+        return chunk.diff((a,b)->b.startFrom(a.last())).startFrom(chunk.get(0));
+    }
+    
+    public TList<TList<T>> reverseChunk(Predicate<T> pred) {
+        return reverse().chunk(pred).map(l->l.reverse()).reverse();
+    }
+    
     /**
      * main body of chunk.
      * recursive function to chunk up the list.
@@ -1006,14 +1055,22 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
      * @param pred
      * @return 
      */
+        
     TList<TList<T>> chunk(TList<TList<T>> current, TList<T> remain, Predicate<T> pred) {
-        TList<T> divides = remain.filter(pred);
+        TList<Integer> divides = remain.filterAt(pred);
         if (divides.isEmpty())
             return current.addOne(remain);
-        TList<TList<T>> divided = remain.divide(divides.get(0));
-        return chunk(current.addOne(divided.get(0).sfix()), divided.get(1).sfix(), pred);
+        int division = divides.get(0);
+        return chunk(current.addOne(remain.pre(division+1).sfix()), remain.post(division+1).sfix(), pred);
     }
     
+    public TList<T> pre(int i) {
+        return subList(0,i);
+    }
+    public TList<T> post(int i) {
+        return subList(i,size());
+    }
+
     /**
      * chunk thie list up with relationship with next item.
      * this version creates sentinel using Optional.
@@ -1064,7 +1121,7 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
      * @return 
      */
     public TList<T> append(List<T>... t) {
-        return append(a2l(t));
+        return appendLists(a2l(t));
     }
     
     public TList<T> append(T... t) {
@@ -1076,10 +1133,19 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
      * @param t
      * @return 
      */
-    public TList<T> append(List<List<T>> t) {
+    public TList<T> appendLists(List<List<T>> t) {
         List<List<T>> l = new ArrayList<>(a2l(this));
         l.addAll(t);
         return concat(l);
+    }
+    
+    public TList<T> startFrom(List<T>... t) {
+        TList<T> added = concat(a2l(t));
+        return added.append(this);
+    }
+    
+    public TList<T> startFrom(T... t) {
+        return startFrom(sof(t));
     }
     
     /**
