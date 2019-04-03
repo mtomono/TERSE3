@@ -536,9 +536,9 @@ public class TListNGTest {
     }
 
     @Test
-    public void testAppend_List() {
+    public void testAppendLists() {
         System.out.println(test.TestUtils.methodName(0));
-        List<Integer> result = TList.of(0, 1, 2, 3).append(a2l(a2l(4, 5, 6), a2l(7, 8)));
+        List<Integer> result = TList.of(0, 1, 2, 3).appendLists(a2l(a2l(4, 5, 6), a2l(7, 8)));
         List<Integer> expected = a2l(0, 1, 2, 3, 4, 5, 6, 7, 8);
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
@@ -717,7 +717,7 @@ public class TListNGTest {
     }
 
     @Test
-    public void testDiffnn() {
+    public void testDiffnn_IntegerArr() {
         System.out.println(test.TestUtils.methodName(0));
         TList<List<Integer>> result = TList.sof(0,1,2,3,4).diffnn(0,2,1);
         Integer[][] expected0 = {{0,2,1},{1,3,2},{2,4,3}};
@@ -725,6 +725,11 @@ public class TListNGTest {
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
         assertEquals(result, expected);
+    }
+
+        @Test
+    public void testDiffnn_TList() {
+        // this is already tested when testDiffnn_IntegerArr is tested.
     }
 
 //------------------- Positioning
@@ -860,7 +865,7 @@ public class TListNGTest {
 //----------------- Combination theory
 
     @Test
-    public void testPermulation_int_int() {
+    public void testPermutation_int_int() {
         System.out.println(methodName(0));
         List<List<Integer>> result = TList.permutation(5, 2);
         List<List<Integer>> expected = a2l(a2l(0, 1), a2l(0, 2), a2l(0, 3), a2l(0, 4), 
@@ -874,7 +879,7 @@ public class TListNGTest {
     }
 
     @Test
-    public void testPermulation_int() {
+    public void testPermutation_int() {
         System.out.println(methodName(0));
         List<List<Integer>> result = TList.range(0, 5).permutation(2);
         List<List<Integer>> expected = a2l(a2l(0, 1), a2l(0, 2), a2l(0, 3), a2l(0, 4), 
@@ -888,7 +893,7 @@ public class TListNGTest {
     }
 
     @Test
-    public void testtestCombination_int_int1() {
+    public void testCombination_int_int1() {
         System.out.println(methodName(0));
         List<List<Integer>> result = TList.combination(5, 1);
         List<List<Integer>> expected = a2l(a2l(0), a2l(1), a2l(2), a2l(3), a2l(4));
@@ -941,7 +946,7 @@ public class TListNGTest {
     }
 
     @Test
-    public void testPermulationUpTo() {
+    public void testPermutationUpTo() {
         System.out.println(test.TestUtils.methodName(0));
         TList<List<List<Integer>>> result = TList.of(0, 1, 2, 3).permutationUpTo(2);
         List<List<List<Integer>>> expected = a2l(a2l(), 
@@ -1561,58 +1566,101 @@ public class TListNGTest {
 
     @Test
     public void testFold() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<TList<Integer>> result = TList.sof(0,1,2,3,4,5,6,7).fold(3);
+        TList<TList<Integer>> expected = TList.sof(TList.sof(0,1,2),TList.sof(3,4,5),TList.sof(6,7));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
     }
 
     @Test
     public void testAppend_GenericType() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> result = TList.sof(0,1,2,3).append(4,5,6);
+        TList<Integer> expected = TList.sof(0,1,2,3,4,5,6);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
     }
 
     @Test
     public void testMatrix_List() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<TList<P<Integer,Integer>>> result = TList.sof(0,1,2).matrix(TList.sof(3,4));
+        TList<TList<P<Integer,Integer>>> expected = TList.sof(TList.sof(P.p(0,3),P.p(0,4)),
+                                                              TList.sof(P.p(1,3),P.p(1,4)),
+                                                              TList.sof(P.p(2,3),P.p(2,4)));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
     }
 
     @Test
     public void testMatrix_List_BiFunction() {
-    }
+        System.out.println(test.TestUtils.methodName(0));
+        TList<TList<P<Integer,Integer>>> result = TList.sof(0,1,2).matrix(TList.sof(3,4),(a,b)->P.p(a,b));
+        TList<TList<P<Integer,Integer>>> expected = TList.sof(TList.sof(P.p(0,3),P.p(0,4)),
+                                                              TList.sof(P.p(1,3),P.p(1,4)),
+                                                              TList.sof(P.p(2,3),P.p(2,4)));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+     }
 
     @Test
     public void testDelimitByValue() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<String> result = TList.sof(1,2,3,4).delimitByValue(i->Integer.toString(i), "|");
+        TList<String> expected = TList.sof("1","|","2","|","3","|","4");
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
     }
 
     @Test
     public void testToWrappedString() {
+        System.out.println(test.TestUtils.methodName(0));
+        String result = TList.sof("test","a bit","longer").toWrappedString();
+        String expected = "test\na bit\nlonger";
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
     }
 
     @Test
     public void testToFlatString() {
+        System.out.println(test.TestUtils.methodName(0));
+        String result = TList.sof("test","a bit","longer").toFlatString();
+        String expected = "testa bitlonger";
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
     }
 
     @Test
     public void testToDelimitedString() {
+        System.out.println(test.TestUtils.methodName(0));
+        String result = TList.sof("test","a bit","longer").toDelimitedString(" ");
+        String expected = "test a bit longer";
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
     }
 
     @Test
     public void testToCatenatedString() {
+        System.out.println(test.TestUtils.methodName(0));
+        String result = TList.sof("test","a bit","longer").toCatenatedString(" ");
+        String expected = "test a bit longer";
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
     }
 
     @Test
     public void testDataProvider() {
-    }
-
-    @Test
-    public void testPermutation_int_int() {
-    }
-
-    @Test
-    public void testPermutation_int() {
-    }
-
-    @Test
-    public void testPermutationUpTo() {
-    }
-
-    @Test
-    public void testCombinationT() {
+        // test is omitted
     }
 
     @Test
@@ -1630,7 +1678,7 @@ public class TListNGTest {
     }
     
     @Test
-    public void skipRange() {
+    public void testSkipRange() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Integer> result = TList.skipRange(new Range<>(5,55), 10);
         TList<Integer> expected = TList.sof(5,15,25,35,45);
@@ -1640,7 +1688,7 @@ public class TListNGTest {
     }
 
     @Test
-    public void skipRange2() {
+    public void testSkipRange2() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Integer> result = TList.skipRange(new Range<>(5,56), 10);
         TList<Integer> expected = TList.sof(5,15,25,35,45,55);
@@ -1650,7 +1698,7 @@ public class TListNGTest {
     }
 
     @Test
-    public void skipRange3() {
+    public void testSkipRange3() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Integer> result = TList.skipRange(new Range<>(0,100), 10);
         TList<Integer> expected = TList.sof(0,10,20,30,40,50,60,70,80,90);
@@ -1732,6 +1780,123 @@ public class TListNGTest {
         Integer j = 10002;
         Set<Integer> result = TList.sof(TList.sof(9999,i,j,10003,10005),TList.sof(i,j,10003,10006)).intersectByIdentity(l->l);
         Set<Integer> expected = TList.sof(i,j).toIdentitySet();
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testTrimmedChunk() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<TList<Integer>> result = TList.sof(0,5,5,5,0,4,4,0,0,6).trimmedChunk(i->i<=0);
+        TList<TList<Integer>> expected = TList.sof(TList.sof(),TList.sof(5,5,5),TList.sof(4,4),TList.sof(),TList.sof(6));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testEnvelopChunk() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<TList<Integer>> result = TList.sof(0,5,5,5,0,4,4,0,0,6).envelopChunk(i->i<=0);
+        TList<TList<Integer>> expected = TList.sof(TList.sof(0),TList.sof(0,5,5,5,0),TList.sof(0,4,4,0),TList.sof(0,0),TList.sof(0,6));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    
+    @Test
+    public void testReverseChunk() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<TList<Integer>> result = TList.sof(0,5,5,5,0,4,4,0,0,6).reverseChunk(i->i<=0);
+        TList<TList<Integer>> expected = TList.sof(TList.sof(),TList.sof(0,5,5,5),TList.sof(0,4,4),TList.sof(0),TList.sof(0,6));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testStartFrom_ListArr() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> result = TList.sof(5,6,7).startFrom(TList.sof(0,1,2),TList.sof(3,4));
+        TList<Integer> expected = TList.sof(0,1,2,3,4,5,6,7);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testStartFrom_GenericType() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> result = TList.sof(3,4,5).startFrom(0,1,2);
+        TList<Integer> expected = TList.sof(0,1,2,3,4,5);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testGetDebug() {
+    }
+
+    @Test
+    public void testAverageSampleD() {
+    }
+
+    @Test
+    public void testAverageSampleL() {
+    }
+
+    @Test
+    public void testAverageSampleI() {
+    }
+
+    @Test
+    public void testMinval() {
+    }
+
+    @Test
+    public void testMaxval() {
+    }
+
+    @Test
+    public void testDiffChunk_BiPredicate() {
+    }
+
+    @Test
+    public void testDiffChunk_BiPredicate_GenericType() {
+    }
+
+    @Test
+    public void testToIdentitySet() {
+    }
+
+    @Test
+    public void testToSet() {
+        // this is merely a wrapper of jdk
+    }
+
+    @Test
+    public void testIntersect_TListArr() {
+    }
+
+    @Test
+    public void testIntersect_TList() {
+    }
+
+    @Test
+    public void testIntersectByIdentity_TListArr() {
+    }
+
+    @Test
+    public void testIntersectByIdentity_TList() {
+    }
+
+    @Test
+    public void testFilterAt() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> result = TList.sof(0,1,0,0,1,0,1,1).filterAt(i->i==1);
+        TList<Integer> expected = TList.sof(1,4,6,7);
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
