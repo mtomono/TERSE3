@@ -16,6 +16,7 @@
 package collection;
 
 import debug.Monitorable;
+import static java.lang.Integer.min;
 import java.util.AbstractList;
 
 /**
@@ -31,7 +32,7 @@ public class FoldList<T> extends AbstractList<TList<T>> implements Monitorable {
     }
     @Override
     public TList<T> get(int index) {
-        return body.subList(index*length, (index+1)*length);
+        return body.subList(index*length, min(body.size(),(index+1)*length));
     }
 
     @Override
