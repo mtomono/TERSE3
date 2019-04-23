@@ -15,6 +15,7 @@
 
 package shape;
 
+import static arithmetic.Calculation.roundAt;
 import collection.TList;
 import static collection.c.a2l;
 import java.util.*;
@@ -146,6 +147,21 @@ public class TPoint2d extends Point2d implements List<Double> {
     public TPoint2d setYS(double v1) {
         return self(v->v.setY(v1));
     }
+
+    public TPoint2d roundR(int i) {
+        return retval(p->{
+            p.x=roundAt(p.x,i);
+            p.y=roundAt(p.y,i);
+        });
+    }
+    
+    public TPoint2d roundS(int i) {
+        return self(p->{
+            p.x=roundAt(p.x,i);
+            p.y=roundAt(p.y,i);
+        });
+    }
+    
     public TPoint3d expand() {
         return expand(0);
     }

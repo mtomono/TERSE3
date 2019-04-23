@@ -15,6 +15,7 @@
 
 package shape;
 
+import static arithmetic.Calculation.roundAt;
 import collection.TList;
 import static collection.TList.toTList;
 import static collection.c.a2l;
@@ -174,6 +175,20 @@ public class TVector2d extends Vector2d implements List<Double> {
     
     public TVector2d interpolateS(TVector2d to, double rate) {
         return self(p->p.interpolate(to, rate));
+    }
+    
+    public TVector2d roundR(int i) {
+        return retval(p->{
+            p.x=roundAt(p.x,i);
+            p.y=roundAt(p.y,i);
+        });
+    }
+    
+    public TVector2d roundS(int i) {
+        return self(p->{
+            p.x=roundAt(p.x,i);
+            p.y=roundAt(p.y,i);
+        });
     }
     
     public TVector3d expand() {
