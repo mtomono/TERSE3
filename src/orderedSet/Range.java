@@ -36,6 +36,10 @@ public class Range<T extends Comparable<T>> {
             return false;
         return order.eq(this.start, ((Range<T>)o).start) && order.eq(this.end, ((Range<T>)o).end);
     }
+    
+    public boolean equalsAsPoint(T t) {
+        return start.equals(end)&&start.equals(t);
+    }
 
     @Override
     public int hashCode() {
