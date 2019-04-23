@@ -19,7 +19,8 @@ import collection.TList;
 import static java.lang.Math.abs;
 
 /**
- *
+ * rectangle in 2d integer, of which sides are parallel to axis.
+ * contains points on sides.
  * @author masao
  */
 public class Rect2i {
