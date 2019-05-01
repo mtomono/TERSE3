@@ -23,6 +23,7 @@ import iterator.IteratorCache;
 import iterator.RotateListIterator;
 import iterator.TIterator;
 import iterator.TListIterator;
+import static java.lang.Math.abs;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collector;
@@ -1681,6 +1682,20 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
     
     public TList<T> subList(Range<Integer> range) {
         return subList(range.start(), range.end());
+    }
+    
+    /**
+     * subList by amount.
+     * variation of subList which take a parameter in the same policy as rotate
+     * @param rot
+     * @return subList which is shaved in front or rear depending on the sign of the parameter rot.
+     */
+    public TList<T> subList(int rot) {
+        assert abs(rot)<=size() : "you shaved me too much";
+        if (rot>=0)
+            return subList(rot,size());
+        else
+            return subList(0,size()+rot);
     }
     
     /**
