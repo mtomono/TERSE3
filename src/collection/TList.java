@@ -1715,11 +1715,15 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
      * @return 
      */
     public String toCatenatedString(String x) {
+        return toCatenatedString(x,()->"null");
+    }
+
+    public String toCatenatedString(String x, Supplier<String> forNull) {
         if (isEmpty())
             return "";
-        return map(o->o.toString()).accumFromStart(s->new StringBuilder(s), (a,b)->a.append(x).append(b)).last().toString();
+        return map(o->o!=null?o.toString():forNull.get()).accumFromStart(s->new StringBuilder(s),(a,b)->a.append(x).append(b)).last().toString();
     }
-    
+
     /**
      * collector method for Stream#collect().
      * @param <T>
