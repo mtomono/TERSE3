@@ -572,6 +572,8 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
      * @return 
      */
     public TList<T> accumFromStart(BiFunction<T, T, T> map) {
+        if (isEmpty())
+            return TList.empty();
         return subList(1, size()).accum(get(0), map);
     }
 

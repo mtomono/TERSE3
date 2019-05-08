@@ -1151,10 +1151,30 @@ public class TListNGTest {
     }
 
     @Test
+    public void testAccumFromStart_BiFunction_whenTheListIsEmpty() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<String> result = TList.of().map(p->p.toString()).accumFromStart((a,b)->a+b);
+        TList<String> expected = TList.of();
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
     public void testAccumFromStart_Function_BiFunction() {
         System.out.println(test.TestUtils.methodName(0));
         TList<String> result = TList.of(0, 1, 2, 3).accumFromStart(f->Integer.toString(f), (a,b)->a+Integer.toString(b));
         TList<String> expected = TList.of("0", "01", "012", "0123");
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testAccumFromStart_Function_BiFunction_whenTheListIsEmpty() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<String> result = TList.<Integer>of().accumFromStart(f->Integer.toString(f), (a,b)->a+Integer.toString(b));
+        TList<String> expected = TList.of();
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
         assertEquals(result, expected);
