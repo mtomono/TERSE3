@@ -81,7 +81,7 @@ public class RangeSet<T extends Comparable<T>> extends AbstractList<Range<T>> {
     
     public RangeSet(List<Range<T>> elements) {
         this();
-        assert rangesAreInOrder(elements);
+        assert rangesAreInOrder(elements) : "range is not in order"+elements.toString();
         this.elements = elements;
     }
     
