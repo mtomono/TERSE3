@@ -12,15 +12,19 @@ import collection.TList;
  * @author masao
  */
 public class StackTracePrint {
-    static public void stackTracePrint(int from, int to) {
-        System.out.println(TList.sof(Thread.currentThread().getStackTrace()).subList(from,to).toWrappedString());
+    static public TList<StackTraceElement> getStackTrace() {
+        return TList.sof(Thread.currentThread().getStackTrace());
     }
     
-    static public void stackTracePrint(int upto) {
-        stackTracePrint(1,upto);
+    static public TList<StackTraceElement> getStackTrace(int from, int to) {
+        return getStackTrace().subList(from,to);
     }
     
-    static public void stackTracePrint() {
-        System.out.println(TList.sof(Thread.currentThread().getStackTrace()).toWrappedString());
+    static public TList<StackTraceElement> getStackTrace(int upto) {
+        return getStackTrace(1, upto);
+    }
+    
+    static public void print(TList<StackTraceElement> stackTrace) {
+        System.out.println(stackTrace.toWrappedString());
     }
 }
