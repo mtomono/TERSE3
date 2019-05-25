@@ -458,6 +458,12 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
         return map(map, e->{throw new RuntimeException("Tried to change a list mapped without reverse map");});
     }
     
+    /**
+     * map cached.
+     * @param <S>
+     * @param map
+     * @return 
+     */
     public <S> TList<S> mapc(Function<T, S> map) {
         return map(map).cache();
     }
@@ -475,6 +481,12 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
         return (body instanceof RandomAccess) ? new TListRandom<>(new ListRandomList<>(map(map))) : new TList<>(new ListSequentialList<>(map(map)));
     }
     
+    /**
+     * flatMap cached.
+     * @param <S>
+     * @param map
+     * @return 
+     */
     public <S> TList<S> flatMapc(Function<T, List<S>> map) {
         return (body instanceof RandomAccess) ? new TListRandom<>(new ListRandomList<>(mapc(map))) : new TList<>(new ListSequentialList<>(mapc(map)));
     }
@@ -1064,13 +1076,13 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
         if (divides.isEmpty())
             return current.addOne(remain);
         int division = divides.get(0);
-        return chunk(current.addOne(remain.pre(division+1).sfix()), remain.post(division+1).sfix(), pred);
+        return chunk(current.addOne(remain.head(division+1).sfix()), remain.tail(division+1).sfix(), pred);
     }
     
-    public TList<T> pre(int i) {
+    public TList<T> head(int i) {
         return subList(0,i);
     }
-    public TList<T> post(int i) {
+    public TList<T> tail(int i) {
         return subList(i,size());
     }
 
