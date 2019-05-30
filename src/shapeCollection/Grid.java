@@ -133,12 +133,12 @@ public class Grid<T> implements Cloneable {
     }
     
     int xInList(int px) {
-        assert xr.contains(px) : "px:"+px+" :"+xr;
+        assert xr.contains(px) : "px out of range:"+px+" :"+xr;
         return (px - x.get(0))*sigTogo.x;
     }
     
     int yInList(int py) {
-        assert yr.contains(py) : "py:"+py+" :"+yr;
+        assert yr.contains(py) : "py out of range:"+py+" :"+yr;
         return (py - y.get(0))*sigTogo.y;
     }
     
