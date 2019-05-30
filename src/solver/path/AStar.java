@@ -17,7 +17,6 @@ package solver.path;
 
 import collection.TList;
 import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.Optional;
 import java.util.PriorityQueue;
 import static solver.path.AStarStatus.*;
@@ -28,7 +27,6 @@ import static solver.path.AStarStatus.*;
  * @param <T>
  */
 public abstract class AStar<T extends AStarNode> {
-    LinkedList<T> qXXX;
     PriorityQueue<T> queue;
 
     abstract public int costToGo(T astar);
