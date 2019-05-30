@@ -20,150 +20,131 @@ import static collection.c.a2l;
 import static java.lang.Math.abs;
 import java.util.*;
 import java.util.function.Consumer;
-import javax.vecmath.Point2i;
-import javax.vecmath.Tuple2i;
+import javax.vecmath.Point3i;
+import javax.vecmath.Tuple3i;
+import static shape.ShapeUtil.vector3;
 
 /**
  *
  * @author masao
  */
-public class TPoint2i extends Point2i implements List<Integer> {
-    final static public TPoint2i zero = new TPoint2i(0, 0);
-    final static public TPoint2i x1 = new TPoint2i(1, 0);
-    final static public TPoint2i y1 = new TPoint2i(0, 1);
-    final static public Comparator<Point2i> xc = Comparator.<Point2i>comparingInt(p->p.x);
-    final static public Comparator<Point2i> yc = Comparator.<Point2i>comparingInt(p->p.y);
+public class TPoint3i extends Point3i implements List<Integer> {
+    final static public TPoint3i zero = new TPoint3i(0, 0, 0);
+    final static public TPoint3i x1 = new TPoint3i(1, 0, 0);
+    final static public TPoint3i y1 = new TPoint3i(0, 1, 0);
+    final static public TPoint3i z1 = new TPoint3i(0, 0, 1);
+    final static public Comparator<Point3i> xc = Comparator.<Point3i>comparingInt(p->p.x);
+    final static public Comparator<Point3i> yc = Comparator.<Point3i>comparingInt(p->p.y);
+    final static public Comparator<Point3i> zc = Comparator.<Point3i>comparingInt(p->p.z);
 
-    public TPoint2i() {
+    public TPoint3i() {
         super();
     }
     
-    public TPoint2i(Tuple2i t) {
+    public TPoint3i(Tuple3i t) {
         super(t);
     }
     
-    public TPoint2i(int x, int y) {
-        super(x, y);
+    public TPoint3i(int x, int y, int z) {
+        super(x, y, z);
     }
     
-    public static TPoint2i c(Tuple2i start, Tuple2i end) {
-        return new TPoint2i(end).self(p->p.sub(start));
+    public static TPoint3i c(Tuple3i start, Tuple3i end) {
+        return new TPoint3i(end).self(p->p.sub(start));
     }
     
-    public TPoint2i retval(Consumer<TPoint2i> consumer) {
-        TPoint2i retval = new TPoint2i(this);
+    public TPoint3i retval(Consumer<TPoint3i> consumer) {
+        TPoint3i retval = new TPoint3i(this);
         consumer.accept(retval);
         return retval;
     }
     
-    public TPoint2i self(Consumer<TPoint2i> consumer) {
+    public TPoint3i self(Consumer<TPoint3i> consumer) {
         consumer.accept(this);
         return this;
     }
 
-    public TPoint2i to(TPoint2i to) {
-        return TPoint2i.c(this, to);
+    public TPoint3i to(TPoint3i to) {
+        return TPoint3i.c(this, to);
     }
     
-    public TPoint2i from(TPoint2i from) {
-        return TPoint2i.c(from, this);
+    public TPoint3i from(TPoint3i from) {
+        return TPoint3i.c(from, this);
     }
     
-    public TPoint2i addR(Tuple2i v1) {
+    public TPoint3i addR(Tuple3i v1) {
         return retval(v->v.add(v1));
     }
     
-    public TPoint2i addS(Tuple2i v1) {
+    public TPoint3i addS(Tuple3i v1) {
         return self(v->v.add(v1));
     }
     
-    public TPoint2i subR(Tuple2i v1) {
+    public TPoint3i subR(Tuple3i v1) {
         return retval(v->v.sub(v1));
     }
     
-    public TPoint2i subS(Tuple2i v1) {
+    public TPoint3i subS(Tuple3i v1) {
         return self(v->v.sub(v1));
     }
     
-    public TPoint2i scaleR(int v1) {
+    public TPoint3i scaleR(int v1) {
         return retval(v->v.scale(v1));
     }
     
-    public TPoint2i scaleS(int v1) {
+    public TPoint3i scaleS(int v1) {
         return self(v->v.scale(v1));
     }
     
-    public TVector2d scaleR(double scale) {
-        return new TVector2d(x,y).scaleS(scale);
+    public TVector3d scaleR(double scale) {
+        return new TVector3d(x,y,z).scaleS(scale);
     }
     
-    public TPoint2i negateR() {
+    public TPoint3i negateR() {
         return retval(v->v.negate());
     }
     
-    public TPoint2i negateS() {
+    public TPoint3i negateS() {
         return self(v->v.negate());
     }
     
-    public int det(Tuple2i other) {
-        return x*other.y-other.x*y;
+    public TVector3d asVector() {
+        return new TVector3d(x,y,z);
     }
     
-    public TPoint2i signum() {
-        return new TPoint2i(Integer.signum(x), Integer.signum(y));
+    public TVector3d det(TPoint3i other) {
+        return asVector().cross(other.asVector());
     }
     
-    public TPoint2i flip() {
-        return new TPoint2i(y, x);
+    public TPoint3i signum() {
+        return new TPoint3i(Integer.signum(x), Integer.signum(y), Integer.signum(z));
+    }
+    
+    public TPoint2i shrinkX() {
+        return new TPoint2i(y,z);
+    }
+    
+    public TPoint2i shrinkY() {
+        return new TPoint2i(z,x);
+    }
+    
+    public TPoint2i shrinkZ() {
+        return new TPoint2i(x,y);
     }
     
     public int manhattanLength() {
-        return abs(x)+abs(y);
+        return abs(x)+abs(y)+abs(z);
     }
     
-    public TPoint3i expandX(int X) {
-        return new TPoint3i(X, x, y);
-    }
-    
-    public TPoint3i expandY(int Y) {
-        return new TPoint3i(y, Y, x);
-    }
-    
-    public TPoint3i expandZ(int Z) {
-        return new TPoint3i(x, y, Z);
-    }
-    
-    /**
-     * judge the quadrant.
-     * only applicable to unit point.
-     * 0:x+y+ 1:x-y+ 2:x-y- 3:x+y-
-     * @return 
-     */
-    public int quadrant() {
-        assert abs(x+y)==1;
-        assert x*y==0;
-        return 3-abs(x*2+y+1);
-    }
-    
-    final static public TList<TPoint2i> quadrants = TList.sof(
-            new TPoint2i(1, 0),
-            new TPoint2i(0, 1),
-            new TPoint2i(-1,0),
-            new TPoint2i(0,-1)
-    );
-    static TPoint2i quadrant(int i) {
-        return quadrants.get(i);
-    }
-
     //--------- compatibility with list
     
     public List<Integer> asList() {
-        return a2l(x,y);
+        return a2l(x,y,z);
     }
 
     @Override
     public int size() {
-        return 2;
+        return 3;
     }
 
     @Override
@@ -175,8 +156,8 @@ public class TPoint2i extends Point2i implements List<Integer> {
     public boolean contains(Object o) {
         if (!(o instanceof Integer))
             return false;
-        Integer t = (Integer) o;
-        return t==x||t==y;
+        Double t = (Double) o;
+        return t==x||t==y||t==z;
     }
 
     @Override
@@ -239,7 +220,8 @@ public class TPoint2i extends Point2i implements List<Integer> {
         switch (index) {
             case 0: return x;
             case 1: return y;
-            default: throw new NoSuchElementException("TVector3d#get index was "+index);
+            case 2: return z;
+            default: throw new NoSuchElementException("TPoint3i#get index was "+index);
         }
     }
 
@@ -289,6 +271,6 @@ public class TPoint2i extends Point2i implements List<Integer> {
     
     @Override
     public String toString() {
-        return "("+x+","+y+")";
+        return "("+x+","+y+","+z+")";
     }
 }
