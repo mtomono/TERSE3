@@ -161,9 +161,9 @@ public class TPoint2i extends Point2i implements List<Integer> {
 
     @Override
     public boolean contains(Object o) {
-        if (!(o instanceof Double))
+        if (!(o instanceof Integer))
             return false;
-        Double t = (Double) o;
+        Integer t = (Integer) o;
         return t==x||t==y;
     }
 
