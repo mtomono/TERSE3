@@ -83,6 +83,11 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
         return this;
     }
     
+    public TList<T> cset(int i, T o) {
+        this.set(i, o);
+        return this;
+    }
+    
     public TList<T> insertAt(int at,TList<T> t) {
         return subList(0,at).append(t).append(subList(at,size()));
     }
