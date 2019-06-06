@@ -1922,4 +1922,74 @@ public class TListNGTest {
         assertEquals(result, expected);
     }
     
+    @Test
+    public void testFlip() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> result = TList.range(1, 10).flip(4, 6);
+        TList<Integer> expected = TList.sof(1, 2, 3, 4, 7, 6, 5, 8, 9);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    
+    @Test
+    public void testFlip2() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> result = TList.range(1, 10).flip(6,4);
+        TList<Integer> expected = TList.sof(1, 2, 3, 4, 7, 6, 5, 8, 9);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    
+    @Test
+    public void testFlip3() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> result = TList.range(1, 10).flip(0,5);
+        TList<Integer> expected = TList.sof(6, 2, 3, 4, 5, 1, 7, 8, 9);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    
+    @Test
+    public void testFlip4() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> result = TList.range(1, 10).flip(5,0);
+        TList<Integer> expected = TList.sof(6, 2, 3, 4, 5, 1, 7, 8, 9);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testFlip5() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> result = TList.range(1, 10).flip(5,8);
+        TList<Integer> expected = TList.sof(1, 2, 3, 4, 5, 9, 7, 8, 6);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    
+    @Test
+    public void testFlip6() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> result = TList.range(1, 10).flip(5,6);
+        TList<Integer> expected = TList.sof(1, 2, 3, 4, 5, 7, 6, 8, 9);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testFlip7() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> result = TList.range(1, 10).flip(5,5);
+        TList<Integer> expected = TList.sof(1, 2, 3, 4, 5, 6, 7, 8, 9);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+
 }

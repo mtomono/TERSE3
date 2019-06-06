@@ -976,6 +976,18 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
             return TList.concat(subList(size()+x, size()), subList(0, size()+x));
     }
     
+    public TList<T> flip(int from, int to) {
+        if (from==to)
+            return this;
+        int min = Integer.min(from, to);
+        int max = Integer.max(from, to);
+        assert 0<=min&&max<size() : "tried to flip out of range";
+        TList<T> l0 = subList(0,min);
+        TList<T> l1 = subList(min+1,max);
+        TList<T> l2 = subList(max+1,size());
+        return l0.append(get(max)).append(l1).append(get(min)).append(l2);
+    }
+    
     public TList<T> skip(int n) {
         assert n>=1 : "no skip less than 1";
         if (n==1)
