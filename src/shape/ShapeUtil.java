@@ -85,6 +85,15 @@ public class ShapeUtil {
     public static TList<TPoint2i> p2is(Integer... v) {
         return TList.set(a2l(v)).fold(2).map(l->p2i(l.get(0), l.get(1)));
     }
+    public static TPoint3i p3i(int x, int y, int z) {
+        return new TPoint3i(x,y,z);
+    }
+    public static TPoint3i p3i(List<Integer> vs) {
+        return p3i(vs.get(0),vs.get(1),vs.get(2));
+    }
+    public static TList<TPoint3i> p3is(Integer... v) {
+        return TList.set(a2l(v)).fold(3).map(l->p3i(l.get(0), l.get(1), l.get(2)));
+    }
     public static double sin(TVector2d from, TVector2d to) {
         assert epsilonEquals(from.length(), 1, err);
         assert epsilonEquals(to.length(), 1, err);
