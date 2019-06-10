@@ -466,5 +466,60 @@ public class GridXNGTest {
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
     }
+    
+    @Test
+    public void testEquals() {
+        System.out.println(test.TestUtils.methodName(0));
+        GridCoord axis = gcoord(0,0,0, 2,2,2);
+        GridX<Integer> base = new GridX<>(axis, p->p.sumI(c->c));
+        GridX<Integer> tested = new GridX<>(axis, p->p.sumI(c->c));
+        boolean result = tested.equals(base);
+        boolean expected = true;
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
 
+    @Test
+    public void testEquals_fail() {
+        System.out.println(test.TestUtils.methodName(0));
+        GridCoord axis = gcoord(0,0,0, 2,2,2);
+        GridX<Integer> base = new GridX<>(axis, p->p.sumI(c->c));
+        GridX<Integer> tested = new GridX<>(axis, TList.sof(0,1,2,1,2,3,2,3,4,1,2,3,2,3,4,3,4,5,2,3,10/*should be 4*/,3,4,5,4,5,6));
+        boolean result = tested.equals(base);
+        boolean expected = false;
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testDissolve() {
+        System.out.println(test.TestUtils.methodName(0));
+        GridCoord axis = gcoord(0,0,0, 2,2,2);
+        GridCoord lower = gcoord(0,0, 2,2);
+        GridX<Integer> base = new GridX<>(axis, p->p.sumI(c->c));
+        TList<GridX<Integer>> result = base.dissolve(1);
+        TList<GridX<Integer>> expected = TList.sof(new GridX<>(lower,TList.sof(0,1,2,1,2,3,2,3,4)),
+                                                   new GridX<>(lower,TList.sof(1,2,3,2,3,4,3,4,5)),
+                                                   new GridX<>(lower,TList.sof(2,3,4,3,4,5,4,5,6)));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    
+    @Test
+    public void testToStringX() {
+        System.out.println(test.TestUtils.methodName(0));
+        GridCoord axis = gcoord(0,0,0, 2,2,2);
+        GridX<Integer> base = new GridX<>(axis, p->p.sumI(c->c));
+        System.out.println(base.toStringFlat());
+    }
+    @Test
+    public void testToString() {
+        System.out.println(test.TestUtils.methodName(0));
+        GridCoord axis = gcoord(0,0,0, 2,2,2);
+        GridX<Integer> base = new GridX<>(axis, p->p.sumI(c->c));
+        System.out.println(base.toString());
+    }
 }
