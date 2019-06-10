@@ -26,6 +26,19 @@ import java.util.function.Function;
 public class GridCoord {
     final public TList<GridAxis> axis;
     
+    public static TList<Integer> vector(List<Integer> from, List<Integer> to) {
+        return TList.set(from).pair(to, (a,b)->b-a);
+    }
+    
+    public static TList<Integer> move(List<Integer> from, List<Integer> vector) {
+        return TList.set(from).pair(vector,(a,b)->a+b);
+    }
+
+    public static TList<List<Integer>> allDirs(int nth) {
+        TList<Integer> zero = TList.nCopies(nth,0).fix();
+        return TList.range(0,nth).flatMap(i->TList.sof(zero.fix().cset(i, 1), zero.fix().cset(i,-1)));
+    }
+    
     static public GridCoord gcoord(Integer... fromAndTo) {
         assert fromAndTo.length%2==0 : "number of parameter should be even";
         TList<Integer> parameters = TList.sof(fromAndTo);

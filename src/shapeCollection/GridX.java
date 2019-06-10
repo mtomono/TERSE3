@@ -16,6 +16,7 @@
 package shapeCollection;
 
 import collection.TList;
+import java.util.Collection;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -83,6 +84,15 @@ public class GridX<T> {
     public GridX<T> cset(T v, List<Integer> address) {
         set(v, address);
         return this;
+    }
+    
+    public GridX<T> multiCSet(Collection<List<Integer>> at, Function<List<Integer>,T> f) {
+        at.forEach(p->set(f.apply(p),p));
+        return this;
+    }
+    
+    public boolean contains(List<Integer> p) {
+        return axis.contains(p);
     }
 
     public TList<T> asList() {
