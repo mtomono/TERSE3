@@ -1769,6 +1769,10 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
             return "";
         return map(o->o!=null?o.toString():forNull.get()).accumFromStart(s->new StringBuilder(s),(a,b)->a.append(x).append(b)).last().toString();
     }
+    
+    public TList<String> toIndentedStrings(String indent) {
+        return TList.wrap("(").append(map(e->indent+e.toString())).append(")");
+    }
 
     /**
      * collector method for Stream#collect().

@@ -1991,5 +1991,21 @@ public class TListNGTest {
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
     }
+    
+    @Test
+    public void testToIndentedStrings() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<String> tested = TList.sof("aaa","bbbb","ccc");
+        String result = tested.toIndentedStrings("  ").toWrappedString();
+        String expected = ""+
+                "(\n"+
+                "  aaa\n"+
+                "  bbbb\n"+
+                "  ccc\n"+
+                ")";
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
 
 }
