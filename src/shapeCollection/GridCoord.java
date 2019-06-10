@@ -80,8 +80,8 @@ public class GridCoord {
         return rindex(axis.pair(address, (a,b)->a.raddress(b)));
     }
     
-    public int rindex(List<Integer> address) {
-        return baseSize().pair(address, (a,b)->a*b).sumI(i->i);
+    public int rindex(List<Integer> raddress) {
+        return baseSize().pair(raddress, (a,b)->a*b).sumI(i->i);
     }
     
     public TList<Integer> address(int index) {
@@ -98,6 +98,14 @@ public class GridCoord {
     
     public boolean contains(GridCoord o) {
         return axis.pair(o.axis, (a,b)->a.contains(b)).forAll(b->b);
+    }
+    
+    public TList<Integer> from() {
+        return axis.map(a->a.from);
+    }
+    
+    public TList<Integer> to() {
+        return axis.map(a->a.to);
     }
     
     public TList<Integer> togo() {
@@ -121,7 +129,7 @@ public class GridCoord {
         return TList.range(0,size()).filter(i->!g.contains(address(i)));
     }
     
-    public TList<TList<Integer>> indices2addresses(TList<Integer> index) {
+    public TList<List<Integer>> i2a(TList<Integer> index) {
         return index.map(i->address(i));
     }
     
