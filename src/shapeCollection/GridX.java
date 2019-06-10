@@ -187,4 +187,46 @@ public class GridX<T> {
     public GridX<T> flip(int from, int to) {
         return new GridX<>(new GridCoordFlipped(axis, from, to), body);
     }
+    
+    public TList<GridX<T>> dissolve(Integer axisIndex) {
+        GridCoord lower = new GridCoord(axis.axis.hide(TList.sof(axisIndex)));
+        return axis.axis.get(axisIndex).v().map(i->new GridX<T>(lower, TList.range(0,lower.size()).map(j->get(lower.address(j).insertAt(axisIndex,i)))));
+    }
+
+    @Override
+    public boolean equals(Object e) {
+        if (e == null) {
+            return false;
+        }
+        if (!(e instanceof GridX)) {
+            return false;
+        }
+        GridX t = (GridX) e;
+        if (!t.axis.contains(axis))
+            return false;
+        if (!axis.contains(t.axis))
+            return false;
+        return TList.range(0,axis.size()).map(i->axis.address(i)).forAll(a->get(a).equals(t.get(a)));
+    }
+    
+    public TList<String> toStrings(String indent) {
+        if (axis.axis.size()>2)
+            return dissolve(axis.axis.size()-1).flatMap(g->g.toStrings(indent)).toIndentedStrings(indent);
+        else
+            return dissolve(axis.axis.size()-1).map(g->g.asList().toString()).toIndentedStrings(indent);
+    }
+    
+    @Override
+    public String toString() {
+        if (axis.size()==1)
+            return asList().toString();
+        return toStrings("  ").toWrappedString();
+    }
+    
+    public String toStringFlat() {
+        if (axis.axis.size()>1)
+            return dissolve(0).map(g->g.toStringFlat()).toString();
+        else
+            return asList().toString();
+    }
 }
