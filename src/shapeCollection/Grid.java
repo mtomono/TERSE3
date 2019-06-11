@@ -226,11 +226,20 @@ public class Grid<T> implements Cloneable {
     public <S> Grid<S> mapByPosition(BiFunction<TPoint2i, T, S> f) {
         return new Grid<>(from, to, (a,b)->f.apply(new TPoint2i(a,b), get(a,b)));
     }
-    
+    /**
+     * point list.
+     * listing all the points.
+     * @return 
+     */
     public TList<TPoint2i> plist() {
         return x.cross(y, (a,b)->new TPoint2i(a,b));
     }
     
+    /**
+     * flatten to list.
+     * listing all items along the all points list.
+     * @return 
+     */
     public TList<T> flat() {
         return plist().map(p->get(p));
     }
