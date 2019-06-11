@@ -15,16 +15,16 @@
 
 package solver.path;
 
-import shape.TPoint3i;
+import java.util.List;
 
 /**
  * Node for Grid2 A Star.
  * @author masao
  */
-public class AStarNodeGrid3D extends AStarNode<AStarNodeGrid3D>{
-    final public TPoint3i point;
+public class AStarNodeGridX extends AStarNode<AStarNodeGridX>{
+    final public List<Integer> point;
     
-    public AStarNodeGrid3D(TPoint3i point, AStarStatus status) {
+    public AStarNodeGridX(List<Integer> point, AStarStatus status) {
         this.point = point;
         this.status = status;
     }
