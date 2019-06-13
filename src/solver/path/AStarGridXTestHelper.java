@@ -29,14 +29,14 @@ import static string.Strings.toCharacters;
  * @author masao
  */
 public class AStarGridXTestHelper {
-    GridX<String> body;
+    final public GridX<String> body;
 
     public AStarGridXTestHelper(String picture, Integer... dim) {
         this(picture, TList.sof(dim));
     }
     public AStarGridXTestHelper(String picture, TList<Integer> dim) {
         GridCoord axis = new GridCoord(dim.map(i->new GridAxis(0,i)));
-        this.body = new GridX<>(axis,TList.set(toCharacters(picture))).map(c->c.toString());
+        this.body = new GridX<>(axis,TList.set(toCharacters(picture)).map(c->c.toString()));
     }
     
     public TList<List<Integer>> path() {
