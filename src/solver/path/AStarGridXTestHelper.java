@@ -44,7 +44,7 @@ public class AStarGridXTestHelper {
     }
     
     public GridX<String> solve() {
-        return body.fix().multiCSet(path(), p->"#");
+        return body.fix().multiCSet(path().seek(1).seek(-1), p->"#");
     }
     
     public Collection<List<Integer>> blocked() {
