@@ -24,6 +24,7 @@ import shapeCollection.GridAxis;
 import shapeCollection.GridCoord;
 import static shapeCollection.GridCoord.gcoord;
 import shapeCollection.GridX;
+import static solver.path.AStarGridX.exampleWOD;
 import static string.Strings.toCharacters;
 
 /**
@@ -37,7 +38,10 @@ public class AStarGridXTestHelper {
     }
     
     public static GridX<String> toGridX(String picture, Integer... dim) {
-        GridCoord axis = new GridCoord(TList.sof(dim).map(i->new GridAxis(0,i)));
+        return toGridX(picture, TList.sof(dim));
+    }
+    public static GridX<String> toGridX(String picture, TList<Integer>dim) {
+        GridCoord axis = new GridCoord(dim.map(i->new GridAxis(0,i)));
         return new GridX<>(axis,TList.set(toCharacters(picture))).map(c->c.toString());
     }
     
@@ -59,5 +63,9 @@ public class AStarGridXTestHelper {
     
     public static GridX<String> test3D(GridX<String> base, TPoint3i from, TPoint3i to) {
         return base.fix().multiCSet(new GridXBlocked(base.axis, 1,1,3).path(from, to, blocked(base)), p->"#");
+    }
+    
+    public static GridX<String> solve(GridX<String> base, List<Integer> from, List<Integer> to) {
+        return base.fix().multiCSet(new GridXBlocked(base.axis, exampleWOD).path(from, to, blocked(base)), p->"#");
     }
 }
