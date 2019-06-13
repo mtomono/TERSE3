@@ -6,13 +6,6 @@
 package solver.path;
 
 import org.testng.annotations.Test;
-import static shape.ShapeUtil.p2i;
-import static shape.ShapeUtil.p3i;
-import static solver.path.AStarGridXTestHelper.test2D;
-import static solver.path.AStarGridXTestHelper.test2DPath;
-import static solver.path.AStarGridXTestHelper.test3D;
-import static solver.path.AStarGridXTestHelper.test3DPath;
-import static solver.path.AStarGridXTestHelper.toGridX;
 
 /**
  *
@@ -27,24 +20,25 @@ public class GridXBlockedNGTest {
     public void testCase2D_1() {
         String case1 = 
              // +0123456789+
-                "          " + //0
+                "   S      " + //0
                 "   XXX   X" + //1
                 "          " + //2
                 "          " + //3
                 "XXXXXXXX  " + //4
                 "          " + //5
-                "          " ; //6
+                "     G    " ; //6
         System.out.println(case1);
-        System.out.println(toGridX(case1,9,6).toString());
-        System.out.println(test2DPath(toGridX(case1,9,6),p2i(3,0),p2i(5,6)));
-        System.out.println(test2D(toGridX(case1,9,6),p2i(3,0),p2i(5,6)));
+        AStarGridXTestHelper h = new AStarGridXTestHelper(case1,9,6);
+        System.out.println(h.toString());
+        System.out.println(h.path());
+        System.out.println(h.solve());
     }
 
     @Test
     public void testCase3D_1() {
         String case1 = 
              // +0123456789+
-                "          " + //0
+                "   S      " + //0
                 "   XXX   X" + //1
                 "          " + //2
                 "          " + //3
@@ -60,7 +54,7 @@ public class GridXBlockedNGTest {
                 "XXXXXXXXXX" + //5
                 "XXXXXXXXXX" + //6
                 
-                "          " + //0
+                "   G      " + //0
                 "   XXXXXX " + //1
                 "          " + //2
                 "          " + //3
@@ -69,16 +63,17 @@ public class GridXBlockedNGTest {
                 "          " ; //6
                 
         System.out.println(case1);
-        System.out.println(toGridX(case1,9,6,2).toString());
-        System.out.println(test3DPath(toGridX(case1,9,6,2),p3i(3,0,0),p3i(3,0,2)));
-        System.out.println(test3D(toGridX(case1,9,6,2),p3i(3,0,0),p3i(3,0,2)));
+        AStarGridXTestHelper h = new AStarGridXTestHelper(case1,9,6,2);
+        System.out.println(h.toString());
+        System.out.println(h.path());
+        System.out.println(h.solve());
     }
 
     @Test
     public void testHelix() {
         String case1 = 
              // +0123456789+
-                "          " + //0
+                "   S      " + //0
                 "          " + //1
                 "          " + //2
                 "XXXXXXXXXX" + //3
@@ -108,8 +103,40 @@ public class GridXBlockedNGTest {
                 "XXXXX     " + //3
                 "XXXXX     " + //4
                 "XXXXX     " + //5
-                "XXXXX     " ; //6
+                "XXXXX     " + //6
                 
-        System.out.println(test3D(toGridX(case1+case1,9,6,7),p3i(3,0,0),p3i(7,0,7))); //BE CAREFUL: in this case, the string is doubled.
+                "          " + //0
+                "          " + //1
+                "          " + //2
+                "XXXXXXXXXX" + //3
+                "XXXXXXXXXX" + //4
+                "XXXXXXXXXX" + //5
+                "XXXXXXXXXX" + //6
+                
+                "     XXXXX" + //0
+                "     XXXXX" + //1
+                "     XXXXX" + //2
+                "     XXXXX" + //3
+                "     XXXXX" + //4
+                "     XXXXX" + //5
+                "     XXXXX" + //6
+                
+                "XXXXXXXXXX" + //0
+                "XXXXXXXXXX" + //1
+                "XXXXXXXXXX" + //2
+                "XXXXXXXXXX" + //3
+                "          " + //4
+                "          " + //5
+                "          " + //6
+                
+                "XXXXX  G  " + //0
+                "XXXXX     " + //1
+                "XXXXX     " + //2
+                "XXXXX     " + //3
+                "XXXXX     " + //4
+                "XXXXX     " + //5
+                "XXXXX     " ; //6
+        AStarGridXTestHelper h = new AStarGridXTestHelper(case1,9,6,7);
+        System.out.println(h.solve()); //BE CAREFUL: in this case, the string is doubled.
     }
 }
