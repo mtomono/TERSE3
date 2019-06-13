@@ -74,4 +74,42 @@ public class GridXBlockedNGTest {
         System.out.println(test3D(toGridX(case1,9,6,2),p3i(3,0,0),p3i(3,0,2)));
     }
 
+    @Test
+    public void testHelix() {
+        String case1 = 
+             // +0123456789+
+                "          " + //0
+                "          " + //1
+                "          " + //2
+                "XXXXXXXXXX" + //3
+                "XXXXXXXXXX" + //4
+                "XXXXXXXXXX" + //5
+                "XXXXXXXXXX" + //6
+                
+                "     XXXXX" + //0
+                "     XXXXX" + //1
+                "     XXXXX" + //2
+                "     XXXXX" + //3
+                "     XXXXX" + //4
+                "     XXXXX" + //5
+                "     XXXXX" + //6
+                
+                "XXXXXXXXXX" + //0
+                "XXXXXXXXXX" + //1
+                "XXXXXXXXXX" + //2
+                "XXXXXXXXXX" + //3
+                "          " + //4
+                "          " + //5
+                "          " + //6
+                
+                "XXXXX     " + //0
+                "XXXXX     " + //1
+                "XXXXX     " + //2
+                "XXXXX     " + //3
+                "XXXXX     " + //4
+                "XXXXX     " + //5
+                "XXXXX     " ; //6
+                
+        System.out.println(test3D(toGridX(case1+case1,9,6,7),p3i(3,0,0),p3i(7,0,7))); //BE CAREFUL: in this case, the string is doubled.
+    }
 }
