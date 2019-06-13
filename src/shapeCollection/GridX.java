@@ -119,6 +119,10 @@ public class GridX<T> {
         return body.filterAt(p);
     }
     
+    public TList<List<Integer>> addressOf(Predicate<T> p) {
+        return axis.i2a(filterAt(p));
+    }
+    
     public <U> GridX<U> map(Function<T,U> f) {
         return new GridX<>(axis, body.map(f));
     }
