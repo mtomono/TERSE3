@@ -33,6 +33,7 @@ public class GridXBlocked {
     
     public GridXBlocked(GridCoord axis, Integer... weight) {
         this(axis, wodFixed(weight));
+        assert axis.axis.size() == weight.length : "there are dimension which weight is unset";
     }
 
     public GridXBlocked(GridCoord axis, Function<List<Integer>,Integer> weight) {
