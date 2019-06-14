@@ -33,15 +33,28 @@ public class GridCoord {
     public static TList<Integer> move(List<Integer> from, List<Integer> vector) {
         return TList.set(from).pair(vector,(a,b)->a+b);
     }
-
-    public static TList<List<Integer>> allDirsX(int nth) {
-        TList<Integer> zero = TList.nCopies(nth,0).fix();
-        return TList.range(0,nth).flatMap(i->TList.sof(zero.fix().cset(i, 1), zero.fix().cset(i,-1)));
-    }
     
+    /**
+     * all the unit vectors in n dimension space.
+     * @param nth
+     * @return 
+     */
     public static TList<List<Integer>> allDirs(int nth) {
         TList<Integer> zero = TList.nCopies(nth,0).fix();
         return TList.concat(TList.range(0,nth).map(i->zero.fix().cset(i, 1)),TList.range(0,nth).map(i->zero.fix().cset(i, -1))).map(p->p);
+    }
+    
+    /**
+     * .result is the same as allDirs() when it is considered as a set.the only
+ difference is the order of the result.
+     * but the order is crucial in testing.
+ so this method is depreciated
+     * @param nth
+     * @return 
+     */
+    public static TList<List<Integer>> allDirs_alt(int nth) {
+        TList<Integer> zero = TList.nCopies(nth,0).fix();
+        return TList.range(0,nth).flatMap(i->TList.sof(zero.fix().cset(i, 1), zero.fix().cset(i,-1)));
     }
     
     static public GridCoord gcoord(Integer... fromAndTo) {

@@ -49,9 +49,8 @@ public class GridCoordNGTest {
         System.out.println(test.TestUtils.methodName(0));
         TList<List<Integer>> result = allDirs(3);
         TList<List<Integer>> expected = TList.sof(
-                TList.sof(1,0,0),TList.sof(-1,0,0),
-                TList.sof(0,1,0),TList.sof(0,-1,0),
-                TList.sof(0,0,1),TList.sof(0,0,-1)
+                TList.sof(1,0,0),TList.sof(0,1,0),TList.sof(0,0,1),
+                TList.sof(-1,0,0),TList.sof(0,-1,0),TList.sof(0,0,-1)
         );
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
