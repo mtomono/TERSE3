@@ -34,9 +34,14 @@ public class GridCoord {
         return TList.set(from).pair(vector,(a,b)->a+b);
     }
 
-    public static TList<List<Integer>> allDirs(int nth) {
+    public static TList<List<Integer>> allDirsX(int nth) {
         TList<Integer> zero = TList.nCopies(nth,0).fix();
         return TList.range(0,nth).flatMap(i->TList.sof(zero.fix().cset(i, 1), zero.fix().cset(i,-1)));
+    }
+    
+    public static TList<List<Integer>> allDirs(int nth) {
+        TList<Integer> zero = TList.nCopies(nth,0).fix();
+        return TList.concat(TList.range(0,nth).map(i->zero.fix().cset(i, 1)),TList.range(0,nth).map(i->zero.fix().cset(i, -1))).map(p->p);
     }
     
     static public GridCoord gcoord(Integer... fromAndTo) {
