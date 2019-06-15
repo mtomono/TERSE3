@@ -4,6 +4,7 @@
  */
 package orderedSet;
 
+import collection.TList;
 import collection.c;
 import java.util.Collections;
 import java.util.List;
@@ -24,6 +25,16 @@ public class RangeSetTest {
     public void testIsEmpty() {
         methodNamePrint();
         assertTrue(RangeSet.<Integer>empty().isEmpty());
+    }
+    
+    @Test
+    public void testMergeIntoRangeSet() {
+        System.out.println(test.TestUtils.methodName(0));
+        RangeSet<Integer> result = RangeSet.mergeIntoRangeSet(TList.set(Range.c(Default.order, 0,3, 5,7, -2,2, 4,8, 10,11)));
+        RangeSet<Integer> expected = new RangeSet<>(Range.c(Default.order, -2,3, 4,8, 10,11));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
     }
     
     @Test

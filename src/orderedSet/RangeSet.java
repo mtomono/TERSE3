@@ -15,11 +15,13 @@
 
 package orderedSet;
 
+import collection.TList;
 import java.util.*;
 import iterator.Iterators;
 import static iterator.Iterators.toStream;
 import static java.util.stream.Collectors.toList;
 import static collection.TList.concat;
+import static function.ComparePolicy.inc;
 import string.Message;
 
 /**
@@ -68,6 +70,16 @@ public class RangeSet<T extends Comparable<T>> extends AbstractList<Range<T>> {
     
     public static <T extends Comparable<T>> RangeSet<T> empty() {
         return new RangeSet<>(Collections.<Range<T>>emptyList());
+    }
+    
+    /**
+     * force some list of range into RangeSet by sorting and merging ranges.
+     * @param <T>
+     * @param rs
+     * @return 
+     */
+    public static <T extends Comparable<T>> RangeSet<T> mergeIntoRangeSet(TList<Range<T>> rs) {
+        return rs.sortTo(inc(r->r.start())).diffChunk((a,b)->!a.overlaps(b)).map(rl->rl.stream().reduce((a,b)->a.cover(b))).filter(or->or.isPresent()).map(or->or.get()).transform(l->new RangeSet<>(l));
     }
    
     protected RangeSet() {
