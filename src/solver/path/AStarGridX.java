@@ -26,7 +26,6 @@ import static solver.path.AStarStatus.BLOCKED;
 import static solver.path.AStarStatus.NONE;
 import shape.TPoint2i;
 import shapeCollection.GridCoord;
-import static shapeCollection.GridCoord.allDirs;
 import static shapeCollection.GridCoord.move;
 import static shapeCollection.GridCoord.vector;
 import shapeCollection.GridX;
@@ -37,6 +36,7 @@ import shapeCollection.GridX;
  */
 public class AStarGridX extends AStar<AStarNodeGridX> {
     public GridX<AStarNodeGridX> space;
+    public TList<List<Integer>> allDirs;
     public List<Integer> from;
     public List<Integer> to;
     public TList<List<Integer>> path;
@@ -47,16 +47,12 @@ public class AStarGridX extends AStar<AStarNodeGridX> {
         return l->weightT.pair(l, (a,b)->abs(b)*abs(a)).sumI(i->i);
     }
 
-
-    public AStarGridX(GridX<AStarNodeGridX> space, List<Integer> from, List<Integer> to) {
-        this(space,from,to,exampleWOD);
-    }
-    
-    public AStarGridX(GridX<AStarNodeGridX> space, List<Integer> from, List<Integer> to, Function<List<Integer>, Integer> weightOnDirection) {
+    public AStarGridX(GridX<AStarNodeGridX> space, List<Integer> from, List<Integer> to, Function<List<Integer>, Integer> weightOnDirection, Function<GridCoord, TList<List<Integer>>> searchOrderOfDirs) {
         super();
         assert weightOnDirection!=null : "weightOnDirection is null";
         this.weightOnDirection = weightOnDirection;
         this.space = space;
+        this.allDirs = searchOrderOfDirs.apply(space.axis);
         this.from = from;
         this.to = TList.set(to);
         TList<AStarNodeGridX> rawPath = search().map(a->a.result()).orElse(TList.empty());
@@ -75,7 +71,7 @@ public class AStarGridX extends AStar<AStarNodeGridX> {
 
     @Override
     public TList<AStarNodeGridX> candidates(AStarNodeGridX astar) {
-        return allDirs(space.axis.axis.size()).map(q->move(astar.point,q)).filter(p->space.contains(p)&&space.get(p).status!=BLOCKED).map(p->space.get(p));
+        return allDirs.map(q->move(astar.point,q)).filter(p->space.contains(p)&&space.get(p).status!=BLOCKED).map(p->space.get(p));
     }
     
     @Override

@@ -40,7 +40,7 @@ public class AStarGridXTestHelper {
     }
     
     public TList<List<Integer>> path() {
-        return new GridXBlocked(body.axis, exampleWOD).path(find("S"), find("G"), blocked());
+        return new GridXBlocked(body.axis, GridCoord::dirsAlternate, exampleWOD).path(find("S"), find("G"), blocked());
     }
     
     public GridX<String> solve() {

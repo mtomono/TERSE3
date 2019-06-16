@@ -35,7 +35,7 @@ public class GridCoord {
     }
     
     public static TList<List<Integer>> allDirs(int nth) {
-        return allDirs_alt(nth);
+        return dirsAlternate(nth);
     }
     
     /**
@@ -43,7 +43,7 @@ public class GridCoord {
      * @param nth
      * @return 
      */
-    public static TList<List<Integer>> allDirs_around(int nth) {
+    public static TList<List<Integer>> dirsAround(int nth) {
         TList<Integer> zero = TList.nCopies(nth,0).fix();
         return TList.concat(TList.range(0,nth).map(i->zero.fix().cset(i, 1)),TList.range(0,nth).map(i->zero.fix().cset(i, -1))).map(p->p);
     }
@@ -56,7 +56,7 @@ public class GridCoord {
      * @param nth
      * @return 
      */
-    public static TList<List<Integer>> allDirs_alt(int nth) {
+    public static TList<List<Integer>> dirsAlternate(int nth) {
         TList<Integer> zero = TList.nCopies(nth,0).fix();
         return TList.range(0,nth).flatMap(i->TList.sof(zero.fix().cset(i, 1), zero.fix().cset(i,-1)));
     }
@@ -76,6 +76,14 @@ public class GridCoord {
     
     public GridCoord(TList<GridAxis> axis) {
         this.axis = axis;
+    }
+    
+    public TList<List<Integer>> dirsAround() {
+        return dirsAround(this.axis.size());
+    }
+    
+    public TList<List<Integer>> dirsAlternate() {
+        return dirsAlternate(this.axis.size());
     }
     
     public int size() {

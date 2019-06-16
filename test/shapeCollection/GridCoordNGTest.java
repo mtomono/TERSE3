@@ -10,11 +10,11 @@ import java.util.List;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import shape.TPoint3i;
-import static shapeCollection.GridCoord.allDirs_alt;
-import static shapeCollection.GridCoord.allDirs_around;
 import static shapeCollection.GridCoord.gcoord;
 import static shapeCollection.GridCoord.move;
 import static shapeCollection.GridCoord.vector;
+import static shapeCollection.GridCoord.dirsAround;
+import static shapeCollection.GridCoord.dirsAlternate;
 
 /**
  *
@@ -48,7 +48,7 @@ public class GridCoordNGTest {
     @Test
     public void testAllDirs_around() {
         System.out.println(test.TestUtils.methodName(0));
-        TList<List<Integer>> result = allDirs_around(3);
+        TList<List<Integer>> result = dirsAround(3);
         TList<List<Integer>> expected = TList.sof(
                 TList.sof(1,0,0),TList.sof(0,1,0),TList.sof(0,0,1),
                 TList.sof(-1,0,0),TList.sof(0,-1,0),TList.sof(0,0,-1)
@@ -61,7 +61,7 @@ public class GridCoordNGTest {
     @Test
     public void testAllDirs_alt() {
         System.out.println(test.TestUtils.methodName(0));
-        TList<List<Integer>> result = allDirs_alt(3);
+        TList<List<Integer>> result = dirsAlternate(3);
         TList<List<Integer>> expected = TList.sof(
                 TList.sof(1,0,0),TList.sof(-1,0,0),
                 TList.sof(0,1,0),TList.sof(0,-1,0),
