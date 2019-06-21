@@ -7,12 +7,11 @@ package shapeCollection;
 
 import collection.TList;
 import java.util.List;
+import math.VectorOp;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import shape.TPoint3i;
 import static shapeCollection.GridCoord.gcoord;
-import static shapeCollection.GridCoord.move;
-import static shapeCollection.GridCoord.vector;
 import static shapeCollection.GridCoord.dirsAround;
 import static shapeCollection.GridCoord.dirsAlternate;
 
@@ -25,26 +24,7 @@ public class GridCoordNGTest {
     public GridCoordNGTest() {
     }
     
-    @Test
-    public void testVector() {
-        System.out.println(test.TestUtils.methodName(0));
-        List<Integer> result = vector(TList.sof(1,2,3),TList.sof(3,5,7));
-        List<Integer> expected = TList.sof(2,3,4);
-        System.out.println("result  : " + result);
-        System.out.println("expected: " + expected);
-        assertEquals(result, expected);
-    }
-    
-    @Test
-    public void testMove() {
-        System.out.println(test.TestUtils.methodName(0));
-        List<Integer> result = move(TList.sof(1,2,3),TList.sof(2,3,4));
-        List<Integer> expected = TList.sof(3,5,7);
-        System.out.println("result  : " + result);
-        System.out.println("expected: " + expected);
-        assertEquals(result, expected);
-    }
-    
+
     @Test
     public void testAllDirs_around() {
         System.out.println(test.TestUtils.methodName(0));

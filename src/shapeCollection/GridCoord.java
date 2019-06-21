@@ -18,6 +18,7 @@ import collection.TList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import math.VectorOp;
 
 /**
  *
@@ -26,13 +27,7 @@ import java.util.function.Function;
 public class GridCoord {
     final public TList<GridAxis> axis;
     
-    public static TList<Integer> vector(List<Integer> from, List<Integer> to) {
-        return TList.set(from).pair(to, (a,b)->b-a);
-    }
     
-    public static TList<Integer> move(List<Integer> from, List<Integer> vector) {
-        return TList.set(from).pair(vector,(a,b)->a+b);
-    }
     
     public static TList<List<Integer>> allDirs(int nth) {
         return dirsAlternate(nth);

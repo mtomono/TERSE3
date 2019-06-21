@@ -22,12 +22,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import math.VectorOp;
+import static math.VectorOp.addI;
+import static math.VectorOp.subI;
 import static solver.path.AStarStatus.BLOCKED;
 import static solver.path.AStarStatus.NONE;
 import shape.TPoint2i;
 import shapeCollection.GridCoord;
-import static shapeCollection.GridCoord.move;
-import static shapeCollection.GridCoord.vector;
 import shapeCollection.GridX;
 
 /**
@@ -61,17 +62,17 @@ public class AStarGridX extends AStar<AStarNodeGridX> {
         
     @Override
     public int costToGo(AStarNodeGridX astar) {
-        return weightOnDirection.apply(vector(astar.point,to));
+        return weightOnDirection.apply(subI(to, astar.point));
     }
     
     @Override
     public int costToMove(Optional<AStarNodeGridX> from, AStarNodeGridX to) {
-        return from.map(a->weightOnDirection.apply(vector(a.point,to.point))).orElse(0);
+        return from.map(a->weightOnDirection.apply(subI(to.point, a.point))).orElse(0);
     }
 
     @Override
     public TList<AStarNodeGridX> candidates(AStarNodeGridX astar) {
-        return allDirs.map(q->move(astar.point,q)).filter(p->space.contains(p)&&space.get(p).status!=BLOCKED).map(p->space.get(p));
+        return allDirs.map(q->addI(astar.point,q)).filter(p->space.contains(p)&&space.get(p).status!=BLOCKED).map(p->space.get(p));
     }
     
     @Override
@@ -91,7 +92,7 @@ public class AStarGridX extends AStar<AStarNodeGridX> {
         
     @Override
     public int upperBoundary() {
-        return weightOnDirection.apply(vector(from,to))*2;
+        return weightOnDirection.apply(VectorOp.subI(to, from))*2;
     }
     
     public TList<List<Integer>> path() {
