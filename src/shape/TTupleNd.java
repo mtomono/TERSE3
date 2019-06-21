@@ -6,6 +6,7 @@
 package shape;
 
 import collection.TList;
+import static java.lang.Math.round;
 import java.util.List;
 import java.util.function.BinaryOperator;
 import java.util.function.UnaryOperator;
@@ -14,30 +15,30 @@ import java.util.function.UnaryOperator;
  *
  * @author masao
  */
-public class TTupleNi extends TList<Integer> {
+public class TTupleNd  extends TList<Double> {
 
-    public TTupleNi(List<Integer> body) {
+    public TTupleNd(List<Double> body) {
         super(body);
     }
-    public TTupleNi c(List<Integer> body) {
-        return new TTupleNi(body);
+    public TTupleNd c(List<Double> body) {
+        return new TTupleNd(body);
     }
-    public TTupleNi bop(List<Integer> b, BinaryOperator<Integer> f) {
+    public TTupleNd bop(List<Double> b, BinaryOperator<Double> f) {
         return c(pair(b, (x,y)->f.apply(x,y))); 
     }
-    public TTupleNi op(UnaryOperator<Integer> f) {
+    public TTupleNd op(UnaryOperator<Double> f) {
         return c(map(f)); 
     }
-    public TTupleNi sub(TTupleNi b) {
+    public TTupleNd sub(TTupleNd b) {
         return bop(b,(x,y)->x-y);
     }
-    public TTupleNi add(TTupleNi b) {
+    public TTupleNd add(TTupleNd b) {
         return bop(b,(x,y)->x+y);
     }
-    public TTupleNi scale(Integer s) {
+    public TTupleNd scale(double s) {
         return op(x->x*s);
     }
-    public TTupleNi mul(TTupleNi b) {
+    public TTupleNd mul(TTupleNd b) {
         return bop(b,(x,y)->x*y);
     }
     public TTupleNi toI() {
@@ -48,5 +49,8 @@ public class TTupleNi extends TList<Integer> {
     }
     public TTupleNd toD() {
         return new TTupleNd(map(e->e.doubleValue()));
+    }
+    public TTupleNl round() {
+        return new TTupleNl(map(Math::round));
     }
 }

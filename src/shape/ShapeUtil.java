@@ -94,6 +94,18 @@ public class ShapeUtil {
     public static TList<TPoint3i> p3is(Integer... v) {
         return TList.set(a2l(v)).fold(3).map(l->p3i(l.get(0), l.get(1), l.get(2)));
     }
+    public static TTupleNi tni(List<Integer> vs) {
+        return new TTupleNi(vs);
+    }
+    public static TTupleNi tni(Integer... vs) {
+        return tni(TList.sof(vs));
+    }
+    public static TTupleNd tnd(List<Double> vs) {
+        return new TTupleNd(vs);
+    }
+    public static TTupleNd tnd(Double... vs) {
+        return tnd(TList.sof(vs));
+    }
     public static double sin(TVector2d from, TVector2d to) {
         assert epsilonEquals(from.length(), 1, err);
         assert epsilonEquals(to.length(), 1, err);

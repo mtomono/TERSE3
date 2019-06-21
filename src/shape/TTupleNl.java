@@ -14,30 +14,29 @@ import java.util.function.UnaryOperator;
  *
  * @author masao
  */
-public class TTupleNi extends TList<Integer> {
-
-    public TTupleNi(List<Integer> body) {
+public class TTupleNl extends TList<Long> {
+    public TTupleNl(List<Long> body) {
         super(body);
     }
-    public TTupleNi c(List<Integer> body) {
-        return new TTupleNi(body);
+    public TTupleNl c(List<Long> body) {
+        return new TTupleNl(body);
     }
-    public TTupleNi bop(List<Integer> b, BinaryOperator<Integer> f) {
+    public TTupleNl bop(List<Long> b, BinaryOperator<Long> f) {
         return c(pair(b, (x,y)->f.apply(x,y))); 
     }
-    public TTupleNi op(UnaryOperator<Integer> f) {
+    public TTupleNl op(UnaryOperator<Long> f) {
         return c(map(f)); 
     }
-    public TTupleNi sub(TTupleNi b) {
+    public TTupleNl sub(TTupleNl b) {
         return bop(b,(x,y)->x-y);
     }
-    public TTupleNi add(TTupleNi b) {
+    public TTupleNl add(TTupleNl b) {
         return bop(b,(x,y)->x+y);
     }
-    public TTupleNi scale(Integer s) {
+    public TTupleNl scale(long s) {
         return op(x->x*s);
     }
-    public TTupleNi mul(TTupleNi b) {
+    public TTupleNl mul(TTupleNl b) {
         return bop(b,(x,y)->x*y);
     }
     public TTupleNi toI() {
