@@ -59,6 +59,12 @@ public class TTupleNd  extends TList<Double> {
     public TTupleNd d() {
         return new TTupleNd(map(e->e.doubleValue()));
     }
+    public TTupleNd fix() {
+        return c(fix());
+    }
+    public TTupleNd sfix() {
+        return c(sfix());
+    }
     public TTupleNl round() {
         return new TTupleNl(map(Math::round));
     }
