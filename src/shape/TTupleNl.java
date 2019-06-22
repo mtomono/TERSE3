@@ -59,9 +59,9 @@ public class TTupleNl extends TList<Long> {
         return new TTupleNd(map(e->e.doubleValue()));
     }
     public TTupleNl fix() {
-        return c(fix());
+        return c(super.fix());
     }
     public TTupleNl sfix() {
-        return c(sfix());
+        return c(super.sfix());
     }
 }

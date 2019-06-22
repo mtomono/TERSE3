@@ -60,9 +60,9 @@ public class TTupleNi extends TList<Integer> {
         return new TTupleNd(map(e->e.doubleValue()));
     }
     public TTupleNi fix() {
-        return c(fix());
+        return c(super.fix());
     }
     public TTupleNi sfix() {
-        return c(sfix());
+        return c(super.sfix());
     }
 }
