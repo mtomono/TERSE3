@@ -119,13 +119,13 @@ public class ParserNGTest {
         assertEquals(result, expected);
     }
 
-    @Test(expectedExceptions = StringIndexOutOfBoundsException.class)
+    @Test(expectedExceptions = parser.ParseException.class)
     public void testExtractJsonValueWhenJsonIsNotContainsTarget() throws ParseException {
         System.out.println(methodName(0));
 
         final Parser<String, Character, String> extractor = JsonParserFactory.create("interest");
 
-        System.out.println("expectedExceptions: StringIndexOutOfBoundsException");
+        System.out.println("expectedExceptions: parserParseException");
         extractor.parse(new StrSource("{ \"ignore1\": \"NG\", \"ignore2\": \"NG\" , \"ignore3\": \"NG\" } "));
     }
 
