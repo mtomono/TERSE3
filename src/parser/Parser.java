@@ -18,6 +18,9 @@ package parser;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import collection.P;
+import collection.TList;
+import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /**
@@ -57,7 +60,7 @@ public interface Parser<S, T, U> {
         ret[1]=s.pos;
         return ret;
     }
-    
+        
     default boolean matches(Source<S, T> s) {
         try {
             parse(s);
@@ -134,6 +137,34 @@ public interface Parser<S, T, U> {
         };
     }
     
+    default Parser<S,T,List<Integer>> sec() {
+        return s->{
+            int start = s.pos;
+            parse(s);
+            int end = s.pos;
+            return TList.sof(start,end);
+        };
+    }
+    
+    default Parser<S,T,U> tee(Consumer<U> c) {
+        return s->{
+            U retval = parse(s);
+            c.accept(retval);
+            return retval;
+        };
+    }
+    
+    default <V> Parser<S,T,U> peek(Function<U,V> f) {
+        return tee(c->System.out.println(f.apply(c)));
+    }
+
+    default Parser<S,T,U> touches(String str) {
+        return s->{
+            System.out.println(str);
+            return parse(s);
+        };
+    }
+
     default <V> Parser<S, T, V> apply(Function<U, V> f) {
         return s-> f.apply(parse(s));
     }

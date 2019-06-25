@@ -19,6 +19,8 @@ import java.util.Arrays;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -78,6 +80,8 @@ public class Parsers {
     public static final Parser<String, Character, Character> cr = chr('\n');
     public static final Parser<String, Character, Character> comma = chr(',');
     public static final Parser<String, Character, Character> semicolon = chr(';');
+    public static final Parser<String, Character, Character> underbar = chr('_');
+    
     
     public static final <S, T, U> Parser<S, T, U> sequence(Parser<S, T, U>... args) {
         return s-> {
@@ -189,6 +193,17 @@ public class Parsers {
     public static final Parser<String, Character, String> str(String str) {
         return string(str, c->chr(c)).l();
     }
+    
+    public static final Parser<String, Character, String> lex(String regex) {
+        Pattern p = Pattern.compile("^"+regex);
+        return s->{
+            Matcher m = p.matcher(s.rest());
+            if(!m.find())
+                throw new ParseException("lex : regex didn't matched");
+            s.forward(m.end());
+            return m.group();
+        };
+    }
                 
     public static final <S, T, U> Parser<S, T, U> or(Parser<S, T, U>... ps) {
         return s-> {
@@ -210,6 +225,19 @@ public class Parsers {
     
     public static final <S, T, U> Parser<S, T, U> tor(Parser<S, T, U>... ps) {
         return or(Arrays.asList(ps).stream().map(p->p.tr()).collect(toList()).toArray(ps));
+    }
+    
+    public static Parser<String,Character,Character> not(Predicate<Character> p) {
+        return many(anyChar.t().except(p).tr());
+    }
+    public static Parser<String,Character,String> notL(Predicate<String> p) {
+        return many(anyChar.l().except(p).tr());
+    }
+    public static Parser<String,Character,Character> not(Character c) {
+        return not(x->x.equals(c));
+    }
+    public static Parser<String,Character,String> notL(Character c) {
+        return notL(x->x.equals(c));
     }
     
     public static final Parser<String, Character, String> integerStr = seq(upto(1, chr('-')), many(1, digit)).l();

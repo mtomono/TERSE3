@@ -53,8 +53,19 @@ public class StrSource extends Source<String, Character> {
     }
 
     @Override
-    public Character get(int at) {
+    public Character get(int at) throws ParseException {
+        if (src.length()<=pos)
+            throw new ParseException("unexpectedly reached end of text.");
         return src.charAt(at);
     }
     
+    @Override
+    public String rest() {
+        return src.substring(pos);
+    }
+    
+    @Override
+    public void forward(int jump) {
+        this.pos = this.pos+jump;
+    }
 }
