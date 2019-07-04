@@ -34,6 +34,9 @@ public class VectorOp {
     static public List<Integer> addI(List<Integer>a, List<Integer>b) {
         return op(a,b,(x,y)->x+y);
     }
+    static public List<Integer> scaleI(List<Integer>a, int scale) {
+        return TList.set(a).map(x->x*scale);
+    }
     static public List<Double> subD(List<Double>a, List<Double>b) {
         return op(a,b,(x,y)->x-y);
     }
