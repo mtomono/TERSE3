@@ -765,8 +765,12 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
      * @param c 
      * @return 
      */
-   public TList<T> distinctLocally(Comparator<T> c) {
+    public TList<T> distinctLocally(Comparator<T> c) {
         return diff().filter(p->c.compare(p.l(), p.r())!=0).transform(dediff());
+    }
+    
+    public <S> TList<Integer> changePoints(Function<T,S> map) {
+        return map(map).diff().filterAt(p->!p.l().equals(p.r())).map(i->i+1);
     }
     
     /**
@@ -1601,6 +1605,9 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
         return retval;
     }
     
+    static public TList<TList<Integer>> permutationT(int a, int b) {
+        return permutationx(a,b);
+    }
     static public TList<List<Integer>> permutation(int a, int b) {
         return permutationx(a, b).map(l->(List<Integer>)l);
     }
