@@ -64,12 +64,28 @@ public class GridCoord {
         return new GridCoord(from.pair(to, (a,b)->new GridAxis(a,b)));
     }
     
+    static public GridCoord gcoord(List<Integer> from, List<Integer> to) {
+        return gcoord(TList.set(from), TList.set(to));
+    }
+
     public GridCoord(GridAxis... axis) {
         this(TList.sof(axis));
     }
     
     public GridCoord(TList<GridAxis> axis) {
         this.axis = axis;
+    }
+    
+    public TList<Integer> zero() {
+        return TList.nCopies(axis.size(), 0);
+    }
+    
+    public List<Integer> nthUnit(int n) {
+        return zero().fix().cset(n, axis.get(n).sigTogo);
+    }
+    
+    public List<Integer> nthVector(int n) {
+        return zero().fix().cset(n,axis.get(n).togo);
     }
     
     public TList<List<Integer>> dirsAround() {
@@ -82,6 +98,10 @@ public class GridCoord {
     
     public int size() {
         return volume().stream().reduce((a,b)->a*b).orElse(0);
+    }
+    
+    public TList<List<Integer>> addresses() {
+        return TList.range(0,size()).map(i->address(i));
     }
     
     public GridCoord straight() {
