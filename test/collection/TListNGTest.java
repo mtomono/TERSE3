@@ -359,6 +359,16 @@ public class TListNGTest {
         assertEquals(result, expected);
     }
     
+    @Test
+    public void testChangePoints_Function() {
+        System.out.println(test.TestUtils.methodName(0));
+        List<Integer> result = TList.of("a", "bo", "and", "bad", "dad", "exit").changePoints(s->s.length());
+        List<Integer> expected = a2l(1,2,5);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    
 //----------------- Ordering
     
     @Test
