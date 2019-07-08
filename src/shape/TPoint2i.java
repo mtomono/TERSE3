@@ -140,8 +140,8 @@ public class TPoint2i extends Point2i implements List<Integer> {
      * @return 
      */
     public int quadrant() {
-        assert abs(x+y)==1;
-        assert x*y==0;
+        assert abs(x+y)==1 : "when quadrant is called, abs(x+y) is assumed to be 1 but "+this;
+        assert x*y==0 : "when quadrant is called, x*y is assumed to be 0 but "+this;
         return 3-abs(x*2+y+1);
     }
     
