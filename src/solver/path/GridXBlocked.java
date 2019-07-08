@@ -20,7 +20,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 import shapeCollection.GridCoord;
-import shapeCollection.GridX;
 import static solver.path.AStarGridX.wodFixed;
 
 /**
