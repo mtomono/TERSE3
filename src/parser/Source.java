@@ -25,7 +25,7 @@ import java.util.Objects;
  */
 public abstract class Source<S, T> {
     int pos;
-    S src;
+    final public S src;
     abstract public Source<S, T> clone();
     abstract public T peek() throws ParseException;
     abstract public S sub(int... sec);
