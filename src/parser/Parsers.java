@@ -227,17 +227,17 @@ public class Parsers {
         return or(Arrays.asList(ps).stream().map(p->p.tr()).collect(toList()).toArray(ps));
     }
     
-    public static Parser<String,Character,Character> not(Predicate<Character> p) {
-        return many(anyChar.t().except(p).tr());
+    public static <S,T> Parser<S,T,T> not(Predicate<T> p) {
+        return many(Parsers.<S,T>any().t().except(p).tr());
     }
-    public static Parser<String,Character,String> notL(Predicate<String> p) {
-        return many(anyChar.l().except(p).tr());
+    public static <S,T> Parser<S,T,S> notL(Predicate<S> p) {
+        return many(Parsers.<S,T>any().l().except(p).tr());
     }
-    public static Parser<String,Character,Character> not(Character c) {
-        return not(x->x.equals(c));
+    public static <S,T> Parser<S,T,T> not(T c) {
+        return Parsers.not(x->x.equals(c));
     }
-    public static Parser<String,Character,String> notL(Character c) {
-        return notL(x->x.equals(c));
+    public static <S,T> Parser<S,T,S> notL(S s) {
+        return Parsers.notL(x->x.equals(s));
     }
     
     public static final Parser<String, Character, String> integerStr = seq(upto(1, chr('-')), many(1, digit)).l();
@@ -272,6 +272,8 @@ public class Parsers {
     public static final Parser<String, Character, String> doubleQuote = chr('\"').next(reduce(()->new StringBuilder(), charsInDoubleQuote.apply(c->(sb->sb.append(c)))).apply(sb->sb.toString())).prev(chr('\"'));
     public static final Parser<String, Character, String> singleQuote = chr('\'').next(reduce(()->new StringBuilder(), charsInSingleQuote.apply(c->(sb->sb.append(c)))).apply(sb->sb.toString())).prev(chr('\''));
 
+    //----- formula -------------
+    
     public static final <U> Parser<String, Character, U> s(Parser<String, Character, U> p) {
         return spaces.next(p).prev(spaces);
     }
