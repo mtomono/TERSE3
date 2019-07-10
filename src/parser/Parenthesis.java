@@ -5,6 +5,8 @@
  */
 package parser;
 
+import collection.TList;
+import static function.TSupplier.f;
 import java.util.List;
 import java.util.function.Predicate;
 import static parser.Parsers.many;
@@ -16,7 +18,7 @@ import static parser.Parsers.seq;
  *
  * @author masao
  */
-public class Parenthesis<S,T,U> {
+public class Parenthesis<S,T> {
     public static final <S,T> Parser<S,T,T> parenthesis(Parser<S,T,T> content, Predicate<T> start, Predicate<T> end) {
         return seq(not(start.or(end)),satisfy(start),content,satisfy(end));
     };
@@ -28,9 +30,13 @@ public class Parenthesis<S,T,U> {
     final public PlaceHolder<S,T,T> parenthesis;
     final public Parser<S,T,T> content;
     
-    public Parenthesis(Predicate<T> start, Predicate<T> end) {
+    public Parenthesis(Predicate<T> start, Predicate<T> end, TList<List<Integer>> retval) {
         this.parenthesis = new PlaceHolder<>();
         this.content = content(parenthesis, start, end);
-        this.parenthesis.set(parenthesis(content, start, end));
+        this.parenthesis.set(parenthesis(content, start, end).sec().apply(s->retval.addOne(s).transform(w->null)));
+    }
+    
+    public Parenthesis(T start, T end, TList<List<Integer>> retval) {
+        this(c->c.equals(start),c->c.equals(end),retval);
     }
 }
