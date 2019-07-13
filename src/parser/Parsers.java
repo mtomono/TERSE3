@@ -241,6 +241,7 @@ public class Parsers {
     }
     
     public static final Parser<String, Character, String> integerStr = seq(upto(1, chr('-')), many(1, digit)).l();
+    public static final Parser<String, Character, String> integerStrDelimited = seq(upto(1, chr('-')), many(1, digit.or(comma))).l();
     public static final Parser<String, Character, Integer> integer = integerStr.apply(s->Integer.parseInt(s));
     public static final Parser<String, Character, String> numberStr = seq(integerStr, manyUpto(0, 1, sequence(dot, many(digit))).l()).l();
     public static final Parser<String, Character, Double> number = numberStr.apply(s->Double.parseDouble(s));
