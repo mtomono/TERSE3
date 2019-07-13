@@ -41,15 +41,14 @@ public class Interaction {
     }
     
     public void main() {
-        try (Scanner in = new Scanner(console.in)) {
-            while (true) {
-                prompt();
-                String line = in.nextLine();
-                if (end.matches(new StrSource(line)))
-                    return;
-                if (prompts.stream().sequential().noneMatch(p->p.execIfMatch(line, console.out)))
-                    System.out.println("no such command");
-            }
+        Scanner in = new Scanner(console.in);
+        while (true) {
+            prompt();
+            String line = in.nextLine();
+            if (end.matches(new StrSource(line)))
+                return;
+            if (prompts.stream().sequential().noneMatch(p->p.execIfMatch(line, console.out)))
+                System.out.println("no such command");
         }
     }
     
