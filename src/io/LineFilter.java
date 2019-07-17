@@ -5,24 +5,31 @@
  */
 package io;
 
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
+import java.util.function.Function;
 
 /**
  *
  * @author masao
  */
-public abstract class LineFilter {
+public class LineFilter {
     Scanner in;
     PrintStream out;
-    public LineFilter() {
-        this.in = new Scanner(System.in);
-        this.out = System.out;
+    Function<String,String> f;
+    public LineFilter(InputStream in, PrintStream out, Function<String,String> f) {
+        this.in = new Scanner(in);
+        this.out = out;
+        this.f = f;
     }
-    abstract public String processLine(String line);
+    public LineFilter(Function<String,String> f) {
+        this(System.in,System.out,f);
+    }
     
     public void process() {
         while(in.hasNext())
-            out.println(processLine(in.nextLine()));
+            out.println(f.apply(in.nextLine()));
     }
+    
 }
