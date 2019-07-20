@@ -1,0 +1,10 @@
+#!/bin/bash
+
+mkdir ___x
+mkdir -p ___x/command
+cp -r ../dist ___x
+cp -r command ___x/
+cp setup ___x
+zip -r ___x.zip ___x
+rm -rf ___x
+

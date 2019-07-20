@@ -1,0 +1,4 @@
+#!/bin/bash
+
+export PATH=$PATH:`pwd`/command
+export LFILTERCLASS=`pwd`/../dist/TERSE3.jar

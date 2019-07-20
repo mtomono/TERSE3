@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if [ $# -ne 1 ]; then
+    echo "one destination path to deployment have to be passed as a parameter."
+    exit 1;
+fi
+./pack
+mv ___x.zip "$1/../"
+cd "$1/../"
+unzip ___x.zip
+rm ___x.zip
+rm -rf "$1"
+mv -f ___x "$1"
+
