@@ -5,10 +5,12 @@
  */
 package io;
 
+import collection.TList;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
 import java.util.function.Function;
+import system.OneLiner;
 
 /**
  *
@@ -30,6 +32,14 @@ public class LineFilter {
     public void process() {
         while(in.hasNext())
             out.println(f.apply(in.nextLine()));
+    }
+    
+    static public LineFilter filter;
+    static public void main(String args[]) {
+        try(OneLiner shell = new OneLiner()) {
+            shell.exec(LineFilter.class.getName()+".filter = new "+LineFilter.class.getName()+"(" + args[0]+")");
+            filter.process();
+        }
     }
     
 }
