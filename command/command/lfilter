@@ -1,0 +1,4 @@
+#!/bin/bash
+java -ea -classpath $LFILTERCLASS io.LineFilter "$1"
+
+
