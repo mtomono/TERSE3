@@ -28,6 +28,7 @@ import java.util.stream.Stream;
 import javax.vecmath.Matrix3d;
 import javax.vecmath.Tuple3d;
 import javax.vecmath.Vector3d;
+import static shape.ShapeUtil.vector3;
 
 /**
  *
@@ -291,6 +292,9 @@ public class TVector3d extends Vector3d implements List<Double> {
         return Double.toString(x)+","+Double.toString(y)+","+Double.toString(z);
     }
     
+    static public TVector3d fromCsv(String line) {
+        return vector3(TList.sof(line.split(",")).map(i->Double.parseDouble(i)));
+    }
     //--------- compatibility with list
     
     public List<Double> asList() {

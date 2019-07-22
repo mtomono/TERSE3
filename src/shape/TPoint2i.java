@@ -22,6 +22,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import javax.vecmath.Point2i;
 import javax.vecmath.Tuple2i;
+import static shape.ShapeUtil.p2i;
 
 /**
  *
@@ -153,6 +154,14 @@ public class TPoint2i extends Point2i implements List<Integer> {
     );
     static TPoint2i quadrant(int i) {
         return quadrants.get(i);
+    }
+
+    public String toCsv() {
+        return Integer.toString(x)+","+Integer.toString(y);
+    }
+
+    static public TPoint2i fromCsv(String line) {
+        return p2i(TList.sof(line.split(",")).map(i->Integer.parseInt(i)));
     }
 
     //--------- compatibility with list

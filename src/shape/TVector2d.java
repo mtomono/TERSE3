@@ -26,6 +26,7 @@ import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 import javax.vecmath.*;
+import static shape.ShapeUtil.vector2;
 
 /**
  *
@@ -242,6 +243,9 @@ public class TVector2d extends Vector2d implements List<Double> {
         return Double.toString(x)+","+Double.toString(y);
     }
 
+    static public TVector2d fromCsv(String line) {
+        return vector2(TList.sof(line.split(",")).map(i->Double.parseDouble(i)));
+    }
 
     //--------- compatibility with list
     

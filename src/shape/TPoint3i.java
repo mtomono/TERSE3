@@ -22,7 +22,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import javax.vecmath.Point3i;
 import javax.vecmath.Tuple3i;
-import static shape.ShapeUtil.vector3;
+import static shape.ShapeUtil.p3i;
 
 /**
  *
@@ -134,6 +134,14 @@ public class TPoint3i extends Point3i implements List<Integer> {
     
     public int manhattanLength() {
         return abs(x)+abs(y)+abs(z);
+    }
+    
+    public String toCsv() {
+        return Integer.toString(x)+","+Integer.toString(y)+","+Integer.toString(z);
+    }
+    
+    static public TPoint3i fromCsv(String line) {
+        return p3i(TList.sof(line.split(",")).map(i->Integer.parseInt(i)));
     }
     
     //--------- compatibility with list

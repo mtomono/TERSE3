@@ -21,6 +21,7 @@ import static collection.c.a2l;
 import java.util.*;
 import java.util.function.Consumer;
 import javax.vecmath.*;
+import static shape.ShapeUtil.point2;
 
 /**
  *
@@ -181,6 +182,11 @@ public class TPoint2d extends Point2d implements List<Double> {
     public String toCsv() {
         return Double.toString(x)+","+Double.toString(y);
     }
+
+    static public TPoint2d fromCsv(String line) {
+        return point2(TList.sof(line.split(",")).map(i->Double.parseDouble(i)));
+    }
+
 
     //--------- compatibility with list
     

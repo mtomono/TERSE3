@@ -24,6 +24,7 @@ import javax.vecmath.Matrix3d;
 import javax.vecmath.Point3d;
 import javax.vecmath.Tuple3d;
 import javax.vecmath.Vector3d;
+import static shape.ShapeUtil.point3;
 
 /**
  *
@@ -195,6 +196,10 @@ public class TPoint3d extends Point3d implements List<Double> {
     
     public String toCsv() {
         return Double.toString(x)+","+Double.toString(y)+","+Double.toString(z);
+    }
+    
+    static public TPoint3d fromCsv(String line) {
+        return point3(TList.sof(line.split(",")).map(i->Double.parseDouble(i)));
     }
 
     //--------- compatibility with list
