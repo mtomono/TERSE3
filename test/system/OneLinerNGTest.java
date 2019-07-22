@@ -60,4 +60,22 @@ public class OneLinerNGTest {
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
     }
+    
+    public static void exec() {
+        throw new RuntimeException("test");
+    }
+
+    @Test
+    public void testException() throws Exception{
+        System.out.println(test.TestUtils.methodName(0));
+        TList<String> l = TList.sof("xxx","yyy");
+        try (OneLiner oneLiner = new OneLiner()) {
+            System.out.println(oneLiner.exec("system.OneLinerNGTest.exec()"));
+        }
+        int result = 0;
+        int expected = 0;
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
 }
