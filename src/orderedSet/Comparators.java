@@ -61,7 +61,7 @@ public class Comparators<T> {
         return this;
     }
     
-    public Comparators<T> append(List<Comparator<T>>... appended) {
+    public Comparators<T> append(Comparator<T>... appended) {
         return new Comparators<>(body.append(appended));
     }
     

@@ -536,16 +536,6 @@ public class TListNGTest {
 //-----------------Composing
     
     @Test
-    public void testAppend_ListArr() {
-        System.out.println(test.TestUtils.methodName(0));
-        List<Integer> result = TList.of(0, 1, 2, 3).append(a2l(4, 5, 6), a2l(7, 8));
-        List<Integer> expected = a2l(0, 1, 2, 3, 4, 5, 6, 7, 8);
-        System.out.println("result  : " + result);
-        System.out.println("expected: " + expected);
-        assertEquals(result, expected);
-    }
-
-    @Test
     public void testAppendLists() {
         System.out.println(test.TestUtils.methodName(0));
         List<Integer> result = TList.of(0, 1, 2, 3).appendLists(a2l(a2l(4, 5, 6), a2l(7, 8)));

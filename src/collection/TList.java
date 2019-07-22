@@ -1156,8 +1156,8 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
      * @param t
      * @return 
      */
-    public TList<T> append(List<T>... t) {
-        return appendLists(a2l(t));
+    public TList<T> append(List<T> t) {
+        return concat(this,t);
     }
     
     public TList<T> append(T... t) {
