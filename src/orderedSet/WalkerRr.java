@@ -22,7 +22,7 @@ import java.util.Iterator;
  * @author masao
  * @param <T>
  */
-public class WalkerRr<T extends Comparable<T>> extends WalkerSetOp<Range<T>, Range<T>, Range<T>> {
+public class WalkerRr<T extends Comparable<? super T>> extends WalkerSetOp<Range<T>, Range<T>, Range<T>> {
     public WalkerRr(Iterator<Range<T>> left, Iterator<Range<T>> right) {
         super(left, right);
     }

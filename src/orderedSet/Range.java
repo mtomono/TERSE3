@@ -25,10 +25,10 @@ import string.Message;
  * @author mtomono
  * @param <T>
  */
-public class Range<T extends Comparable<T>> {
+public class Range<T extends Comparable<? super T>> {
     public final T start;
     public final T end;
-    public final Order<T> order;
+    public final Order<? super T> order;
     
     @Override
     public boolean equals(Object o) {
@@ -55,7 +55,7 @@ public class Range<T extends Comparable<T>> {
         return new Range<>(start, end, order);
     }
     
-    public Range(T start, T end, Order<T> order) {
+    public Range(T start, T end, Order<? super T> order) {
         assert order.le(start, end) : "start=" + start + ":end = " + end;
         this.start = start;
         this.end = end;
@@ -66,7 +66,7 @@ public class Range<T extends Comparable<T>> {
         this(start, end, Default.order);
     }
     
-    static public <T extends Comparable<T>> List<Range<T>> c(Order<T> order, T... range) {
+    static public <T extends Comparable<? super T>> List<Range<T>> c(Order<? super T> order, T... range) {
         if (range.length == 0) {
             return Collections.<Range<T>>emptyList();
         } else if (range.length % 2 != 0) {

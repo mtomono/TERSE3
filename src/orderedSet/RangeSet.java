@@ -29,7 +29,7 @@ import string.Message;
  * @author mtomono
  * @param <T>
  */
-public class RangeSet<T extends Comparable<T>> extends AbstractList<Range<T>> {
+public class RangeSet<T extends Comparable<? super T>> extends AbstractList<Range<T>> {
     List<Range<T>> elements;
     
     @Override
@@ -97,7 +97,7 @@ public class RangeSet<T extends Comparable<T>> extends AbstractList<Range<T>> {
         this.elements = elements;
     }
     
-    public RangeSet(Order<T> order, T... range) {
+    public RangeSet(Order<? super T> order, T... range) {
         this(Range.<T>c(order, range));
     }
     

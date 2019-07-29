@@ -36,10 +36,10 @@ import java.util.Iterator;
  * @author masao
  * @param <T>
  */
-public class NegateRangeIterator<T extends Comparable<T>> extends AbstractBufferedIterator<Range<T>> {
+public class NegateRangeIterator<T extends Comparable<? super T>> extends AbstractBufferedIterator<Range<T>> {
     PreIterator<Range<T>> base;
     
-    class demarcation<S extends Comparable<S>> extends Range<S> {
+    class demarcation<S extends Comparable<? super S>> extends Range<S> {
         public demarcation(S point) {
             super(point, point);
         }
