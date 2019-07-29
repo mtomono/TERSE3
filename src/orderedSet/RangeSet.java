@@ -101,6 +101,10 @@ public class RangeSet<T extends Comparable<? super T>> extends AbstractList<Rang
         this(Range.<T>c(order, range));
     }
     
+    public RangeSet(Order<? super T> order, List<T> range) {
+        this(Range.<T>c(order, range));
+    }
+    
     public RangeSet(T... range) {
         this(Default.order, range);
     }

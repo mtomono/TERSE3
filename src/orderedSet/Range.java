@@ -80,6 +80,20 @@ public class Range<T extends Comparable<? super T>> {
         }
     }
 
+    static public <T extends Comparable<? super T>> List<Range<T>> c(Order<? super T> order, List<T> range) {
+        if (range.isEmpty()) {
+            return Collections.<Range<T>>emptyList();
+        } else if (range.size() % 2 != 0) {
+            throw new RuntimeException("Range(T...) illegal number of parameters");
+        } else {
+            List<Range<T>> retval = new ArrayList<>(range.size() / 2);
+            for (int i = 0; i < range.size(); i += 2) {
+                retval.add(new Range<>(range.get(i), range.get(i+1), order));
+            }
+            return retval;
+        }
+    }
+
     public boolean isEmpty() {
         return order.eq(start, end);
     }
