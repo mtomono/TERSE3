@@ -109,6 +109,10 @@ public class RangeSet<T extends Comparable<? super T>> extends AbstractList<Rang
         this(Default.order, range);
     }
     
+    public static <T extends Comparable<? super T>> RangeSet<T> c(List<T> range) {
+        return new RangeSet<>(Default.order, range);
+    }
+    
     @Override
     public boolean isEmpty() {
         return elements.isEmpty();
