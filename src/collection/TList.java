@@ -571,6 +571,19 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
         return subList(1, size()).accum(first.apply(get(0)), map);
     }
     
+    /**
+     * accum which takes the seed of the first item.
+     * this is applicable when all the items are calculated by `map` but the
+     * first one requires its seed.
+     * @param <S>
+     * @param init
+     * @param map
+     * @return 
+     */
+    public <S> TList<S> accumFromInit(S init, BiFunction<S,T,S> map) {
+        return accumFromStart(t->map.apply(init,t),map);
+    }
+    
     @Deprecated
     public <S> TList<S> heapFromStart(Function<T, S> first, BiFunction<T, S, S> map) {
         return accumFromStart(first, (a,b)->map.apply(b,a));
