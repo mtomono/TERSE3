@@ -29,7 +29,7 @@ public class TransposeList<T> extends AbstractList<List<T>> implements Monitorab
     List<List<T>> body;
     
     public TransposeList(List<List<T>> body) {
-        assert checkOrdered(new MapSequentialList<>(body, l->l.size()), (a, b)->b-a);
+        assert checkOrdered(new MapSequentialList<>(body, l->l.size()), (a, b)->b-a) : "when transpose, the target list size have to be in descending order";
         this.body = body;
     }
     
