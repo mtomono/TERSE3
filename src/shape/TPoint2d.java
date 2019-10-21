@@ -28,10 +28,16 @@ import static shape.ShapeUtil.point2;
  * @author masao
  */
 public class TPoint2d extends Point2d implements List<Double> {
-    final static public TPoint2d zero = new TPoint2d(0, 0);
+    final static public TPoint2d zero = new TPoint2d(0, 0).lock();
     final static public Comparator<Point2d> xc = Comparator.<Point2d>comparingDouble(p->p.x);
     final static public Comparator<Point2d> yc = Comparator.<Point2d>comparingDouble(p->p.y);
+    private boolean locked = false;
 
+    public TPoint2d lock() {
+        this.locked = true;
+        return this;
+    }
+    
     public TPoint2d() {
         super();
     }
@@ -55,6 +61,8 @@ public class TPoint2d extends Point2d implements List<Double> {
     }
     
     public TPoint2d self(Consumer<TPoint2d> consumer) {
+        if (locked)
+            throw new RuntimeException("changed while locked");
         consumer.accept(this);
         return this;
     }

@@ -33,12 +33,19 @@ import static shape.ShapeUtil.vector2;
  * @author masao
  */
 public class TVector2d extends Vector2d implements List<Double> {
-    final static public TVector2d zero = new TVector2d(0, 0);
+    final static public TVector2d zero = new TVector2d(0, 0).lock();
     final static public Comparator<Vector2d> xc = Comparator.<Vector2d>comparingDouble(p->p.x);
     final static public Comparator<Vector2d> yc = Comparator.<Vector2d>comparingDouble(p->p.y);
+    private boolean locked = false;
+    public TVector2d lock() {
+        this.locked = true;
+        return this;
+    }
+    
 
     public TVector2d() {
         super();
+        this.locked = false;
     }
     
     public TVector2d(Tuple2d t) {
@@ -64,6 +71,8 @@ public class TVector2d extends Vector2d implements List<Double> {
     }
     
     public TVector2d self(Consumer<TVector2d> consumer) {
+        if (locked)
+            throw new RuntimeException("changed while locked");
         consumer.accept(this);
         return this;
     }

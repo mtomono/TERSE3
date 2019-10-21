@@ -29,13 +29,19 @@ import static shape.ShapeUtil.p3i;
  * @author masao
  */
 public class TPoint3i extends Point3i implements List<Integer> {
-    final static public TPoint3i zero = new TPoint3i(0, 0, 0);
-    final static public TPoint3i x1 = new TPoint3i(1, 0, 0);
-    final static public TPoint3i y1 = new TPoint3i(0, 1, 0);
-    final static public TPoint3i z1 = new TPoint3i(0, 0, 1);
+    final static public TPoint3i zero = new TPoint3i(0, 0, 0).lock();
+    final static public TPoint3i x1 = new TPoint3i(1, 0, 0).lock();
+    final static public TPoint3i y1 = new TPoint3i(0, 1, 0).lock();
+    final static public TPoint3i z1 = new TPoint3i(0, 0, 1).lock();
     final static public Comparator<Point3i> xc = Comparator.<Point3i>comparingInt(p->p.x);
     final static public Comparator<Point3i> yc = Comparator.<Point3i>comparingInt(p->p.y);
     final static public Comparator<Point3i> zc = Comparator.<Point3i>comparingInt(p->p.z);
+    private boolean locked = false;
+
+    public TPoint3i lock() {
+        this.locked = true;
+        return this;
+    }
 
     public TPoint3i() {
         super();
@@ -60,6 +66,8 @@ public class TPoint3i extends Point3i implements List<Integer> {
     }
     
     public TPoint3i self(Consumer<TPoint3i> consumer) {
+        if (locked)
+            throw new RuntimeException("changed while locked");
         consumer.accept(this);
         return this;
     }

@@ -29,11 +29,17 @@ import static shape.ShapeUtil.p2i;
  * @author masao
  */
 public class TPoint2i extends Point2i implements List<Integer> {
-    final static public TPoint2i zero = new TPoint2i(0, 0);
-    final static public TPoint2i x1 = new TPoint2i(1, 0);
-    final static public TPoint2i y1 = new TPoint2i(0, 1);
+    final static public TPoint2i zero = new TPoint2i(0, 0).lock();
+    final static public TPoint2i x1 = new TPoint2i(1, 0).lock();
+    final static public TPoint2i y1 = new TPoint2i(0, 1).lock();
     final static public Comparator<Point2i> xc = Comparator.<Point2i>comparingInt(p->p.x);
     final static public Comparator<Point2i> yc = Comparator.<Point2i>comparingInt(p->p.y);
+    private boolean locked = false;
+
+    public TPoint2i lock() {
+        this.locked = true;
+        return this;
+    }
 
     public TPoint2i() {
         super();
@@ -58,6 +64,8 @@ public class TPoint2i extends Point2i implements List<Integer> {
     }
     
     public TPoint2i self(Consumer<TPoint2i> consumer) {
+        if (locked)
+            throw new RuntimeException("changed while locked");
         consumer.accept(this);
         return this;
     }

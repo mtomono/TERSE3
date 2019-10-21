@@ -31,10 +31,16 @@ import static shape.ShapeUtil.point3;
  * @author masao
  */
 public class TPoint3d extends Point3d implements List<Double> {
-    final static public TPoint3d zero = new TPoint3d(0, 0, 0);
+    final static public TPoint3d zero = new TPoint3d(0, 0, 0).lock();
     final static public Comparator<Point3d> xc = Comparator.<Point3d>comparingDouble(p->p.x);
     final static public Comparator<Point3d> yc = Comparator.<Point3d>comparingDouble(p->p.y);
     final static public Comparator<Point3d> zc = Comparator.<Point3d>comparingDouble(p->p.z);
+    private boolean locked = false;
+
+    public TPoint3d lock() {
+        this.locked = true;
+        return this;
+    }
 
     public TPoint3d() {
         super();
@@ -55,6 +61,8 @@ public class TPoint3d extends Point3d implements List<Double> {
     }
     
     public TPoint3d self(Consumer<TPoint3d> consumer) {
+        if (locked)
+            throw new RuntimeException("changed while locked");
         consumer.accept(this);
         return this;
     }

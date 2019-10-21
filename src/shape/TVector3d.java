@@ -35,13 +35,19 @@ import static shape.ShapeUtil.vector3;
  * @author masao
  */
 public class TVector3d extends Vector3d implements List<Double> {
-    final static public TVector3d zero = new TVector3d(0, 0, 0);
-    final static public TVector3d x1 = new TVector3d(1, 0, 0);
-    final static public TVector3d y1 = new TVector3d(0, 1, 0);
-    final static public TVector3d z1 = new TVector3d(0, 0, 1);
+    final static public TVector3d zero = new TVector3d(0, 0, 0).lock();
+    final static public TVector3d x1 = new TVector3d(1, 0, 0).lock();
+    final static public TVector3d y1 = new TVector3d(0, 1, 0).lock();
+    final static public TVector3d z1 = new TVector3d(0, 0, 1).lock();
     final static public Comparator<Vector3d> xc = Comparator.<Vector3d>comparingDouble(p->p.x);
     final static public Comparator<Vector3d> yc = Comparator.<Vector3d>comparingDouble(p->p.y);
     final static public Comparator<Vector3d> zc = Comparator.<Vector3d>comparingDouble(p->p.z);
+    private boolean locked = false;
+    public TVector3d lock() {
+        this.locked = true;
+        return this;
+    }
+    
     
     public TVector3d() {
         super();
@@ -49,6 +55,10 @@ public class TVector3d extends Vector3d implements List<Double> {
     
     public TVector3d(Tuple3d t) {
         super(t);
+    }
+    
+    public TVector3d(double x, double y, double z) {
+        super(x, y, z);
     }
     
     static public TVector3d c(Tuple3d start, Tuple3d end) {
@@ -67,10 +77,6 @@ public class TVector3d extends Vector3d implements List<Double> {
         return new TVector3d(0, 0, v);
     }
     
-    public TVector3d(double x, double y, double z) {
-        super(x, y, z);
-    }
-    
     public TVector3d retval(Consumer<TVector3d> consumer) {
         TVector3d retval = new TVector3d(this);
         consumer.accept(retval);
@@ -78,6 +84,8 @@ public class TVector3d extends Vector3d implements List<Double> {
     }
     
     public TVector3d self(Consumer<TVector3d> consumer) {
+        if (locked)
+            throw new RuntimeException("changed while locked");
         consumer.accept(this);
         return this;
     }
