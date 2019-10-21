@@ -44,9 +44,10 @@ public class TPoint3iNGTest {
     @Test
     public void testHash() {
         System.out.println(test.TestUtils.methodName(0));
-        TList<TPoint3i> result = TList.sof(p3i(0,150,0),p3i(0,150,0),p3i(0,150,0),p3i(0,150,0),p3i(0,150,0),p3i(0,150,0),p3i(0,150,0),p3i(0,150,0));
-        System.out.println(result.map(p->p.hashCode()));
-        Set<TPoint3i> expected = new HashSet<>(result);
+        TList<TPoint3i> tested = TList.sof(p3i(0,150,0),p3i(0,150,0),p3i(0,150,0),p3i(0,150,0),p3i(0,150,0),p3i(0,150,0),p3i(0,150,0),p3i(0,150,0));
+        Set<TPoint3i> result = new HashSet<>(tested);
+        System.out.println(tested.map(p->p.hashCode()));
+        Set<TPoint3i> expected = new HashSet<>(TList.sof(p3i(0,150,0)));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
