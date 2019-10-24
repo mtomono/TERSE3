@@ -19,6 +19,7 @@ import debug.Monitorable;
 import static java.lang.Integer.min;
 import java.util.AbstractList;
 import java.util.List;
+import java.util.RandomAccess;
 import java.util.function.BiFunction;
 
 /**
@@ -28,7 +29,7 @@ import java.util.function.BiFunction;
  * @param <T>
  * @param <U>
  */
-public class PairRandomList<S, T, U> extends AbstractList<U> implements Monitorable {
+public class PairRandomList<S, T, U> extends AbstractList<U> implements RandomAccess,Monitorable {
     List<S> left;
     List<T> right;
     BiFunction<S, T, U> map;
