@@ -27,13 +27,13 @@ public class PrimitiveArrayWrap {
     public static List<java.lang.Double> wrap(double[] body) {
         return new Double(body);
     }
-    public static List<java.lang.Integer> wrap(int[] body) {
+    public static List<java.lang.Integer> wrap(int... body) {
         return new Integer(body);
     }
-    public static List<java.lang.Byte> wrap(byte[] body) {
+    public static List<java.lang.Byte> wrap(byte... body) {
         return new Byte(body);
     }
-    public static List<java.lang.Long> wrap(long[] body) {
+    public static List<java.lang.Long> wrap(long... body) {
         return new Long(body);
     }
     public static double[] unwrapD(List<java.lang.Double> body) {
