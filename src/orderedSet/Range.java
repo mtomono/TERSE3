@@ -15,6 +15,7 @@
 
 package orderedSet;
 
+import collection.TList;
 import static java.lang.Math.abs;
 import java.util.*;
 import java.util.function.Function;
@@ -244,6 +245,10 @@ public class Range<T extends Comparable<? super T>> {
     
     public double interpolate(Function<T,Double> f, double rate) {
         return f.apply(start)*(1-rate)+f.apply(end)*rate;
+    }
+    
+    static public <T extends Comparable<? super T>> TList<Range<T>> mergeOverlap(TList<Range<T>> r) {
+        return r.diffChunk((a,b)->!a.overlaps(b)).map(l->l.stream().reduce(l.get(0), (a,b)->a.cover(b)));
     }
 
     @Override

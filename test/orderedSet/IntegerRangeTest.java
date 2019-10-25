@@ -4,6 +4,7 @@
  */
 package orderedSet;
 
+import collection.TList;
 import static org.testng.Assert.assertEquals;
 import org.testng.annotations.Test;
 
@@ -772,5 +773,16 @@ public class IntegerRangeTest {
         assertEquals(null          , new x().test(new Range<>(-12,   2, order))); //      +     +
         assertEquals(null          , new x().test(new Range<>(-12,   3, order))); //      +     |-
         assertEquals(null          , new x().test(new Range<>(-12,   4, order))); //      +     | -
+    }
+
+    @Test
+    public void testMergeOverlap() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Range<Long>> tested = TList.sof(0L,10L, 11L,13L, 12L,15L, 14L,18L, 20L,23L).fold(2).map(l->new Range<>(l.get(0),l.get(1)));
+        TList<Range<Long>> result = Range.mergeOverlap(tested);
+        TList<Range<Long>> expected = TList.sof(0L,10L, 11L,18L, 20L,23L).fold(2).map(l->new Range<>(l.get(0),l.get(1)));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
     }
 }
