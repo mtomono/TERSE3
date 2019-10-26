@@ -16,6 +16,9 @@
 package orderedSet;
 
 import collection.TList;
+import static collection.c.i2l;
+import debug.Te;
+import iterator.AbstractBufferedIterator;
 import static java.lang.Math.abs;
 import java.util.*;
 import java.util.function.Function;
@@ -247,8 +250,39 @@ public class Range<T extends Comparable<? super T>> {
         return f.apply(start)*(1-rate)+f.apply(end)*rate;
     }
     
-    static public <T extends Comparable<? super T>> TList<Range<T>> mergeOverlap(TList<Range<T>> r) {
-        return r.diffChunk((a,b)->!a.overlaps(b)).map(l->l.stream().reduce(l.get(0), (a,b)->a.cover(b)));
+    static class Negate<T extends Comparable<? super T>> extends AbstractBufferedIterator<Range<T>> {
+        Iterator<Range<T>> iter;
+        Optional<Range<T>> rest;
+        public Negate(TList<Range<T>> punches) {
+            TList<Range<T>> sorted = punches.sortTo((a,b)->a.start.compareTo(b.start)).sfix();
+            rest = Optional.of(sorted.get(0).cover(sorted.last()));
+            iter = sorted.iterator();
+        }
+        @Override
+        protected void findNext() {
+            if (rest.isEmpty())
+                return;
+            while (iter.hasNext()) {
+                Range<T> next = iter.next();
+                if (!next.overlaps(rest.get()))
+                    continue;
+                Optional<Range<T>> retval = next.getLowerRoomIn(rest.get());
+                rest = next.getUpperRoomIn(rest.get());
+                if (!retval.isPresent())
+                    continue;
+                nextFound(retval.get());
+                return;
+            }
+        }
+    }
+    
+    static public <T extends Comparable<? super T>> TList<Range<T>> negate(TList<Range<T>> rl) {
+        return TList.set(i2l(new Negate(rl)));
+    }
+    
+    public static <T extends Comparable<? super T>> Range<T> cover(TList<Range<T>> rl) {
+        assert !rl.isEmpty() : "list is empty.";
+        return new Range<T>(rl.map(r->r.start).min((a,b)->a.compareTo(b)).get(),rl.map(r->r.end).max((a,b)->a.compareTo(b)).get());
     }
 
     @Override
