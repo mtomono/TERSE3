@@ -779,7 +779,7 @@ public class IntegerRangeTest {
     public void testNegate() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Range<Long>> tested = TList.sof(0L,10L, 11L,18L, 12L,13L, 13L,15L, 20L,23L).fold(2).map(l->new Range<>(l.get(0),l.get(1)));
-        TList<Range<Long>> result = Range.negate(tested);
+        TList<Range<Long>> result = Range.negateCover(tested);
         TList<Range<Long>> expected = TList.sof(10L,11L, 18L,20L).fold(2).map(l->new Range<>(l.get(0),l.get(1)));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
@@ -789,7 +789,7 @@ public class IntegerRangeTest {
     public void testNegate2() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Range<Long>> tested = TList.sof(0L,10L, 11L,18L, 12L,13L, 13L,15L, 20L,28L, 21L,24L, 25L,26L).fold(2).map(l->new Range<>(l.get(0),l.get(1)));
-        TList<Range<Long>> result = Range.negate(tested);
+        TList<Range<Long>> result = Range.negateCover(tested);
         TList<Range<Long>> expected = TList.sof(10L,11L, 18L,20L).fold(2).map(l->new Range<>(l.get(0),l.get(1)));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);

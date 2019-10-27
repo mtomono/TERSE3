@@ -253,9 +253,8 @@ public class Range<T extends Comparable<? super T>> {
     static class Negate<T extends Comparable<? super T>> extends AbstractBufferedIterator<Range<T>> {
         Iterator<Range<T>> iter;
         Optional<Range<T>> rest;
-        public Negate(TList<Range<T>> punches) {
-            TList<Range<T>> sorted = punches.sortTo((a,b)->a.start.compareTo(b.start)).sfix();
-            rest = Optional.of(sorted.get(0).cover(sorted.last()));
+        public Negate(TList<Range<T>> sorted, Range<T> scope) {
+            rest = Optional.of(scope);
             iter = sorted.iterator();
         }
         @Override
@@ -276,13 +275,18 @@ public class Range<T extends Comparable<? super T>> {
         }
     }
     
-    static public <T extends Comparable<? super T>> TList<Range<T>> negate(TList<Range<T>> rl) {
-        return TList.set(i2l(new Negate(rl)));
+    public TList<Range<T>> negate(TList<Range<T>> punches) {
+        TList<Range<T>> sorted = punches.sortTo((a,b)->a.start.compareTo(b.start)).sfix();
+        return TList.set(i2l(new Negate(sorted,this)));
+    }
+    
+    static public <T extends Comparable<? super T>> TList<Range<T>> negateCover(TList<Range<T>> punches) {
+        return cover(punches).negate(punches);
     }
     
     public static <T extends Comparable<? super T>> Range<T> cover(TList<Range<T>> rl) {
         assert !rl.isEmpty() : "list is empty.";
-        return new Range<T>(rl.map(r->r.start).min((a,b)->a.compareTo(b)).get(),rl.map(r->r.end).max((a,b)->a.compareTo(b)).get());
+        return new Range<>(rl.map(r->r.start).min((a,b)->a.compareTo(b)).get(),rl.map(r->r.end).max((a,b)->a.compareTo(b)).get());
     }
 
     @Override
