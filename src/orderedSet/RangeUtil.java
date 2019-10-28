@@ -60,6 +60,18 @@ public class RangeUtil {
         return rs.stream().reduce(RangeSet.empty(), (a,b)->a.union(b));
     }
     
+    static public RangeSet<Integer> intersectI(List<RangeSet<Integer>> rs) {
+        return rs.stream().reduce(RangeSet.empty(), (a,b)->a.intersect(b));
+    }
+    
+    static public RangeSet<Long> intersectL(List<RangeSet<Long>> rs) {
+        return rs.stream().reduce(RangeSet.empty(), (a,b)->a.intersect(b));
+    }
+    
+    static public RangeSet<Double> intersectD(List<RangeSet<Double>> rs) {
+        return rs.stream().reduce(RangeSet.empty(), (a,b)->a.intersect(b));
+    }
+    
     static public Range<Integer> optional(int a, int b) {
         return new Range<>(a, max(a,b));
     }

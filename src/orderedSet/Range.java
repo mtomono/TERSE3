@@ -17,7 +17,6 @@ package orderedSet;
 
 import collection.TList;
 import static collection.c.i2l;
-import debug.Te;
 import iterator.AbstractBufferedIterator;
 import static java.lang.Math.abs;
 import java.util.*;
@@ -282,6 +281,11 @@ public class Range<T extends Comparable<? super T>> {
     
     static public <T extends Comparable<? super T>> TList<Range<T>> negateCover(TList<Range<T>> punches) {
         return cover(punches).negate(punches);
+    }
+    
+    static public <T extends Comparable<? super T>> TList<Range<T>> mergeOverlaps(TList<Range<T>> punches) {
+        Range<T> whole = cover(punches);
+        return TList.set(new RangeSet<>(whole.negate(punches)).negate(whole));
     }
     
     public static <T extends Comparable<? super T>> Range<T> cover(TList<Range<T>> rl) {
