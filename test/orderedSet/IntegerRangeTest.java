@@ -778,9 +778,20 @@ public class IntegerRangeTest {
     @Test
     public void testNegate() {
         System.out.println(test.TestUtils.methodName(0));
-        TList<Range<Long>> tested = TList.sof(0L,10L, 11L,18L, 12L,13L, 13L,15L, 20L,23L).fold(2).map(l->new Range<>(l.get(0),l.get(1)));
-        TList<Range<Long>> result = Range.negateCover(tested);
-        TList<Range<Long>> expected = TList.sof(10L,11L, 18L,20L).fold(2).map(l->new Range<>(l.get(0),l.get(1)));
+        Range<Integer> tested = new Range<>(0,500);
+        TList<Range<Integer>> result = tested.negate(TList.sof());
+        TList<Range<Integer>> expected = TList.sof(0,500).fold(2).map(l->new Range<>(l.get(0),l.get(1)));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testNegate1() {
+        System.out.println(test.TestUtils.methodName(0));
+        Range<Integer> tested = new Range<>(0,500);
+        TList<Range<Integer>> result = tested.negate(TList.sof(5,6).fold(2).map(l->new Range<>(l.get(0),l.get(1))));
+        TList<Range<Integer>> expected = TList.sof(0,5, 6,500).fold(2).map(l->new Range<>(l.get(0),l.get(1)));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
@@ -788,9 +799,79 @@ public class IntegerRangeTest {
     @Test
     public void testNegate2() {
         System.out.println(test.TestUtils.methodName(0));
-        TList<Range<Long>> tested = TList.sof(0L,10L, 11L,18L, 12L,13L, 13L,15L, 20L,28L, 21L,24L, 25L,26L).fold(2).map(l->new Range<>(l.get(0),l.get(1)));
-        TList<Range<Long>> result = Range.negateCover(tested);
-        TList<Range<Long>> expected = TList.sof(10L,11L, 18L,20L).fold(2).map(l->new Range<>(l.get(0),l.get(1)));
+        Range<Integer> tested = new Range<>(0,500);
+        TList<Range<Integer>> result = tested.negate(TList.sof(-20,-19).fold(2).map(l->new Range<>(l.get(0),l.get(1))));
+        TList<Range<Integer>> expected = TList.sof(0,500).fold(2).map(l->new Range<>(l.get(0),l.get(1)));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    @Test
+    public void testNegate3() {
+        System.out.println(test.TestUtils.methodName(0));
+        Range<Integer> tested = new Range<>(0,500);
+        TList<Range<Integer>> result = tested.negate(TList.sof(510,512).fold(2).map(l->new Range<>(l.get(0),l.get(1))));
+        TList<Range<Integer>> expected = TList.sof(0,500).fold(2).map(l->new Range<>(l.get(0),l.get(1)));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    @Test
+    public void testNegate4() {
+        System.out.println(test.TestUtils.methodName(0));
+        Range<Integer> tested = new Range<>(0,500);
+        TList<Range<Integer>> result = tested.negate(TList.sof(-21,-20, 5,6, 510,512).fold(2).map(l->new Range<>(l.get(0),l.get(1))));
+        TList<Range<Integer>> expected = TList.sof(0,5, 6,500).fold(2).map(l->new Range<>(l.get(0),l.get(1)));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    @Test
+    public void testNegate5() {
+        System.out.println(test.TestUtils.methodName(0));
+        Range<Integer> tested = new Range<>(0,500);
+        TList<Range<Integer>> result = tested.negate(TList.sof(-21,-20, 5,60, 62,70, 510,512).fold(2).map(l->new Range<>(l.get(0),l.get(1))));
+        TList<Range<Integer>> expected = TList.sof(0,5, 60,62, 70,500).fold(2).map(l->new Range<>(l.get(0),l.get(1)));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    @Test
+    public void testNegate6() {
+        System.out.println(test.TestUtils.methodName(0));
+        Range<Integer> tested = new Range<>(0,500);
+        TList<Range<Integer>> result = tested.negate(TList.sof(-21,-20, 5,60, 62,70, 65,75, 510,512).fold(2).map(l->new Range<>(l.get(0),l.get(1))));
+        TList<Range<Integer>> expected = TList.sof(0,5, 60,62, 75,500).fold(2).map(l->new Range<>(l.get(0),l.get(1)));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    @Test
+    public void testNegate7() {
+        System.out.println(test.TestUtils.methodName(0));
+        Range<Integer> tested = new Range<>(0,500);
+        TList<Range<Integer>> result = tested.negate(TList.sof(5,60, 62,70, 65,75).fold(2).map(l->new Range<>(l.get(0),l.get(1))));
+        TList<Range<Integer>> expected = TList.sof(0,5, 60,62, 75,500).fold(2).map(l->new Range<>(l.get(0),l.get(1)));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    @Test
+    public void testNegateCover() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Range<Integer>> tested = TList.sof(0,10, 11,18, 12,13, 13,15, 20,23).fold(2).map(l->new Range<>(l.get(0),l.get(1)));
+        TList<Range<Integer>> result = Range.negateCover(tested);
+        TList<Range<Integer>> expected = TList.sof(10,11, 18,20).fold(2).map(l->new Range<>(l.get(0),l.get(1)));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    @Test
+    public void testNegateCover2() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Range<Integer>> tested = TList.sof(0,10, 11,18, 12,13, 13,15, 20,28, 21,24, 25,26).fold(2).map(l->new Range<>(l.get(0),l.get(1)));
+        TList<Range<Integer>> result = Range.negateCover(tested);
+        TList<Range<Integer>> expected = TList.sof(10,11, 18,20).fold(2).map(l->new Range<>(l.get(0),l.get(1)));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);

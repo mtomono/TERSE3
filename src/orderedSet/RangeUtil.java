@@ -17,6 +17,7 @@ package orderedSet;
 
 import static java.lang.Math.max;
 import java.util.List;
+import java.util.Optional;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -61,15 +62,15 @@ public class RangeUtil {
     }
     
     static public RangeSet<Integer> intersectI(List<RangeSet<Integer>> rs) {
-        return rs.stream().reduce(RangeSet.empty(), (a,b)->a.intersect(b));
+        return rs.stream().reduce((a,b)->a.intersect(b)).orElse(RangeSet.empty());
     }
     
     static public RangeSet<Long> intersectL(List<RangeSet<Long>> rs) {
-        return rs.stream().reduce(RangeSet.empty(), (a,b)->a.intersect(b));
+        return rs.stream().reduce((a,b)->a.intersect(b)).orElse(RangeSet.empty());
     }
     
     static public RangeSet<Double> intersectD(List<RangeSet<Double>> rs) {
-        return rs.stream().reduce(RangeSet.empty(), (a,b)->a.intersect(b));
+        return rs.stream().reduce((a,b)->a.intersect(b)).orElse(RangeSet.empty());
     }
     
     static public Range<Integer> optional(int a, int b) {
