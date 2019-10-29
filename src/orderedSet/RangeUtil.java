@@ -17,7 +17,6 @@ package orderedSet;
 
 import static java.lang.Math.max;
 import java.util.List;
-import java.util.Optional;
 import static java.util.stream.Collectors.toList;
 
 /**
