@@ -15,8 +15,11 @@
 
 package orderedSet;
 
+import collection.TList;
+import iterator.TIterator;
 import static java.lang.Math.max;
 import java.util.List;
+import java.util.Optional;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -70,6 +73,27 @@ public class RangeUtil {
     
     static public RangeSet<Double> intersectD(List<RangeSet<Double>> rs) {
         return rs.stream().reduce((a,b)->a.intersect(b)).orElse(RangeSet.empty());
+    }
+    
+    static public Optional<Range<Integer>> intersectRI(List<Range<Integer>> rs) {
+        TIterator<Optional<Range<Integer>>> iter = TList.set(rs).accumFromStart(a->Optional.of(a),(a,b)->a.flatMap(r->r.intersect(b))).iterator().until(r->r.isEmpty());
+        if (!iter.hasNext())
+            return Optional.empty();
+        return iter.last();
+    }
+    
+    static public Optional<Range<Long>> intersectRL(List<Range<Long>> rs) {
+        TIterator<Optional<Range<Long>>> iter = TList.set(rs).accumFromStart(a->Optional.of(a),(a,b)->a.flatMap(r->r.intersect(b))).iterator().until(r->r.isEmpty());
+        if (!iter.hasNext())
+            return Optional.empty();
+        return iter.last();
+    }
+    
+    static public Optional<Range<Double>> intersectRD(List<Range<Double>> rs) {
+        TIterator<Optional<Range<Double>>> iter = TList.set(rs).accumFromStart(a->Optional.of(a),(a,b)->a.flatMap(r->r.intersect(b))).iterator().until(r->r.isEmpty());
+        if (!iter.hasNext())
+            return Optional.empty();
+        return iter.last();
     }
     
     static public Range<Integer> optional(int a, int b) {
