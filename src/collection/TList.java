@@ -495,7 +495,7 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
     public <S> TList<S> flatMapc(Function<T, List<S>> map) {
         return (body instanceof RandomAccess) ? new TListRandom<>(new ListRandomList<>(mapc(map))) : new TList<>(new ListSequentialList<>(mapc(map)));
     }
-    
+        
     /**
      * transpose.
      * remember matrix operation. in some way, this method has something common
