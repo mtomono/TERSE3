@@ -45,6 +45,11 @@ public class MVMap<K, V> implements Map<K, TList<V>> {
         return body.get(key);
     }
     
+    public MVMap<K,V> merge(Map<K,TList<V>> merged) {
+        TList.set(merged.entrySet()).forEach(e->getList(e.getKey()).addAll(e.getValue()));
+        return this;
+    }
+    
     @Override
     public int size() {
         return body.size();
