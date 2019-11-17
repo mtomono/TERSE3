@@ -14,6 +14,7 @@
  */
 package shapeCollection;
 
+import static collection.PrimitiveArrayWrap.wrap;
 import collection.TList;
 import java.util.List;
 import java.util.Optional;
@@ -55,7 +56,11 @@ public class GridCoord {
         return TList.range(0,nth).flatMap(i->TList.sof(zero.fix().cset(i, 1), zero.fix().cset(i,-1)));
     }
     
-    static public GridCoord gcoord(Integer... fromAndTo) {
+    static public GridCoord gcoord(int... fromAndTo) {
+        return gcoord(wrap(fromAndTo).toArray(new Integer[0]));
+    }
+    
+    static private GridCoord gcoord(Integer... fromAndTo) {
         assert fromAndTo.length%2==0 : "number of parameter should be even";
         TList<Integer> parameters = TList.sof(fromAndTo);
         return gcoord(parameters.head(fromAndTo.length/2), parameters.tail(fromAndTo.length/2));
