@@ -280,7 +280,7 @@ public class TPoint2d extends Point2d implements List<Double> {
         switch (index) {
             case 0: return x;
             case 1: return y;
-            default: throw new NoSuchElementException("TVector3d#get index was "+index);
+            default: throw new NoSuchElementException("TPoint2d#get index was "+index);
         }
     }
 
@@ -289,7 +289,7 @@ public class TPoint2d extends Point2d implements List<Double> {
         switch (index) {
             case 0: {x=element;return x;}
             case 1: {y=element;return y;}
-            default: throw new NoSuchElementException("TVector3d#get index was "+index);
+            default: throw new NoSuchElementException("TPoint2d#get index was "+index);
         }
     }
 

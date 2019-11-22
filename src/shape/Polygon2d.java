@@ -15,12 +15,14 @@
 
 package shape;
 
+import static arithmetic.Arithmetic.mod;
 import collection.P;
 import collection.TList;
 import static function.ComparePolicy.inc;
 import static java.lang.Math.ceil;
 import static java.lang.Math.floor;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 import orderedSet.Range;
 import static shape.ShapeUtil.err;
@@ -34,6 +36,10 @@ public class Polygon2d extends TList<TPoint2d> {
     public static Polygon2d c(TList<TPoint2d> vertices) {
         assert !vertices.isEmpty();
         return new Polygon2d(vertices);
+    }
+    
+    public static Polygon2d set(TList<TPoint2d> vertices) {
+        return c(vertices);
     }
     
     public static Polygon2d c(TPoint2d... vertices) {
@@ -68,7 +74,7 @@ public class Polygon2d extends TList<TPoint2d> {
         return new Rect2d(new TPoint2d(stream().mapToDouble(p->p.x).min().getAsDouble(), stream().mapToDouble(p->p.y).min().getAsDouble()), 
                           new TPoint2d(stream().mapToDouble(p->p.x).max().getAsDouble(), stream().mapToDouble(p->p.y).max().getAsDouble()));
     }
-    
+        
     public TList<Polygon2d> chunk(int factor) {
         if (factor >= size())
             return TList.wrap(this);
@@ -87,7 +93,7 @@ public class Polygon2d extends TList<TPoint2d> {
        return chunk(chunkFactor).map(p->P.p(p.asEdges(), p.cover().margin(margin)));
     }
     
-    public abstract class ClosestPart {
+        public abstract class ClosestPart {
         Polygon2d target;
         public ClosestPart(Polygon2d target) {
             this.target = target;

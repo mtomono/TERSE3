@@ -45,4 +45,8 @@ public class Te {
         System.out.println(value);
         return value;
     }
+    public static <T> T e(String label,T value) {
+        System.out.println(label+value);
+        return value;
+    }
 }
