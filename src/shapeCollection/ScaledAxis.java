@@ -64,7 +64,7 @@ public class ScaledAxis extends AbstractList<Double> {
         this.size = abs(toStep-fromStep);
     }
         
-    final int step(double value) {//what happens when the pitch gets negative
+    final int step(double value) {
         if (dir > 0)
             return (int)ceil.o(div.o(value-zero, pitch));
         else 

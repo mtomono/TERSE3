@@ -81,6 +81,18 @@ public class ScaledAxisNGTest {
     }
 
     @Test
+    public void testConstruct05() {
+        System.out.println(test.TestUtils.methodName(0));
+        ScaledAxis sa = new ScaledAxis(3.0, 1, 1.25, 3.75);
+        System.out.println(sa);
+        TList<Integer> result = TList.sof(sa.fromStep,sa.toStep);
+        TList<Integer> expected = TList.sof(-1,1);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
     public void testGet00() {
         System.out.println(test.TestUtils.methodName(0));
         ScaledAxis sa = new ScaledAxis(-0.5, 1, 0.25, 1.25);
