@@ -17,6 +17,7 @@ package shapeCollection;
 
 import static arithmetic.Arithmetic.ceil;
 import static arithmetic.Arithmetic.div;
+import static arithmetic.Arithmetic.floor;
 import static java.lang.Math.abs;
 import static java.lang.Math.signum;
 import java.util.AbstractList;
@@ -24,7 +25,14 @@ import java.util.NoSuchElementException;
 import static shape.ShapeUtil.err;
 
 /**
- *
+ * Axis which are scaled.
+ * scale is defined by zero and pitch.
+ * starting from the point of zero and pitched regularly.
+ * from and to means the range on this pitch.
+ * as a list, ScaledAxis contains readings which are between from and to.
+ * in that sense, fromStep and toStep form a pseudo-range which means 
+ * the range starts from fromStep and range stops right before toStop.
+ * 
  * @author mtomono
  */
 public class ScaledAxis extends AbstractList<Double> {
@@ -53,18 +61,25 @@ public class ScaledAxis extends AbstractList<Double> {
         this.dir = signum(to-from);
         this.fromStep = step(this.from);
         this.toStep = step(this.to);
-        this.size = toStep-fromStep;
+        this.size = abs(toStep-fromStep);
     }
         
-    final int step(double value) {
-        return (int)ceil.o(div.o(value-zero, pitch*dir()));
+    final int step(double value) {//what happens when the pitch gets negative
+        if (dir > 0)
+            return (int)ceil.o(div.o(value-zero, pitch));
+        else 
+            return (int)floor.o(div.o(value-zero, pitch));
+    }
+    
+    public int start() {
+        return fromStep-(dir>0?1:0);
     }
 
     @Override
     public Double get(int index) {
-        if (index<0||index>size())
+        if (index<0||size()<index)
             throw new NoSuchElementException("ScaleAxis#get()");
-        return zero+(fromStep+index)*pitch*dir();
+        return zero+(fromStep+index*dir())*pitch;
     }
 
     @Override
@@ -80,14 +95,20 @@ public class ScaledAxis extends AbstractList<Double> {
         return new ScaledAxis(zero+diff, pitch, from+diff, to+diff);
     }
     
+    /**
+     * scale the axis using from as center.
+     * this preserves containing readings.
+     * @param rate
+     * @return 
+     */
     public ScaledAxis scale(double rate) {
-        return new ScaledAxis(zero*rate, pitch*abs(rate), from*rate, to*rate);
+        return new ScaledAxis((zero-from)*rate+from, pitch*abs(rate), from, (to-from)*rate+from);
     }
     
     public ScaledAxis fit(double newFrom, double newTo) {
         if (abs(to-from) < err)
             return this;
-        return shift(newFrom-from).scale((newTo-newFrom)/(to-from));
+        return scale((newTo-newFrom)/(to-from)).shift(newFrom-from);
     }
     
     @Override

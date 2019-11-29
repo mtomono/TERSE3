@@ -12,6 +12,7 @@ import java.util.List;
 import static org.testng.Assert.assertEquals;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import static shape.ShapeUtil.p3i;
 import static shape.ShapeUtil.vector3;
 import shape.TVector3d;
 
@@ -30,7 +31,7 @@ public class CubesNGTest {
 
     @Test
     public void testToCubes() {
-        TVector3d zero = vector3(-0.5,-0.5,0.0);
+        TVector3d zero = vector3(-0.5,-0.5,-0.5);
         TVector3d factor = vector3(1.0, 1.0, 1.0);
         TVector3d from = vector3(0.0,0.0,0.0);
         TVector3d to = vector3(3.0,3.0,0.0);
@@ -44,7 +45,7 @@ public class CubesNGTest {
     
     @Test
     public void testToCubes2() {
-        TVector3d zero = vector3(-0.5,-0.5,0.0);
+        TVector3d zero = vector3(-0.5,-0.5,-0.5);
         TVector3d factor = vector3(1.0, 1.0, 1.0);
         TVector3d from = vector3(0.0,0.0,0.0);
         TVector3d to = vector3(3.0,6.0,0.0);
@@ -67,7 +68,7 @@ public class CubesNGTest {
      * negative, and it is not acceptable.
      */
     public void testToCubesNegativeScale2() {
-        TVector3d zero = vector3(-0.5,-0.5,0.0);
+        TVector3d zero = vector3(-0.5,-0.5,-0.5);
         TVector3d factor = vector3(1.0, -1.0, 1.0);
         TVector3d from = vector3(0.0,0.0,0.0);
         TVector3d to = vector3(3.0,6.0,0.0);
@@ -81,7 +82,7 @@ public class CubesNGTest {
     
     @Test
     public void testToCubes3() {
-        TVector3d zero = vector3(-0.5,-0.5,0.0);
+        TVector3d zero = vector3(-0.5,-0.5,-0.5);
         TVector3d factor = vector3(1.0, 1.0, 1.0);
         TVector3d from = vector3(30.0,30.0,0.0);
         TVector3d to = vector3(33.0,36.0,0.0);
@@ -95,7 +96,7 @@ public class CubesNGTest {
     
     @Test
     public void testToCubes4() {
-        TVector3d zero = vector3(-0.5,-0.5,0.0);
+        TVector3d zero = vector3(-0.5,-0.5,-0.5);
         TVector3d factor = vector3(1.0, 1.0, 1.0);
         TVector3d from = vector3(-30.0,-30.0,0.0);
         TVector3d to = vector3(-33.0,-36.0,0.0);
@@ -109,7 +110,7 @@ public class CubesNGTest {
     
     @Test
     public void testToCubes5() {
-        TVector3d zero = vector3(-0.5,-0.5,0.0);
+        TVector3d zero = vector3(-0.5,-0.5,-0.5);
         TVector3d factor = vector3(1.0, 1.0, 1.0);
         TVector3d from = vector3(30.0,-30.0,0.0);
         TVector3d to = vector3(33.0,-36.0,0.0);
@@ -123,7 +124,7 @@ public class CubesNGTest {
     
     @Test
     public void testToCubes6() {
-        TVector3d zero = vector3(-0.5,-0.5,0.0);
+        TVector3d zero = vector3(-0.5,-0.5,-0.5);
         TVector3d factor = vector3(1.0, 1.0, 1.0);
         TVector3d from = vector3(30.0,3.0,0.0);
         TVector3d to = vector3(33.0,-3.0,0.0);
@@ -134,4 +135,33 @@ public class CubesNGTest {
         System.out.println("expected: "+expected);
         assertEquals(result, expected);
     }    
+
+    @Test
+    public void testCube000_111() {
+        System.out.println(test.TestUtils.methodName(0));
+        Cubes cubes = new Cubes(vector3(-0.5,-0.5,-0.5),vector3(1,1,1));
+        TList<List<Integer>> result0 = cubes.go(vector3(-0.25,-0.25,-0.25), vector3(1.25,1.25,1.25));
+        TList<List<Integer>> result1 = cubes.go(vector3(0.25,-0.25,-0.25), vector3(1.25,1.25,1.25));
+        TList<List<Integer>> result2 = cubes.go(vector3(-0.25,0.25,-0.25), vector3(1.25,1.25,1.25));
+        TList<List<Integer>> result3 = cubes.go(vector3(0.25,0.25,-0.25), vector3(1.25,1.25,1.25));
+        TList<TList<List<Integer>>> results = TList.sof(result0,result1,result2,result3);
+        TList<List<Integer>> expected = TList.sof(TList.sof(0,0,0),TList.sof(1,1,1));
+        System.out.println("result  : " + results.toWrappedString());
+        System.out.println("expected: " + expected);
+        results.map(r->TList.sof(r.get(0),r.last())).forEach(r->assertEquals(r, expected));
+    }
+    @Test
+    public void testCube111_000() {
+        System.out.println(test.TestUtils.methodName(0));
+        Cubes cubes = new Cubes(vector3(-0.5,-0.5,-0.5),vector3(1,1,1));
+        TList<List<Integer>> result0 = cubes.go(vector3(0.75,0.75,1.25), vector3(0.25,0.25,0.25));
+        TList<List<Integer>> result1 = cubes.go(vector3(1.25,0.75,1.25), vector3(0.25,0.25,0.25));
+        TList<List<Integer>> result2 = cubes.go(vector3(0.75,1.25,1.25), vector3(0.25,0.25,0.25));
+        TList<List<Integer>> result3 = cubes.go(vector3(1.25,1.25,1.25), vector3(0.25,0.25,0.25));
+        TList<TList<List<Integer>>> results = TList.sof(result0,result1,result2,result3);
+        TList<List<Integer>> expected = TList.sof(TList.sof(1,1,1),TList.sof(0,0,0));
+        System.out.println("result  : " + results.toWrappedString());
+        System.out.println("expected: " + expected);
+        results.map(r->TList.sof(r.get(0),r.last())).forEach(r->assertEquals(r, expected));
+    }
 }

@@ -14,7 +14,6 @@
  */
 package shapeCollection;
 
-import static arithmetic.Arithmetic.ceil;
 import collection.P;
 import collection.Scale;
 import collection.TList;
@@ -51,13 +50,12 @@ public class Cubes {
     }
     static Integer[] intArray = new Integer[]{0};
 
-    static TList<Integer> toStartingCube(List<Double> factor, List<Double> from) {
-        assert factor.size()==from.size();
-        return TList.sof(factor, from).transpose(l->l).map(l->(int) ceil.o(l.get(1)/l.get(0))).sfix();
+    static TList<Integer> toStartingCube(TList<ScaledAxis> axis) {
+        return axis.map(a->a.start());
     }
 
-    static Integer[] toStartingCubeArr(List<Double> factor, List<Double> from) {
-        return toStartingCube(factor, from).toArray(intArray);
+    static Integer[] toStartingCubeArr(TList<ScaledAxis> axis) {
+        return toStartingCube(axis).toArray(intArray);
     }
 
     static TList<ScaledAxis> toAxis(List<Double> zero, List<Double> factor, List<Double> from, List<Double> to) {
@@ -86,8 +84,8 @@ public class Cubes {
     }
 
     static public TList<List<Integer>> toCubes(List<Double> zero, List<Double> factor, List<Double> from, List<Double> to, double norm) {
-        TList<Integer> initial = toStartingCube(factor, from);
         TList<ScaledAxis> axis = toAxis(zero, factor, from, to);
+        TList<Integer> initial = toStartingCube(axis);
         return hitToCube(initial, mergeAndSortHits(hits(normalize(axis, norm), axis)));
     }
 
