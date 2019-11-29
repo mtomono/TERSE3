@@ -93,7 +93,13 @@ public class PolygonC2dNGTest {
         PolygonC2d tested = PolygonC2d.c(point2(0,0),point2(2,0),point2(2,-2),point2(4,-2),point2(4,2),point2(0,2),point2(0,0));
         TList<TList<TPoint2d>> result = TList.c();
         tested.decompose(result);
-        TList<TList<TPoint2d>> expected = TList.sof(TList.sof(point2(2,0),point2(2,-2),point2(4,-2)));
+        TList<TList<TPoint2d>> expected = TList.sof(
+                TList.sof(point2(2,0),point2(2,-2),point2(4,-2)),
+                TList.sof(point2(2.0, 0.0), point2(4.0, -2.0), point2(4.0, 2.0)),
+                TList.sof(point2(2.0, 0.0), point2(4.0, 2.0), point2(0.0, 2.0)),
+                TList.sof(point2(2.0, 0.0), point2(0.0, 2.0), point2(0.0, 0.0)),
+                TList.sof(point2(2.0, 0.0), point2(0.0, 0.0), point2(0.0, 0.0))
+        );
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);

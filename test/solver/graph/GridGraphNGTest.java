@@ -48,7 +48,7 @@ public class GridGraphNGTest {
         NodeGraph<TPoint2i> d = NodeGraphBuilder.builder(graph,p2i(1,0),p2i(3,3)).earlyExit().astar().block(blocks).build();
         d.fill();
         TList<TPoint2i> result= d.findRoute();
-        TList<Integer> expected = TList.sof(0,3,6,7);
+        TList<TPoint2i> expected = TList.sof(p2i(1,0), p2i(2,0), p2i(3,0), p2i(4,0), p2i(4,1), p2i(4,2), p2i(4,3), p2i(3,3));
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
         assertEquals(result, expected);
