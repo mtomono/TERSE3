@@ -33,6 +33,7 @@ public class NodeGraph<K> {
     }
     
     public Node<K> get(K at) {
+        assert nodes.get(at)!=null:"no such element in graph";
         return nodes.get(at);
     }
     
