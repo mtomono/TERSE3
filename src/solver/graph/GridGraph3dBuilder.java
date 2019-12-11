@@ -7,8 +7,11 @@ package solver.graph;
 
 import static collection.PrimitiveArrayWrap.wrap;
 import collection.TList;
+import shape.ShapeUtil;
 import static shape.ShapeUtil.p3i;
+import static shape.ShapeUtil.vector3;
 import shape.TPoint3i;
+import shape.TVector3d;
 import shapeCollection.GridCoord;
 
 /**
@@ -18,8 +21,7 @@ import shapeCollection.GridCoord;
 public class GridGraph3dBuilder {
     GridCoord gcoord;
     TList<TPoint3i> dirs;
-    TList<Double> cost;
-    TList<Double> weight;
+    TVector3d weight;
     
     public static GridGraph3dBuilder builder(int... end) {
         return builder(GridCoord.gcoord(end));
@@ -31,9 +33,8 @@ public class GridGraph3dBuilder {
     
     public GridGraph3dBuilder(GridCoord gcoord) {
         this.gcoord=gcoord;
-        this.dirs=gcoord.dirsAlternate().map(d->p3i(d));
-        this.cost=TList.sof(1.0,1.0,1.0,1.0,3.0,3.0);
-        this.weight=this.cost;
+        this.dirs=gcoord.dirsAlternate().map(ShapeUtil::p3i);
+        this.weight=vector3(1,1,3);
     }
         
     public GridGraph3dBuilder alt() {
@@ -41,17 +42,12 @@ public class GridGraph3dBuilder {
         return this;
     }
     
-    public GridGraph3dBuilder cost(double... cost) {
-        this.cost=TList.set(wrap(cost));
-        return this;
-    }
-    
     public GridGraph3dBuilder weight(double... weight) {
-        this.weight=TList.set(wrap(weight));
+        this.weight=vector3(wrap(weight));
         return this;
     }
     
     public GridGraph<TPoint3i> build() {
-        return new GridGraph<>(gcoord,dirs,cost,weight,(a,b)->a.addR(b),a->p3i(a));
+        return new GridGraph<>(gcoord,dirs,weight,ShapeUtil::p3i);
     }
 }

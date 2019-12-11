@@ -7,11 +7,11 @@ package solver.graph;
 
 import collection.P;
 import collection.TList;
+import static java.lang.Math.abs;
 import java.util.List;
-import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import math.VectorOp;
-import shape.TPoint2d;
+import shape.TVector3d;
 import shapeCollection.GridCoord;
 
 /**
@@ -21,27 +21,33 @@ import shapeCollection.GridCoord;
  */
 public class GridGraph<K extends List<Integer>> implements AStarGraph<K> {
     public final GridCoord gcoord;
-    public final TList<P<K, Double>> dirs;
-    public final TList<P<Double,Double>> weight;
-    BinaryOperator<K> add;
+    public final TVector3d weight;
+    public final TList<K> dirs;
     Function<List<Integer>,K> translator;
     
-    public GridGraph(GridCoord gcoord, TList<K> dirs, TList<Double> cost, TList<Double> weight, BinaryOperator<K> add, Function<List<Integer>,K>translator) {
+    public GridGraph(GridCoord gcoord, TList<K> dirs, TVector3d weight, Function<List<Integer>,K>translator) {
         this.gcoord = gcoord;
-        this.dirs = dirs.pair(cost).sfix();
-        this.add = add;
+        this.dirs = dirs;
         this.translator=translator;
-        this.weight = weight.fold(2).map(l->P.p(l.get(0),l.get(1)));
+        this.weight = weight;
+    }
+
+    public List<Double> doubleAbs(List<Integer> k) {
+        return TList.set(k).map(i->(double)abs(i));
+    }
+    
+    public double cost(List<Integer> k) {
+        return VectorOp.dot(weight, doubleAbs(k));
     }
 
     @Override
     public double heuristic(K from, K to) {
-        return TList.set(VectorOp.subI(to,from)).pair(weight, (a,b)->a>0?a*b.l():a*b.r()).sumD(d->d);
+        return cost(VectorOp.subI(to,from));
     }
-
+    
     @Override
     public TList<P<K, Double>> next(K from) {
-        return dirs.map(d->P.p(add.apply(from, d.l()),d.r())).filter(p->gcoord.contains(p.l())).sfix();
+        return dirs.map(d->P.p(translator.apply(VectorOp.addI(from, d)),cost(d))).filter(p->gcoord.contains(p.l())).sfix();
     }
 
     @Override

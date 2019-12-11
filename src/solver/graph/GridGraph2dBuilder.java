@@ -7,8 +7,11 @@ package solver.graph;
 
 import static collection.PrimitiveArrayWrap.wrap;
 import collection.TList;
+import shape.ShapeUtil;
 import static shape.ShapeUtil.p2i;
+import static shape.ShapeUtil.vector3;
 import shape.TPoint2i;
+import shape.TVector3d;
 import shapeCollection.GridCoord;
 
 /**
@@ -18,8 +21,7 @@ import shapeCollection.GridCoord;
 public class GridGraph2dBuilder {
     GridCoord gcoord;
     TList<TPoint2i> dirs;
-    TList<Double> cost;
-    TList<Double> weight;
+    TVector3d weight;
     
     public static GridGraph2dBuilder builder(int... end) {
         return builder(GridCoord.gcoord(end));
@@ -31,9 +33,8 @@ public class GridGraph2dBuilder {
     
     public GridGraph2dBuilder(GridCoord gcoord) {
         this.gcoord=gcoord;
-        this.dirs=gcoord.dirsAlternate().map(d->p2i(d));
-        this.cost=TList.sof(1.0,1.0,1.0,1.0,3.0,3.0);
-        this.weight=this.cost;
+        this.dirs=gcoord.dirsAlternate().map(d->p2i(d)).sfix();
+        this.weight=vector3(1,1,3);
     }
         
     public GridGraph2dBuilder alt() {
@@ -41,17 +42,12 @@ public class GridGraph2dBuilder {
         return this;
     }
     
-    public GridGraph2dBuilder cost(double... cost) {
-        this.cost=TList.set(wrap(cost));
-        return this;
-    }
-    
     public GridGraph2dBuilder weight(double... weight) {
-        this.weight=TList.set(wrap(weight));
+        this.weight=vector3(wrap(weight));
         return this;
     }
     
     public GridGraph<TPoint2i> build() {
-        return new GridGraph<>(gcoord,dirs,cost,weight,(a,b)->a.addR(b),a->p2i(a));
+        return new GridGraph<>(gcoord,dirs,weight,ShapeUtil::p2i);
     }
 }

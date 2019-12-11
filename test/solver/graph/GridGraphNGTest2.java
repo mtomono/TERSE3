@@ -36,7 +36,7 @@ public class GridGraphNGTest2 {
     }
 
     @Test
-    public void testFindTime() {
+    public void testFindCost() {
         System.out.println(test.TestUtils.methodName(0));
         NodeGraph<TPoint2i> d = NodeGraphBuilder.builder(graph,p2i(10,0),p2i(20,9)).earlyExit().astar().white(blocks).build();
         d.fill();

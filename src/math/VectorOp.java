@@ -53,4 +53,8 @@ public class VectorOp {
     static public double manhattanLengthD(List<Double>a,List<Double>b) {
         return op(a,b,(x,y)->x-y).map(x->abs(x)).sumD(i->i);
     }
+    
+    static public double dot(List<Double>a, List<Double> b) {
+        return TList.set(a).pair(TList.set(b), (x,y)->x*y).sumD(d->d);
+    }
 }
