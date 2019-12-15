@@ -9,6 +9,7 @@ import solver.graph.BareGraph;
 import solver.graph.Metric;
 import collection.P;
 import collection.TList;
+import debug.Te;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Optional;
@@ -21,7 +22,7 @@ import solver.graph.Node;
  * @author masao
  * @param <K>
  */
-public class NodeGraph<K> {
+public class MetricNodeGraph<K> {
     Metric<K> metric;
     BareGraph<K> graph;
     Map<K,Node<K>> nodes;
@@ -30,7 +31,7 @@ public class NodeGraph<K> {
     K from;
     K to;
     
-    public NodeGraph(Metric<K> metric, BareGraph<K> graph, Map<K,Node<K>> nodes, K from, K to) {
+    public MetricNodeGraph(Metric<K> metric, BareGraph<K> graph, Map<K,Node<K>> nodes, K from, K to) {
         this.metric=metric;
         this.graph=graph;
         this.nodes=nodes;
@@ -40,29 +41,29 @@ public class NodeGraph<K> {
         this.exitPolicy=this::waitUntilEnd;
     }
     
-    public NodeGraph<K> earlyExit() {
+    public MetricNodeGraph<K> earlyExit() {
         this.exitPolicy=this::earlyExit;
         return this;
     }
     
-    public NodeGraph<K> waitUntilEnd() {
+    public MetricNodeGraph<K> waitUntilEnd() {
         this.exitPolicy=this::waitUntilEnd;
         return this;
     }
     
     public Node<K> get(K at) {
-        assert nodes.get(at)!=null:"no such element in graph";
+        assert nodes.get(at)!=null:"no such element as "+ at + " in graph";
         return nodes.get(at);
     }
     
     static public class Exit extends RuntimeException {
     }
     
-    public NodeGraph<K> fill() {
+    public MetricNodeGraph<K> fill() {
         return fill(this::fill);
     }
 
-    public NodeGraph<K> fillLoop() {
+    public MetricNodeGraph<K> fillLoop() {
         assert get(from).isNone() : "from is not reacheable";
         assert get(to).isNone() : "to is not reacheable";
         return fill(this::fillLoop);
@@ -84,11 +85,7 @@ public class NodeGraph<K> {
         return at;
     }
     
-    public double cost(Node<K> at, Node<K> from) {
-        return from.distance()+metric.measure(from.at,at.at);
-    }
-    
-    public NodeGraph<K> fill(Consumer<Node<K>> sweep) {
+    public MetricNodeGraph<K> fill(Consumer<Node<K>> sweep) {
         get(from).setDistance(0);
         Node<K> current=get(from).close();
         try {
@@ -108,7 +105,7 @@ public class NodeGraph<K> {
     }
     
     public TList<P<Node<K>,Double>> candidatesAndDistances(Node<K> from) {
-        return graph.next(from.at).map(p->get(p)).map(p->P.p(p, cost(p,from)));
+        return graph.next(from.at).map(p->P.p(get(p), metric.measure(p,from.at)));
     }
 
     public Node<K> fillCore(Node<K> from) {

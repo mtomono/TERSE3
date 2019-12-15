@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package solver.graphMetric;
+package solver.graph;
 
 import collection.TList;
 import java.util.List;
 import shapeCollection.GridCoord;
+import solver.graphMetric.BareGridGraph;
 
 /**
  *
@@ -35,7 +36,7 @@ public class GridGraphBuilder {
         return this;
     }
         
-    public GridGraph build() {
-        return new GridGraph(gcoord,dirs);
+    public BareGridGraph build() {
+        return new BareGridGraph(gcoord,dirs);
     }
 }

@@ -15,11 +15,11 @@ import shapeCollection.GridCoord;
  *
  * @author masao
  */
-public class GridGraph implements BareGraph<List<Integer>> {
+public class BareGridGraph implements BareGraph<List<Integer>> {
     public final GridCoord gcoord;
     public final TList<List<Integer>> dirs;
     
-    public GridGraph(GridCoord gcoord, TList<List<Integer>> dirs) {
+    public BareGridGraph(GridCoord gcoord, TList<List<Integer>> dirs) {
         this.gcoord = gcoord;
         this.dirs = dirs;
     }

@@ -183,7 +183,7 @@ public class TPoint3i extends Point3i implements List<Integer> {
 
     @Override
     public Object[] toArray() {
-        return new Integer[]{x,y};
+        return new Integer[]{x,y,z};
     }
 
     @Override
