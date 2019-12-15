@@ -18,15 +18,15 @@ import java.util.function.Supplier;
  */
 public class NodeGraphBuilder<K> {
     Supplier<Map<K,Node<K>>> nodesSupplier;
-    Graph<K> graph;
+    MetricGraph<K> graph;
     K from;
     K to;
     NodeGraph<K> built;
     
-    static public <K> NodeGraphBuilder<K> builder(Graph<K> graph,K from,K to) {
+    static public <K> NodeGraphBuilder<K> builder(MetricGraph<K> graph,K from,K to) {
         return new NodeGraphBuilder<>(graph,from,to);
     }
-    public NodeGraphBuilder(Graph<K> graph,K from,K to) {
+    public NodeGraphBuilder(MetricGraph<K> graph,K from,K to) {
         this.nodesSupplier=()->new HashMap<>();
         this.graph=graph;
         this.from=from;

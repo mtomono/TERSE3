@@ -12,8 +12,7 @@ import collection.TList;
  *
  * @author masao
  */
-public interface Graph<K> {
-    public TList<P<K,Double>> next(K from);
+public interface BareGraph<K> {
+    public TList<K> next(K from);
     public TList<K> all();
-    public double heuristic(K from, K to);
 }

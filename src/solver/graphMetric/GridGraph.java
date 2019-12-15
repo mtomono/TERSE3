@@ -5,6 +5,7 @@
  */
 package solver.graphMetric;
 
+import solver.graph.BareGraph;
 import collection.TList;
 import java.util.List;
 import math.VectorOp;
@@ -14,7 +15,7 @@ import shapeCollection.GridCoord;
  *
  * @author masao
  */
-public class GridGraph implements Graph<List<Integer>> {
+public class GridGraph implements BareGraph<List<Integer>> {
     public final GridCoord gcoord;
     public final TList<List<Integer>> dirs;
     

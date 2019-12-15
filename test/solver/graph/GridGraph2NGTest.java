@@ -15,10 +15,10 @@ import shape.TPoint2i;
  *
  * @author masao
  */
-public class GridGraphNGTest2 {
+public class GridGraph2NGTest {
     GridGraph<TPoint2i> graph;
     TList<TPoint2i> blocks;
-    public GridGraphNGTest2() {
+    public GridGraph2NGTest() {
         graph = GridGraph2dBuilder.builder(0,0, 20,20).build();
         blocks = TList.sof(
                 p2i(10,0),p2i(11,0),p2i(12,0),

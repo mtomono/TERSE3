@@ -19,14 +19,14 @@ import java.util.function.Consumer;
  * @param <K>
  */
 public class NodeGraph<K> {
-    Graph<K> graph;
+    MetricGraph<K> graph;
     Map<K,Node<K>> nodes;
     PriorityQueue<Node<K>> queue;
     Consumer<Node<K>> exitPolicy;
     K from;
     K to;
     
-    public NodeGraph(Graph<K> graph, Map<K,Node<K>> nodes, K from, K to) {
+    public NodeGraph(MetricGraph<K> graph, Map<K,Node<K>> nodes, K from, K to) {
         this.graph=graph;
         this.nodes=nodes;
         this.queue = new PriorityQueue<>(Comparator.comparing(n->n.score()));
@@ -98,10 +98,13 @@ public class NodeGraph<K> {
         
     }
 
+    public TList<P<Node<K>,Double>> candidatesAndDistances(Node<K> from) {
+        return graph.next(from.at).map(p->P.p(get(p.l()), p.r()));
+    }
+
     public Node<K> fillCore(Node<K> from) {
         exitPolicy.accept(from);
-        graph.next(from.at)
-                .map(p->P.p(get(p.l()), p.r()))
+        candidatesAndDistances(from)
                 .filter(p->p.l().isBetterParent(from, p.r()))
                 .forEach(p->requeue(p.l().changeParent(from, p.r()).open()));
         if (queue.isEmpty())

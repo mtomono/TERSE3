@@ -5,6 +5,8 @@
  */
 package solver.graphMetric;
 
+import solver.graph.BareGraph;
+import solver.graph.Metric;
 import collection.P;
 import collection.TList;
 import java.util.Comparator;
@@ -21,14 +23,14 @@ import solver.graph.Node;
  */
 public class NodeGraph<K> {
     Metric<K> metric;
-    Graph<K> graph;
+    BareGraph<K> graph;
     Map<K,Node<K>> nodes;
     PriorityQueue<Node<K>> queue;
     Consumer<Node<K>> exitPolicy;
     K from;
     K to;
     
-    public NodeGraph(Metric<K> metric, Graph<K> graph, Map<K,Node<K>> nodes, K from, K to) {
+    public NodeGraph(Metric<K> metric, BareGraph<K> graph, Map<K,Node<K>> nodes, K from, K to) {
         this.metric=metric;
         this.graph=graph;
         this.nodes=nodes;
@@ -104,11 +106,14 @@ public class NodeGraph<K> {
     public void waitUntilEnd(Node<K> from) {
         
     }
+    
+    public TList<P<Node<K>,Double>> candidatesAndDistances(Node<K> from) {
+        return graph.next(from.at).map(p->get(p)).map(p->P.p(p, cost(p,from)));
+    }
 
     public Node<K> fillCore(Node<K> from) {
         exitPolicy.accept(from);
-        graph.next(from.at)
-                .map(p->get(p)).map(p->P.p(p, cost(p,from)))
+        candidatesAndDistances(from)
                 .filter(p->p.l().isBetterParent(from, p.r()))
                 .forEach(p->requeue(p.l().changeParent(from, p.r()).open()));
         if (queue.isEmpty())

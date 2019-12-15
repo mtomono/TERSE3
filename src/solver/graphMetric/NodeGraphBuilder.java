@@ -5,6 +5,8 @@
  */
 package solver.graphMetric;
 
+import solver.graph.BareGraph;
+import solver.graph.Metric;
 import collection.TList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -21,15 +23,15 @@ import solver.graph.NodeStatus;
 public class NodeGraphBuilder<K> {
     Supplier<Map<K,Node<K>>> nodesSupplier;
     Metric<K> metric;
-    Graph<K> graph;
+    BareGraph<K> graph;
     K from;
     K to;
     NodeGraph<K> built;
     
-    static public <K> NodeGraphBuilder<K> builder(Metric<K> metric, Graph<K> graph,K from,K to) {
+    static public <K> NodeGraphBuilder<K> builder(Metric<K> metric, BareGraph<K> graph,K from,K to) {
         return new NodeGraphBuilder<>(metric, graph,from,to);
     }
-    public NodeGraphBuilder(Metric<K> metric, Graph<K> graph,K from,K to) {
+    public NodeGraphBuilder(Metric<K> metric, BareGraph<K> graph,K from,K to) {
         this.nodesSupplier=()->new HashMap<>();
         this.metric=metric;
         this.graph=graph;

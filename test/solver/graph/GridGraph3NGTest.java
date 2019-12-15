@@ -15,10 +15,10 @@ import shape.TPoint3i;
  *
  * @author masao
  */
-public class GridGraphNGTest3 {
+public class GridGraph3NGTest {
     GridGraph<TPoint3i> graph;
     TList<TPoint3i> blocks;
-    public GridGraphNGTest3() {
+    public GridGraph3NGTest() {
         graph = GridGraph3dBuilder.builder(0,0,0, 20,20,20).build();
         blocks = TList.sof(
                 p3i(10,0,0),p3i(11,0,0),p3i(12,0,0),

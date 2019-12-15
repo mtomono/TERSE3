@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package solver.graphMetric;
+package solver.graph;
 
 import collection.P;
 import collection.TList;
@@ -12,7 +12,8 @@ import collection.TList;
  *
  * @author masao
  */
-public interface Graph<K> {
-    public TList<K> next(K from);
+public interface MetricGraph<K> {
+    public TList<P<K,Double>> next(K from);
     public TList<K> all();
+    public double heuristic(K from, K to);
 }

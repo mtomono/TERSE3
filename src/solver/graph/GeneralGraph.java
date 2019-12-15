@@ -17,7 +17,7 @@ import java.util.Set;
  * @author masao
  * @param <K>
  */
-public class GeneralGraph<K> implements Graph<K> {
+public class GeneralGraph<K> implements MetricGraph<K> {
     MVMap<K,P<K,Double>> body;
     
     public GeneralGraph(Map<K,TList<P<K,Double>>> body) {

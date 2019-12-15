@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package solver.graphMetric;
+package solver.graph;
 
 import collection.TList;
 import static java.lang.Math.abs;

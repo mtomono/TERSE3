@@ -5,6 +5,7 @@
  */
 package solver.graphMetric;
 
+import solver.graph.BareGraph;
 import collection.MVMap;
 import collection.P;
 import collection.TList;
@@ -17,7 +18,7 @@ import java.util.Set;
  * @author masao
  * @param <K>
  */
-public class GeneralGraph<K> implements Graph<K> {
+public class GeneralGraph<K> implements BareGraph<K> {
     MVMap<K,K> body;
     Map<P<K,K>,Double> metric;
     

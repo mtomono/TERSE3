@@ -19,7 +19,7 @@ import shapeCollection.GridCoord;
  * @author masao
  * @param <K>
  */
-public class GridGraph<K extends List<Integer>> implements Graph<K> {
+public class GridGraph<K extends List<Integer>> implements MetricGraph<K> {
     public final GridCoord gcoord;
     public final TVector3d weight;
     public final TList<K> dirs;

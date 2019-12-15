@@ -7,21 +7,21 @@ package solver.graph;
 
 import collection.P;
 import collection.TList;
-import solver.graph.Graph;
+import solver.graph.MetricGraph;
 
 /**
  *
  * @author masao
  * @param <K>
  */
-public class LayeredGraph<K> implements Graph<K> {
-    final public TList<Graph<K>> body;
+public class LayeredGraph<K> implements MetricGraph<K> {
+    final public TList<MetricGraph<K>> body;
     
-    public LayeredGraph(TList<Graph<K>> body) {
+    public LayeredGraph(TList<MetricGraph<K>> body) {
         this.body = body;
     }
     
-    public LayeredGraph(Graph<K>... body) {
+    public LayeredGraph(MetricGraph<K>... body) {
         this(TList.sof(body));
     }
 
