@@ -37,7 +37,8 @@ public class LayeredGraph<K> implements Graph<K> {
 
     @Override
     public double heuristic(K from, K to) {
-        return body.map(g->g.heuristic(from,to)).filter(d->d<=0).minval(d->d).orElse(0.0);
+        return body.map(g->g.heuristic(from,to)).minval(d->d).get();
+        //return body.map(g->g.heuristic(from,to)).filter(d->d<=0).minval(d->d).orElse(0.0);
     }
     
 }

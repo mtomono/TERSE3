@@ -101,7 +101,7 @@ public class LayeredGraphNGTest {
         NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(layeredGraph0,p3i(0,1,0),p3i(2,0,4)).earlyExit().astar().white(blocks1).build();
         d.fillLoop();
         TList<TPoint3i> result = d.findRoute();
-        TList<TPoint3i> expected = TList.sof(p3i(0,1,0), p3i(1,1,0), p3i(1,1,1), p3i(1,1,2), p3i(1,0,2), p3i(2,0,2), p3i(2,0,3), p3i(2,0,4));
+        TList<TPoint3i> expected = TList.sof(p3i(0,1,0), p3i(1,1,0), p3i(2,1,0), p3i(2,0,0), p3i(2,0,1), p3i(2,0,2), p3i(2,0,3), p3i(2,0,4));
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
         assertEquals(result, expected);
@@ -125,7 +125,7 @@ public class LayeredGraphNGTest {
         NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(layeredGraph0,p3i(15,16,0),p3i(17,15,4)).earlyExit().astar().white(blocks2).build();
         d.fillLoop();
         TList<TPoint3i> result = d.findRoute();
-        TList<TPoint3i> expected = TList.sof(p3i(15,16,0), p3i(16,16,0), p3i(16,16,1), p3i(16,16,2), p3i(16,15,2), p3i(17,15,2), p3i(17,15,3), p3i(17,15,4));
+        TList<TPoint3i> expected = TList.sof(p3i(15,16,0), p3i(16,16,0), p3i(17,16,0), p3i(17,15,0), p3i(17,15,1), p3i(17,15,2), p3i(17,15,3), p3i(17,15,4));
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
         assertEquals(result, expected);
