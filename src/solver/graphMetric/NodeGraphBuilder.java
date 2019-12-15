@@ -3,14 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package solver.graph;
+package solver.graphMetric;
 
 import collection.TList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.BiFunction;
 import java.util.function.Supplier;
+import solver.graph.AStarNode;
+import solver.graph.Node;
+import solver.graph.NodeStatus;
 
 /**
  *
@@ -18,16 +20,18 @@ import java.util.function.Supplier;
  */
 public class NodeGraphBuilder<K> {
     Supplier<Map<K,Node<K>>> nodesSupplier;
+    Metric<K> metric;
     Graph<K> graph;
     K from;
     K to;
     NodeGraph<K> built;
     
-    static public <K> NodeGraphBuilder<K> builder(Graph<K> graph,K from,K to) {
-        return new NodeGraphBuilder<>(graph,from,to);
+    static public <K> NodeGraphBuilder<K> builder(Metric<K> metric, Graph<K> graph,K from,K to) {
+        return new NodeGraphBuilder<>(metric, graph,from,to);
     }
-    public NodeGraphBuilder(Graph<K> graph,K from,K to) {
+    public NodeGraphBuilder(Metric<K> metric, Graph<K> graph,K from,K to) {
         this.nodesSupplier=()->new HashMap<>();
+        this.metric=metric;
         this.graph=graph;
         this.from=from;
         this.to=to;
@@ -37,11 +41,11 @@ public class NodeGraphBuilder<K> {
         return this;
     }
     public NodeGraphBuilder<K> fullSearch() {
-        this.built=new NodeGraph(graph,nodesSupplier.get(),from,to).waitUntilEnd();
+        this.built=new NodeGraph(metric,graph,nodesSupplier.get(),from,to).waitUntilEnd();
         return this;
     }
     public NodeGraphBuilder<K> earlyExit() {
-        this.built=new NodeGraph(graph,nodesSupplier.get(),from,to).earlyExit();
+        this.built=new NodeGraph(metric,graph,nodesSupplier.get(),from,to).earlyExit();
         return this;
     }
     public NodeGraphBuilder<K> node() {
@@ -51,12 +55,7 @@ public class NodeGraphBuilder<K> {
     }
     public NodeGraphBuilder<K> astar() {
         assert built != null : "nodeGraph is not ready";
-        graph.all().forEach(k->built.nodes.put(k,new AStarNode(k,graph.heuristic(k,to))));
-        return this;
-    }
-    public NodeGraphBuilder<K> astar(BiFunction<K,K,Double> heuristic) {
-        assert built != null : "nodeGraph is not ready";
-        graph.all().forEach(k->built.nodes.put(k,new AStarNode(k,heuristic.apply(k,to))));
+        graph.all().forEach(k->built.nodes.put(k,new AStarNode(k,metric.measure(k,to))));
         return this;
     }
     public NodeGraphBuilder<K> block(Collection<K> blocks) {

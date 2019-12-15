@@ -5,9 +5,6 @@
  */
 package solver.graph;
 
-import static solver.graph.NodeStatus.BLOCKED;
-import static solver.graph.NodeStatus.NONE;
-
 /**
  *
  * @author masao

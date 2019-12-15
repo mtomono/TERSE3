@@ -9,7 +9,6 @@ import java.util.Optional;
 import static solver.graph.NodeStatus.CLOSED;
 import static solver.graph.NodeStatus.NONE;
 import static solver.graph.NodeStatus.OPEN;
-import static solver.graph.NodeStatus.BLOCKED;
 
 /**
  *
@@ -17,7 +16,7 @@ import static solver.graph.NodeStatus.BLOCKED;
  */
 public class Node<K> {
     NodeStatus status;
-    K at;
+    final public K at;
     Optional<K> parent;
     double distance;
     
@@ -35,6 +34,21 @@ public class Node<K> {
     
     public Node<K> setDistance(double distance) {
         this.distance=distance;
+        return this;
+    }
+    
+    public Node<K> setParent(Optional<K> parent) {
+        this.parent=parent;
+        return this;
+    }
+    
+    public boolean isBetterParent(Node<K> from, double lastStep) {
+        return !isClosed()&&(distance>from.distance+lastStep||isNone());
+    }
+    
+    public Node<K> changeParent(Node<K> from, double lastStep) {
+        this.distance=from.distance+lastStep;
+        this.parent=Optional.of(from.at);
         return this;
     }
     
@@ -62,6 +76,10 @@ public class Node<K> {
     
     public double score() {
         return distance;
+    }
+    
+    public Optional<K> parent() {
+        return parent;
     }
     
     @Override

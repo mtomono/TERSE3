@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package solver.graph;
+package solver.graphMetric;
 
 import collection.P;
 import collection.TList;
@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.PriorityQueue;
 import java.util.function.Consumer;
+import solver.graph.Node;
 
 /**
  *
@@ -19,6 +20,7 @@ import java.util.function.Consumer;
  * @param <K>
  */
 public class NodeGraph<K> {
+    Metric<K> metric;
     Graph<K> graph;
     Map<K,Node<K>> nodes;
     PriorityQueue<Node<K>> queue;
@@ -26,7 +28,8 @@ public class NodeGraph<K> {
     K from;
     K to;
     
-    public NodeGraph(Graph<K> graph, Map<K,Node<K>> nodes, K from, K to) {
+    public NodeGraph(Metric<K> metric, Graph<K> graph, Map<K,Node<K>> nodes, K from, K to) {
+        this.metric=metric;
         this.graph=graph;
         this.nodes=nodes;
         this.queue = new PriorityQueue<>(Comparator.comparing(n->n.score()));
@@ -78,18 +81,9 @@ public class NodeGraph<K> {
         queue.offer(at);
         return at;
     }
-        
-    public Node<K> changeParentWhenCloser(Node<K> at, Node<K> from, double lastStep) {
-        if (!(at.distance()>cost(at,from,lastStep)||at.isNone()))
-            return at;
-        at.setDistance(cost(at, from, lastStep));
-        at.setParent(Optional.of(from.at));
-        requeue(at.open());
-        return at;
-    }
     
-    public double cost(Node<K> at, Node<K> from, double lastStep) {
-        return from.distance()+lastStep;
+    public double cost(Node<K> at, Node<K> from) {
+        return from.distance()+metric.measure(from.at,at.at);
     }
     
     public NodeGraph<K> fill(Consumer<Node<K>> sweep) {
@@ -101,7 +95,7 @@ public class NodeGraph<K> {
         }
         return this;
     }
-    
+
     public void earlyExit(Node<K> from) {
         if (from.at.equals(to))
             throw new Exit();
@@ -114,7 +108,7 @@ public class NodeGraph<K> {
     public Node<K> fillCore(Node<K> from) {
         exitPolicy.accept(from);
         graph.next(from.at)
-                .map(p->P.p(get(p.l()), p.r()))
+                .map(p->get(p)).map(p->P.p(p, cost(p,from)))
                 .filter(p->p.l().isBetterParent(from, p.r()))
                 .forEach(p->requeue(p.l().changeParent(from, p.r()).open()));
         if (queue.isEmpty())

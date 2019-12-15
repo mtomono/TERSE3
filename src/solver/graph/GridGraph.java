@@ -19,7 +19,7 @@ import shapeCollection.GridCoord;
  * @author masao
  * @param <K>
  */
-public class GridGraph<K extends List<Integer>> implements AStarGraph<K> {
+public class GridGraph<K extends List<Integer>> implements Graph<K> {
     public final GridCoord gcoord;
     public final TVector3d weight;
     public final TList<K> dirs;
@@ -32,12 +32,8 @@ public class GridGraph<K extends List<Integer>> implements AStarGraph<K> {
         this.weight = weight;
     }
 
-    public List<Double> doubleAbs(List<Integer> k) {
-        return TList.set(k).map(i->(double)abs(i));
-    }
-    
     public double cost(List<Integer> k) {
-        return VectorOp.dot(weight, doubleAbs(k));
+        return VectorOp.dot(weight, k);
     }
 
     @Override

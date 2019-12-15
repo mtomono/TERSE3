@@ -54,7 +54,7 @@ public class VectorOp {
         return op(a,b,(x,y)->x-y).map(x->abs(x)).sumD(i->i);
     }
     
-    static public double dot(List<Double>a, List<Double> b) {
-        return TList.set(a).pair(TList.set(b), (x,y)->x*y).sumD(d->d);
+    static public double dot(List<? extends Number>a, List<? extends Number> b) {
+        return TList.set(a).pair(b, (x,y)->x.doubleValue()*y.doubleValue()).sumD(d->d);
     }
 }

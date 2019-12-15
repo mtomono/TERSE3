@@ -3,12 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package solver.graph;
+package solver.graphMetric;
+
+import collection.P;
+import collection.TList;
 
 /**
  *
  * @author masao
  */
-public interface AStarGraph<K> extends Graph<K> {
-    public double heuristic(K from, K to);
+public interface Graph<K> {
+    public TList<K> next(K from);
+    public TList<K> all();
 }

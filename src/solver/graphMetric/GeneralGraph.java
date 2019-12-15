@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package solver.graph;
+package solver.graphMetric;
 
 import collection.MVMap;
 import collection.P;
@@ -18,31 +18,29 @@ import java.util.Set;
  * @param <K>
  */
 public class GeneralGraph<K> implements Graph<K> {
-    MVMap<K,P<K,Double>> body;
+    MVMap<K,K> body;
+    Map<P<K,K>,Double> metric;
     
-    public GeneralGraph(Map<K,TList<P<K,Double>>> body) {
+    public GeneralGraph(Map<K,TList<K>> body, Map<P<K,K>,Double> metric) {
         this.body = new MVMap<>(body);
+        this.metric=metric;
     }
     @Override
-    public TList<P<K,Double>> next(K from) {
+    public TList<K> next(K from) {
         return body.getList(from);
     }
     
     @Override
     public TList<K> all() {
         Set<K> retval = new HashSet<>(body.keySet());
-        for (TList<P<K,Double>> v : body.values())
-            retval.addAll(v.map(p->p.l()));
+        for (TList<K> v : body.values())
+            retval.addAll(v);
         return TList.set(retval);
     }
     
     public GeneralGraph<K> addPath(K from, K to, double distance) {
-        body.getList(from).add(P.p(to, distance));
+        body.getList(from).add(to);
+        metric.put(P.p(from, to), distance);
         return this;
-    }
-
-    @Override
-    public double heuristic(K from, K to) {
-        return 0;
     }
 }
