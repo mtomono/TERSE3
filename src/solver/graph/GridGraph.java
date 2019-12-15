@@ -33,7 +33,7 @@ public class GridGraph<K extends List<Integer>> implements Graph<K> {
     }
 
     public double cost(List<Integer> k) {
-        return VectorOp.dot(weight, k);
+        return VectorOp.dot(weight, TList.set(k).map(i->abs(i)));
     }
 
     @Override
