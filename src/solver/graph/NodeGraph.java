@@ -78,19 +78,6 @@ public class NodeGraph<K> {
         queue.offer(at);
         return at;
     }
-        
-    public Node<K> changeParentWhenCloser(Node<K> at, Node<K> from, double lastStep) {
-        if (!(at.distance()>cost(at,from,lastStep)||at.isNone()))
-            return at;
-        at.setDistance(cost(at, from, lastStep));
-        at.setParent(Optional.of(from.at));
-        requeue(at.open());
-        return at;
-    }
-    
-    public double cost(Node<K> at, Node<K> from, double lastStep) {
-        return from.distance()+lastStep;
-    }
     
     public NodeGraph<K> fill(Consumer<Node<K>> sweep) {
         get(from).setDistance(0);
