@@ -8,7 +8,6 @@ package solver.graph;
 import collection.TList;
 import java.util.List;
 import shapeCollection.GridCoord;
-import solver.graphMetric.BareGridGraph;
 
 /**
  *
@@ -36,7 +35,7 @@ public class GridGraphBuilder {
         return this;
     }
         
-    public BareGridGraph build() {
-        return new BareGridGraph(gcoord,dirs);
+    public GridGraph build() {
+        return new GridGraph(gcoord,dirs);
     }
 }

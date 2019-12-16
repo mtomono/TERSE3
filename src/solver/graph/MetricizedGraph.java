@@ -14,8 +14,8 @@ import collection.TList;
  */
 public class MetricizedGraph<K> implements MetricGraph<K> {
     Metric<K> metric;
-    BareGraph<K> base;
-    public MetricizedGraph(Metric<K> metric, BareGraph<K> base) {
+    Graph<K> base;
+    public MetricizedGraph(Metric<K> metric, Graph<K> base) {
         this.metric = metric;
         this.base = base;
     }

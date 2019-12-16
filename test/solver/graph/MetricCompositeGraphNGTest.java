@@ -18,20 +18,20 @@ import shape.TPoint3i;
  *
  * @author masao
  */
-public class LayeredGraphNGTest {
-    GridGraph<TPoint3i> grid;
-    GeneralGraph<TPoint3i> bypass;
+public class MetricCompositeGraphNGTest {
+    MetricGridGraph<TPoint3i> grid;
+    MetricGeneralGraph<TPoint3i> bypass;
     TList<TPoint3i> blocks0;
     TList<TPoint3i> blocks1;
     TList<TPoint3i> blocks2;
-    LayeredGraph<TPoint3i> layeredGraph0;
-    LayeredGraph<TPoint3i> layeredGraph1;
+    MetricCompositeGraph<TPoint3i> layeredGraph0;
+    MetricCompositeGraph<TPoint3i> layeredGraph1;
     Metric<List<Integer>> l1=Metric.weighted(Metric.l2(), TList.sof(1,1,3));
-    public LayeredGraphNGTest() {
-        grid = GridGraph3dBuilder.builder(0,0,0, 20,20,5).build();
-        bypass = GeneralGraphBuilder.<TPoint3i>builder().a(p3i(1,1,3), p3i(16,16,3), sqrt(15*15*2)).build();
-        layeredGraph0 = new LayeredGraph<>(grid);
-        layeredGraph1 = new LayeredGraph<>(grid,bypass);
+    public MetricCompositeGraphNGTest() {
+        grid = MetricGridGraph3dBuilder.builder(0,0,0, 20,20,5).build();
+        bypass = MetricGeneralGraphBuilder.<TPoint3i>builder().a(p3i(1,1,3), p3i(16,16,3), sqrt(15*15*2)).build();
+        layeredGraph0 = new MetricCompositeGraph<>(grid);
+        layeredGraph1 = new MetricCompositeGraph<>(grid,bypass);
         blocks0 = TList.sof(
                 p3i(0,0,0),p3i(1,0,0),p3i(2,0,0),p3i(0,1,0),p3i(1,1,0),p3i(2,1,0),p3i(0,2,0),p3i(1,2,0),p3i(2,2,0)
         );

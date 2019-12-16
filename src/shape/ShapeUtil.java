@@ -94,6 +94,9 @@ public class ShapeUtil {
     public static TList<TPoint3i> p3is(Integer... v) {
         return TList.set(a2l(v)).fold(3).map(l->p3i(l.get(0), l.get(1), l.get(2)));
     }
+    public static TList<Integer> pni(Integer... v) {
+        return TList.sof(v);
+    }
     public static TTupleNi tni(List<Integer> vs) {
         return new TTupleNi(vs);
     }

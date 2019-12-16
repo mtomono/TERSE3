@@ -3,9 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package solver.graphMetric;
+package solver.graph;
 
-import solver.graph.BareGraph;
 import collection.MVMap;
 import collection.P;
 import collection.TList;
@@ -18,30 +17,27 @@ import java.util.Set;
  * @author masao
  * @param <K>
  */
-public class GeneralGraph<K> implements BareGraph<K> {
-    MVMap<K,K> body;
-    Map<P<K,K>,Double> metric;
+public class MetricGeneralGraph<K> implements MetricGraph<K> {
+    MVMap<K,P<K,Double>> body;
     
-    public GeneralGraph(Map<K,TList<K>> body, Map<P<K,K>,Double> metric) {
+    public MetricGeneralGraph(Map<K,TList<P<K,Double>>> body) {
         this.body = new MVMap<>(body);
-        this.metric=metric;
     }
     @Override
-    public TList<K> next(K from) {
+    public TList<P<K,Double>> next(K from) {
         return body.getList(from);
     }
     
     @Override
     public TList<K> all() {
         Set<K> retval = new HashSet<>(body.keySet());
-        for (TList<K> v : body.values())
-            retval.addAll(v);
+        for (TList<P<K,Double>> v : body.values())
+            retval.addAll(v.map(p->p.l()));
         return TList.set(retval);
     }
     
-    public GeneralGraph<K> addPath(K from, K to, double distance) {
-        body.getList(from).add(to);
-        metric.put(P.p(from, to), distance);
+    public MetricGeneralGraph<K> addPath(K from, K to, double distance) {
+        body.getList(from).add(P.p(to, distance));
         return this;
     }
 }

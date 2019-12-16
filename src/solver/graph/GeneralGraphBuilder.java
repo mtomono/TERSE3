@@ -24,44 +24,26 @@ public class GeneralGraphBuilder<K> {
         this.body=new MVMap<>(new HashMap<>());
     }
     
-    static class FromToCost<K> {
-        K from;
-        K to;
-        Double cost;
-        
-        public FromToCost(K from, K to,Double cost) {
-            this.from=from;
-            this.to=to;
-            this.cost=cost;
-        }
-        public K key() {
-            return from;
-        }
-        public P<K,Double> value() {
-            return P.p(to,cost);
-        }
-    }
-
-    public static <K> Map<K,TList<P<K,Double>>> graph(Object... fromToCosts) {
-        MVMap<K,P<K,Double>> retval = new MVMap(new HashMap<>());
-        TList.sof(fromToCosts).fold(3).map(p->new FromToCost<>((K)p.get(0),(K)p.get(1),(Double)p.get(2))).forEach(f->retval.getList(f.key()).add(f.value()));
+    public static <K> Map<K,TList<K>> graph(K... fromTo) {
+        MVMap<K,K> retval = new MVMap(new HashMap<>());
+        TList.sof(fromTo).fold(2).map(p->P.p(p.get(0),p.get(1))).forEach(f->retval.getList(f.l()).add(f.r()));
         return retval;
     }
     
-    MVMap<K,P<K,Double>> body;
+    MVMap<K,K> body;
     
-    public GeneralGraphBuilder<K> merge(Object... fromToCosts) {
-        this.body.merge(GeneralGraphBuilder.graph(fromToCosts));
+    public GeneralGraphBuilder<K> merge(K... fromTo) {
+        this.body.merge(GeneralGraphBuilder.graph(fromTo));
         return this;
     }
     
-    public GeneralGraphBuilder<K> a(K from, K to, double cost) {
-        body.getList(from).add(P.p(to, cost));
+    public GeneralGraphBuilder<K> a(K from, K to) {
+        body.getList(from).add(to);
         return this;
     }
     
-    public GeneralGraph<K> build(Object... fromToCosts) {
-        return new GeneralGraph<>(body.merge(graph(fromToCosts)));
+    public GeneralGraph<K> build(K... fromTo) {
+        return new GeneralGraph<>(body.merge(graph(fromTo)));
     }
     
     public GeneralGraph<K> build() {

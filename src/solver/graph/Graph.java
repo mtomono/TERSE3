@@ -12,7 +12,7 @@ import collection.TList;
  *
  * @author masao
  */
-public interface BareGraph<K> {
+public interface Graph<K> {
     public TList<K> next(K from);
     public TList<K> all();
 }

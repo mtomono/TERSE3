@@ -18,36 +18,36 @@ import shapeCollection.GridCoord;
  *
  * @author masao
  */
-public class GridGraph2dBuilder {
+public class MetricGridGraph2dBuilder {
     GridCoord gcoord;
     TList<TPoint2i> dirs;
     TVector3d weight;
     
-    public static GridGraph2dBuilder builder(int... end) {
+    public static MetricGridGraph2dBuilder builder(int... end) {
         return builder(GridCoord.gcoord(end));
     }
     
-    public static GridGraph2dBuilder builder(GridCoord gcoord) {
-        return new GridGraph2dBuilder(gcoord);
+    public static MetricGridGraph2dBuilder builder(GridCoord gcoord) {
+        return new MetricGridGraph2dBuilder(gcoord);
     }
     
-    public GridGraph2dBuilder(GridCoord gcoord) {
+    public MetricGridGraph2dBuilder(GridCoord gcoord) {
         this.gcoord=gcoord;
         this.dirs=gcoord.dirsAlternate().map(d->p2i(d)).sfix();
         this.weight=vector3(1,1,3);
     }
         
-    public GridGraph2dBuilder alt() {
+    public MetricGridGraph2dBuilder alt() {
         this.dirs=gcoord.dirsAlternate().map(d->p2i(d));
         return this;
     }
     
-    public GridGraph2dBuilder weight(double... weight) {
+    public MetricGridGraph2dBuilder weight(double... weight) {
         this.weight=vector3(wrap(weight));
         return this;
     }
     
-    public GridGraph<TPoint2i> build() {
-        return new GridGraph<>(gcoord,dirs,weight,ShapeUtil::p2i);
+    public MetricGridGraph<TPoint2i> build() {
+        return new MetricGridGraph<>(gcoord,dirs,weight,ShapeUtil::p2i);
     }
 }

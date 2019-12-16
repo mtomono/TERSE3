@@ -11,33 +11,34 @@ import collection.TList;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import solver.graph.Graph;
 
 /**
  *
  * @author masao
  * @param <K>
  */
-public class GeneralGraph<K> implements MetricGraph<K> {
-    MVMap<K,P<K,Double>> body;
+public class GeneralGraph<K> implements Graph<K> {
+    MVMap<K,K> body;
     
-    public GeneralGraph(Map<K,TList<P<K,Double>>> body) {
+    public GeneralGraph(Map<K,TList<K>> body) {
         this.body = new MVMap<>(body);
     }
     @Override
-    public TList<P<K,Double>> next(K from) {
+    public TList<K> next(K from) {
         return body.getList(from);
     }
     
     @Override
     public TList<K> all() {
         Set<K> retval = new HashSet<>(body.keySet());
-        for (TList<P<K,Double>> v : body.values())
-            retval.addAll(v.map(p->p.l()));
+        for (TList<K> v : body.values())
+            retval.addAll(v);
         return TList.set(retval);
     }
     
-    public GeneralGraph<K> addPath(K from, K to, double distance) {
-        body.getList(from).add(P.p(to, distance));
+    public GeneralGraph<K> addPath(K from, K to) {
+        body.getList(from).add(to);
         return this;
     }
 }

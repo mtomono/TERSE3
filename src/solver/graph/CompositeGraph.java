@@ -5,28 +5,25 @@
  */
 package solver.graph;
 
-import collection.P;
 import collection.TList;
-import solver.graph.MetricGraph;
 
 /**
  *
  * @author masao
- * @param <K>
  */
-public class LayeredGraph<K> implements MetricGraph<K> {
-    final public TList<MetricGraph<K>> body;
+public class CompositeGraph<K> implements Graph<K> {
+    final public TList<Graph<K>> body;
     
-    public LayeredGraph(TList<MetricGraph<K>> body) {
+    public CompositeGraph(TList<Graph<K>> body) {
         this.body = body;
     }
     
-    public LayeredGraph(MetricGraph<K>... body) {
+    public CompositeGraph(Graph<K>... body) {
         this(TList.sof(body));
     }
 
     @Override
-    public TList<P<K, Double>> next(K from) {
+    public TList<K> next(K from) {
         return body.map(g->g.next(from)).sfix().flatMap(l->l).sfix();
     }
 

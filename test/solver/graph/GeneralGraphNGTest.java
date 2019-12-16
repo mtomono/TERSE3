@@ -15,10 +15,10 @@ import org.testng.annotations.Test;
  * @author masao
  */
 public class GeneralGraphNGTest {
-    GeneralGraph<Integer> graph;
+    MetricGeneralGraph<Integer> graph;
     public GeneralGraphNGTest() {
-        graph = new GeneralGraph<>(new HashMap<>());
-        graph = GeneralGraphBuilder.<Integer>builder()
+        graph = new MetricGeneralGraph<>(new HashMap<>());
+        graph = MetricGeneralGraphBuilder.<Integer>builder()
                 .a(0, 1, 1)
                 .a(0, 2, 7)
                 .a(0, 3, 2)
