@@ -40,9 +40,4 @@ public class GeneralGraph<K> implements MetricGraph<K> {
         body.getList(from).add(P.p(to, distance));
         return this;
     }
-
-    @Override
-    public double heuristic(K from, K to) {
-        return 0;
-    }
 }

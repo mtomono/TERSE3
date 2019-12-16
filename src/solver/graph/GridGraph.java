@@ -35,11 +35,6 @@ public class GridGraph<K extends List<Integer>> implements MetricGraph<K> {
     public double cost(List<Integer> k) {
         return VectorOp.dot(weight, TList.set(k).map(i->abs(i)));
     }
-
-    @Override
-    public double heuristic(K from, K to) {
-        return cost(VectorOp.subI(to,from));
-    }
     
     @Override
     public TList<P<K, Double>> next(K from) {

@@ -6,6 +6,7 @@
 package solver.graph;
 
 import collection.TList;
+import java.util.List;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import static shape.ShapeUtil.p3i;
@@ -18,6 +19,7 @@ import shape.TPoint3i;
 public class GridGraph3NGTest {
     GridGraph<TPoint3i> graph;
     TList<TPoint3i> blocks;
+    Metric<List<Integer>> l1=Metric.weighted(Metric.l1(), TList.sof(1,1,3));
     public GridGraph3NGTest() {
         graph = GridGraph3dBuilder.builder(0,0,0, 20,20,20).build();
         blocks = TList.sof(
@@ -48,7 +50,7 @@ public class GridGraph3NGTest {
     @Test
     public void testFindCost() {
         System.out.println(test.TestUtils.methodName(0));
-        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(graph,p3i(10,0,0),p3i(20,9,9)).earlyExit().astar().white(blocks).build();
+        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(graph,p3i(10,0,0),p3i(20,9,9)).earlyExit().astar(l1).white(blocks).build();
         d.fillLoop();
         double result = d.findCost().get();
         double expected = 46;
@@ -60,7 +62,7 @@ public class GridGraph3NGTest {
     @Test
     public void testFindRoute() {
         System.out.println(test.TestUtils.methodName(0));
-        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(graph,p3i(10,0,0),p3i(20,9,9)).earlyExit().astar().white(blocks).build();
+        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(graph,p3i(10,0,0),p3i(20,9,9)).earlyExit().astar(l1).white(blocks).build();
         d.fill();
         TList<TPoint3i> result= d.findRoute();
         TList<TPoint3i> expected = TList.sof(p3i(10,0,0), p3i(11,0,0), p3i(12,0,0), p3i(12,0,1), p3i(12,1,1), p3i(12,1,2), p3i(12,2,2), p3i(13,2,2), p3i(13,2,3), p3i(13,3,3), p3i(14,3,3), p3i(14,3,4), p3i(14,4,4), p3i(15,4,4), p3i(15,4,5), p3i(15,5,5), p3i(16,5,5), p3i(16,5,6), p3i(16,6,6), p3i(17,6,6), p3i(17,6,7), p3i(17,7,7), p3i(18,7,7), p3i(18,7,8), p3i(18,8,8), p3i(19,8,8), p3i(19,8,9), p3i(19,9,9), p3i(20,9,9));
@@ -72,7 +74,7 @@ public class GridGraph3NGTest {
     @Test
     public void testFindRouteLoop() {
         System.out.println(test.TestUtils.methodName(0));
-        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(graph,p3i(10,0,0),p3i(20,9,9)).earlyExit().astar().white(blocks).build();
+        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(graph,p3i(10,0,0),p3i(20,9,9)).earlyExit().astar(l1).white(blocks).build();
         d.fillLoop();
         TList<TPoint3i> result= d.findRoute();
         TList<TPoint3i> expected = TList.sof(p3i(10,0,0), p3i(11,0,0), p3i(12,0,0), p3i(12,0,1), p3i(12,1,1), p3i(12,1,2), p3i(12,2,2), p3i(13,2,2), p3i(13,2,3), p3i(13,3,3), p3i(14,3,3), p3i(14,3,4), p3i(14,4,4), p3i(15,4,4), p3i(15,4,5), p3i(15,5,5), p3i(16,5,5), p3i(16,5,6), p3i(16,6,6), p3i(17,6,6), p3i(17,6,7), p3i(17,7,7), p3i(18,7,7), p3i(18,7,8), p3i(18,8,8), p3i(19,8,8), p3i(19,8,9), p3i(19,9,9), p3i(20,9,9));
@@ -84,7 +86,7 @@ public class GridGraph3NGTest {
     @Test
     public void testFindCost2Recursion() {
         System.out.println(test.TestUtils.methodName(0));
-        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(graph,p3i(10,0,0),p3i(20,9,20)).fullSearch().astar().build();
+        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(graph,p3i(10,0,0),p3i(20,9,20)).fullSearch().astar(l1).build();
         d.fill();
         double result = d.findCost().get();
         double expected = 79.0;
@@ -96,7 +98,7 @@ public class GridGraph3NGTest {
     @Test
     public void testFindCost2Loop() {
         System.out.println(test.TestUtils.methodName(0));
-        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(graph,p3i(10,0,0),p3i(20,9,20)).fullSearch().astar().build();
+        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(graph,p3i(10,0,0),p3i(20,9,20)).fullSearch().astar(l1).build();
         d.fillLoop();
         double result = d.findCost().get();
         double expected = 79.0;
@@ -108,7 +110,7 @@ public class GridGraph3NGTest {
     @Test
     public void testFindRoute2Recursion() {
         System.out.println(test.TestUtils.methodName(0));
-        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(graph,p3i(10,0,0),p3i(20,9,20)).fullSearch().astar().build();
+        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(graph,p3i(10,0,0),p3i(20,9,20)).fullSearch().astar(l1).build();
         d.fill();
         TList<TPoint3i> result = d.findRoute();
         TList<TPoint3i> expected = TList.sof(p3i(10,0,0), p3i(11,0,0), p3i(12,0,0), p3i(12,1,0), p3i(12,1,1), p3i(12,1,2), p3i(12,1,3), p3i(12,1,4), p3i(12,2,4), p3i(12,3,4), p3i(12,3,5), p3i(12,3,6), p3i(12,4,6), p3i(12,5,6), p3i(13,5,6), p3i(14,5,6), p3i(15,5,6), p3i(16,5,6), p3i(16,6,6), p3i(16,6,7), p3i(17,6,7), p3i(17,7,7), p3i(17,7,8), p3i(17,7,9), p3i(17,7,10), p3i(17,7,11), p3i(17,7,12), p3i(17,7,13), p3i(17,7,14), p3i(17,7,15), p3i(17,7,16), p3i(17,7,17), p3i(17,7,18), p3i(17,7,19), p3i(17,8,19), p3i(18,8,19), p3i(18,8,20), p3i(18,9,20), p3i(19,9,20), p3i(20,9,20));
@@ -120,7 +122,7 @@ public class GridGraph3NGTest {
     @Test
     public void testFindRoute2Loop() {
         System.out.println(test.TestUtils.methodName(0));
-        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(graph,p3i(10,0,0),p3i(20,9,20)).fullSearch().astar().build();
+        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(graph,p3i(10,0,0),p3i(20,9,20)).fullSearch().astar(l1).build();
         d.fillLoop();
         TList<TPoint3i> result = d.findRoute();
         //TList<TPoint3i> expected = TList.sof(p3i(10,0,0), p3i(11,0,0), p3i(12,0,0), p3i(12,1,0), p3i(12,1,1), p3i(12,1,2), p3i(12,1,3), p3i(12,1,4), p3i(12,1,5), p3i(12,1,6), p3i(12,1,7), p3i(12,1,8), p3i(12,1,9), p3i(12,1,10), p3i(12,1,11), p3i(12,1,12), p3i(12,1,13), p3i(12,2,13), p3i(12,3,13), p3i(12,3,14), p3i(12,4,14), p3i(12,5,14), p3i(12,5,15), p3i(12,5,16), p3i(12,5,17), p3i(12,5,18), p3i(12,5,19), p3i(13,5,19), p3i(14,5,19), p3i(15,5,19), p3i(16,5,19), p3i(17,5,19), p3i(18,5,19), p3i(19,5,19), p3i(20,5,19), p3i(20,6,19), p3i(20,6,20), p3i(20,7,20), p3i(20,8,20), p3i(20,9,20));
@@ -133,7 +135,7 @@ public class GridGraph3NGTest {
     @Test
     public void testFindRouteEarly2Recursion() {
         System.out.println(test.TestUtils.methodName(0));
-        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(graph,p3i(10,0,0),p3i(20,9,20)).earlyExit().astar().build();
+        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(graph,p3i(10,0,0),p3i(20,9,20)).earlyExit().astar(l1).build();
         d.fill();
         TList<TPoint3i> result = d.findRoute();
         //TList<TPoint3i> expected = TList.sof(p3i(10,0,0), p3i(11,0,0), p3i(12,0,0), p3i(12,1,0), p3i(12,1,1), p3i(12,1,2), p3i(12,1,3), p3i(12,1,4), p3i(12,1,5), p3i(12,1,6), p3i(12,1,7), p3i(12,1,8), p3i(12,1,9), p3i(12,1,10), p3i(12,1,11), p3i(12,1,12), p3i(12,1,13), p3i(12,2,13), p3i(12,3,13), p3i(12,3,14), p3i(12,4,14), p3i(12,5,14), p3i(12,5,15), p3i(12,5,16), p3i(12,5,17), p3i(12,5,18), p3i(12,5,19), p3i(13,5,19), p3i(14,5,19), p3i(15,5,19), p3i(16,5,19), p3i(17,5,19), p3i(18,5,19), p3i(19,5,19), p3i(20,5,19), p3i(20,6,19), p3i(20,6,20), p3i(20,7,20), p3i(20,8,20), p3i(20,9,20));
@@ -146,7 +148,7 @@ public class GridGraph3NGTest {
     @Test
     public void testFindRouteEarly2Loop() {
         System.out.println(test.TestUtils.methodName(0));
-        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(graph,p3i(10,0,0),p3i(20,9,20)).earlyExit().astar().build();
+        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(graph,p3i(10,0,0),p3i(20,9,20)).earlyExit().astar(l1).build();
         d.fillLoop();
         TList<TPoint3i> result = d.findRoute();
         //TList<TPoint3i> expected = TList.sof(p3i(10,0,0), p3i(11,0,0), p3i(12,0,0), p3i(12,1,0), p3i(12,1,1), p3i(12,1,2), p3i(12,1,3), p3i(12,1,4), p3i(12,1,5), p3i(12,1,6), p3i(12,1,7), p3i(12,1,8), p3i(12,1,9), p3i(12,1,10), p3i(12,1,11), p3i(12,1,12), p3i(12,1,13), p3i(12,2,13), p3i(12,3,13), p3i(12,3,14), p3i(12,4,14), p3i(12,5,14), p3i(12,5,15), p3i(12,5,16), p3i(12,5,17), p3i(12,5,18), p3i(12,5,19), p3i(13,5,19), p3i(14,5,19), p3i(15,5,19), p3i(16,5,19), p3i(17,5,19), p3i(18,5,19), p3i(19,5,19), p3i(20,5,19), p3i(20,6,19), p3i(20,6,20), p3i(20,7,20), p3i(20,8,20), p3i(20,9,20));

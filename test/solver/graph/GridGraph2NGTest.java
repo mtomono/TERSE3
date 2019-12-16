@@ -6,6 +6,7 @@
 package solver.graph;
 
 import collection.TList;
+import java.util.List;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import static shape.ShapeUtil.p2i;
@@ -18,6 +19,7 @@ import shape.TPoint2i;
 public class GridGraph2NGTest {
     GridGraph<TPoint2i> graph;
     TList<TPoint2i> blocks;
+    Metric<List<Integer>> l1=Metric.weighted(Metric.l1(), TList.sof(1,1));
     public GridGraph2NGTest() {
         graph = GridGraph2dBuilder.builder(0,0, 20,20).build();
         blocks = TList.sof(
@@ -38,7 +40,7 @@ public class GridGraph2NGTest {
     @Test
     public void testFindCost() {
         System.out.println(test.TestUtils.methodName(0));
-        NodeGraph<TPoint2i> d = NodeGraphBuilder.builder(graph,p2i(10,0),p2i(20,9)).earlyExit().astar().white(blocks).build();
+        NodeGraph<TPoint2i> d = NodeGraphBuilder.builder(graph,p2i(10,0),p2i(20,9)).earlyExit().astar(l1).white(blocks).build();
         d.fill();
         double result = d.findCost().get();
         double expected = 19;
@@ -50,7 +52,7 @@ public class GridGraph2NGTest {
     @Test
     public void testFindRoute() {
         System.out.println(test.TestUtils.methodName(0));
-        NodeGraph<TPoint2i> d = NodeGraphBuilder.builder(graph,p2i(1,0),p2i(3,3)).earlyExit().astar().block(blocks).build();
+        NodeGraph<TPoint2i> d = NodeGraphBuilder.builder(graph,p2i(1,0),p2i(3,3)).earlyExit().astar(l1).block(blocks).build();
         d.fill();
         TList<TPoint2i> result= d.findRoute();
         TList<TPoint2i> expected = TList.sof(p2i(1,0), p2i(2,0), p2i(2,1), p2i(2,2), p2i(2,3), p2i(3,3));

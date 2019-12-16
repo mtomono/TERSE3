@@ -15,5 +15,4 @@ import collection.TList;
 public interface MetricGraph<K> {
     public TList<P<K,Double>> next(K from);
     public TList<K> all();
-    public double heuristic(K from, K to);
 }

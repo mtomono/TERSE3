@@ -29,9 +29,4 @@ public class MetricizedGraph<K> implements MetricGraph<K> {
     public TList<K> all() {
         return base.all();
     }
-
-    @Override
-    public double heuristic(K from, K to) {
-        return metric.measure(from, to);
-    }
 }

@@ -9,7 +9,6 @@ import solver.graph.BareGraph;
 import solver.graph.Metric;
 import collection.P;
 import collection.TList;
-import debug.Te;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Optional;

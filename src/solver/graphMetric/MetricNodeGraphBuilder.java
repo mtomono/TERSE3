@@ -8,7 +8,6 @@ package solver.graphMetric;
 import solver.graph.BareGraph;
 import solver.graph.Metric;
 import collection.TList;
-import debug.Te;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;

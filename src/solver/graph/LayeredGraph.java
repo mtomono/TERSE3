@@ -34,10 +34,4 @@ public class LayeredGraph<K> implements MetricGraph<K> {
     public TList<K> all() {
         return body.map(g->g.all()).sfix().flatMap(l->l).sfix();
     }
-
-    @Override
-    public double heuristic(K from, K to) {
-        return body.map(g->g.heuristic(from,to)).filter(d->d<=0).minval(d->d).orElse(0.0);
-    }
-    
 }

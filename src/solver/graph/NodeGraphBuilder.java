@@ -49,14 +49,9 @@ public class NodeGraphBuilder<K> {
         graph.all().forEach(k->built.nodes.put(k,new Node(k)));
         return this;
     }
-    public NodeGraphBuilder<K> astar() {
+    public NodeGraphBuilder<K> astar(Metric<? super K> heuristic) {
         assert built != null : "nodeGraph is not ready";
-        graph.all().forEach(k->built.nodes.put(k,new AStarNode(k,graph.heuristic(k,to))));
-        return this;
-    }
-    public NodeGraphBuilder<K> astar(BiFunction<K,K,Double> heuristic) {
-        assert built != null : "nodeGraph is not ready";
-        graph.all().forEach(k->built.nodes.put(k,new AStarNode(k,heuristic.apply(k,to))));
+        graph.all().forEach(k->built.nodes.put(k,new AStarNode(k,heuristic.measure(k,to))));
         return this;
     }
     public NodeGraphBuilder<K> block(Collection<K> blocks) {
