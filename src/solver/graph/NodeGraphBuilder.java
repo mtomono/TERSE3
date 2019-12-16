@@ -32,6 +32,9 @@ public class NodeGraphBuilder<K> {
         this.from=from;
         this.to=to;
     }
+    public NodeGraphBuilder(Metric<K> metric, Graph<K> graph, K from, K to) {
+        this(new MetricizedGraph<>(metric, graph), from, to);
+    }
     public NodeGraphBuilder<K> mapSupplier(Supplier<Map<K,Node<K>>> nodesSupplier) {
         this.nodesSupplier = nodesSupplier;
         return this;
