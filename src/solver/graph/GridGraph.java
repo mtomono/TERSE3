@@ -9,7 +9,6 @@ import collection.TList;
 import java.util.List;
 import math.VectorOp;
 import shapeCollection.GridCoord;
-import solver.graph.Graph;
 
 /**
  *

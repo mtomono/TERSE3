@@ -6,6 +6,8 @@
 package solver.graph;
 
 import collection.TList;
+import java.util.List;
+import static shape.ShapeUtil.point3;
 import shape.TMatrix3d;
 import shape.TPoint3d;
 import shape.TVector3d;
@@ -40,5 +42,13 @@ public class LocalCoord {
     
     public TPoint3d globalize(TPoint3d p) {
         return globalize.transformToPoint(p).addR(origin);
+    }
+    
+    public TPoint3d globalize(List<Integer> p) {
+        return globalize(point3(TList.set(p).map(i->i.doubleValue())));
+    }
+    
+    public List<Integer> round(List<Double> point) {
+        return TList.set(point).map(v->(int)Math.round(v)).sfix();
     }
 }
