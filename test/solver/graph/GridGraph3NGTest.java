@@ -9,7 +9,6 @@ import collection.TList;
 import java.util.List;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
-import static shape.ShapeUtil.p3i;
 import static shape.ShapeUtil.pni;
 
 /**
@@ -19,7 +18,7 @@ import static shape.ShapeUtil.pni;
 public class GridGraph3NGTest {
     GridGraph graph;
     TList<List<Integer>> blocks;
-    Metric<List<Integer>> l1 = Metric.weighted(Metric.l1(),pni(1,1,3));
+    Metric<List<Integer>> l1=Metric.<Double>l1().morph(Metric.weight(TList.sof(1,1,3)));
     public GridGraph3NGTest() {
         graph = GridGraphBuilder.builder(0,0,0, 20,20,20).build();
         blocks = TList.sof(

@@ -26,7 +26,7 @@ public class MetricCompositeGraphNGTest {
     TList<TPoint3i> blocks2;
     MetricCompositeGraph<TPoint3i> layeredGraph0;
     MetricCompositeGraph<TPoint3i> layeredGraph1;
-    Metric<List<Integer>> l1=Metric.weighted(Metric.l2(), TList.sof(1,1,3));
+    Metric<List<Integer>> l2=Metric.<Double>l2().morph(Metric.weight(TList.sof(1,1,3)));
     public MetricCompositeGraphNGTest() {
         grid = MetricGridGraph3dBuilder.builder(0,0,0, 20,20,5).build();
         bypass = MetricGeneralGraphBuilder.<TPoint3i>builder().a(p3i(1,1,3), p3i(16,16,3), sqrt(15*15*2)).build();
@@ -64,7 +64,7 @@ public class MetricCompositeGraphNGTest {
     @Test(expectedExceptions=AssertionError.class)
     public void testFromIsReacheable() {
         System.out.println(test.TestUtils.methodName(0));
-        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(layeredGraph0,p3i(15,18,0),p3i(17,15,4)).earlyExit().astar(l1).white(blocks2).build();
+        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(layeredGraph0,p3i(15,18,0),p3i(17,15,4)).earlyExit().astar(l2).white(blocks2).build();
         d.fillLoop();
         TList<TPoint3i> result = d.findRoute();
         int expected = 0;
@@ -76,7 +76,7 @@ public class MetricCompositeGraphNGTest {
     @Test(expectedExceptions=AssertionError.class)
     public void testToIsReacheable() {
         System.out.println(test.TestUtils.methodName(0));
-        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(layeredGraph0,p3i(15,16,0),p3i(17,18,4)).earlyExit().astar(l1).white(blocks2).build();
+        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(layeredGraph0,p3i(15,16,0),p3i(17,18,4)).earlyExit().astar(l2).white(blocks2).build();
         d.fillLoop();
         TList<TPoint3i> result = d.findRoute();
         int expected = 0;
@@ -88,7 +88,7 @@ public class MetricCompositeGraphNGTest {
     @Test
     public void testFindCostInBlocks1() {
         System.out.println(test.TestUtils.methodName(0));
-        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(layeredGraph0,p3i(0,1,0),p3i(2,0,4)).earlyExit().astar(l1).white(blocks1).build();
+        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(layeredGraph0,p3i(0,1,0),p3i(2,0,4)).earlyExit().astar(l2).white(blocks1).build();
         d.fillLoop();
         double result = d.findCost().get();
         double expected = 15;
@@ -100,7 +100,7 @@ public class MetricCompositeGraphNGTest {
     @Test
     public void testFindRouteInBlocks1() {
         System.out.println(test.TestUtils.methodName(0));
-        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(layeredGraph0,p3i(0,1,0),p3i(2,0,4)).earlyExit().astar(l1).white(blocks1).build();
+        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(layeredGraph0,p3i(0,1,0),p3i(2,0,4)).earlyExit().astar(l2).white(blocks1).build();
         d.fillLoop();
         TList<TPoint3i> result = d.findRoute();
         TList<TPoint3i> expected = TList.sof(p3i(0,1,0), p3i(0,1,1), p3i(0,1,2), p3i(0,1,3), p3i(1,1,3), p3i(1,0,3), p3i(1,0,4), p3i(2,0,4));
@@ -112,7 +112,7 @@ public class MetricCompositeGraphNGTest {
     @Test
     public void testFindCostInBlocks2() {
         System.out.println(test.TestUtils.methodName(0));
-        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(layeredGraph0,p3i(15,16,0),p3i(17,15,4)).earlyExit().astar(l1).white(blocks2).build();
+        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(layeredGraph0,p3i(15,16,0),p3i(17,15,4)).earlyExit().astar(l2).white(blocks2).build();
         d.fillLoop();
         double result = d.findCost().get();
         double expected = 15;
@@ -124,7 +124,7 @@ public class MetricCompositeGraphNGTest {
     @Test
     public void testFindRouteInBlocks2() {
         System.out.println(test.TestUtils.methodName(0));
-        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(layeredGraph0,p3i(15,16,0),p3i(17,15,4)).earlyExit().astar(l1).white(blocks2).build();
+        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(layeredGraph0,p3i(15,16,0),p3i(17,15,4)).earlyExit().astar(l2).white(blocks2).build();
         d.fillLoop();
         TList<TPoint3i> result = d.findRoute();
         TList<TPoint3i> expected = TList.sof(p3i(15,16,0), p3i(15,16,1), p3i(15,16,2), p3i(15,16,3), p3i(16,16,3), p3i(16,15,3), p3i(16,15,4), p3i(17,15,4));
@@ -136,7 +136,7 @@ public class MetricCompositeGraphNGTest {
     @Test
     public void testFindCostInBlocks1x2() {
         System.out.println(test.TestUtils.methodName(0));
-        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(layeredGraph0,p3i(0,1,0),p3i(17,15,4)).earlyExit().astar(l1).white(blocks1.append(blocks2)).build();
+        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(layeredGraph0,p3i(0,1,0),p3i(17,15,4)).earlyExit().astar(l2).white(blocks1.append(blocks2)).build();
         d.fillLoop();
         Optional<Double> result = d.findCost();
         Optional<Double> expected = Optional.empty();
@@ -148,7 +148,7 @@ public class MetricCompositeGraphNGTest {
     @Test
     public void testFindCostInBlocks1x2wBypass() {
         System.out.println(test.TestUtils.methodName(0));
-        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(layeredGraph1,p3i(0,1,0),p3i(17,15,4)).earlyExit().astar(l1).white(blocks1.append(blocks2)).build();
+        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(layeredGraph1,p3i(0,1,0),p3i(17,15,4)).earlyExit().astar(l2).white(blocks1.append(blocks2)).build();
         d.fillLoop();
         double result = d.findCost().get();
         double expected = 36.21320343559643;
@@ -160,7 +160,7 @@ public class MetricCompositeGraphNGTest {
     @Test
     public void testFindRouteInBlocks1x2wBypass() {
         System.out.println(test.TestUtils.methodName(0));
-        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(layeredGraph1,p3i(0,1,0),p3i(17,15,4)).earlyExit().astar(l1).white(blocks1.append(blocks2)).build();
+        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(layeredGraph1,p3i(0,1,0),p3i(17,15,4)).earlyExit().astar(l2).white(blocks1.append(blocks2)).build();
         d.fillLoop();
         TList<TPoint3i> result = d.findRoute();
         TList<TPoint3i> expected = TList.sof(p3i(0,1,0), p3i(1,1,0), p3i(1,1,1), p3i(1,1,2), p3i(1,1,3), p3i(16,16,3), p3i(17,16,3), p3i(17,15,3), p3i(17,15,4));

@@ -19,7 +19,7 @@ import shape.TPoint2i;
 public class MetricGridGraph0NGTest {
     MetricGridGraph<TPoint2i> graph;
     TList<TPoint2i> blocks;
-    Metric<List<Integer>> l1=Metric.weighted(Metric.l1(), TList.sof(1,1,3));
+    Metric<List<Integer>> l1=Metric.<Double>l1().morph(Metric.weight(TList.sof(1,1,3)));
     public MetricGridGraph0NGTest() {
         graph = MetricGridGraph2dBuilder.builder(0,0, 5,5).build();
         blocks = TList.sof(

@@ -19,7 +19,7 @@ import static java.lang.Math.abs;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 import java.util.List;
-import math.VectorOp;
+import java.util.function.Function;
 
 /**
  *
@@ -28,14 +28,16 @@ import math.VectorOp;
 @FunctionalInterface
 public interface Metric<K> {
     public double measure(K from, K to);
+    default public <S> Metric<S> morph(Function<S,K> morph) {
+        return (f,t)->measure(morph.apply(f),morph.apply(t));
+    }
     static public <K extends Number> Metric<List<K>> l2() {
         return (f,t)->sqrt(TList.set(t).pair(f,(x,y)->(pow(x.doubleValue()-y.doubleValue(),2))).sumD(i->i));
     }
     static public <K extends Number> Metric<List<K>> l1() {
         return (f,t)->TList.set(t).pair(f,(x,y)->abs(x.doubleValue()-y.doubleValue())).sumD(i->i);
     }
-    static public <K extends Number> Metric<List<K>> weighted(Metric<List<Double>> base, List<? extends Number> weight) {
-        TList<? extends Number> w = TList.set(weight);
-        return (f,t)->base.measure(w.pair(f,(a,b)->a.doubleValue()*b.doubleValue()),w.pair(t,(a,b)->a.doubleValue()*b.doubleValue()));
+    static public <N extends Number> Function<List<N>,List<Double>> weight(TList<? extends Number> weight) {
+        return l->weight.pair(l,(a,b)->a.doubleValue()*b.doubleValue());
     }
 }

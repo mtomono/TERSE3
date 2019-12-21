@@ -26,7 +26,7 @@ public class CompositeGraphNGTest {
     TList<List<Integer>> blocks2;
     CompositeGraph<List<Integer>> compositeGraph0;
     CompositeGraph<List<Integer>> compositeGraph1;
-    Metric<List<Integer>> l1=Metric.weighted(Metric.l2(), pni(1,1,3));
+    Metric<List<Integer>> l1=Metric.<Double>l2().morph(Metric.weight(pni(1,1,3)));
     public CompositeGraphNGTest() {
         grid = GridGraphBuilder.builder(0,0,0, 20,20,5).build();
         bypass = GeneralGraphBuilder.<List<Integer>>builder().a(pni(1,1,3), pni(16,16,3)).build();

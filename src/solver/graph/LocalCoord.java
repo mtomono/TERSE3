@@ -15,6 +15,7 @@
 package solver.graph;
 
 import collection.TList;
+import static java.lang.Double.min;
 import java.util.List;
 import static shape.ShapeUtil.point3;
 import static shape.ShapeUtil.vector3;
@@ -63,5 +64,27 @@ public class LocalCoord {
     
     public List<Integer> round(List<Double> point) {
         return TList.set(point).map(v->(int)Math.round(v)).sfix();
+    }
+    
+    public double hvRatio() {
+        return bases.get(3).length()/min(bases.get(0).length(),bases.get(1).length());
+    }
+    
+    public double compensateHv(double targetRatio) {
+        return targetRatio/hvRatio();
+    }
+    
+    public TList<List<Integer>> grids(TList<TPoint3d> line) {
+        return line.map(x->localize(x)).diff((a,b)->toCube(a,b)).sfix().flatMap(l->l).sfix();
+    }
+
+    public TList<List<Integer>> toCube(TList<TPoint3d> localLine) {
+        return localLine.diff((a,b)->toCube(a,b)).sfix().flatMap(p->p).sfix();
+    }
+    
+    public TList<List<Integer>> toCube(TPoint3d localFrom, TPoint3d localTo) {
+        if (Metric.<Integer>l1().measure(round(localTo),round(localFrom))<1)
+            return TList.wrap(round(localTo));
+        return cubes.go(localFrom, localTo);
     }
 }
