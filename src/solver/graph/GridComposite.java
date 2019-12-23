@@ -53,12 +53,11 @@ public class GridComposite implements GridSpace {
     }
     
     @Override
-    public TList<List<Integer>> grids(TList<TPoint3d> line) {
-        return TList.range(0,grids.size()).map(i->grids.get(i).coord.grids(line).filter(g->grids.get(i).graph.gcoord.contains(g))
-                    .map(l->(List<Integer>)TList.set(l).startFrom(i).sfix())).sfix().flatMap(l->l);
+    public TList<List<Integer>> toCube(TList<TPoint3d> line) {
+        return TList.range(0,grids.size()).map(i->grids.get(i).toCube(line).map(l->(List<Integer>)TList.set(l).insertAt(0,i))).sfix().flatMap(l->l).sfix();
     }
     
-    @Override
+    @Override    
     public Metric<List<Integer>> metric(double weight) {
         return baseMetric.morph(Metric.<Double>weight(TList.sof(1,1,compensateHv(weight))).compose(this::globalize));
     }

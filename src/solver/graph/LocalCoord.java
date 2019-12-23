@@ -50,6 +50,10 @@ public class LocalCoord {
         return localize.transformToPoint(p.subR(origin));
     }
     
+    public TList<TPoint3d> localize(TList<TPoint3d> globalLine) {
+        return globalLine.map(x->localize(x));
+    }
+    
     public TVector3d globalize(TVector3d v) {
         return globalize.transformToVector(v);
     }
@@ -74,10 +78,6 @@ public class LocalCoord {
         return targetRatio/hvRatio();
     }
     
-    public TList<List<Integer>> grids(TList<TPoint3d> line) {
-        return line.map(x->localize(x)).diff((a,b)->toCube(a,b)).sfix().flatMap(l->l).sfix();
-    }
-
     public TList<List<Integer>> toCube(TList<TPoint3d> localLine) {
         return localLine.diff((a,b)->toCube(a,b)).sfix().flatMap(p->p).sfix();
     }

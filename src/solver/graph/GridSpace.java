@@ -38,6 +38,6 @@ public interface GridSpace {
 
     Optional<List<Integer>> localize(TPoint3d point);
 
-    TList<List<Integer>> grids(TList<TPoint3d> line);
+    TList<List<Integer>> toCube(TList<TPoint3d> line);
 
 }

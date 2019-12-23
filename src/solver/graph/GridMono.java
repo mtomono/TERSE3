@@ -17,7 +17,8 @@ package solver.graph;
 import collection.TList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
+import static shape.ShapeUtil.point2;
+import static shape.ShapeUtil.vector2;
 import shape.TPoint3d;
 
 /**
@@ -54,7 +55,11 @@ public class GridMono implements GridSpace{
     public TPoint3d globalize(List<Integer> point) {
         return coord.globalize(point);
     }
-
+    
+    public TList<TPoint3d> globalize(TList<List<Integer>> cubes) {
+        return cubes.map(p->coord.globalize(p));
+    }
+    
     @Override
     public Optional<List<Integer>> localize(TPoint3d point) {
         List<Integer> retval= coord.round(coord.localize(point));
@@ -62,8 +67,31 @@ public class GridMono implements GridSpace{
     }
 
     @Override
-    public TList<List<Integer>> grids(TList<TPoint3d> line) {
-        return coord.grids(line).filter(g->graph.gcoord.contains(g));
+    public TList<List<Integer>> toCube(TList<TPoint3d> line) {
+        return coord.toCube(coord.localize(line)).filter(g->graph.gcoord.contains(g)).sfix();
     }
-
+    
+    public TList<List<Integer>> toCube(TPoint3d from, TPoint3d to) {
+        return coord.toCube(coord.localize(from),coord.localize(to)).filter(g->graph.gcoord.contains(g)).sfix();
+    }
+    
+    static TList<TList<Integer>> dirs = TList.sof(TList.sof(-1,-1),TList.sof(1,-1),TList.sof(1,1),TList.sof(-1,1)); //ll->lr->ur->ul
+    
+    public TList<TPoint3d> rect(List<Integer> ll, List<Integer> ur, double height) {
+        return dirs.map(l->l.map(i->i<0?ll:ur)).map(p->point2(p.get(0).get(0),p.get(1).get(1)))
+                .pair(dirs.map(l->vector2(l.get(0),l.get(1))), (a,b)->a.addR(b.scaleR(0.5))).map(d->coord.globalize(d.expand(height)));
+    }
+    
+    public TList<TPoint3d> bottom(List<Integer> ll, List<Integer> ur) {
+        return rect(ll,ur,ll.get(2)-0.5);
+    }
+    
+    public TList<TPoint3d> top(List<Integer> ll, List<Integer> ur) {
+        return rect(ll,ur,ur.get(2)+0.5);
+    }
+    
+    public TList<TPoint3d> circumference() {
+        TList<List<Integer>> ranges=graph.gcoord.axis.map(a->a.vr).map(r->TList.sof(r.start,r.end-1)).transpose(l->l);
+        return bottom(ranges.get(0),ranges.get(1));
+    }
 }
