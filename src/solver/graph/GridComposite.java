@@ -29,6 +29,8 @@ public class GridComposite implements GridSpace {
     final public Metric<List<Double>> baseMetric;
     
     public GridComposite(CompositeGraph<List<Integer>> graph, TList<GridMono> grids, Metric<List<Double>> baseMetric) {
+        assert !grids.isEmpty() : "grids cannot be empty";
+        assert grids.forAll(g->graph.body.contains(g)) : "wrong grid is included in grids";
         this.graph=graph;
         this.grids=grids;
         this.baseMetric = baseMetric;
@@ -64,6 +66,6 @@ public class GridComposite implements GridSpace {
     
     @Override
     public double compensateHv(double target) {
-        return grids.minval(g->g.coord.compensateHv(target)).orElseThrow(()->new RuntimeException("grids are empty"));
+        return grids.minval(g->g.coord.compensateHv(target)).orElseThrow(()->new RuntimeException("this can't happen"));
     }
 }
