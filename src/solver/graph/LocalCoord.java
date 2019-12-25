@@ -22,6 +22,7 @@ import static shape.ShapeUtil.vector3;
 import shape.TMatrix3d;
 import shape.TPoint3d;
 import shape.TVector3d;
+import static shape.TVector3d.zero;
 import shapeCollection.Cubes;
 
 /**
@@ -34,12 +35,16 @@ public class LocalCoord {
     final public TMatrix3d globalize;
     final public TMatrix3d localize;
     final public Cubes cubes;
+    final public TVector3d center;
+    final public double radius;
     public LocalCoord(TList<TVector3d> bases, TPoint3d origin) {
         this.bases=bases;
         this.origin=origin;
         this.globalize=TMatrix3d.coordinateTransform(bases.get(0), bases.get(1), bases.get(2));
         this.localize=globalize.invertR();
         this.cubes = new Cubes(vector3(-0.5,-0.5,-0.5), vector3(1d,1d,1d));
+        this.center=bases.accum(zero, (a,b)->a.addR(b)).last().scaleR(0.5);
+        this.radius=bases.append(zero).map(p->center.subR(p).length()).maxval(d->d).orElseThrow(()->new RuntimeException("never happen"));
     }
     
     public TVector3d localize(TVector3d v) {
