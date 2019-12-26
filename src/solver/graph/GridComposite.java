@@ -30,7 +30,7 @@ public class GridComposite implements GridSpace {
     
     public GridComposite(CompositeGraph<List<Integer>> graph, TList<GridMono> grids, Metric<List<Double>> baseMetric) {
         assert !grids.isEmpty() : "grids cannot be empty";
-        assert grids.forAll(g->graph.body.contains(g)) : "wrong grid is included in grids";
+        assert grids.forAll(g->graph.body.contains(g.graph)) : "wrong grid is included in grids";
         this.graph=graph;
         this.grids=grids;
         this.baseMetric = baseMetric;
