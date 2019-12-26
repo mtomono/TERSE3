@@ -86,7 +86,7 @@ public class Cubes {
     static public TList<List<Integer>> toCubes(List<Double> zero, List<Double> factor, List<Double> from, List<Double> to, double norm) {
         TList<ScaledAxis> axis = toAxis(zero, factor, from, to);
         TList<Integer> initial = toStartingCube(axis);
-        return hitToCube(initial, mergeAndSortHits(hits(normalize(axis, norm), axis)));
+        return hitToCube(initial, mergeAndSortHits(hits(normalize(axis, norm), axis))).map(c->TList.set(c).sfix());
     }
 
     static public TList<Integer> add(TList<Integer> cube, List<Integer> vector) {
