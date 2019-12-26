@@ -62,8 +62,12 @@ public class GridMono implements GridSpace{
     
     @Override
     public Optional<List<Integer>> localize(TPoint3d point) {
-        List<Integer> retval= coord.round(coord.localize(point));
+        List<Integer> retval= forceLocalize(point);
         return graph.gcoord.contains(retval)?Optional.of(retval):Optional.empty();
+    }
+    
+    public List<Integer> forceLocalize(TPoint3d point) {
+        return coord.round(coord.localize(point));
     }
 
     @Override
