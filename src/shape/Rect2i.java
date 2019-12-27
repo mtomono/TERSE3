@@ -99,6 +99,8 @@ public class Rect2i {
         Rect2i t = (Rect2i) e;
         return one.equals(t.one)&&two.equals(t.two);
     }
+    
+    @Override
     public String toString() {
         return one.toString()+"<->"+two;
     }
