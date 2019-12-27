@@ -16,7 +16,7 @@ import static shape.TPoint3d.zero;
 import static shape.TVector3d.x1;
 import static shape.TVector3d.y1;
 import static shape.TVector3d.z1;
-import solver.graph.LocalCoord;
+import solver.graph.GridCore;
 
 /**
  *
@@ -27,7 +27,7 @@ public class GridTriangleNGTest {
     public GridTriangleNGTest() {
     }
     
-    LocalCoord coord = new LocalCoord(TList.sof(x1,y1,z1),zero);
+    GridCore coord = new GridCore(TList.sof(x1,y1,z1),zero);
     
     @Test
     public void testLongestEdgeFromX() {

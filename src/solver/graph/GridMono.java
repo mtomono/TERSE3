@@ -15,22 +15,27 @@
 package solver.graph;
 
 import collection.TList;
+import static java.lang.Double.min;
 import java.util.List;
 import java.util.Optional;
+import static math.VectorOp.round;
 import static shape.ShapeUtil.point2;
 import static shape.ShapeUtil.vector2;
 import shape.TPoint3d;
 
 /**
- *
+ * Single Grid.
+ * this implements functionality for GridSpace made of one grid.
+ * at the same time, a grid has a specific shape, so this class comes with a
+ * methods which reveal it.
  * @author masao
  */
 public class GridMono implements GridSpace{
     final public GridGraph graph;
     final public Metric<List<Double>> baseMetric;
-    final public LocalCoord coord;
+    final public GridCore coord;
     
-    public GridMono(GridGraph graph, LocalCoord coord, Metric<List<Double>>baseMetric) {
+    public GridMono(GridGraph graph, GridCore coord, Metric<List<Double>>baseMetric) {
         this.graph=graph;
         this.coord=coord;
         this.baseMetric=baseMetric;
@@ -48,12 +53,16 @@ public class GridMono implements GridSpace{
 
     @Override
     public double compensateHv(double target) {
-        return coord.compensateHv(target);
+        return target/hvRatio();
     }
 
+    public double hvRatio() {
+        return coord.bases.get(2).length()/min(coord.bases.get(0).length(),coord.bases.get(1).length());
+    }
+    
     @Override
-    public TPoint3d globalize(List<Integer> point) {
-        return coord.globalize(point);
+    public TPoint3d globalize(List<Integer> cube) {
+        return coord.globalize(cube);
     }
     
     public TList<TPoint3d> globalize(TList<List<Integer>> cubes) {
@@ -62,14 +71,10 @@ public class GridMono implements GridSpace{
     
     @Override
     public Optional<List<Integer>> localize(TPoint3d point) {
-        List<Integer> retval= forceLocalize(point);
+        List<Integer> retval= round(coord.localize(point));
         return graph.gcoord.contains(retval)?Optional.of(retval):Optional.empty();
     }
     
-    public List<Integer> forceLocalize(TPoint3d point) {
-        return coord.round(coord.localize(point));
-    }
-
     @Override
     public TList<List<Integer>> toCube(TList<TPoint3d> line) {
         return coord.toCube(coord.localize(line)).filter(g->graph.gcoord.contains(g)).sfix();
@@ -78,6 +83,8 @@ public class GridMono implements GridSpace{
     public TList<List<Integer>> toCube(TPoint3d from, TPoint3d to) {
         return coord.toCube(coord.localize(from),coord.localize(to)).filter(g->graph.gcoord.contains(g)).sfix();
     }
+    
+    // shape of this.
     
     static TList<TList<Integer>> dirs = TList.sof(TList.sof(-1,-1),TList.sof(1,-1),TList.sof(1,1),TList.sof(-1,1)); //ll->lr->ur->ul
     

@@ -16,15 +16,10 @@ package solver.graph.gridShape;
 
 import collection.P;
 import collection.TList;
-import static collection.c.a2l;
 import static java.lang.Math.abs;
 import java.util.List;
-import static shape.ShapeUtil.p2i;
-import static shape.ShapeUtil.p3i;
 import shape.TPoint2d;
-import shape.TPoint2i;
-import shape.TPoint3i;
-import solver.graph.LocalCoord;
+import solver.graph.GridCore;
 
 /**
  *
@@ -32,8 +27,8 @@ import solver.graph.LocalCoord;
  */
 public class GridTriangle {
     TList<TPoint2d> shape;
-    LocalCoord coord;
-    public GridTriangle(TList<TPoint2d> shape, LocalCoord coord) {
+    GridCore coord;
+    public GridTriangle(TList<TPoint2d> shape, GridCore coord) {
         this.shape=close(shape.rotate(longestEdgeFromX(close(shape))));
         this.coord=coord;
     }

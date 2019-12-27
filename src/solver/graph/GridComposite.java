@@ -17,6 +17,7 @@ package solver.graph;
 import collection.TList;
 import java.util.List;
 import java.util.Optional;
+import static math.VectorOp.round;
 import shape.TPoint3d;
 
 /**
@@ -46,7 +47,7 @@ public class GridComposite implements GridSpace {
     
     @Override
     public Optional<List<Integer>> localize(TPoint3d point) {
-        return grids.map(g->g.coord.round(g.coord.localize(point))).pair(TList.range(0,grids.size())).stream().filter(p->grids.get(p.r()).graph.gcoord.contains(p.l())).findFirst().map(p->TList.set(p.l()).startFrom(p.r()));
+        return grids.map(g->round(g.coord.localize(point))).pair(TList.range(0,grids.size())).stream().filter(p->grids.get(p.r()).graph.gcoord.contains(p.l())).findFirst().map(p->TList.set(p.l()).startFrom(p.r()));
     }
     
     @Override
@@ -66,6 +67,6 @@ public class GridComposite implements GridSpace {
     
     @Override
     public double compensateHv(double target) {
-        return grids.minval(g->g.coord.compensateHv(target)).orElseThrow(()->new RuntimeException("this can't happen"));
+        return grids.minval(g->g.compensateHv(target)).orElseThrow(()->new RuntimeException("this can't happen"));
     }
 }

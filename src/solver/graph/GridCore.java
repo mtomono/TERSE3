@@ -15,8 +15,8 @@
 package solver.graph;
 
 import collection.TList;
-import static java.lang.Double.min;
 import java.util.List;
+import static math.VectorOp.round;
 import static shape.ShapeUtil.point3;
 import static shape.ShapeUtil.vector3;
 import shape.TMatrix3d;
@@ -26,10 +26,12 @@ import static shape.TVector3d.zero;
 import shapeCollection.Cubes;
 
 /**
- *
+ * Core of Grid system.
+ * very basic coordination system. also, divides spece into cubes.
+ * everything is in blinded manner, meaning, doesn't know where to stop.
  * @author masao
  */
-public class LocalCoord {
+public class GridCore {
     final public TList<TVector3d> bases;
     final public TPoint3d origin;
     final public TMatrix3d globalize;
@@ -37,7 +39,7 @@ public class LocalCoord {
     final public Cubes cubes;
     final public TVector3d center;
     final public double radius;
-    public LocalCoord(TList<TVector3d> bases, TPoint3d origin) {
+    public GridCore(TList<TVector3d> bases, TPoint3d origin) {
         assert !bases.isEmpty() : "bases cannot be empty";
         this.bases=bases;
         this.origin=origin;
@@ -56,6 +58,10 @@ public class LocalCoord {
         return localize.transformToPoint(p.subR(origin));
     }
     
+    public List<Integer> localizeIntoCube(TPoint3d p) {
+        return round(localize(p));
+    }
+    
     public TList<TPoint3d> localize(TList<TPoint3d> globalLine) {
         return globalLine.map(x->localize(x));
     }
@@ -71,19 +77,7 @@ public class LocalCoord {
     public TPoint3d globalize(List<Integer> p) {
         return globalize(point3(TList.set(p).map(i->i.doubleValue())));
     }
-    
-    public List<Integer> round(List<Double> point) {
-        return TList.set(point).map(v->(int)Math.round(v)).sfix();
-    }
-    
-    public double hvRatio() {
-        return bases.get(3).length()/min(bases.get(0).length(),bases.get(1).length());
-    }
-    
-    public double compensateHv(double targetRatio) {
-        return targetRatio/hvRatio();
-    }
-    
+        
     public TList<List<Integer>> toCube(TList<TPoint3d> localLine) {
         return localLine.diff((a,b)->toCube(a,b)).sfix().flatMap(p->p).sfix();
     }

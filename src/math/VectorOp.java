@@ -57,4 +57,8 @@ public class VectorOp {
     static public double dot(List<? extends Number>a, List<? extends Number> b) {
         return TList.set(a).pair(b, (x,y)->x.doubleValue()*y.doubleValue()).sumD(d->d);
     }
+    
+    static public List<Integer> round(List<Double> point) {
+        return TList.set(point).map(v->(int)Math.round(v)).sfix();
+    }
 }

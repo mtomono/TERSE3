@@ -20,7 +20,15 @@ import java.util.Optional;
 import shape.TPoint3d;
 
 /**
- *
+ * Space defined with grids.
+ * grids can be one, which are basically defined by GridCore.
+ * globalize and localize points in view of cube.
+ * when grids are multiple, it handles the situation by increasing the dimension of cube.
+ * in that case this class adds new dimension at the head of the list.
+ * 
+ * this class can produce metric for route searching. for that purpose, this comes with
+ * the facility of calculating compensation rate for horisontal vs vertical.
+ * 
  * @author masao
  */
 public interface GridSpace {
@@ -32,6 +40,7 @@ public interface GridSpace {
     double compensateHv(double target);
 
     TPoint3d globalize(List<Integer> point);
+    
     default TList<TPoint3d> globalize(TList<List<Integer>> points) {
         return points.map(p->globalize(p)).sfix();
     }
@@ -39,5 +48,4 @@ public interface GridSpace {
     Optional<List<Integer>> localize(TPoint3d point);
 
     TList<List<Integer>> toCube(TList<TPoint3d> line);
-
 }
