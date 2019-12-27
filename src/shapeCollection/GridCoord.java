@@ -214,6 +214,10 @@ public class GridCoord {
         return new GridCoord(retval);
     }
     
+    public TList<List<Integer>> llur() {
+        return axis.map(a->a.vr).map(r->TList.sof(r.start,r.end-1)).transpose(l->l);
+    }
+    
     @Override
     public String toString() {
         return axis.toString();

@@ -95,7 +95,7 @@ public class GridMono implements GridSpace{
     }
     
     public TList<TPoint3d> circumference() {
-        TList<List<Integer>> ranges=graph.gcoord.axis.map(a->a.vr).map(r->TList.sof(r.start,r.end-1)).transpose(l->l);
+        TList<List<Integer>> ranges=graph.gcoord.llur();
         return bottom(ranges.get(0),ranges.get(1));
     }
 }

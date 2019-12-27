@@ -17,6 +17,8 @@ package shape;
 
 import collection.TList;
 import static java.lang.Math.abs;
+import java.util.List;
+import static shape.ShapeUtil.p2i;
 
 /**
  * rectangle in 2d integer, of which sides are parallel to axis.
@@ -27,6 +29,10 @@ public class Rect2i {
     final public TPoint2i one;
     final public TPoint2i two;
     
+    static public Rect2i i2r(TList<List<Integer>> ps) {
+        return new Rect2i(ps.map(l->p2i(l)));
+    }
+    
     public Rect2i(TPoint2i one, TPoint2i two) {
         this.one = one;
         this.two = two;
@@ -35,7 +41,7 @@ public class Rect2i {
     public Rect2i(TList<TPoint2i> ps) {
         this(ps.get(0), ps.get(1));
     }
-    
+        
     static boolean containSym(int a, int b, int v) {
         if (a <= b)
             return a<=v&&v<=b;
@@ -82,6 +88,17 @@ public class Rect2i {
         return edge2().subList(0,abs(one.y-two.y)).append(edge3());
     }
     
+    @Override
+    public boolean equals(Object e) {
+        if (e == null) {
+            return false;
+        }
+        if (!(e instanceof Rect2i)) {
+            return false;
+        }
+        Rect2i t = (Rect2i) e;
+        return one.equals(t.one)&&two.equals(t.two);
+    }
     public String toString() {
         return one.toString()+"<->"+two;
     }
