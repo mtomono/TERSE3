@@ -57,7 +57,7 @@ public class GridMono implements GridSpace{
     }
 
     public double hvRatio() {
-        return coord.bases.get(2).length()/min(coord.bases.get(0).length(),coord.bases.get(1).length());
+        return coord.basis.get(2).length()/min(coord.basis.get(0).length(),coord.basis.get(1).length());
     }
     
     @Override
