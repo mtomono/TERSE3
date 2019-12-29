@@ -32,22 +32,18 @@ import shapeCollection.Cubes;
  * @author masao
  */
 public class GridCore {
-    final public TList<TVector3d> bases;
+    final public TList<TVector3d> basis;
     final public TPoint3d origin;
     final public TMatrix3d globalize;
     final public TMatrix3d localize;
     final public Cubes cubes;
-    final public TVector3d center;
-    final public double radius;
-    public GridCore(TList<TVector3d> bases, TPoint3d origin) {
-        assert !bases.isEmpty() : "bases cannot be empty";
-        this.bases=bases;
+    public GridCore(TList<TVector3d> basis, TPoint3d origin) {
+        assert !basis.isEmpty() : "bases cannot be empty";
+        this.basis=basis;
         this.origin=origin;
-        this.globalize=TMatrix3d.coordinateTransform(bases.get(0), bases.get(1), bases.get(2));
+        this.globalize=TMatrix3d.coordinateTransform(basis.get(0), basis.get(1), basis.get(2));
         this.localize=globalize.invertR();
         this.cubes = new Cubes(vector3(-0.5,-0.5,-0.5), vector3(1d,1d,1d));
-        this.center=bases.accum(zero, (a,b)->a.addR(b)).last().scaleR(0.5);
-        this.radius=bases.append(zero).map(p->center.subR(p).length()).maxval(d->d).orElseThrow(()->new RuntimeException("this can't happen"));
     }
     
     public TVector3d localize(TVector3d v) {
