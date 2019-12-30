@@ -14,6 +14,7 @@
  */
 package solver.graph;
 
+import collection.Scale;
 import collection.TList;
 import java.util.List;
 import java.util.Optional;
@@ -26,8 +27,12 @@ import shape.TPoint3d;
  */
 public class GridComposite implements GridSpace {
     final public CompositeGraph<List<Integer>> graph;
-    final public TList<GridMono> grids;
+    final public TList<GridMono> grids; //graphでの出現順とは別で構わない。graphは経路探索にしか使わないため。
     final public Metric<List<Double>> baseMetric;
+    
+    static public TList<Graph<List<Integer>>> extractGraph(TList<GridMono> gmonos) {
+        return gmonos.<Graph<List<Integer>>>map(g->g.graph);
+    }
     
     public GridComposite(CompositeGraph<List<Integer>> graph, TList<GridMono> grids, Metric<List<Double>> baseMetric) {
         assert !grids.isEmpty() : "grids cannot be empty";
@@ -57,7 +62,11 @@ public class GridComposite implements GridSpace {
     
     @Override
     public TList<List<Integer>> toCube(TList<TPoint3d> line) {
-        return TList.range(0,grids.size()).map(i->grids.get(i).toCube(line).map(l->(List<Integer>)TList.set(l).insertAt(0,i))).sfix().flatMap(l->l).sfix();
+        return grids.pair(new Scale(),(g,i)->g.toCube(line).map(l->(List<Integer>)TList.set(l).insertAt(0,i))).sfix().flatMap(l->l).sfix();
+    }
+    
+    public TList<List<Integer>> toCube(TPoint3d... line) {
+        return toCube(TList.sof(line));
     }
     
     @Override    

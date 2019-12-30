@@ -18,11 +18,13 @@ package shapeCollection;
 import static arithmetic.Arithmetic.ceil;
 import static arithmetic.Arithmetic.div;
 import static arithmetic.Arithmetic.floor;
+import debug.Te;
 import static java.lang.Math.abs;
 import static java.lang.Math.signum;
 import java.util.AbstractList;
 import java.util.NoSuchElementException;
 import static shape.ShapeUtil.err;
+import static todo.ToDo.todo;
 
 /**
  * Axis which are scaled.
@@ -36,10 +38,10 @@ import static shape.ShapeUtil.err;
  * @author mtomono
  */
 public class ScaledAxis extends AbstractList<Double> {
+    double zero; //start of scale.
     double pitch;
     double from;
     double to;
-    double zero;
     int fromStep;
     int toStep;
     int size;
@@ -63,12 +65,26 @@ public class ScaledAxis extends AbstractList<Double> {
         this.toStep = step(this.to);
         this.size = abs(toStep-fromStep);
     }
-        
+    
+    /**
+     * .
+     * how many steps of pitch to go from zero.
+     * 
+     * @param value
+     * @return 
+     */
     final int step(double value) {
         if (dir > 0)
             return (int)ceil.o(div.o(value-zero, pitch));
         else 
             return (int)floor.o(div.o(value-zero, pitch));
+    }
+    final int stepDebug(double value) {
+        todo("the problem here is caused by glitch of double");
+        if (dir > 0)
+            return Te.e("positive:",(int)ceil.o((double)Te.e("br:",div.o((double)Te.e("v-z:",value-zero), (double)Te.e("p:",pitch)))));
+        else 
+            return Te.e("negative:",(int)floor.o((double)Te.e("br:",div.o((double)Te.e("v-z:",value-zero), (double)Te.e("p:",pitch)))));
     }
     
     public int start() {
@@ -96,7 +112,8 @@ public class ScaledAxis extends AbstractList<Double> {
     }
     
     /**
-     * scale the axis using from as center.
+     * .
+     * scale the axis keeping 'from' unmoved.
      * this preserves containing readings.
      * @param rate
      * @return 

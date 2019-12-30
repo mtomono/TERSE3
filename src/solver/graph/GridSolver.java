@@ -14,11 +14,8 @@
  */
 package solver.graph;
 
-import collection.TList;
 import java.util.Collection;
 import java.util.List;
-import math.VectorOp;
-import shape.TPoint3d;
 
 /**
  *

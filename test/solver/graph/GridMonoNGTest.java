@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import static org.testng.Assert.assertEquals;
 import org.testng.annotations.Test;
+import static shape.ShapeUtil.pni;
 import static shape.ShapeUtil.point3;
 import static shape.ShapeUtil.vector3;
 import shape.TPoint3d;
@@ -69,6 +70,18 @@ public class GridMonoNGTest {
         TList<List<Integer>> expected = TList.sof(
                 TList.sof(3,0,3), TList.sof(2,0,3), TList.sof(2,0,2), TList.sof(2,1,2), TList.sof(1,1,2), 
                 TList.sof(1,1,1), TList.sof(1,2,1), TList.sof(0,2,1), TList.sof(0,2,0), TList.sof(0,3,0));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testToCube_fromOutside() {
+        System.out.println(test.TestUtils.methodName(0));
+        System.out.println(gmono.toCubeUnabridged(point3(5.5,-0.5,2),point3(-0.5,5.5,2)));
+        TList<List<Integer>> result = gmono.toCube(point3(5.5,-0.5,2),point3(-0.5,5.5,2));
+        TList<List<Integer>> expected = TList.sof(
+                TList.sof(1,0,0), TList.sof(0,0,0), TList.sof(0,1,0));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);

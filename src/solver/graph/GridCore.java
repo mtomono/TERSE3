@@ -22,7 +22,6 @@ import static shape.ShapeUtil.vector3;
 import shape.TMatrix3d;
 import shape.TPoint3d;
 import shape.TVector3d;
-import static shape.TVector3d.zero;
 import shapeCollection.Cubes;
 
 /**
@@ -82,5 +81,9 @@ public class GridCore {
         if (Metric.<Integer>l1().measure(round(localTo),round(localFrom))<1)
             return TList.wrap(round(localTo));
         return cubes.go(localFrom, localTo).sfix();
+    }
+    
+    public String toString() {
+        return basis.toString()+":"+origin;
     }
 }
