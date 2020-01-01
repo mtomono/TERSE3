@@ -88,6 +88,18 @@ public class GridMonoNGTest {
     }
 
     @Test
+    public void testToCube_fromOutside2() {
+        System.out.println(test.TestUtils.methodName(0));
+        System.out.println(gmono.toCubeUnabridged(point3(5,0,2),point3(0,5,2)));
+        TList<List<Integer>> result = gmono.toCube(point3(5,0,2),point3(0,5,2));
+        TList<List<Integer>> expected = TList.sof(
+                TList.sof(1,0,0), TList.sof(0,0,0), TList.sof(0,1,0));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
     public void testBottom() {
         System.out.println(test.TestUtils.methodName(0));
         TList<TPoint3d> result = gmono.bottom(TList.sof(0,0,0), TList.sof(0,0,0));

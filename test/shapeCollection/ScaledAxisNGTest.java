@@ -256,6 +256,14 @@ public class ScaledAxisNGTest {
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
     }
+    
+    @Test
+    public void testScale03sub() {
+        ScaledAxis sa = new ScaledAxis(-0.5, 1, 1.5, -1);
+        System.out.println(sa);
+        System.out.println(sa.scaleCalc(-0.4));
+        System.out.println(sa.scale(-0.4));
+    }
 
     @Test
     public void testScale03negative() {
@@ -264,11 +272,11 @@ public class ScaledAxisNGTest {
         ScaledAxis sa = new ScaledAxis(-0.5, 1, 1.5, -1);
         System.out.println(sa.scale(-0.4));
         System.out.println(sa);
-        List<Double> result = TList.set(sa.scale(-0.4)).sfix();
-        List<Double> expected = TList.sof(1.5,1.9,2.3);
+        TList<Double> result = TList.set(sa.scale(-0.4)).sfix();
+        TList<Double> expected = TList.sof(1.5,1.9,2.3);
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
-        assertEquals(result, expected);
+        result.pair(expected).forEach(p->assertEquals(p.l(),p.r(),err));
     }
 
     @Test

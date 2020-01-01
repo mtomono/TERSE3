@@ -18,6 +18,7 @@ package shapeCollection;
 import static arithmetic.Arithmetic.ceil;
 import static arithmetic.Arithmetic.div;
 import static arithmetic.Arithmetic.floor;
+import collection.TList;
 import debug.Te;
 import static java.lang.Math.abs;
 import static java.lang.Math.signum;
@@ -66,6 +67,17 @@ public class ScaledAxis extends AbstractList<Double> {
         this.size = abs(toStep-fromStep);
     }
     
+    protected ScaledAxis(ScaledAxis base, int fromStep, int toStep, double dir, int size) {
+        this.zero = base.zero;
+        this.pitch = base.pitch;
+        this.from = base.from;
+        this.to = base.to;
+        this.dir = dir;
+        this.fromStep = fromStep;
+        this.toStep = toStep;
+        this.size = size;
+    }
+    
     /**
      * .
      * how many steps of pitch to go from zero.
@@ -108,6 +120,10 @@ public class ScaledAxis extends AbstractList<Double> {
     }
     
     public ScaledAxis shift(double diff) {
+        return shiftCalc(diff).compensate(this);
+    }
+    
+    public ScaledAxis shiftCalc(double diff) {
         return new ScaledAxis(zero+diff, pitch, from+diff, to+diff);
     }
     
@@ -119,9 +135,33 @@ public class ScaledAxis extends AbstractList<Double> {
      * @return 
      */
     public ScaledAxis scale(double rate) {
+        return scaleCalc(rate).compensate(this);
+    }
+    
+    /**
+     * .
+     * scaling the axis have to keep 'from' and readings in steps.
+     * but this calculation cannot keep the readings because of the glitch in
+     * double calculation
+     * @param rate
+     * @return 
+     */
+    public ScaledAxis scaleCalc(double rate) {
         return new ScaledAxis((zero-from)*rate+from, pitch*abs(rate), from, (to-from)*rate+from);
     }
     
+    /**
+     * .
+     * shift and scale the axis keeping 'from' unmoved.
+     * this preserves containing readings.
+     * @param rate
+     * @return 
+     */
+    public ScaledAxis compensate(ScaledAxis original) {
+        int dir = (int)(this.dir*original.dir);
+        return new ScaledAxis(this,original.fromStep*dir,original.toStep*dir,this.dir,original.size);
+    }
+
     public ScaledAxis fit(double newFrom, double newTo) {
         if (abs(to-from) < err)
             return this;
