@@ -154,6 +154,13 @@ public class ScaledAxis extends AbstractList<Double> {
      * .
      * shift and scale the axis keeping 'from' unmoved.
      * this preserves containing readings.
+     * 
+     * in this solution, number of walls are forced to meet the original one.
+     * there's another choice.
+     * you could change the first item in Cubes to fit to the result of the original calculation of this
+     * class (meaning leave the error of double). that will also give you a legitimate sequence of cubes
+     * after all. but, as the author of this software, i believe this way of correction should be better.
+     * because it's better to follow easier principle even as a underlying class.
      * @param rate
      * @return 
      */
