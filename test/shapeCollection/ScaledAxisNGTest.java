@@ -249,7 +249,6 @@ public class ScaledAxisNGTest {
     public void testScale03() {
         System.out.println(test.TestUtils.methodName(0));
         ScaledAxis sa = new ScaledAxis(-0.5, 1, 1.5, -1);
-        System.out.println(sa.scale(0.4));
         List<Double> result = TList.set(sa.scale(0.4)).sfix();
         List<Double> expected = TList.sof(1.5,1.1,0.7);
         System.out.println("result  : " + result);
@@ -314,26 +313,15 @@ public class ScaledAxisNGTest {
         System.out.println("expected: " + expected);
         TList.set(result).pair(expected).forEach(p->assertEquals(p.l(),p.r(),err));
     }
-    
     @Test
-    public void testSpecificCase01() {
+    public void testFit05() {
         System.out.println(test.TestUtils.methodName(0));
         ScaledAxis sa = new ScaledAxis(-0.5, 1, 1.5, -1);
-        System.out.println(TList.set(sa).sfix());
-        System.out.println(sa.scale(1.0/2.5));
-        System.out.println(sa.scale(1.0/-2.5));
-        System.out.println(TList.set(sa.scale(1.0/2.5)).sfix());
-        ScaledAxis sa2 = new ScaledAxis(-0.5, 1, -1, 1.5);
-        System.out.println(TList.set(sa2.fit(0,1)).sfix());
-        int result = 0;
-        int expected = 0;
+        System.out.println(sa.fit(0, 1));
+        List<Double> result = TList.set(sa.fit(0, 1)).sfix();
+        List<Double> expected = TList.sof(0.0,0.4,0.8);
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
-        assertEquals(result, expected);
+        TList.set(result).pair(expected).forEach(p->assertEquals(p.l(),p.r(),err));
     }
-
-    @Test
-    public void testToString() {
-    }
-    
 }

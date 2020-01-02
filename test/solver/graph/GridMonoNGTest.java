@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Optional;
 import static org.testng.Assert.assertEquals;
 import org.testng.annotations.Test;
-import static shape.ShapeUtil.pni;
 import static shape.ShapeUtil.point3;
 import static shape.ShapeUtil.vector3;
 import shape.TPoint3d;
