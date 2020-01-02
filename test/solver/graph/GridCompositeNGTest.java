@@ -37,7 +37,7 @@ public class GridCompositeNGTest {
         GridCore coord=new GridCore(basis,origin);
         GridCoord gcoord=GridCoord.gcoord(fromAndTo);
         GridGraph graph=GridGraphBuilder.builder(gcoord).alt().build();
-        return new GridMono(graph,coord,Metric.l1());
+        return new GridMono(graph,coord);
     }
     public GridCompositeNGTest() {
         gmonos= TList.sof(
@@ -48,7 +48,7 @@ public class GridCompositeNGTest {
              pni(0,0,1,0),pni(1,1,0,0),
              pni(1,0,0,0),pni(0,0,0,0)
         );
-        grid=new GridComposite(new CompositeGraph<>(extractGraph(gmonos).append(links)), gmonos, Metric.l2());
+        grid=new GridComposite(new CompositeGraph<>(extractGraph(gmonos).append(links)), gmonos);
     }
 
     @Test

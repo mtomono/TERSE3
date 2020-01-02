@@ -35,10 +35,6 @@ public interface GridSpace {
     
     Graph<List<Integer>> graph();
     
-    Metric<List<Integer>> metric(double weight);
-    
-    double compensateHv(double target);
-
     TPoint3d globalize(List<Integer> point);
     
     default TList<TPoint3d> globalize(TList<List<Integer>> points) {

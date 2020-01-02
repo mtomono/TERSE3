@@ -40,4 +40,8 @@ public interface Metric<K> {
     static public <N extends Number> Function<List<N>,List<Double>> weight(TList<? extends Number> weight) {
         return l->weight.pair(l,(a,b)->a.doubleValue()*b.doubleValue());
     }
+    
+    static public <N extends Number> Function<List<N>,List<Double>> costv(double costv) {
+        return weight(TList.sof(1,1,costv));
+    }
 }

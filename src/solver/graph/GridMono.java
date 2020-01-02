@@ -32,32 +32,16 @@ import shape.TPoint3d;
  */
 public class GridMono implements GridSpace{
     final public GridGraph graph;
-    final public Metric<List<Double>> baseMetric;
     final public GridCore coord;
     
-    public GridMono(GridGraph graph, GridCore coord, Metric<List<Double>>baseMetric) {
+    public GridMono(GridGraph graph, GridCore coord) {
         this.graph=graph;
         this.coord=coord;
-        this.baseMetric=baseMetric;
     }
 
     @Override
     public Graph<List<Integer>> graph() {
         return graph;
-    }
-    
-    @Override
-    public Metric<List<Integer>> metric(double weight) {
-        return baseMetric.morph(Metric.weight(TList.sof(1,1,weight)));
-    }
-    
-    @Override
-    public double compensateHv(double target) {
-        return target/hvRatio();
-    }
-
-    public double hvRatio() {
-        return coord.basis.get(2).length()/min(coord.basis.get(0).length(),coord.basis.get(1).length());
     }
     
     @Override
