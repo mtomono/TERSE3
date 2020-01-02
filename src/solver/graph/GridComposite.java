@@ -70,12 +70,7 @@ public class GridComposite implements GridSpace {
     }
     
     @Override    
-    public Metric<List<Integer>> metric(double weight) {
-        return baseMetric.morph(Metric.<Double>weight(TList.sof(1,1,compensateHv(weight))).compose(this::globalize));
-    }
-    
-    @Override
-    public double compensateHv(double target) {
-        return grids.minval(g->g.compensateHv(target)).orElseThrow(()->new RuntimeException("this can't happen"));
+    public Metric<List<Integer>> metric(double costv) {
+        return baseMetric.morph(Metric.<Double>weight(TList.sof(1,1,costv)).compose(this::globalize));
     }
 }

@@ -26,9 +26,9 @@ public class GridSolver {
     Metric<List<Integer>> metric;
     NodeGraphBuilder<List<Integer>> ngb;
     
-    public GridSolver(GridSpace target, double weight, List<Integer> from, List<Integer> to) {
+    public GridSolver(GridSpace target, double costv, List<Integer> from, List<Integer> to) {
         this.target=target;
-        this.metric=target.metric(weight);
+        this.metric=target.metric(costv);
         this.ngb=NodeGraphBuilder.builder(metric, target.graph(), from, to);
     }
     

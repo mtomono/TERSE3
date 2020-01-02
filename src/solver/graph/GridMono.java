@@ -47,17 +47,8 @@ public class GridMono implements GridSpace{
     }
     
     @Override
-    public Metric<List<Integer>> metric(double weight) {
-        return baseMetric.morph(Metric.weight(TList.sof(1,1,weight)));
-    }
-    
-    @Override
-    public double compensateHv(double target) {
-        return target/hvRatio();
-    }
-
-    public double hvRatio() {
-        return coord.basis.get(2).length()/min(coord.basis.get(0).length(),coord.basis.get(1).length());
+    public Metric<List<Integer>> metric(double costv) {
+        return baseMetric.morph(Metric.weight(TList.sof(1,1,costv)));
     }
     
     @Override
