@@ -44,6 +44,11 @@ public class GridGraphBuilder {
         return this;
     }
         
+    public GridGraphBuilder alt3d() {
+        this.dirs=gcoord.dirsAlternate().subList(0,6).sfix();
+        return this;
+    }
+        
     public GridGraph build() {
         return new GridGraph(gcoord,dirs);
     }

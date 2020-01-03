@@ -52,17 +52,17 @@ public class GridComposite implements GridSpace {
     
     @Override
     public Optional<List<Integer>> localize(TPoint3d point) {
-        return grids.map(g->round(g.coord.localize(point))).pair(TList.range(0,grids.size())).stream().filter(p->grids.get(p.r()).graph.gcoord.contains(p.l())).findFirst().map(p->TList.set(p.l()).startFrom(p.r()));
+        return grids.map(g->round(g.coord.localize(point))).pair(TList.range(0,grids.size())).stream().filter(p->grids.get(p.r()).graph.gcoord.contains(p.l())).findFirst().map(p->TList.set(p.l()).append(p.r()));
     }
-    
+        
     @Override
     public TPoint3d globalize(List<Integer> point) {
-        return grids.get(point.get(0)).coord.globalize(point.subList(1, point.size()));
+        return grids.get(point.get(point.size()-1)).coord.globalize(point.subList(0, point.size()-1));
     }
     
     @Override
     public TList<List<Integer>> toCube(TList<TPoint3d> line) {
-        return grids.pair(new Scale(),(g,i)->g.toCube(line).map(l->(List<Integer>)TList.set(l).insertAt(0,i))).sfix().flatMap(l->l).sfix();
+        return grids.pair(new Scale(),(g,i)->g.toCube(line).map(l->(List<Integer>)TList.set(l).fix().addOne(i))).sfix().flatMap(l->l).sfix();
     }
     
     public TList<List<Integer>> toCube(TPoint3d... line) {
@@ -72,5 +72,12 @@ public class GridComposite implements GridSpace {
     @Override    
     public Metric<List<Integer>> metric(double costv) {
         return baseMetric.morph(Metric.<Double>weight(TList.sof(1,1,costv)).compose(this::globalize));
+    }
+    
+// debug methods
+    public TList<List<Integer>> showDirs() {
+        TList<List<Integer>> retval = graph.body.filter(g->g instanceof GridGraph).map(g->(GridGraph)g).flatMap(g->g.dirs);
+        System.out.println(retval);
+        return retval;
     }
 }
