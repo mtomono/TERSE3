@@ -38,7 +38,7 @@ public class GridBuilder {
         GridCore coord=new GridCore(basis,origin);
         GridCoord gcoord=GridCoord.gcoord(fromAndTo);
         GridGraph graph=GridGraphBuilder.builder(gcoord).alt3d().build();
-        return new GridMono(graph,coord,baseMetrics);
+        return new GridMono(graph,coord);
     }
     static public GridMono gmono(TList<TVector3d> basis, TPoint3d origin, int... fromAndTo) {
         return gmono(basis,origin,Metric.l1(),fromAndTo);
@@ -67,6 +67,6 @@ public class GridBuilder {
     }
     public GridComposite build() {
         assert gmonos != null : "gmonos is null";
-        return new GridComposite(new CompositeGraph<>(extractGraph(gmonos).append(gbuilder.build())), gmonos, baseMetric);
+        return new GridComposite(new CompositeGraph<>(extractGraph(gmonos).append(gbuilder.build())), gmonos);
     }
 }

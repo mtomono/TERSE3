@@ -24,7 +24,7 @@ public class GridMonoNGTest {
     GridCore coord = new GridCore(TList.sof(vector3(2,0,0),vector3(0,2,0),vector3(0,0,2)),point3(2,2,2));
     GridCoord gcoord = GridCoord.gcoord(0,0,0, 3,3,3);
     GridGraph graph = GridGraphBuilder.builder(gcoord).alt().build();
-    GridMono gmono = new GridMono(graph,coord,Metric.l1());
+    GridMono gmono = new GridMono(graph,coord);
     public GridMonoNGTest() {
     }
 

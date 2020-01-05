@@ -28,18 +28,16 @@ import shape.TPoint3d;
 public class GridComposite implements GridSpace {
     final public CompositeGraph<List<Integer>> graph;
     final public TList<GridMono> grids; //graphでの出現順とは別で構わない。graphは経路探索にしか使わないため。
-    final public Metric<List<Double>> baseMetric;
     
     static public TList<Graph<List<Integer>>> extractGraph(TList<GridMono> gmonos) {
         return gmonos.<Graph<List<Integer>>>map(g->g.graph);
     }
     
-    public GridComposite(CompositeGraph<List<Integer>> graph, TList<GridMono> grids, Metric<List<Double>> baseMetric) {
+    public GridComposite(CompositeGraph<List<Integer>> graph, TList<GridMono> grids) {
         assert !grids.isEmpty() : "grids cannot be empty";
         assert grids.forAll(g->graph.body.contains(g.graph)) : "wrong grid is included in grids";
         this.graph=graph;
         this.grids=grids;
-        this.baseMetric = baseMetric;
     }
     
     public Graph<List<Integer>> graph() {
@@ -47,7 +45,7 @@ public class GridComposite implements GridSpace {
     }
     
     public GridComposite depth(TList<Integer> depth) {
-        return new GridComposite(graph,this.grids.pickUp(depth),baseMetric);
+        return new GridComposite(graph,this.grids.pickUp(depth));
     }
     
     @Override

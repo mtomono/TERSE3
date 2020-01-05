@@ -31,13 +31,11 @@ import shape.TPoint3d;
  */
 public class GridMono implements GridSpace{
     final public GridGraph graph;
-    final public Metric<List<Double>> baseMetric;
     final public GridCore coord;
     
-    public GridMono(GridGraph graph, GridCore coord, Metric<List<Double>>baseMetric) {
+    public GridMono(GridGraph graph, GridCore coord) {
         this.graph=graph;
         this.coord=coord;
-        this.baseMetric=baseMetric;
     }
 
     @Override
