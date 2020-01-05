@@ -55,7 +55,6 @@ public class GridRoute {
     }
     
     public static TList<List<Integer>> tighten(TList<List<Integer>> path) {
-        System.out.println("target:"+path);
         return TList.sof(path,path.seek(1),path.seek(2)).transpose(l->l)
                 .filter(l->l.size()==3&&!VectorOp.subI(l.get(0), l.get(1)).equals(VectorOp.subI(l.get(1), l.get(2))))
                 .map(l->l.get(1)).startFrom(path.get(0)).append(path.last()).sfix();

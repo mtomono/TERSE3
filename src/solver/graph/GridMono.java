@@ -15,7 +15,6 @@
 package solver.graph;
 
 import collection.TList;
-import static java.lang.Double.min;
 import java.util.List;
 import java.util.Optional;
 import static math.VectorOp.round;
@@ -79,7 +78,7 @@ public class GridMono implements GridSpace{
         return dirs.map(l->l.map(i->i<0?ll:ur)).map(p->point2(p.get(0).get(0),p.get(1).get(1)))
                 .pair(dirs.map(l->vector2(l.get(0),l.get(1))), (a,b)->a.addR(b.scaleR(0.5))).map(d->coord.globalize(d.expand(height)));
     }
-    
+        
     public TList<TPoint3d> bottom(List<Integer> ll, List<Integer> ur) {
         return rect(ll,ur,ll.get(2)-0.5);
     }
@@ -88,8 +87,17 @@ public class GridMono implements GridSpace{
         return rect(ll,ur,ur.get(2)+0.5);
     }
     
-    public TList<TPoint3d> circumference() {
+    public TList<TPoint3d> bottom() {
         TList<List<Integer>> ranges=graph.gcoord.llur();
         return bottom(ranges.get(0),ranges.get(1));
+    }
+    
+    public TList<TPoint3d> top() {
+        TList<List<Integer>> ranges=graph.gcoord.llur();
+        return top(ranges.get(0),ranges.get(1));
+    }
+    
+    public TList<TPoint3d> circumference() {
+        return bottom();
     }
 }

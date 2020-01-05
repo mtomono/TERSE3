@@ -17,6 +17,7 @@ package solver.graph;
 import collection.TList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import shape.TPoint3d;
 
 /**
@@ -44,4 +45,18 @@ public interface GridSpace {
     Optional<List<Integer>> localize(TPoint3d point);
 
     TList<List<Integer>> toCube(TList<TPoint3d> line);
+    
+    default Metric<List<Integer>> globalMetric(Metric<List<Double>> base, double costv) {
+        return base.morph(Metric.<Double>weight(TList.sof(1,1,costv)).compose(this::globalize));
+    }
+    default Metric<List<Integer>> localMetric(Metric<List<Double>> base, double costv) {
+        return base.morph(Metric.weight(TList.sof(1,1,costv)));
+    }
+    
+    default Function<Double, Metric<List<Integer>>> globalMetricFactory(Metric<List<Double>> base) {
+        return costv->globalMetric(base,costv);
+    }
+    default Function<Double, Metric<List<Integer>>> localMetricFactory(Metric<List<Double>> base) {
+        return costv->localMetric(base,costv);
+    }
 }

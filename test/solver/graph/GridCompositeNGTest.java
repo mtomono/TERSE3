@@ -13,11 +13,10 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import static shape.ShapeUtil.pni;
 import static shape.ShapeUtil.point3;
-import static shape.ShapeUtil.vector3;
 import shape.TPoint3d;
-import shape.TVector3d;
-import shapeCollection.GridCoord;
-import static solver.graph.GridComposite.extractGraph;
+import static solver.graph.GridBuilder.basis;
+import static solver.graph.GridBuilder.gmono;
+import static solver.graph.GridBuilder.origin;
 
 /**
  *
@@ -25,30 +24,15 @@ import static solver.graph.GridComposite.extractGraph;
  */
 public class GridCompositeNGTest {
     GridComposite grid;
-    TList<GridMono> gmonos;
-    
-    static public TList<TVector3d> basis(double... v) {
-        return TList.sof(vector3(v[0],v[1],v[2]),vector3(v[3],v[4],v[5]),vector3(v[6],v[7],v[8]));
-    }
-    static public TPoint3d origin(double... v) {
-        return point3(v[0],v[1],v[2]);
-    }
-    static public GridMono gmono(TList<TVector3d> basis, TPoint3d origin, int... fromAndTo) {
-        GridCore coord=new GridCore(basis,origin);
-        GridCoord gcoord=GridCoord.gcoord(fromAndTo);
-        GridGraph graph=GridGraphBuilder.builder(gcoord).alt().build();
-        return new GridMono(graph,coord);
-    }
+        
     public GridCompositeNGTest() {
-        gmonos= TList.sof(
-            gmono(basis(2,0,0, 0,2,0, 0,0,2),origin(0,0,0), 0,0,0, 3,3,3),
-            gmono(basis(-1,1,0, -1,-1,0, 0,0,1),origin(-3,-2,0), 0,0,0, 2,2,2)
-        );
-        Graph<List<Integer>> links = GeneralGraphBuilder.<List<Integer>>builder().build(
+        grid=GridBuilder.builder().gmonos(
+            gmono(basis(2,0,0, 0,2,0, 0,0,2),origin(0,0,0), 0,0,0,0, 3,3,3,0),
+            gmono(basis(-1,1,0, -1,-1,0, 0,0,1),origin(-3,-2,0), 0,0,0,1, 2,2,2,1)
+        ).links(
              pni(0,0,1,0),pni(1,1,0,0),
              pni(1,0,0,0),pni(0,0,0,0)
-        );
-        grid=new GridComposite(new CompositeGraph<>(extractGraph(gmonos).append(links)), gmonos);
+        ).build();
     }
 
     @Test
@@ -64,9 +48,9 @@ public class GridCompositeNGTest {
     @DataProvider(name="localize")
     public Object[][] glpair() {
         return new Object[][] {
-            {point3(1.2,1.3,0),pni(0,1,1,0)},
-            {point3(-3.5,-2,0),pni(1,0,0,0)},
-            {point3(-4.5,-2,0),pni(1,1,1,0)}
+            {point3(1.2,1.3,0),pni(1,1,0,0)},
+            {point3(-3.5,-2,0),pni(0,0,0,1)},
+            {point3(-4.5,-2,0),pni(1,1,0,1)}
         };
     }
 
@@ -83,7 +67,7 @@ public class GridCompositeNGTest {
     @Test
     public void testGlobalize() {
         System.out.println(test.TestUtils.methodName(0));
-        TPoint3d result = grid.globalize(pni(1,2,1,0));
+        TPoint3d result = grid.globalize(pni(2,1,0,1));
         TPoint3d expected = point3(-6,-1,0);
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
@@ -94,14 +78,18 @@ public class GridCompositeNGTest {
     public void testToCube() {
         System.out.println(test.TestUtils.methodName(0));
         TList<List<Integer>> result = grid.toCube(point3(-10,-0.5,0),point3(10,-0.5,0));
-        TList<List<Integer>> expected = TList.sof(pni(0,0,0,0),pni(0,1,0,0),pni(0,2,0,0),pni(0,3,0,0),pni(1,2,1,0),pni(1,2,0,0),pni(1,1,0,0));
+        TList<List<Integer>> expected = TList.sof(pni(0,0,0,0),pni(1,0,0,0),pni(2,0,0,0),pni(3,0,0,0),pni(2,1,0,1),pni(2,0,0,1),pni(1,0,0,1));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
     }
-
-    @Test
-    public void testCompensateHv() {
-    }
     
+    @Test
+    public void testAll() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<List<Integer>> result = grid.graph.all();
+        System.out.println("result  : " + result);
+        result.forEach(l->assertEquals(l.size(), 4));
+    }
+
 }
