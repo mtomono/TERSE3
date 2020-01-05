@@ -15,7 +15,6 @@
 package solver.graph;
 
 import collection.TList;
-import static java.lang.Double.min;
 import java.util.List;
 import java.util.Optional;
 import static math.VectorOp.round;
