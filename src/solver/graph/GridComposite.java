@@ -69,11 +69,6 @@ public class GridComposite implements GridSpace {
         return toCube(TList.sof(line));
     }
     
-    @Override    
-    public Metric<List<Integer>> metric(double costv) {
-        return baseMetric.morph(Metric.<Double>weight(TList.sof(1,1,costv)).compose(this::globalize));
-    }
-    
 // debug methods
     public TList<List<Integer>> showDirs() {
         TList<List<Integer>> retval = graph.body.filter(g->g instanceof GridGraph).map(g->(GridGraph)g).flatMap(g->g.dirs);

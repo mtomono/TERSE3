@@ -28,16 +28,16 @@ public class GridSolver {
     Metric<List<Integer>> metric;
     NodeGraphBuilder<List<Integer>> ngb;
     
-    public GridSolver(GridSpace target, double costv, List<Integer> from, List<Integer> to) {
+    public GridSolver(GridSpace target, Metric<List<Integer>> metric, List<Integer> from, List<Integer> to) {
         this.target=target;
-        this.metric=target.metric(costv);
+        this.metric=metric;
         this.ngb=NodeGraphBuilder.builder(metric, target.graph(), from, to);
     }
     
-    public GridSolver(GridSpace target, double costv, TPoint3d from, TPoint3d to) {
+    public GridSolver(GridSpace target, Metric<List<Integer>> metric, TPoint3d from, TPoint3d to) {
         Supplier<RuntimeException> e=()->new RuntimeException("points are out of scope");
         this.target=target;
-        this.metric=target.metric(costv);
+        this.metric=metric;
         this.ngb=NodeGraphBuilder.builder(metric, target.graph(), target.localize(from).orElseThrow(e), target.localize(to).orElseThrow(e));
     }
     

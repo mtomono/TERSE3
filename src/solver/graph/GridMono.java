@@ -46,11 +46,6 @@ public class GridMono implements GridSpace{
     }
     
     @Override
-    public Metric<List<Integer>> metric(double costv) {
-        return baseMetric.morph(Metric.weight(TList.sof(1,1,costv)));
-    }
-    
-    @Override
     public TPoint3d globalize(List<Integer> cube) {
         return coord.globalize(cube);
     }

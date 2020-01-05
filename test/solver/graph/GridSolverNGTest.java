@@ -28,7 +28,7 @@ public class GridSolverNGTest {
     public void testMono() {
         System.out.println(test.TestUtils.methodName(0));
         GridMono gmono=gmono(basis(2,0,0, 0,2,0, 0,0,2),origin(0,0,0), 0,0,0, 3,3,3);
-        TList<List<Integer>> result = new GridSolver(gmono,3,point3(2,2,0),point3(6,6,4)).earlyExit().astar().solve().route();
+        TList<List<Integer>> result = new GridSolver(gmono,gmono.localMetric(Metric.l1(), 3), point3(2,2,0),point3(6,6,4)).earlyExit().astar().solve().route();
         TList<List<Integer>> expected = TList.sof(pni(1,1,0),pni(3,1,0),pni(3,1,2),pni(3,3,2));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
@@ -46,7 +46,7 @@ public class GridSolverNGTest {
              pni(0,0,0,1),pni(0,0,0,0)
         ).build();
 
-        TList<List<Integer>> result = new GridSolver(gcomp,3,point3(2,2,0),point3(-6,-1,0)).earlyExit().astar().solve().route();
+        TList<List<Integer>> result = new GridSolver(gcomp,gcomp.globalMetric(Metric.l2(), 3),point3(2,2,0),point3(-6,-1,0)).earlyExit().astar().solve().route();
         TList<List<Integer>> expected = TList.sof(pni(1,1,0,0),pni(0,1,0,0),pni(1,0,0,1),pni(2,0,0,1),pni(2,1,0,1));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
