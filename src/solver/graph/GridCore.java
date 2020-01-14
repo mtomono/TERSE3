@@ -20,8 +20,14 @@ import static math.VectorOp.round;
 import static shape.ShapeUtil.point3;
 import static shape.ShapeUtil.vector3;
 import shape.TMatrix3d;
+import shape.TPoint2d;
 import shape.TPoint3d;
 import shape.TVector3d;
+import static shape.TVector3d.x1;
+import static shape.TVector3d.y1;
+import static shape.TVector3d.z1;
+import static shape.TPoint3d.zero;
+import shape.TVector2d;
 import shapeCollection.Cubes;
 
 /**
@@ -31,11 +37,19 @@ import shapeCollection.Cubes;
  * @author masao
  */
 public class GridCore {
+    static public GridCore ortho = new GridCore(TList.sof(x1,y1,z1),zero);
     final public TList<TVector3d> basis;
     final public TPoint3d origin;
     final public TMatrix3d globalize;
     final public TMatrix3d localize;
     final public Cubes cubes;
+    
+    static public GridCore c2d(TList<TVector2d> basis, TPoint2d origin) {
+        return new GridCore(basis.map(v->v.expand()).append(z1),origin.expand());
+    }
+    static public GridCore c2d(TVector2d x, TVector2d y, TPoint2d origin) {
+        return c2d(TList.sof(x,y),origin);
+    }
     public GridCore(TList<TVector3d> basis, TPoint3d origin) {
         assert !basis.isEmpty() : "bases cannot be empty";
         this.basis=basis;
@@ -43,6 +57,11 @@ public class GridCore {
         this.globalize=TMatrix3d.coordinateTransform(basis.get(0), basis.get(1), basis.get(2));
         this.localize=globalize.invertR();
         this.cubes = new Cubes(vector3(-0.5,-0.5,-0.5), vector3(1d,1d,1d));
+    }
+    
+    
+    public boolean is2d() {
+        return basis.get(0).z==0&&basis.get(1).z==0&&basis.get(2).x==0&&basis.get(2).y==0;
     }
     
     public TVector3d localize(TVector3d v) {

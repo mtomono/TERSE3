@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package solver.graph.gridShape;
+package shapeCollection.gridShape;
 
 import collection.TList;
 import java.util.List;
@@ -33,7 +33,7 @@ public class GridTriangleNGTest {
     public void testLongestEdgeFromX() {
         System.out.println(test.TestUtils.methodName(0));
         TList<TPoint2d> tested = TList.sof(point2(0,0),point2(3,0),point2(5,5),point2(0,0));
-        int result = GridTriangle.longestEdgeFromX(tested);
+        int result = GTriangle.longestEdgeFromX(tested);
         int expected = 2;
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
@@ -43,7 +43,7 @@ public class GridTriangleNGTest {
     @Test
     public void testBottom() {
         System.out.println(test.TestUtils.methodName(0));
-        GridTriangle tested = new GridTriangle(TList.sof(point2(0,0),point2(3,0),point2(5,5)),coord);
+        GTriangle tested = new GTriangle(TList.sof(point2(0,0),point2(3,0),point2(5,5)),coord);
         TList<TPoint2d> result = tested.bottom();
         TList<TPoint2d> expected = TList.sof(point2(5,5),point2(0,0));
         System.out.println("result  : " + result);
@@ -54,7 +54,7 @@ public class GridTriangleNGTest {
     @Test
     public void testOthers() {
         System.out.println(test.TestUtils.methodName(0));
-        GridTriangle tested = new GridTriangle(TList.sof(point2(0,0),point2(3,0),point2(5,5)),coord);
+        GTriangle tested = new GTriangle(TList.sof(point2(0,0),point2(3,0),point2(5,5)),coord);
         TList<TPoint2d> result = tested.others();
         TList<TPoint2d> expected = TList.sof(point2(5,5),point2(3,0),point2(0,0));
         System.out.println("result  : " + result);
@@ -65,8 +65,8 @@ public class GridTriangleNGTest {
     @Test
     public void testFillingTiles() {
         System.out.println(test.TestUtils.methodName(0));
-        GridTriangle tested = new GridTriangle(TList.sof(point2(0,0),point2(3,0),point2(5,5)),coord);
-        TList<List<Integer>> result = tested.fillingTiles();
+        GTriangle tested = new GTriangle(TList.sof(point2(0,0),point2(3,0),point2(5,5)),coord);
+        TList<List<Integer>> result = tested.digitize();
         TList<List<Integer>> expected = TList.sof(p2i(5,4),p2i(5,5)
                 ,p2i(4,1),p2i(4,2),p2i(4,3),p2i(4,4),p2i(4,5)
                 ,p2i(3,0),p2i(3,1),p2i(3,2),p2i(3,3),p2i(3,4)

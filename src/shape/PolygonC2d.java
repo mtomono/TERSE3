@@ -18,7 +18,10 @@ import static arithmetic.Arithmetic.mod;
 import collection.TList;
 import static function.ComparePolicy.inc;
 import static java.lang.Math.abs;
+import java.util.List;
 import shape.PolygonC2d.Edge;
+import solver.graph.GridCore;
+import static solver.graph.GridCore.ortho;
 
 /**
  * Polygon Closed 2d.
@@ -27,20 +30,16 @@ import shape.PolygonC2d.Edge;
  * @author masao
  */
 public class PolygonC2d extends TList<TPoint2d> {
-    public static PolygonC2d c(TList<TPoint2d> vertices) {
+    public static PolygonC2d c(List<TPoint2d> vertices) {
         assert !vertices.isEmpty();
         return new PolygonC2d(vertices);
-    }
-    
-    public static PolygonC2d set(TList<TPoint2d> vertices) {
-        return c(vertices);
     }
     
     public static PolygonC2d c(TPoint2d... vertices) {
         return c(TList.of(vertices));
     }
     
-    PolygonC2d(TList<TPoint2d> vertices) {
+    PolygonC2d(List<TPoint2d> vertices) {
         super(vertices);
     }
     
@@ -52,7 +51,73 @@ public class PolygonC2d extends TList<TPoint2d> {
         return mod.o(p,size());
     }
     
-    public PolygonC2d subC(int a, int b) {
+    public Polygon2d toPolygon() {
+        return Polygon2d.c(this.append(get(0)));
+    }
+    
+    public TList<List<Integer>> digitizeEdges(GridCore grid, double v) {
+        return toPolygon().digitize(grid,v);
+    }
+    
+    public TList<List<Integer>> digitizeEdges(GridCore grid) {
+        return digitizeEdges(grid, 0);
+    }
+    
+    public PolygonC2d localize(GridCore grid) {
+        return c(map(p->grid.localize(p.expand()).shrink()));
+    }
+    
+    /**
+     * .
+     * often times, you don't even have to choose the vertical coordinate. in that case,
+     * use this convenient method.
+     * @param grid
+     * @return 
+     */
+    public TList<List<Integer>> digitize(GridCore grid) {
+        return digitize(grid,0);
+    }
+    
+    /**
+     * .often times, you don't have to choose the axis to monotonize.
+     * in that case,
+ use this convenient method.
+     * @param grid
+     * @param v
+     * @return 
+     */
+    public TList<List<Integer>> digitize(GridCore grid, double v) {
+        return digitize(grid,v,X);
+    }
+    
+    public TList<List<Integer>> digitize(GridCore grid, double v, int axis) {
+        assert grid.is2d():"grid must be 2d (if not, do some transformation)";
+        return localize(grid).monotonize(axis).flatMapc(c->c.digitizeLocallyMonotonized(v, axis));
+    }
+    
+    /**
+     * .
+     * before you call this, you have to have this shape localized to a certain GridCore and monotonize it in a certain axis.
+     * @param v
+     * @param axis
+     * @return 
+     */
+    public TList<List<Integer>> digitizeLocallyMonotonized(double v, int axis) {
+        return digitizeEdges(ortho,v).sortTo(inc(p->p.get(axis)))
+                .diffChunk((a,b)->!a.get(axis).equals(b.get(axis)))
+                .map(l->l.sortTo(inc(p->p.get(theOther(axis)))))
+                .flatMapc(l->TList.rangeSym(l.get(0).get(theOther(axis)),l.last().get(theOther(axis)))
+                        .map(i->(List<Integer>)TList.set(l.get(0)).cset(theOther(axis), i)));
+    }
+    
+    /**
+     * cut between a and b.
+     * in any way, the result PolygonC2d starts from a.
+     * @param a
+     * @param b
+     * @return 
+     */
+    public PolygonC2d cut(int a, int b) {
         assert a < size() && b < size() : "cut below size";
         if (a == b)
             return this;
@@ -62,11 +127,17 @@ public class PolygonC2d extends TList<TPoint2d> {
             return PolygonC2d.c(subList(b,a).startFrom(get(a)).sfix());
     }
     
+    /**
+     * cut into two.
+     * @param a
+     * @param b
+     * @return 
+     */
     public TList<PolygonC2d> divide(int a, int b) {
         assert a < size() && b < size() : "cut below size";
         if (abs(a-b)<2)
             return TList.sof(this);
-        return TList.sof(subC(a,b),subC(b,a));
+        return TList.sof(cut(a,b),cut(b,a));
     }
     
     class Edge {
@@ -179,9 +250,9 @@ public class PolygonC2d extends TList<TPoint2d> {
         }
         if (get(0).to(get(1)).det(get(1).to(get(2)))>0) {
             retval.add(TList.sof(get(0),get(1),get(2)));
-            set(subList(2,size()).startFrom(get(0)).sfix()).decompose(retval);
+            c(subList(2,size()).startFrom(get(0)).sfix()).decompose(retval);
             return;
         }
-        set(rotate(1)).decompose(retval);
+        c(rotate(1)).decompose(retval);
     }
 }

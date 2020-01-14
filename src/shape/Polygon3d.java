@@ -20,14 +20,14 @@ import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 import static shape.ShapeUtil.err;
-import static shape.TPoint3d.zero;
+import solver.graph.GridCore;
 
 /**
  *
  * @author masao
  */
 public class Polygon3d extends TList<TPoint3d> {
-    public static Polygon3d c(TList<TPoint3d> vertices) {
+    public static Polygon3d c(List<TPoint3d> vertices) {
         assert !vertices.isEmpty();
         return new Polygon3d(vertices);
     }
@@ -58,6 +58,10 @@ public class Polygon3d extends TList<TPoint3d> {
     
     public Polygon3d subPolygon(int from, int to) {
         return Polygon3d.c(subList(from, to));
+    }
+    
+    public TList<List<Integer>> digitize(GridCore grid) {
+        return asEdges().flatMapc(e->grid.toCube(e.start,e.end));
     }
     
     public TList<Polygon3d> chunk(int factor) {

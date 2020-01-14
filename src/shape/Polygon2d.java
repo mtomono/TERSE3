@@ -15,7 +15,6 @@
 
 package shape;
 
-import static arithmetic.Arithmetic.mod;
 import collection.P;
 import collection.TList;
 import static function.ComparePolicy.inc;
@@ -26,6 +25,7 @@ import java.util.List;
 import java.util.Optional;
 import orderedSet.Range;
 import static shape.ShapeUtil.err;
+import solver.graph.GridCore;
 
 /**
  *
@@ -33,20 +33,16 @@ import static shape.ShapeUtil.err;
  */
 public class Polygon2d extends TList<TPoint2d> {
     
-    public static Polygon2d c(TList<TPoint2d> vertices) {
+    public static Polygon2d c(List<TPoint2d> vertices) {
         assert !vertices.isEmpty();
         return new Polygon2d(vertices);
     }
-    
-    public static Polygon2d set(TList<TPoint2d> vertices) {
-        return c(vertices);
-    }
-    
+        
     public static Polygon2d c(TPoint2d... vertices) {
         return c(TList.of(vertices));
     }
     
-    Polygon2d(TList<TPoint2d> vertices) {
+    Polygon2d(List<TPoint2d> vertices) {
         super(vertices);
     }
     
@@ -68,6 +64,22 @@ public class Polygon2d extends TList<TPoint2d> {
     
     public Polygon2d subPolygon(int from, int to) {
         return Polygon2d.c(subList(from, to));
+    }
+    
+    public Polygon3d expand(double v) {
+        return Polygon3d.c(map(p->p.expand(v)));
+    }
+    
+    public Polygon3d expand() {
+        return expand(0);
+    }
+    
+    public TList<List<Integer>> digitize(GridCore grid, double v) {
+        return expand(v).digitize(grid);
+    }
+    
+    public TList<List<Integer>> digitize(GridCore grid) {
+        return digitize(grid,0);
     }
     
     public Rect2d cover() {

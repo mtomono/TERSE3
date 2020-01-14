@@ -12,7 +12,7 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.
  */
-package solver.graph.gridShape;
+package shapeCollection.gridShape;
 
 import collection.P;
 import collection.TList;
@@ -25,10 +25,10 @@ import solver.graph.GridCore;
  *
  * @author masao
  */
-public class GridTriangle {
+public class GTriangle {
     TList<TPoint2d> shape;
     GridCore coord;
-    public GridTriangle(TList<TPoint2d> shape, GridCore coord) {
+    public GTriangle(TList<TPoint2d> shape, GridCore coord) {
         this.shape=close(shape.rotate(longestEdgeFromX(close(shape))));
         this.coord=coord;
     }
@@ -50,7 +50,7 @@ public class GridTriangle {
         return shape.reverse().subList(0,3);
     }
 
-    public TList<List<Integer>> fillingTiles() {
+    public TList<List<Integer>> digitize() {
         TList<List<Integer>> bottom = coord.toCube(bottom().map(p->p.expand()));
         if (abs(bottom.get(0).get(0)-bottom.last().get(0))<2)
             return coord.toCube(shape.map(p->p.expand()));
