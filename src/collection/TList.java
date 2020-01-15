@@ -18,6 +18,7 @@ package collection;
 import static collection.c.a2l;
 import static collection.c.l2aInt;
 import debug.Monitorable;
+import debug.Te;
 import static function.ComparePolicy.inc;
 import iterator.IteratorCache;
 import iterator.RotateListIterator;
@@ -84,8 +85,13 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
     }
     
     public TList<T> cset(int i, T o) {
-        this.set(i, o);
+        this.set(i,o);
         return this;
+    }
+    
+    public TList<T> csetDebug(int i, T o) {
+        System.out.println(this+"cset("+i+","+o+")");
+        return cset(i,o);
     }
     
     public TList<T> insertAt(int at,TList<T> t) {
@@ -94,6 +100,27 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
     
     public TList<T> insertAt(int at, T t) {
         return insertAt(at, wrap(t));
+    }
+    
+    public TList<T> replaceAtUnlimited(int at, TList<T> t) {
+        assert 0<=at&&at<size();
+        return subList(0,at).append(t).append(this.subListAnyway(at+t.size(),size()));
+    }
+    
+    public TList<T> replaceAt(int at, TList<T> t) {
+        assert 0<=at&&at+t.size()<size();
+        return replaceAtUnlimited(at, t);
+    }
+    
+    /**
+     * .
+     * if you want to avoid side effectual behavior of cset, then choose this.
+     * @param at
+     * @param t
+     * @return 
+     */
+    public TList<T> replaceAt(int at, T t) {
+        return replaceAt(at, wrap(t));
     }
     
     /**
@@ -782,6 +809,10 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
         return diff().filter(p->c.compare(p.l(), p.r())!=0).transform(dediff());
     }
     
+    public TList<T> unique(Comparator<T> c) {
+        return sortTo(c).distinctLocally(c);
+    }
+        
     public <S> TList<Integer> changePoints(Function<T,S> map) {
         return map(map).diff().filterAt(p->!p.l().equals(p.r())).map(i->i+1);
     }
@@ -875,6 +906,12 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
     
 //------- Ordering
     
+    static public <T extends Comparable<T>> Comparator<List<T>> lexical() {
+        return TList.<T>lexical(Comparator.naturalOrder());
+    }
+    static public <T> Comparator<List<T>> lexical(Comparator<T> c) {
+        return (a,b)->TList.set(a).pair(b, (x,y)->c.compare(x, y)).stream().filter(i->i!=0).findFirst().orElse(Integer.compare(a.size(), b.size()));
+    }
     /**
      * Sort to new list.
      * Unlike the List#sort(), this method returns new list. Mainly because an instance

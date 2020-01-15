@@ -6,6 +6,7 @@
 package shape;
 
 import collection.TList;
+import static collection.TList.lexical;
 import java.util.List;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
@@ -138,6 +139,48 @@ public class PolygonC2dNGTest {
                 pni(2,0,0),pni(2,1,0),pni(2,2,0),pni(2,3,0),
                 pni(3,0,0),pni(3,1,0),pni(3,2,0),pni(3,3,0),pni(3,4,0),
                 pni(4,0,0),pni(4,1,0),pni(4,2,0),pni(4,3,0),pni(4,4,0),pni(4,5,0),
+                pni(5,0,0),pni(5,1,0),pni(5,2,0),pni(5,3,0),pni(5,4,0),pni(5,5,0));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    
+    @Test
+    public void testDigitizeLocallyMonotonizedSfix() {
+        System.out.println(test.TestUtils.methodName(0));
+        PolygonC2d tested = PolygonC2d.c(point2(0,0),point2(5,0),point2(5,5),point2(1,2));
+        TList<List<Integer>> result = tested.digitizeLocallyMonotonized(0,X);
+        Object expected = tested.digitizeLocallyMonotonized(0,X).sfix();
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    
+    @Test
+    public void testDigitizeWithReflex() {
+        System.out.println(test.TestUtils.methodName(0));
+        PolygonC2d tested = PolygonC2d.c(point2(0,0),point2(4,3),point2(5,0),point2(5,5),point2(1,2),point2(0,5));
+        TList<List<Integer>> result = tested.digitize(GridCore.ortho,0,Y);
+        TList<List<Integer>> expected = TList.sof(
+                pni(0,0,0),pni(1,0,0),pni(0,1,0),pni(1,1,0),pni(2,1,0),pni(1,2,0),pni(2,2,0),pni(3,2,0),pni(2,3,0),pni(3,3,0),pni(4,3,0),pni(3,4,0),pni(4,4,0),pni(5,4,0),pni(4,5,0),pni(5,5,0), 
+                pni(5,0,0),pni(4,1,0),pni(5,1,0),pni(4,2,0),pni(5,2,0),pni(4,3,0),pni(5,3,0),pni(4,4,0),pni(5,4,0),pni(5,5,0), 
+                pni(0,0,0),pni(0,1,0),pni(1,1,0),pni(0,2,0),pni(1,2,0),pni(0,3,0),pni(1,3,0),pni(0,4,0),pni(0,5,0));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+        
+    @Test
+    public void testDigitizeWithReflexUnique() {
+        System.out.println(test.TestUtils.methodName(0));
+        PolygonC2d tested = PolygonC2d.c(point2(0,0),point2(4,3),point2(5,0),point2(5,5),point2(1,2),point2(0,5));
+        TList<List<Integer>> result = tested.digitize(GridCore.ortho,0,Y).sfix().unique(lexical());
+        TList<List<Integer>> expected = TList.sof(
+                pni(0,0,0),pni(0,1,0),pni(0,2,0),pni(0,3,0),pni(0,4,0),pni(0,5,0),
+                pni(1,0,0),pni(1,1,0),pni(1,2,0),pni(1,3,0),
+                pni(2,1,0),pni(2,2,0),pni(2,3,0),
+                pni(3,2,0),pni(3,3,0),pni(3,4,0),
+                pni(4,1,0),pni(4,2,0),pni(4,3,0),pni(4,4,0),pni(4,5,0),
                 pni(5,0,0),pni(5,1,0),pni(5,2,0),pni(5,3,0),pni(5,4,0),pni(5,5,0));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);

@@ -5,6 +5,7 @@
  */
 package collection;
 
+import static collection.TList.lexical;
 import static collection.TList.set;
 import static collection.TList.toTList;
 import static collection.c.a2l;
@@ -13,6 +14,7 @@ import static function.ComparePolicy.inc;
 import function.Holder;
 import iterator.TListIterator;
 import java.util.*;
+import static java.util.Comparator.naturalOrder;
 import orderedSet.Range;
 import static org.testng.Assert.*;
 import org.testng.annotations.BeforeClass;
@@ -1910,6 +1912,111 @@ public class TListNGTest {
 
     @Test
     public void testIntersectByIdentity_TList() {
+    }
+    
+    @Test
+    public void testLexicalGT() {
+        System.out.println(test.TestUtils.methodName(0));
+        Comparator<List<Integer>> tested=lexical();
+        int result = tested.compare(TList.sof(0,1,2), TList.sof(0,0,1));
+        int expected = 1;
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testLexicalGTbyLength() {
+        System.out.println(test.TestUtils.methodName(0));
+        Comparator<List<Integer>> tested=lexical();
+        int result = tested.compare(TList.sof(0,1,2), TList.sof(0,1));
+        int expected = 1;
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testLexicalLT() {
+        System.out.println(test.TestUtils.methodName(0));
+        Comparator<List<Integer>> tested=lexical();
+        int result = tested.compare(TList.sof(0,0,1),TList.sof(0,1,2));
+        int expected = -1;
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testLexicalLTbyLength() {
+        System.out.println(test.TestUtils.methodName(0));
+        Comparator<List<Integer>> tested=lexical();
+        int result = tested.compare(TList.sof(0,1),TList.sof(0,1,2));
+        int expected = -1;
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testLexicalEQ() {
+        System.out.println(test.TestUtils.methodName(0));
+        Comparator<List<Integer>> tested=lexical();
+        int result = tested.compare(TList.sof(0,1,2),TList.sof(0,1,2));
+        int expected = 0;
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    
+    @Test
+    public void testUnique() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> result = TList.sof(1,2,5,1,2,3,0,6,0).unique(naturalOrder());
+        TList<Integer> expected = TList.sof(0,1,2,3,5,6);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    
+    @Test
+    public void testReplaceAt() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> result = TList.sof(0,1,2,3,4,5,6).replaceAt(3,TList.sof(4,5));
+        TList<Integer> expected = TList.sof(0,1,2,4,5,5,6);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+
+    @Test(expectedExceptions={AssertionError.class})
+    public void testReplaceAtTooLong() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> result = TList.sof(0,1,2,3,4,5,6).replaceAt(3,TList.sof(4,5,6,7,8));
+        TList<Integer> expected = TList.sof(0,1,2,4,5,6,7,8);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testReplaceAtUnlimited() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> result = TList.sof(0,1,2,3,4,5,6).replaceAtUnlimited(3,TList.sof(4,5,6,7,8));
+        TList<Integer> expected = TList.sof(0,1,2,4,5,6,7,8);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testReplaceAt_int_T() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> result = TList.sof(0,1,2,3,4,5,6).replaceAt(3,4);
+        TList<Integer> expected = TList.sof(0,1,2,4,4,5,6);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
     }
 
     @Test
