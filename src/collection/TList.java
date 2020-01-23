@@ -108,7 +108,7 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
     }
     
     public TList<T> replaceAt(int at, TList<T> t) {
-        assert 0<=at&&at+t.size()<size();
+        assert 0<=at&&at+t.size()<=size() : "at="+at+";added="+t;
         return replaceAtUnlimited(at, t);
     }
     
