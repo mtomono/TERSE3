@@ -2030,6 +2030,16 @@ public class TListNGTest {
     }
     
     @Test
+    public void testFilterWith() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> result = TList.sof(0,2,4,6,8).filterWith(TList.sof(0,1,2,3,4),i->i%2==0);
+        TList<Integer> expected = TList.sof(0,4,8);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    
+    @Test
     public void testFlip() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Integer> result = TList.range(1, 10).flip(4, 6);

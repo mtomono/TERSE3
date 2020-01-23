@@ -788,6 +788,14 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
         return pair(new Scale()).filter(p->cond.test(p.l())).map(p->p.r());
     }
     
+    public <S> TList<T> filterWith(TList<S> filter, Predicate<S> pred) {
+        return pair(filter).filter(p->pred.test(p.r())).map(p->p.l());
+    }
+    
+    public <S> TList<T> filterWith(TList<Boolean> filter) {
+        return filterWith(filter,b->b);
+    }
+        
     /**
      * hide all the equivalent item only in vicinity.
      * when the list is sorted in the order which reflects the equivalency, this is 
