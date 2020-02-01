@@ -81,6 +81,13 @@ public class GridCoord {
         this.axis = axis;
     }
     
+    public GridCoord extend(GridAxis... axis) {
+        return extend(TList.sof(axis));
+    }
+    public GridCoord extend(TList<GridAxis> axis) {
+        return new GridCoord(this.axis.append(axis));
+    }
+    
     public TList<Integer> zero() {
         return TList.nCopies(axis.size(), 0);
     }

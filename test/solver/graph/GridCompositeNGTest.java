@@ -30,8 +30,8 @@ public class GridCompositeNGTest {
             gmono(basis(2,0,0, 0,2,0, 0,0,2),origin(0,0,0), 0,0,0,0, 3,3,3,0),
             gmono(basis(-1,1,0, -1,-1,0, 0,0,1),origin(-3,-2,0), 0,0,0,1, 2,2,2,1)
         ).links(
-             pni(0,0,1,0),pni(1,1,0,0),
-             pni(1,0,0,0),pni(0,0,0,0)
+             pni(0,1,0,0),pni(1,0,0,1),
+             pni(0,0,0,1),pni(0,0,0,0)
         ).build();
     }
 

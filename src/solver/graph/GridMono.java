@@ -21,6 +21,7 @@ import static math.VectorOp.round;
 import static shape.ShapeUtil.point2;
 import static shape.ShapeUtil.vector2;
 import shape.TPoint3d;
+import shapeCollection.GridAxis;
 
 /**
  * Single Grid.
@@ -36,6 +37,10 @@ public class GridMono implements GridSpace{
     public GridMono(GridGraph graph, GridCore coord) {
         this.graph=graph;
         this.coord=coord;
+    }
+    
+    public GridMono extend(TList<GridAxis> axis) {
+        return new GridMono(graph.extend(axis),coord);
     }
 
     @Override

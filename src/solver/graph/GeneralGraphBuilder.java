@@ -34,14 +34,20 @@ public class GeneralGraphBuilder<K> {
     }
     
     public static <K> Map<K,TList<K>> graph(K... fromTo) {
+        return graph(TList.sof(fromTo));
+    }
+    public static <K> Map<K,TList<K>> graph(TList<K> fromTo) {
         MVMap<K,K> retval = new MVMap(new HashMap<>());
-        TList.sof(fromTo).fold(2).map(p->P.p(p.get(0),p.get(1))).forEach(f->retval.getList(f.l()).add(f.r()));
+        fromTo.fold(2).map(p->P.p(p.get(0),p.get(1))).forEach(f->retval.getList(f.l()).add(f.r()));
         return retval;
     }
     
     MVMap<K,K> body;
     
     public GeneralGraphBuilder<K> merge(K... fromTo) {
+        return merge(TList.sof(fromTo));
+    }
+    public GeneralGraphBuilder<K> merge(TList<K> fromTo) {
         this.body.merge(GeneralGraphBuilder.graph(fromTo));
         return this;
     }

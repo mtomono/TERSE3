@@ -15,6 +15,7 @@
 package solver.graph;
 
 import collection.TList;
+import java.util.Collection;
 import java.util.List;
 import static shape.ShapeUtil.point3;
 import static shape.ShapeUtil.vector3;
@@ -44,20 +45,28 @@ public class GridBuilder {
         return gmono(basis,origin,Metric.l1(),fromAndTo);
     }
     
-    TList<GridMono> gmonos = null;
+    TList<GridMono> gmonos = TList.c();
     GeneralGraphBuilder<List<Integer>> gbuilder;
-    Metric<List<Double>> baseMetric = Metric.l2();
+    public Metric<List<Double>> baseMetric = Metric.l2();
+    public TList<Collection<List<Integer>>> limitedBlocks;
     public GridBuilder() {
         this.gbuilder=GeneralGraphBuilder.builder();
+        this.limitedBlocks=TList.c();
     }
     static public GridBuilder builder() {
         return new GridBuilder();
     }
     public GridBuilder gmonos(GridMono... gmonos) {
-        this.gmonos=TList.sof(gmonos);
+        return gmonos(TList.sof(gmonos));
+    }
+    public GridBuilder gmonos(TList<GridMono> gmonos) {
+        this.gmonos.addAll(gmonos);
         return this;
     }
     public GridBuilder links(List<Integer>... links) {
+        return links(TList.sof(links));
+    }
+    public GridBuilder links(TList<List<Integer>> links) {
         gbuilder.merge(links);
         return this;
     }
@@ -65,8 +74,12 @@ public class GridBuilder {
         this.baseMetric=baseMetric;
         return this;
     }
+    public GridBuilder limitedBlocks(TList<Collection<List<Integer>>> limitedBlocks) {
+        this.limitedBlocks.addAll(limitedBlocks);
+        return this;
+    }
     public GridComposite build() {
         assert gmonos != null : "gmonos is null";
-        return new GridComposite(new CompositeGraph<>(extractGraph(gmonos).append(gbuilder.build())), gmonos);
+        return new GridComposite(new CompositeGraph<>(extractGraph(gmonos).append(gbuilder.build())), gmonos, limitedBlocks);
     }
 }

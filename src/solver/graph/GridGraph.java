@@ -15,8 +15,10 @@
 package solver.graph;
 
 import collection.TList;
+import debug.Te;
 import java.util.List;
 import math.VectorOp;
+import shapeCollection.GridAxis;
 import shapeCollection.GridCoord;
 
 /**
@@ -32,6 +34,10 @@ public class GridGraph implements Graph<List<Integer>> {
         this.dirs = dirs;
     }
 
+    public GridGraph extend(TList<GridAxis> axis) {
+        return new GridGraph(gcoord.extend(axis),TList.set(dirs).map(d->(List<Integer>)TList.set(d).addOne(0).sfix()).sfix());
+    }
+    
     @Override
     public TList<List<Integer>> next(List<Integer> from) {
         return dirs.map(d->VectorOp.addI(from, d)).filter(p->gcoord.contains(p)).sfix();
