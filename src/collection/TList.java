@@ -18,7 +18,6 @@ package collection;
 import static collection.c.a2l;
 import static collection.c.l2aInt;
 import debug.Monitorable;
-import debug.Te;
 import static function.ComparePolicy.inc;
 import iterator.IteratorCache;
 import iterator.RotateListIterator;
@@ -83,7 +82,7 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
         this.add(added);
         return this;
     }
-    
+
     public TList<T> cset(int i, T o) {
         this.set(i,o);
         return this;
