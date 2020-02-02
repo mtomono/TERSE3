@@ -56,7 +56,7 @@ public class MetricGridGraph3dBuilder {
         return this;
     }
     
-    public MetricGridGraph<TPoint3i> build() {
-        return new MetricGridGraph<>(gcoord,dirs,weight,ShapeUtil::p3i);
+    public MetricGridGraphOld<TPoint3i> build() {
+        return new MetricGridGraphOld<>(gcoord,dirs,weight,ShapeUtil::p3i);
     }
 }

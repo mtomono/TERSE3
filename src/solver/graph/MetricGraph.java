@@ -16,6 +16,8 @@ package solver.graph;
 
 import collection.P;
 import collection.TList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -24,4 +26,10 @@ import collection.TList;
 public interface MetricGraph<K> {
     public TList<P<K,Double>> next(K from);
     public TList<K> all();
+    default public MetricGraph<K> cache(Map<K,TList<P<K,Double>>> map) {
+        return new MetricGraphCache<>(this, map);
+    }
+    default public MetricGraph<K> cache() {
+        return cache(new HashMap<>());
+    }
 }

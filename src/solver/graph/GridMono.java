@@ -52,11 +52,7 @@ public class GridMono implements GridSpace{
     public TPoint3d globalize(List<Integer> cube) {
         return coord.globalize(cube);
     }
-    
-    public TList<TPoint3d> globalize(TList<List<Integer>> cubes) {
-        return cubes.map(p->coord.globalize(p));
-    }
-    
+
     @Override
     public Optional<List<Integer>> localize(TPoint3d point) {
         List<Integer> retval= round(coord.localize(point));

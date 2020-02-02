@@ -32,7 +32,7 @@ public interface Metric<K> {
         return (f,t)->measure(morph.apply(f),morph.apply(t));
     }
     static public <K extends Number> Metric<List<K>> l2() {
-        return (f,t)->sqrt(TList.set(t).pair(f,(x,y)->(pow(x.doubleValue()-y.doubleValue(),2))).sumD(i->i));
+        return (f,t)->sqrt(TList.set(t).pair(f,(x,y)->x.doubleValue()-y.doubleValue()).map(d->d*d).sumD(i->i));
     }
     static public <K extends Number> Metric<List<K>> l1() {
         return (f,t)->TList.set(t).pair(f,(x,y)->abs(x.doubleValue()-y.doubleValue())).sumD(i->i);

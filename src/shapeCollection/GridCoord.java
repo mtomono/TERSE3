@@ -53,7 +53,7 @@ public class GridCoord {
      */
     public static TList<List<Integer>> dirsAlternate(int nth) {
         TList<Integer> zero = TList.nCopies(nth,0).fix();
-        return TList.range(0,nth).flatMap(i->TList.sof(zero.fix().cset(i, 1), zero.fix().cset(i,-1)));
+        return TList.range(0,nth).flatMapc(i->TList.<List<Integer>>sof(zero.fix().cset(i, 1), zero.fix().cset(i,-1))).sfix();
     }
     
     static public GridCoord gcoord(int... fromAndTo) {

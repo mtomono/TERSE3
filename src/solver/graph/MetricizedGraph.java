@@ -31,7 +31,7 @@ public class MetricizedGraph<K> implements MetricGraph<K> {
     
     @Override
     public TList<P<K, Double>> next(K from) {
-        return base.next(from).map(k->P.p(k,metric.measure(from, k)));
+        return base.next(from).map(k->P.p(k,metric.measure(from, k))).sfix();
     }
 
     @Override

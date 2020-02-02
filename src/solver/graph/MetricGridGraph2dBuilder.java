@@ -56,7 +56,7 @@ public class MetricGridGraph2dBuilder {
         return this;
     }
     
-    public MetricGridGraph<TPoint2i> build() {
-        return new MetricGridGraph<>(gcoord,dirs,weight,ShapeUtil::p2i);
+    public MetricGridGraphOld<TPoint2i> build() {
+        return new MetricGridGraphOld<>(gcoord,dirs,weight,ShapeUtil::p2i);
     }
 }

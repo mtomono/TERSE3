@@ -35,19 +35,14 @@ public class GridBuilder {
     static public TPoint3d origin(double... v) {
         return point3(v[0],v[1],v[2]);
     }
-    static public GridMono gmono(TList<TVector3d> basis, TPoint3d origin, Metric<List<Double>> baseMetrics, int... fromAndTo) {
+    static public GridMono gmono(TList<TVector3d> basis, TPoint3d origin, int... fromAndTo) {
         GridCore coord=new GridCore(basis,origin);
         GridCoord gcoord=GridCoord.gcoord(fromAndTo);
         GridGraph graph=GridGraphBuilder.builder(gcoord).alt3d().build();
         return new GridMono(graph,coord);
     }
-    static public GridMono gmono(TList<TVector3d> basis, TPoint3d origin, int... fromAndTo) {
-        return gmono(basis,origin,Metric.l1(),fromAndTo);
-    }
-    
     TList<GridMono> gmonos = TList.c();
     GeneralGraphBuilder<List<Integer>> gbuilder;
-    public Metric<List<Double>> baseMetric = Metric.l2();
     public TList<Collection<List<Integer>>> limitedBlocks;
     public GridBuilder() {
         this.gbuilder=GeneralGraphBuilder.builder();
@@ -68,10 +63,6 @@ public class GridBuilder {
     }
     public GridBuilder links(TList<List<Integer>> links) {
         gbuilder.merge(links);
-        return this;
-    }
-    public GridBuilder baseMetric(Metric<List<Double>> baseMetric) {
-        this.baseMetric=baseMetric;
         return this;
     }
     public GridBuilder limitedBlocks(TList<Collection<List<Integer>>> limitedBlocks) {

@@ -19,7 +19,7 @@ import shape.TPoint3i;
  * @author masao
  */
 public class MetricCompositeGraphNGTest {
-    MetricGridGraph<TPoint3i> grid;
+    MetricGridGraphOld<TPoint3i> grid;
     MetricGeneralGraph<TPoint3i> bypass;
     TList<TPoint3i> blocks0;
     TList<TPoint3i> blocks1;

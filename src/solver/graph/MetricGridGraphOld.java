@@ -14,37 +14,45 @@
  */
 package solver.graph;
 
+import collection.P;
 import collection.TList;
+import static java.lang.Math.abs;
 import java.util.List;
+import java.util.function.Function;
 import math.VectorOp;
-import shapeCollection.GridAxis;
+import shape.TVector3d;
 import shapeCollection.GridCoord;
 
 /**
  *
  * @author masao
+ * @param <K>
  */
-public class GridGraph implements Graph<List<Integer>> {
+public class MetricGridGraphOld<K extends List<Integer>> implements MetricGraph<K> {
     public final GridCoord gcoord;
-    public final TList<List<Integer>> dirs;
+    public final TVector3d weight;
+    public final TList<K> dirs;
+    Function<List<Integer>,K> translator;
     
-    public GridGraph(GridCoord gcoord, TList<List<Integer>> dirs) {
+    public MetricGridGraphOld(GridCoord gcoord, TList<K> dirs, TVector3d weight, Function<List<Integer>,K>translator) {
         this.gcoord = gcoord;
         this.dirs = dirs;
+        this.translator=translator;
+        this.weight = weight;
     }
 
-    public GridGraph extend(TList<GridAxis> axis) {
-        return new GridGraph(gcoord.extend(axis),TList.set(dirs).map(d->(List<Integer>)TList.set(d).addOne(0).sfix()).sfix());
+    public double cost(List<Integer> k) {
+        return VectorOp.dot(weight, TList.set(k).map(i->abs(i)));
     }
     
     @Override
-    public TList<List<Integer>> next(List<Integer> from) {
-        return dirs.map(d->VectorOp.addI(from, d)).filter(p->gcoord.contains(p)).sfix();
+    public TList<P<K, Double>> next(K from) {
+        return dirs.map(d->P.p(translator.apply(VectorOp.addI(from, d)),cost(d))).filter(p->gcoord.contains(p.l())).sfix();
     }
 
     @Override
-    public TList<List<Integer>> all() {
-        return gcoord.addresses();
+    public TList<K> all() {
+        return gcoord.addresses().map(translator);
     }
     
 }

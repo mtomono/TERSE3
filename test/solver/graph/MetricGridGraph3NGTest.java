@@ -17,7 +17,7 @@ import shape.TPoint3i;
  * @author masao
  */
 public class MetricGridGraph3NGTest {
-    MetricGridGraph<TPoint3i> graph;
+    MetricGridGraphOld<TPoint3i> graph;
     TList<TPoint3i> blocks;
     Metric<List<Integer>> l1=Metric.<Double>l1().morph(Metric.weight(TList.sof(1,1,3)));
     public MetricGridGraph3NGTest() {
