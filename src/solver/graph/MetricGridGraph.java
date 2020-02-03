@@ -18,7 +18,8 @@ public class MetricGridGraph implements MetricGraph<List<Integer>> {
     TList<Double> distance;
     public MetricGridGraph(GridGraph base, Metric<List<Integer>> metric) {
         this.base=base;
-        this.distance=base.dirs.map(d->metric.measure(TList.nCopies(0, d.size()), d)).sfix();
+        List<Integer> zero = TList.nCopies(base.dirs.get(0).size(),0).sfix();
+        this.distance=base.dirs.map(d->metric.measure(zero, d)).sfix();
     }
 
     @Override
