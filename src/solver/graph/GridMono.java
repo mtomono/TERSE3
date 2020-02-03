@@ -48,6 +48,10 @@ public class GridMono implements GridSpace{
         return graph;
     }
     
+    public MetricGraph<List<Integer>> metricGraph(Metric<List<Integer>> metric) {
+        return new MetricGridGraph(graph,metric);
+    }
+    
     @Override
     public TPoint3d globalize(List<Integer> cube) {
         return coord.globalize(cube);

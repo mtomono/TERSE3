@@ -32,4 +32,7 @@ public interface MetricGraph<K> {
     default public MetricGraph<K> cache() {
         return cache(new HashMap<>());
     }
+    default public MetricGraph<K> metric(Metric<K> metric) {
+        return this;
+    }
 }

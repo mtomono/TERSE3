@@ -30,6 +30,11 @@ public class CompositeGraph<K> implements Graph<K> {
     public CompositeGraph(Graph<K>... body) {
         this(TList.sof(body));
     }
+    
+    @Override
+    public MetricGraph<K> metricize(Metric<K> metric) {
+        return new MetricCompositeGraph<>(body.map(g->g.metricize(metric)).sfix());
+    }
 
     @Override
     public TList<K> next(K from) {

@@ -15,7 +15,9 @@
 package solver.graph;
 
 import collection.MVMap;
+import collection.P;
 import collection.TList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -31,6 +33,14 @@ public class GeneralGraph<K> implements Graph<K> {
     public GeneralGraph(Map<K,TList<K>> body) {
         this.body = new MVMap<>(body);
     }
+    
+    @Override
+    public MetricGeneralGraph<K> metricize(Metric<K> metric) {
+        Map<K,TList<P<K,Double>>> body = new HashMap<>();
+        this.body.entrySet().stream().forEach(e->body.put(e.getKey(),e.getValue().map(to->P.p(to, metric.measure(e.getKey(), to)))));
+        return new MetricGeneralGraph<>(body);
+    }
+    
     @Override
     public TList<K> next(K from) {
         return body.getList(from);

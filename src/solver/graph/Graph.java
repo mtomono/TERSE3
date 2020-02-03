@@ -14,7 +14,6 @@
  */
 package solver.graph;
 
-import collection.P;
 import collection.TList;
 
 /**
@@ -24,4 +23,5 @@ import collection.TList;
 public interface Graph<K> {
     public TList<K> next(K from);
     public TList<K> all();
+    public MetricGraph<K> metricize(Metric<K> metric);
 }

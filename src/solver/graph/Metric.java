@@ -16,7 +16,6 @@ package solver.graph;
 
 import collection.TList;
 import static java.lang.Math.abs;
-import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 import java.util.List;
 import java.util.function.Function;

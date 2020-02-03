@@ -38,6 +38,11 @@ public class GridGraph implements Graph<List<Integer>> {
     }
     
     @Override
+    public MetricGraph<List<Integer>> metricize(Metric<List<Integer>> metric) {
+        return new MetricGridGraph(this,metric);
+    }
+    
+    @Override
     public TList<List<Integer>> next(List<Integer> from) {
         return dirs.map(d->VectorOp.addI(from, d)).filter(p->gcoord.contains(p)).sfix();
     }

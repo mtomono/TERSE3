@@ -35,7 +35,7 @@ public class NodeGraphBuilder<K> {
         return new NodeGraphBuilder<>(graph,from,to);
     }
     static public <K> NodeGraphBuilder<K> builder(Metric<K> metric, Graph<K> graph, K from, K to) {
-        return new NodeGraphBuilder<>(new MetricizedGraph<>(metric, graph).cache(), from, to);
+        return new NodeGraphBuilder<>(new MetricizedGraph<>(metric, graph), from, to);
     }
     public NodeGraphBuilder(MetricGraph<K> graph,K from,K to) {
         this.nodesSupplier=()->new HashMap<>();
