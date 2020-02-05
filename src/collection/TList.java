@@ -342,6 +342,14 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
         return set(new ArrayList<>(body));
     }
     
+    public List<T> out() {
+        return fix();
+    }
+    
+    public List<T> sout() {
+        return sfix();
+    }
+    
     /**
      * create new list.
      * @param <T>
@@ -1666,7 +1674,7 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
         return permutationx(a,b);
     }
     static public TList<List<Integer>> permutation(int a, int b) {
-        return permutationx(a, b).map(l->(List<Integer>)l);
+        return permutationx(a, b).map(l->l.sout());
     }
 
     public TList<List<T>> permutation(int a) {
@@ -1703,7 +1711,7 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
     }
     
     static public TList<List<Integer>> combination(int a, int b) {
-        return combinationT(a, b).map(l->(List<Integer>)l);
+        return combinationT(a, b).map(l->l.sout());
     }
     
     public TList<List<T>> combination(int n) {
@@ -1737,7 +1745,7 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
     }
     
     static public TList<List<Integer>> homogeneousProduct(int a, int b) {
-        return homogeneousProductx(a, b).map(l->(List<Integer>)l);
+        return homogeneousProductx(a, b).map(l->l.sout());
     }
     
     public TList<List<T>> homogeneousProduct(int a) {

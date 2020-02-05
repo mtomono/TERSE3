@@ -34,7 +34,7 @@ public class GridGraph implements Graph<List<Integer>> {
     }
 
     public GridGraph extend(TList<GridAxis> axis) {
-        return new GridGraph(gcoord.extend(axis),TList.set(dirs).map(d->(List<Integer>)TList.set(d).addOne(0).sfix()).sfix());
+        return new GridGraph(gcoord.extend(axis),TList.set(dirs).map(d->TList.set(d).addOne(0).sout()).sfix());
     }
     
     @Override

@@ -56,6 +56,6 @@ public class GTriangle {
             return coord.toCube(shape.map(p->p.expand()));
         TList<TList<List<Integer>>> chunkedBottom = bottom.diffChunk((a,b)->!a.get(0).equals(b.get(0)));
         TList<TList<List<Integer>>> chunkedOthers = coord.toCube(others().map(p->p.expand())).diffChunk((a,b)->!a.get(0).equals(b.get(0)));
-        return chunkedBottom.pair(chunkedOthers, (a,b)->a.append(b).sfix().sortTo((c,d)->c.get(1)-d.get(1))).map(e->TList.rangeSym(e.get(0).get(1),e.last().get(1)).map(y->(List<Integer>)TList.sof(e.get(0).get(0),y))).flatMap(p->p);
+        return chunkedBottom.pair(chunkedOthers, (a,b)->a.append(b).sfix().sortTo((c,d)->c.get(1)-d.get(1))).map(e->TList.rangeSym(e.get(0).get(1),e.last().get(1)).map(y->TList.sof(e.get(0).get(0),y).sout())).flatMap(p->p);
     }
 }

@@ -108,7 +108,7 @@ public class PolygonC2d extends TList<TPoint2d> {
                 .diffChunk((a,b)->!a.get(axis).equals(b.get(axis)))
                 .map(l->l.sortTo(inc(p->p.get(theOther(axis)))))
                 .flatMapc(l->TList.rangeSym(l.get(0).get(theOther(axis)),l.last().get(theOther(axis)))
-                        .map(i->(List<Integer>)TList.set(l.get(0)).sfix().cset(theOther(axis), i)));
+                        .map(i->TList.set(l.get(0)).sfix().cset(theOther(axis), i).sout()));
     }
     
     /**
