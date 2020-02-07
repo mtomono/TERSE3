@@ -203,13 +203,23 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
     
     /**
      * tee() for print out.
-     * tee which is specialized for printing. takes a String parameter to mark 
-     * that the String on display is printed out by a certain teep().
+     * tee which is specialized for printing. takes a function to generate 
+     * string for printing
+     * @param f
+     * @return 
+     */
+    public TList<T> teep(Function<T,String> f) {
+        return tee(e->System.out.println(f.apply(e)));
+    }
+    
+    /**
+     * tee() for print out.
+     * tee which is specialized for printing. takes a String parameter to mark .
      * @param mark
      * @return 
      */
     public TList<T> teep(String mark) {
-        return tee(e->System.out.println(mark+e));
+        return teep(e->mark+e);
     }
     
     /**

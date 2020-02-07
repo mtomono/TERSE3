@@ -15,6 +15,8 @@
 
 package debug;
 
+import java.util.function.Function;
+
 /**
  * Tee
  * 
@@ -45,8 +47,11 @@ public class Te {
         System.out.println(value);
         return value;
     }
-    public static <T> T e(String label,T value) {
-        System.out.println(label+value);
+    public static <T> T e(Function<T,String> f, T value) {
+        System.out.println(f.apply(value));
         return value;
+    }
+    public static <T> T e(String label,T value) {
+        return e(v->label+v, value);
     }
 }
