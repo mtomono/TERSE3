@@ -66,14 +66,14 @@ public class NodeGraph<K> {
         return fill(this::fill);
     }
 
+    public void fill(Node<K> from) {
+        fill(fillCore(from));
+    }
+    
     public NodeGraph<K> fillLoop() {
         assert get(from).isNone() : "from is not reacheable";
         assert get(to).isNone() : "to is not reacheable";
         return fill(this::fillLoop);
-    }
-    
-    public void fill(Node<K> from) {
-        fill(fillCore(from));
     }
     
     public void fillLoop(Node<K> current) {
@@ -82,12 +82,6 @@ public class NodeGraph<K> {
         }
     }
 
-    public Node<K> requeue(Node<K> at) {
-        queue.removeIf(n->n==at);
-        queue.offer(at);
-        return at;
-    }
-    
     public NodeGraph<K> fill(Consumer<Node<K>> sweep) {
         get(from).setDistance(0);
         Node<K> current=get(from).close();
@@ -119,6 +113,12 @@ public class NodeGraph<K> {
         if (queue.isEmpty())
             throw new Exit();
         return queue.poll().close();
+    }
+    
+    public Node<K> requeue(Node<K> at) {
+        queue.removeIf(n->n==at);
+        queue.offer(at);
+        return at;
     }
     
     public Optional<Double> findCost() {
