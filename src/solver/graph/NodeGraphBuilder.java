@@ -67,7 +67,7 @@ public class NodeGraphBuilder<K> {
     }
     public NodeGraphBuilder<K> block(Collection<K> blocks) {
         assert !built.nodes.isEmpty() : "nodes are not ready";
-        TList.set(blocks).filter(p->built.nodes.containsKey(p)).forEach(p->built.nodes.get(p).close());
+        TList.set(blocks).filter(p->built.nodes.containsKey(p)).forEach(p->built.nodes.get(p).setStatus(NodeStatus.BLOCKED));
         return this;
     }
     public NodeGraphBuilder<K> white(Collection<K> white) {

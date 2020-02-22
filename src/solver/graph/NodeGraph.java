@@ -84,7 +84,7 @@ public class NodeGraph<K> {
 
     public NodeGraph<K> fill(Consumer<Node<K>> sweep) {
         get(from).setDistance(0);
-        Node<K> current=get(from).close();
+        Node<K> current=get(from);
         try {
             sweep.accept(current);
         } catch(Exit e) {
@@ -106,13 +106,14 @@ public class NodeGraph<K> {
     }
 
     public Node<K> fillCore(Node<K> from) {
+        from.close();
         exitPolicy.accept(from);
         candidatesAndDistances(from)
                 .filter(p->p.l().isBetterParent(from, p.r()))
                 .forEach(p->requeue(p.l().changeParent(from, p.r()).open()));
         if (queue.isEmpty())
             throw new Exit();
-        return queue.poll().close();
+        return queue.poll();
     }
     
     public Node<K> requeue(Node<K> at) {
