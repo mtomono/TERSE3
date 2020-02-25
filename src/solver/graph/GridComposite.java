@@ -56,7 +56,7 @@ public class GridComposite implements GridSpace {
     
     @Override
     public TPoint3d globalize(List<Integer> point) {
-        return grids.get(point.get(point.size()-1)).coord.globalize(point.subList(0, point.size()-1));
+        return grids.get(point.get(point.size()-1)).coord.globalizeI(point.subList(0, point.size()-1));
     }
     
     @Override

@@ -88,8 +88,11 @@ public class GridCore {
         return globalize.transformToPoint(p).addR(origin);
     }
     
-    public TPoint3d globalize(List<Integer> p) {
-        return globalize(point3(TList.set(p).map(i->i.doubleValue())));
+    public TPoint3d globalizeD(List<Double> p) {
+        return globalize(point3(p));
+    }
+    public TPoint3d globalizeI(List<Integer> p) {
+        return globalizeD(TList.set(p).map(i->i.doubleValue()));
     }
         
     public TList<List<Integer>> toCube(TList<TPoint3d> localLine) {

@@ -54,7 +54,7 @@ public class GridMono implements GridSpace{
     
     @Override
     public TPoint3d globalize(List<Integer> cube) {
-        return coord.globalize(cube);
+        return coord.globalizeI(cube);
     }
 
     @Override
