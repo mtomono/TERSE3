@@ -2135,4 +2135,25 @@ public class TListNGTest {
         assertEquals(result, expected);
     }
 
+    @Test
+    public void testCompress() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> tested=TList.sof(0,0,0,1,2,2,3,3,4);
+        P<TList<Integer>,TList<Integer>> result = tested.compress();
+        P<TList<Integer>,TList<Integer>> expected = P.p(TList.sof(0,1,2,3,4),TList.sof(3,1,2,2,1));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    
+    @Test
+    public void testDecompress() {
+        System.out.println(test.TestUtils.methodName(0));
+        P<TList<Integer>,TList<Integer>> tested = P.p(TList.sof(0,1,2,3,4),TList.sof(3,1,2,2,1));
+        TList<Integer> result = tested.l().decompress(tested.r());
+        TList<Integer> expected=TList.sof(0,0,0,1,2,2,3,3,4);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
 }

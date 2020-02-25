@@ -1505,6 +1505,15 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
     public <S> TList<S> delimitByValue(Function<T,S> map, S delimit) {
         return delimit(map, (a,b)->delimit);
     }
+    
+    public P<TList<T>,TList<Integer>> compress() {
+        return diffChunk((a,b)->!a.equals(b)).transform(l->P.p(l.map(ll->ll.get(0)), l.map(ll->ll.size())));
+    }
+    
+    public TList<T> decompress(TList<Integer> duplication) {
+        return pair(duplication,(a,b)->nCopies(b,a)).flatMapc(l->l);
+    }
+    
 //--------- Positioning
     /**
      * get a Optional-wrapped version of this list.
