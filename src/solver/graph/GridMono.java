@@ -72,7 +72,7 @@ public class GridMono implements GridSpace{
         return coord.toCube(coord.localize(from),coord.localize(to));
     }
     public TList<List<Integer>> toCube(TPoint3d from, TPoint3d to) {
-        return toCubeUnabridged(from,to).filter(g->graph.gcoord.contains(g)).sfix();
+        return toCubeUnabridged(from,to).filter(g->graph.gcoord.contains(g)).map(g->graph.gcoord.fitInto(g).sout()).sfix();
     }
     
     // shape of this.
