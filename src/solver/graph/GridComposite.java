@@ -61,7 +61,7 @@ public class GridComposite implements GridSpace {
     
     @Override
     public TList<List<Integer>> toCube(TList<TPoint3d> line) {
-        return grids.pair(new Scale(),(g,i)->g.toCube(line).map(l->TList.set(l).fix().addOne(i).sout())).sfix().flatMap(l->l).sfix();
+        return grids.map(g->g.toCube(line).sfix()).flatMap(l->l).sfix();
     }
     
     public TList<List<Integer>> toCube(TPoint3d... line) {

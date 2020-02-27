@@ -65,7 +65,7 @@ public class GridMono implements GridSpace{
     
     @Override
     public TList<List<Integer>> toCube(TList<TPoint3d> line) {
-        return coord.toCube(coord.localize(line)).filter(g->graph.gcoord.contains(g)).sfix();
+        return coord.toCube(coord.localize(line)).filter(g->graph.gcoord.contains(g)).map(g->graph.gcoord.fitInto(g).sout()).sfix();
     }
     
     public TList<List<Integer>> toCubeUnabridged(TPoint3d from, TPoint3d to) {
