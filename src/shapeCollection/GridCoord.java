@@ -156,6 +156,10 @@ public class GridCoord {
         return axis.pair(o.axis, (a,b)->a.contains(b)).forAll(b->b);
     }
     
+    public TList<Integer> fitInto(List<Integer> address) {
+        return address(index(address));
+    }
+    
     public TList<Integer> from() {
         return axis.map(a->a.from);
     }
