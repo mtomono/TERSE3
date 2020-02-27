@@ -16,6 +16,7 @@
 package math;
 
 import collection.TList;
+import static java.lang.Integer.signum;
 import static java.lang.Math.abs;
 import java.util.List;
 import java.util.function.BinaryOperator;
@@ -68,5 +69,23 @@ public class VectorOp {
     
     static public List<Integer> round(List<Double> point) {
         return TList.set(point).map(v->(int)Math.round(v)).sfix();
+    }
+
+    static public List<Integer> d(List<Integer> from, List<Integer> to) {
+        List<Integer> retval = VectorOp.subI(to, from);
+        assert TList.set(retval).filter(x->x!=0).size()<2;
+        return retval;
+    }
+    
+    static public List<Integer> signize(List<Integer> d) {
+        return TList.set(d).map(x->signum(x)).sfix();
+    }
+    
+    static public List<Double> toDouble(List<Integer> p) {
+        return TList.set(p).map(l->l.doubleValue()).sout();
+    }
+    
+    static public List<Integer> toInteger(List<Double> p) {
+        return TList.set(p).map(l->l.intValue()).sout();
     }
 }
