@@ -35,7 +35,7 @@ public class GridMonoNGTest {
     @Test
     public void testGlobalize() {
         System.out.println(test.TestUtils.methodName(0));
-        TPoint3d result = gmono.globalize(TList.sof(1,1,1));
+        TPoint3d result = gmono.globalizeI(TList.sof(1,1,1));
         TPoint3d expected = point3(4,4,4);
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
@@ -45,7 +45,7 @@ public class GridMonoNGTest {
     @Test
     public void testGlobalize_TList() {
         System.out.println(test.TestUtils.methodName(0));
-        TList<TPoint3d> result = gmono.globalize(TList.sof(TList.sof(1,1,1),TList.sof(1,0,0)));
+        TList<TPoint3d> result = gmono.globalizeI(TList.sof(TList.sof(1,1,1),TList.sof(1,0,0)));
         TList<TPoint3d> expected = TList.sof(point3(4,4,4),point3(4,2,2));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);

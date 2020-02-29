@@ -67,7 +67,7 @@ public class GridCompositeNGTest {
     @Test
     public void testGlobalize() {
         System.out.println(test.TestUtils.methodName(0));
-        TPoint3d result = grid.globalize(pni(2,1,0,1));
+        TPoint3d result = grid.globalizeI(pni(2,1,0,1));
         TPoint3d expected = point3(-6,-1,0);
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
