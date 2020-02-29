@@ -36,10 +36,15 @@ public interface GridSpace {
     
     Graph<List<Integer>> graph();
     
-    TPoint3d globalize(List<Integer> point);
+    TPoint3d globalizeI(List<Integer> point);
+    TPoint3d globalizeD(List<Double> point);
     
-    default TList<TPoint3d> globalize(TList<List<Integer>> points) {
-        return points.map(p->globalize(p)).sfix();
+    default TList<TPoint3d> globalizeI(TList<List<Integer>> points) {
+        return points.map(p->globalizeI(p)).sfix();
+    }
+
+    default TList<TPoint3d> globalizeD(TList<List<Double>> points) {
+        return points.map(p->globalizeD(p)).sfix();
     }
 
     Optional<List<Integer>> localize(TPoint3d point);
@@ -47,7 +52,7 @@ public interface GridSpace {
     TList<List<Integer>> toCube(TList<TPoint3d> line);
     
     default Metric<List<Integer>> globalMetric(Metric<List<Double>> base, double costv) {
-        return base.morph(Metric.<Double>weight(TList.sof(1,1,costv)).compose(this::globalize));
+        return base.morph(Metric.<Double>weight(TList.sof(1,1,costv)).compose(this::globalizeI));
     }
     default Metric<List<Integer>> localMetric(Metric<List<Double>> base, double costv) {
         return base.morph(Metric.weight(TList.sof(1,1,costv)));

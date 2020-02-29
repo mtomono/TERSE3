@@ -14,7 +14,6 @@
  */
 package solver.graph;
 
-import collection.Scale;
 import collection.TList;
 import static java.lang.Integer.max;
 import java.util.Collection;
@@ -55,8 +54,12 @@ public class GridComposite implements GridSpace {
     }
     
     @Override
-    public TPoint3d globalize(List<Integer> point) {
+    public TPoint3d globalizeI(List<Integer> point) {
         return grids.get(point.get(point.size()-1)).coord.globalizeI(point.subList(0, point.size()-1));
+    }
+    
+    public TPoint3d globalizeD(List<Double> point) {
+        return grids.get(point.get(point.size()-1).intValue()).coord.globalizeD(point.subList(0, point.size()-1));
     }
     
     @Override

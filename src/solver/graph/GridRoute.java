@@ -37,7 +37,7 @@ public class GridRoute {
     }
     
     public TList<TPoint3d> groute() {
-        return target.globalize(route());
+        return target.globalizeI(route());
     }
     
     TList<TList<List<Integer>>> routeInGrids() {
@@ -51,7 +51,7 @@ public class GridRoute {
     }
     
     TList<TList<TPoint3d>> grouteInGrids() {
-        return routeInGrids().map(r->target.globalize(route()));
+        return routeInGrids().map(r->target.globalizeI(route()));
     }
     
     public static TList<List<Integer>> tighten(TList<List<Integer>> path) {
