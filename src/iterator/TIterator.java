@@ -82,7 +82,7 @@ public class TIterator<T> implements Iterator<T> {
     }
     
     static public <T> TIterator<T> iterate(T init, UnaryOperator<T> op) {
-        return set(new OperatorWrapper<>(init, op));
+        return set(OperatorWrapper.fromStart(init, op));
     }
     
     static public TIterator<Integer> range(int start, int end) {

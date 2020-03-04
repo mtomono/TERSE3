@@ -36,7 +36,7 @@ public class UntilIterator<T> extends AbstractBufferedIterator<T> {
     
     @Override
     protected void findNext() {
-        if (!body.hasNext() || finished)
+        if (finished||!body.hasNext())
             return;
         T current = body.next();
         if (terminator.test(current))

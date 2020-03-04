@@ -15,25 +15,30 @@
 
 package iterator;
 
-import function.Holder;
+import static java.util.Collections.singleton;
 import java.util.Iterator;
 import java.util.function.UnaryOperator;
 
 /**
  * Iterator made of Operator.
  * generates value by adopting operator repeatedly.
+ * Simple OperatorWrapper does not return the initial value, if you need the initial value
+ * to be returned by this iterator first, then use the factory fromStart().
  * @author masao
  * @param <T>
  */
 public class OperatorWrapper<T> implements Iterator<T> {
-    Holder<T> h;
+    T seed;
     UnaryOperator<T> op;
     
-    public OperatorWrapper(T init, UnaryOperator<T> op) {
-        this.h = new Holder<>(init);
-        this.op = op;
+    static public <T> Iterator<T> fromStart(T init, UnaryOperator<T> op) {
+        return new IteratorIterator<>(singleton(init).iterator(),new OperatorWrapper<>(init, op));
     }
     
+    public OperatorWrapper(T init, UnaryOperator<T> op) {
+        this.seed=init;
+        this.op = op;
+    }
     @Override
     public boolean hasNext() {
         return true;
@@ -41,7 +46,9 @@ public class OperatorWrapper<T> implements Iterator<T> {
 
     @Override
     public T next() {
-        return h.push(op.apply(h.get()));
+        T retval=op.apply(seed);
+        seed=retval;
+        return retval;
     }
     
 }
