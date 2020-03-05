@@ -47,11 +47,11 @@ public class Te {
         System.out.println(value);
         return value;
     }
-    public static <T> T e(Function<T,String> f, T value) {
+    public static <T> T e(T value,Function<T,String> f) {
         System.out.println(f.apply(value));
         return value;
     }
     public static <T> T e(String label,T value) {
-        return e(v->label+v, value);
+        return e(value,v->label+v);
     }
 }
