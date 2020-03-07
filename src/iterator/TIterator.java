@@ -82,10 +82,6 @@ public class TIterator<T> implements Iterator<T> {
     }
     
     static public <T> TIterator<T> iterate(T init, UnaryOperator<T> op) {
-        return set(OperatorWrapper.fromStart(init, op));
-    }
-    
-    static public <T> TIterator<T> iterateNoInit(T init, UnaryOperator<T> op) {
         return set(new OperatorWrapper(init, op));
     }
     
@@ -93,6 +89,10 @@ public class TIterator<T> implements Iterator<T> {
         assert end > start;
         IntHolder h = new IntHolder(start);
         return generate(()->h.push(h.get() + 1)).limit(end - start);
+    }
+    
+    public TIterator<T> append(Iterator<T> added) {
+        return set(new IteratorIterator<>(this,added));
     }
     
     public T last() {

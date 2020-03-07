@@ -48,12 +48,7 @@ public class TIterable<T> implements Iterable<T> {
     public static <T> TIterable<T> iterate(T init, UnaryOperator<T> op) {
         return new TIterable<>(()->TIterator.iterate(init, op));
     }
-    
-    public static <T> TIterable<T> iterateNoInit(T init, UnaryOperator<T> op) {
-        return new TIterable<>(()->TIterator.iterateNoInit(init, op));
-    }
-    
-    
+        
     public static TIterable<Integer> range(int start, int end) {
         return new TIterable<>(()->TIterator.range(start, end));
     }
@@ -65,6 +60,10 @@ public class TIterable<T> implements Iterable<T> {
     @Override
     public TIterator<T> iterator() {
         return TIterator.set(supplier.get());
+    }
+    
+    public TIterable<T> append(TIterable<T> added) {
+        return of(this,added).flatMap(i->i);
     }
     
     public TIterable<T> tee(Consumer<Iterable<T>> tee) {
