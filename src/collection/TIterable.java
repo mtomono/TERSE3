@@ -49,6 +49,11 @@ public class TIterable<T> implements Iterable<T> {
         return new TIterable<>(()->TIterator.iterate(init, op));
     }
     
+    public static <T> TIterable<T> iterateNoInit(T init, UnaryOperator<T> op) {
+        return new TIterable<>(()->TIterator.iterateNoInit(init, op));
+    }
+    
+    
     public static TIterable<Integer> range(int start, int end) {
         return new TIterable<>(()->TIterator.range(start, end));
     }

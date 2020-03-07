@@ -85,6 +85,10 @@ public class TIterator<T> implements Iterator<T> {
         return set(OperatorWrapper.fromStart(init, op));
     }
     
+    static public <T> TIterator<T> iterateNoInit(T init, UnaryOperator<T> op) {
+        return set(new OperatorWrapper(init, op));
+    }
+    
     static public TIterator<Integer> range(int start, int end) {
         assert end > start;
         IntHolder h = new IntHolder(start);
