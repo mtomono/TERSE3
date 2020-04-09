@@ -345,7 +345,37 @@ public class TListNGTest {
     public void testDistinctLocally_0args2() {
         System.out.println(test.TestUtils.methodName(0));
         List<Integer> result = TList.of(1, 1, 1, 1, 1, 1).distinctLocally();
-        List<Integer> expected = TList.empty();
+        List<Integer> expected = TList.of(1);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testDistinctLocally_0args3() {
+        System.out.println(test.TestUtils.methodName(0));
+        List<Integer> result = TList.of(1, 1, 1, 1, 2, 2).distinctLocally();
+        List<Integer> expected = TList.of(1, 2);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testDistinctLocally_0args4() {
+        System.out.println(test.TestUtils.methodName(0));
+        List<Integer> result = TList.<Integer>of().distinctLocally();
+        List<Integer> expected = TList.of();
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testRift_0args() {
+        System.out.println(test.TestUtils.methodName(0));
+        List<Integer> result = TList.<Integer>of(1).distinctLocally();
+        List<Integer> expected = TList.of(1);
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);

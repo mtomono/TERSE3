@@ -401,10 +401,13 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
 //--------- Judging
     /**
      * check whether all the elements are the same.
+     * to be more precise, uniform means there are no two elements which are
+     * different.
+     * bare in mind according to this definition, empty list is considered to be uniform.
      * @return 
      */
     public boolean isUniform() {
-        return distinctLocally().isEmpty();
+        return size()<=1||rift().isEmpty();
     }
     
     /**
@@ -812,6 +815,16 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
     public <S> TList<T> filterWith(TList<Boolean> filter) {
         return filterWith(filter,b->b);
     }
+    
+    public TList<T> rift() {
+        assert !isEmpty():"rift() is invalid for empty list";
+        return diff().filter(p->!p.l().equals(p.r())).transform(dediff());
+    }
+        
+    public TList<T> rift(Comparator<T> c) {
+        assert !isEmpty():"rift() is invalid for empty list";
+        return diff().filter(p->c.compare(p.l(), p.r())!=0).transform(dediff());
+    }
         
     /**
      * hide all the equivalent item only in vicinity.
@@ -820,7 +833,9 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
      * @return 
      */
     public TList<T> distinctLocally() {
-        return diff().filter(p->!p.l().equals(p.r())).transform(dediff());
+        if (isEmpty())
+            return this;
+        return rift().transform(l->l.isEmpty()?subList(0,1):l);
     }
     
     /**
@@ -831,7 +846,9 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
      * @return 
      */
     public TList<T> distinctLocally(Comparator<T> c) {
-        return diff().filter(p->c.compare(p.l(), p.r())!=0).transform(dediff());
+        if (isEmpty())
+            return this;
+        return rift(c).transform(l->l.isEmpty()?subList(0,1):l);
     }
     
     public TList<T> unique(Comparator<T> c) {
@@ -1096,26 +1113,7 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
             return TList.sof(this);
         return TList.sof(subList(0, indexOf(division) + 1), subList(indexOf(division) + 1, size()));
     }
-    
-    /**
-     * divide the list by occurence of the item which matches with pred.
-     * the dividing item is contained as the last item of sublist.
-     * 
-     * if you want it to be otherwise (meaning the dividing item to be the
-     * first item of sublist), follow these steps:
-     * 1. reverse the list
-     * 2. chunk it up
-     * 3. reverse those sublists all by map
-     * 
-     * the result is sfix-ed, because it has a tremendous influence in performance.
-     * @param pred
-     * @return 
-     */
-    public TList<TList<T>> chunk(Predicate<T> pred) {
-        TList<TList<T>> retval = TList.c();
-        return chunk(retval, this, pred);
-    }
-    
+        
     public TList<TList<T>> filterChunk(Predicate<T> pred, BiFunction<TList<T>,Predicate<T>,TList<TList<T>>> chunk) {
         return chunk.apply(this,pred).filter(l->!l.filter(pred.negate()).isEmpty());
     }
@@ -1131,6 +1129,17 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
     }
     static public <T> BiFunction<TList<T>,Predicate<T>,TList<TList<T>>> envelopChunk() {
         return (a,b)->a.envelopChunk(b);
+    }
+    
+    /**
+     * divide the list by occurence of the item which matches with pred.
+     * the dividing item is contained as the last item of sublist.
+     * the result is sfix-ed, because it has a tremendous influence in performance.
+     * @param pred
+     * @return 
+     */
+    public TList<TList<T>> chunk(Predicate<T> pred) {
+        return reverse().reverseChunk(pred).map(l->l.reverse()).reverse();
     }
         
     /**
@@ -1153,26 +1162,19 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
         return chunk.diff((a,b)->b.startFrom(a.last())).startFrom(chunk.get(0));
     }
     
-    public TList<TList<T>> reverseChunk(Predicate<T> pred) {
-        return reverse().chunk(pred).map(l->l.reverse()).reverse();
-    }
-    
     /**
      * main body of chunk.
-     * recursive function to chunk up the list.
-     * result is sfix-ed for memo.
+     * 
      * @param current
      * @param remain
      * @param pred
      * @return 
-     */
-        
-    TList<TList<T>> chunk(TList<TList<T>> current, TList<T> remain, Predicate<T> pred) {
-        TList<Integer> divides = remain.filterAt(pred);
+     */    
+    public TList<TList<T>> reverseChunk(Predicate<T> pred) {
+        TList<Integer> divides = filterAt(pred).startFrom(0).append(size());
         if (divides.isEmpty())
-            return current.addOne(remain);
-        int division = divides.get(0);
-        return chunk(current.addOne(remain.head(division+1).sfix()), remain.tail(division+1).sfix(), pred);
+            return TList.sof(this);
+        return divides.diff((a,b)->subList(a,b)).map(l->l.sfix()).sfix();
     }
     
     public TList<T> head(int i) {
