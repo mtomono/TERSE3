@@ -18,6 +18,8 @@ package collection;
 import static collection.c.a2l;
 import debug.Monitorable;
 import java.util.*;
+import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 import string.Message;
 
 /**
@@ -60,6 +62,14 @@ public class P<L, R> extends AbstractList<Object> implements Monitorable {
     
     public <RR> P<P<L, R>, RR> c(RR rr) {
         return new P<>(this, rr);
+    }
+    
+    public boolean test(BiPredicate<L,R> test) {
+        return test.test(l, r);
+    }
+    
+    public <S> S map(BiFunction<L,R,S> map) {
+        return map.apply(l, r);
     }
     
     @Override

@@ -1161,12 +1161,10 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
             return chunk;
         return chunk.diff((a,b)->b.startFrom(a.last())).startFrom(chunk.get(0));
     }
-    
+        
     /**
      * main body of chunk.
      * 
-     * @param current
-     * @param remain
      * @param pred
      * @return 
      */    
@@ -1192,20 +1190,16 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
      * @return 
      */
     public TList<TList<T>> diffChunk(BiPredicate<T,T> pred) {
-        return map(e->Optional.of(e)).sfix().diffChunk((a,b)->a.isPresent()&&b.isPresent()?pred.test(a.get(),b.get()):true, Optional.empty()).map(l->l.map(o->o.get()).sfix());
+        Iterator<T> iter=iterator();
+        if (!iter.hasNext())
+            return TList.empty();
+        T one = iter.next();
+        if (!iter.hasNext())
+            return TList.of(this);
+        TList<TList<P<T,T>>> chunk = diff().sfix().reverseChunk(p->p.test(pred)).sfix();
+        return chunk.seek(1).map(l->l.size()>1?l.seek(1).transform(dediff()).sfix():TList.of(l.get(0).r()).sfix()).startFrom(chunk.get(0).transform(dediff()).sfix()).sfix();
     }
     
-    /**
-     * chunk the list up with relationship with next item.
-     * the result is sfix-ed because it has tremendous influence in performance.
-     * @param pred
-     * @param sentinel an item which is not contained in list to show the end of the list
-     * @return 
-     */
-    public TList<TList<T>> diffChunk(BiPredicate<T,T> pred, T sentinel) {
-        assert !contains(sentinel);
-        return append(sentinel).diff().sfix().chunk(p->pred.test(p.l(),p.r())).sfix().filter(l->!l.isEmpty()).sfix().map(pl->pl.map(p->p.l())).sfix();
-    }
     
 //----------- Composing
     /**

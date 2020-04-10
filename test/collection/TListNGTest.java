@@ -1785,6 +1785,19 @@ public class TListNGTest {
     }
     
     @Test
+    public void testDiffChunk3() {
+        System.out.println(test.TestUtils.methodName(0));
+        Integer[][] resultO = {{0,1},{0,2},{5,2},{1,2},{1,3},{2,4},{2,5},{2,6},{5,9},{6,1},{3,7},{3,8},{4,9}};
+        TList<TList<Integer>> tested = TList.sof(resultO).map(a->TList.sof(a));
+        TList<TList<TList<Integer>>> result = tested.diffChunk((a,b)->!a.get(0).equals(b.get(0)));
+        Integer[][][] expectedO = {{{0,1},{0,2}},{{5,2}},{{1,2},{1,3}},{{2,4},{2,5},{2,6}},{{5,9}},{{6,1}},{{3,7},{3,8}},{{4,9}}};
+        TList<TList<TList<Integer>>> expected = TList.sof(expectedO).map(aa->TList.sof(aa).map(a->TList.sof(a))).sfix();
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result, expected);
+    }
+    
+    @Test
     public void testIntersect() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Integer> tested = TList.sof(10000,10001,10002,1003,10004,10005);
