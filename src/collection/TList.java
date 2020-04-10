@@ -1197,9 +1197,9 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
         T one = iter.next();
         if (!iter.hasNext())
             return TList.of(this);
-        TList<TList<P<T,T>>> chunk = diff().sfix().chunk(p->p.test(pred)).sfix();
-        return chunk.seek(-1).map(l->l.map(p->p.l()).sfix())
-                .append(chunk.last().isEmpty()?TList.of(chunk.last(1).last().r()).sfix():chunk.last().transform(dediff()).sfix()).sfix();
+        TList<TList<T>> retval = diff().sfix().chunk(p->p.test(pred)).map(l->l.map(p->p.l()).fix()).sfix();
+        retval.last().add(last());
+        return retval;
     }
 
 //----------- Composing
