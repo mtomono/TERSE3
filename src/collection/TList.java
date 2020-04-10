@@ -18,6 +18,7 @@ package collection;
 import static collection.c.a2l;
 import static collection.c.l2aInt;
 import debug.Monitorable;
+import debug.Te;
 import static function.ComparePolicy.inc;
 import iterator.IteratorCache;
 import iterator.RotateListIterator;
@@ -1196,11 +1197,11 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
         T one = iter.next();
         if (!iter.hasNext())
             return TList.of(this);
-        TList<TList<P<T,T>>> chunk = diff().sfix().reverseChunk(p->p.test(pred)).sfix();
-        return chunk.seek(1).map(l->l.size()>1?l.seek(1).transform(dediff()).sfix():TList.of(l.get(0).r()).sfix()).startFrom(chunk.get(0).transform(dediff()).sfix()).sfix();
+        TList<TList<P<T,T>>> chunk = diff().sfix().chunk(p->p.test(pred)).sfix();
+        return chunk.seek(-1).map(l->l.map(p->p.l()).sfix())
+                .append(chunk.last().isEmpty()?TList.of(chunk.last(1).last().r()).sfix():chunk.last().transform(dediff()).sfix()).sfix();
     }
-    
-    
+
 //----------- Composing
     /**
      * concatenate lists in parameters.

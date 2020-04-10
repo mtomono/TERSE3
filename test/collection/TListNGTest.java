@@ -1798,6 +1798,17 @@ public class TListNGTest {
     }
     
     @Test
+    public void testDiffChunk4() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> tested = TList.sof(0,1,2,3,4);
+        TList<TList<Integer>> result = tested.diffChunk((a,b)->!a.equals(b));
+        TList<TList<Integer>> expected = TList.sof(0,1,2,3,4).map(i->TList.sof(i));
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
     public void testIntersect() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Integer> tested = TList.sof(10000,10001,10002,1003,10004,10005);
