@@ -96,6 +96,17 @@ public class TListNGTest {
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
     }
+    
+    @Test
+    public void testSet_Iterator() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> tested = TList.sof(0,1,2,3);
+        TList<Integer> result = TList.set(tested.iterator());
+        TList<Integer> expected = tested;
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
 
     @Test
     public void testOf() {

@@ -16,9 +16,9 @@
 package collection;
 
 import static collection.c.a2l;
+import static collection.c.i2l;
 import static collection.c.l2aInt;
 import debug.Monitorable;
-import debug.Te;
 import static function.ComparePolicy.inc;
 import iterator.IteratorCache;
 import iterator.RotateListIterator;
@@ -351,6 +351,10 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
      */
     static public <T> TList<T> set(Collection<T> body) {
         return set(new ArrayList<>(body));
+    }
+    
+    static public <T> TList<T> set(Iterator<T> body) {
+        return set(i2l(body));
     }
     
     public List<T> out() {

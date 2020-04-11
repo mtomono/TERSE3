@@ -18,8 +18,7 @@ package shapeCollection;
 import static arithmetic.Arithmetic.ceil;
 import static arithmetic.Arithmetic.div;
 import static arithmetic.Arithmetic.floor;
-import collection.TList;
-import debug.Te;
+import test.PTe;
 import static java.lang.Math.abs;
 import static java.lang.Math.signum;
 import java.util.AbstractList;
@@ -94,9 +93,9 @@ public class ScaledAxis extends AbstractList<Double> {
     final int stepDebug(double value) {
         todo("the problem here is caused by glitch of double");
         if (dir > 0)
-            return Te.e("positive:",(int)ceil.o((double)Te.e("br:",div.o((double)Te.e("v-z:",value-zero), (double)Te.e("p:",pitch)))));
+            return PTe.e((int) ceil.o((double) PTe.e(div.o((double) PTe.e(value-zero, "v-z:"), (double) PTe.e(pitch, "p:")), "br:")), "positive:");
         else 
-            return Te.e("negative:",(int)floor.o((double)Te.e("br:",div.o((double)Te.e("v-z:",value-zero), (double)Te.e("p:",pitch)))));
+            return PTe.e((int) floor.o((double) PTe.e(div.o((double) PTe.e(value-zero, "v-z:"), (double) PTe.e(pitch, "p:")), "br:")), "negative:");
     }
     
     public int start() {

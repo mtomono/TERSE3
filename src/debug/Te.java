@@ -15,52 +15,18 @@
 
 package debug;
 
-import java.util.function.Function;
+import test.PTe;
 
 /**
- * Tee
- * 
+ * Tee.
+ * every implementation is inherited from PTe.
+ * Te is a class often times reference is prohibited.
+ * thus, this way of inheritance.
+ * and made PTe as home to their implementation.
+ * because often times, reference to Te are clensed.
+ * if Te has the implementation, PTe has to contain reference to Te.
+ * and that reference would be on radar everytime we do the sanity check.
  * @author masao
  */
-public class Te {
-    public static double e(double value) {
-        System.out.println(value);
-        return value;
-    }
-    public static int e(int value) {
-        System.out.println(value);
-        return value;
-    }
-    public static long e(long value) {
-        System.out.println(value);
-        return value;
-    }
-    public static boolean e(boolean value) {
-        System.out.println(value);
-        return value;
-    }
-    public static char e(char value) {
-        System.out.println(value);
-        return value;
-    }
-    public static <T> T e(T value) {
-        System.out.println(value);
-        return value;
-    }
-    public static <T> T ex(T value) {
-        return value;
-    }
-    public static <T> T e(T value,Function<T,String> f) {
-        System.out.println(f.apply(value));
-        return value;
-    }
-    public static <T> T ex(T value,Function<T,String> f) {
-        return value;
-    }
-    public static <T> T e(String label,T value) {
-        return e(value,v->label+v);
-    }
-    public static <T> T ex(String label, T value) {
-        return value;
-    }
+public class Te extends PTe{
 }
