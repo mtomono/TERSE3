@@ -264,7 +264,11 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
     static public <T> TList<T> wrap(T target) {
         return set(Collections.singletonList(target));
     }
-    
+
+    static public <T> TList<T> wrapOp(Optional<T> o) {
+        return o.map(x->TList.wrap(x)).orElse(TList.empty());
+    }
+
     static TList<Integer> rangeBase(int from, int to) {
         assert from <= to;
         return set(new ShiftedScale(from)).subList(0, to-from);
@@ -1174,9 +1178,9 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
      * @return 
      */    
     public TList<TList<T>> reverseChunk(Predicate<T> pred) {
+        if (isEmpty())
+            return TList.empty();
         TList<Integer> divides = filterAt(pred).startFrom(0).append(size());
-        if (divides.isEmpty())
-            return TList.sof(this);
         return divides.diff((a,b)->subList(a,b)).map(l->l.sfix()).sfix();
     }
     
@@ -1205,7 +1209,7 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
         retval.last().add(last());
         return retval;
     }
-
+    
 //----------- Composing
     /**
      * concatenate lists in parameters.
