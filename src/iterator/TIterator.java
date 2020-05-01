@@ -19,6 +19,7 @@ import static collection.c.a2i;
 import collection.OneTimeIterable;
 import collection.P;
 import collection.RingBuffer;
+import collection.TList;
 import static collection.c.i2l;
 import function.Holder;
 import function.IntHolder;
@@ -209,12 +210,24 @@ public class TIterator<T> implements Iterator<T> {
         return accum((a,b)->map.apply(b,a));
     }
     
+    public TIterator<TList<T>> chunk(Predicate<T> pred) {
+        return TIterator.set(new ContextChunkIterator<>(this,pred)).map(l->TList.set(l));
+    }
+    
+    public TIterator<TList<T>> reverseChunk(Predicate<T> pred) {
+        return TIterator.set(new ContextReverseChunkIterator<>(this,pred)).map(l->TList.set(l));
+    }
+    
     public Stream<T> stream() {
         return toStream(this);
     }
     
     public Iterable<T> i() {
         return new OneTimeIterable<>(this);
+    }
+    
+    public TList<T> asList() {
+        return TList.set(i2l(this));
     }
     
     public TSupplier<T> supplier(Supplier<T> shortage) {
