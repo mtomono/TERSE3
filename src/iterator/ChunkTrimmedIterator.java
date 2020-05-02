@@ -23,17 +23,15 @@ import java.util.function.Predicate;
  * @author masao
  * @param <T>
  */
-public class ContextEnvelopChunkIterator<T> extends ContextChunkIteratorBase<T> {
+public class ChunkTrimmedIterator<T> extends ChunkIteratorBase<T> {
 
-    public ContextEnvelopChunkIterator(Iterator<T> body, Predicate<T> pred) {
+    public ChunkTrimmedIterator(Iterator<T> body, Predicate<T> pred) {
         super(body,pred);
     }
 
     @Override
     protected void whenTestsTrue(T e) {
-        retval.add(e);
         nextFound(retval);
         retval=new ArrayList<>();
-        retval.add(e);
     }
 }

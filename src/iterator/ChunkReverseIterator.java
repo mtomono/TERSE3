@@ -23,9 +23,9 @@ import java.util.function.Predicate;
  * @author masao
  * @param <T>
  */
-public class ContextReverseChunkIterator<T> extends ContextChunkIteratorBase<T> {
+public class ChunkReverseIterator<T> extends ChunkIteratorBase<T> {
 
-    public ContextReverseChunkIterator(Iterator<T> body, Predicate<T> pred) {
+    public ChunkReverseIterator(Iterator<T> body, Predicate<T> pred) {
         super(body,pred);
     }
 

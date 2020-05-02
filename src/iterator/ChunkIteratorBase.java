@@ -16,22 +16,41 @@ package iterator;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.function.Predicate;
 
 /**
  *
  * @author masao
  */
-public class ContextChunkIterator<T> extends ContextChunkIteratorBase<T>{
+abstract public class ChunkIteratorBase<T> extends AbstractBufferedIterator<List<T>>{
+    Iterator<T> body;
+    Predicate<T> pred;
+    List<T> retval;
+    boolean finished;
 
-    public ContextChunkIterator(Iterator<T> body, Predicate<T> pred) {
-        super(body,pred);
+    public ChunkIteratorBase(Iterator<T> body, Predicate<T> pred) {
+        this.body = body;
+        this.pred = pred;
+        this.retval = new ArrayList<>();
+        this.finished = !body.hasNext();
     }
 
+    abstract protected void whenTestsTrue(T e);
+    
     @Override
-    protected void whenTestsTrue(T e) {
-        retval.add(e);
+    protected void findNext() {
+        if (finished)
+            return;
+        while (body.hasNext()) {
+            T e = body.next();
+            if (pred.test(e)) {
+                whenTestsTrue(e);
+                return;
+            }
+            retval.add(e);
+        }
         nextFound(retval);
-        retval=new ArrayList<>();
+        finished=true;
     }
 }

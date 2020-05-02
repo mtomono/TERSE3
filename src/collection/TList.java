@@ -1210,6 +1210,19 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
         return retval;
     }
     
+    public TList<TList<T>> contextChunk(Predicate<T> pred) {
+        return iterator().chunk(pred).asList();
+    }
+    public TList<TList<T>> contextReverseChunk(Predicate<T> pred) {
+        return iterator().reverseChunk(pred).asList();
+    }
+    public TList<TList<T>> contextEnvelopChunk(Predicate<T> pred) {
+        return iterator().envelopChunk(pred).asList();
+    }
+    public TList<TList<T>> contextTrimmedChunk(Predicate<T> pred) {
+        return iterator().trimmedChunk(pred).asList();
+    }
+    
 //----------- Composing
     /**
      * concatenate lists in parameters.

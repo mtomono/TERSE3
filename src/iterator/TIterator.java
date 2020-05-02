@@ -211,19 +211,19 @@ public class TIterator<T> implements Iterator<T> {
     }
     
     public TIterator<TList<T>> chunk(Predicate<T> pred) {
-        return TIterator.set(new ContextChunkIterator<>(this,pred)).map(l->TList.set(l));
+        return TIterator.set(new ChunkIterator<>(this,pred)).map(l->TList.set(l));
     }
     
     public TIterator<TList<T>> reverseChunk(Predicate<T> pred) {
-        return TIterator.set(new ContextReverseChunkIterator<>(this,pred)).map(l->TList.set(l));
+        return TIterator.set(new ChunkReverseIterator<>(this,pred)).map(l->TList.set(l));
     }
     
     public TIterator<TList<T>> envelopChunk(Predicate<T> pred) {
-        return TIterator.set(new ContextEnvelopChunkIterator<>(this,pred)).map(l->TList.set(l));
+        return TIterator.set(new ChunkEnvelopIterator<>(this,pred)).map(l->TList.set(l));
     }
     
     public TIterator<TList<T>> trimmedChunk(Predicate<T> pred) {
-        return TIterator.set(new ContextTrimmedChunkIterator<>(this,pred)).map(l->TList.set(l));
+        return TIterator.set(new ChunkTrimmedIterator<>(this,pred)).map(l->TList.set(l));
     }
     
     public Stream<T> stream() {
