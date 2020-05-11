@@ -244,6 +244,7 @@ public class Parsers {
     public static final Parser<String, Character, String> integerStrDelimited = seq(upto(1, chr('-')), many(1, digit.or(comma))).l();
     public static final Parser<String, Character, Integer> integer = integerStr.apply(s->Integer.parseInt(s));
     public static final Parser<String, Character, String> numberStr = seq(integerStr, manyUpto(0, 1, sequence(dot, many(digit))).l()).l();
+    public static final Parser<String, Character, String> numberStrDelimited = seq(integerStrDelimited, manyUpto(0, 1, sequence(dot, many(digit))).l()).l();
     public static final Parser<String, Character, Double> number = numberStr.apply(s->Double.parseDouble(s));
     public static final Parser<String, Character, String> spaces = many(space.or(tab).or(cr)).l();
     public static final Parser<String, Character, Character> octal = digit.t().accept(c->c<'8');
