@@ -18,9 +18,11 @@ package orderedSet;
 import collection.TList;
 import iterator.TIterator;
 import static java.lang.Math.max;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import static java.util.stream.Collectors.toList;
+import static math.TBigDecimal.b;
 
 /**
  *
@@ -118,6 +120,10 @@ public class RangeUtil {
 
     static public double widthD(Range<Double> range) {
         return range.end()-range.start();
+    }
+    
+    static public BigDecimal widthBD(Range<BigDecimal> range) {
+        return b(range.end()).sub(range.start()).v;
     }
     
     static public <T extends Comparable<T>> Range<T> inEitherWay(T one, T two) {
