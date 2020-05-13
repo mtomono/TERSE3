@@ -119,4 +119,9 @@ public class RangeUtil {
     static public double widthD(Range<Double> range) {
         return range.end()-range.start();
     }
+    
+    static public <T extends Comparable<T>> Range<T> inEitherWay(T one, T two) {
+        return one.compareTo(two)<0?new Range<>(one,two):new Range<>(two,one);
+
+    }
 }
