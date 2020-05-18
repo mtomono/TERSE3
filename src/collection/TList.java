@@ -25,6 +25,7 @@ import iterator.RotateListIterator;
 import iterator.TIterator;
 import iterator.TListIterator;
 import static java.lang.Math.abs;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collector;
@@ -673,6 +674,9 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
     }
     
 //-----------Calculating
+    public BigDecimal averageBD(Function<T,BigDecimal> f) {
+        return sumBD(f).divide(new BigDecimal(size()));
+    }
     /**
      * map each item to double value and take average of them.
      * @param f
@@ -700,6 +704,9 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
         return stream().mapToInt(f).average().orElse(0);
     }
 
+    public BigDecimal sumBD(Function<T,BigDecimal> f) {
+        return stream().map(f).reduce(BigDecimal.ZERO,(a,b)->a.add(b));
+    }
     /**
      * map each item to double value and take sum of them.
      * @param f
