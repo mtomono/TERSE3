@@ -41,6 +41,10 @@ public class RangeUtil {
         return new Range<>(r.start()+v, r.end()+v);
     }
     
+    static public Range<BigDecimal> shift(Range<BigDecimal> r, BigDecimal v) {
+        return new Range<>(r.start().add(v), r.end().add(v));
+    }
+    
     static public RangeSet<Integer> shift(RangeSet<Integer> rs, int l) {
         return new RangeSet<>(rs.stream().map(r->shift(r,l)).collect(toList()));
     }
@@ -53,6 +57,10 @@ public class RangeUtil {
         return new RangeSet<>(rs.stream().map(r->shift(r,l)).collect(toList()));
     }
     
+    static public RangeSet<BigDecimal> shift(RangeSet<BigDecimal> rs, BigDecimal l) {
+        return new RangeSet<>(rs.stream().map(r->shift(r,l)).collect(toList()));
+    }
+
     static public RangeSet<Integer> unionI(List<RangeSet<Integer>> rs) {
         return rs.stream().reduce(RangeSet.empty(), (a,b)->a.union(b));
     }
@@ -65,6 +73,10 @@ public class RangeUtil {
         return rs.stream().reduce(RangeSet.empty(), (a,b)->a.union(b));
     }
     
+    static public RangeSet<BigDecimal> unionBD(List<RangeSet<BigDecimal>> rs) {
+        return rs.stream().reduce(RangeSet.empty(), (a,b)->a.union(b));
+    }
+
     static public RangeSet<Integer> intersectI(List<RangeSet<Integer>> rs) {
         return rs.stream().reduce((a,b)->a.intersect(b)).orElse(RangeSet.empty());
     }
@@ -77,6 +89,10 @@ public class RangeUtil {
         return rs.stream().reduce((a,b)->a.intersect(b)).orElse(RangeSet.empty());
     }
     
+    static public RangeSet<BigDecimal> intersectBD(List<RangeSet<BigDecimal>> rs) {
+        return rs.stream().reduce((a,b)->a.intersect(b)).orElse(RangeSet.empty());
+    }
+
     static public Optional<Range<Integer>> intersectRI(List<Range<Integer>> rs) {
         TIterator<Optional<Range<Integer>>> iter = TList.set(rs).accumFromStart(a->Optional.of(a),(a,b)->a.flatMap(r->r.intersect(b))).iterator().until(r->r.isEmpty());
         if (!iter.hasNext())
@@ -98,6 +114,13 @@ public class RangeUtil {
         return iter.last();
     }
     
+    static public Optional<Range<BigDecimal>> intersectRBD(List<Range<BigDecimal>> rs) {
+        TIterator<Optional<Range<BigDecimal>>> iter = TList.set(rs).accumFromStart(a->Optional.of(a),(a,b)->a.flatMap(r->r.intersect(b))).iterator().until(r->r.isEmpty());
+        if (!iter.hasNext())
+            return Optional.empty();
+        return iter.last();
+    }
+    
     static public Range<Integer> optional(int a, int b) {
         return new Range<>(a, max(a,b));
     }
@@ -110,6 +133,10 @@ public class RangeUtil {
         return new Range<>(a, max(a,b));
     }
     
+    static public Range<BigDecimal> optional(BigDecimal a, BigDecimal b) {
+        return new Range<>(a, a.max(b));
+    }
+
     static public int widthI(Range<Integer> range) {
         return range.end()-range.start();
     }
