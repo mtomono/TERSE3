@@ -19,7 +19,7 @@ package math;
  * @author masao
  * @param <K>
  */
-public interface Field<K extends Field> {
+public interface FieldM<K extends FieldM> {
     public K add(K value);
     public K sub(K value);
     public K mul(K value);

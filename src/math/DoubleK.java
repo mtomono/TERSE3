@@ -18,7 +18,7 @@ package math;
  *
  * @author masao
  */
-public class DoubleK implements Field<DoubleK> {
+public class DoubleK implements FieldM<DoubleK> {
     public final double body;
     
     static public final DoubleK zero = new DoubleK(0);

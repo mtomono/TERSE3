@@ -22,7 +22,7 @@ import java.util.Map;
  * @param <K>
  * @param <B>
  */
-abstract public class SparseVectorSpace<B,K extends Field<K>> implements VectorSpaceWithBasis<SparseVectorSpace<B,K>,B,K> {
+abstract public class SparseVectorSpace<B,K extends FieldM<K>> implements VectorSpaceWithBasis<SparseVectorSpace<B,K>,B,K> {
     abstract public Map<B,K> getMap();
     abstract public SparseVectorSpace<B,K> clone();
 

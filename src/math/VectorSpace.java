@@ -20,7 +20,7 @@ package math;
  * @param <V>
  * @param <K>
  */
-public interface VectorSpace<V extends VectorSpace,K extends Field> {
+public interface VectorSpace<V extends VectorSpace,K extends FieldM> {
     V add(V other);
     V sub(V other);
     V scale(K other);

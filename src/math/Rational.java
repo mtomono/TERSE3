@@ -22,7 +22,7 @@ import java.math.BigDecimal;
  *
  * @author masao
  */
-public class Rational implements Field<Rational> {
+public class Rational implements FieldM<Rational> {
     public final long numerator;
     public final long denominator;
     

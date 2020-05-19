@@ -21,5 +21,5 @@ package math;
  * @param <B> basis or axis
  * @param <K> member of the field where this vector is based on
  */
-public interface VectorSpaceWithBasis<V extends VectorSpace,B,K extends Field> extends VectorSpace<V,K> {
+public interface VectorSpaceWithBasis<V extends VectorSpace,B,K extends FieldM> extends VectorSpace<V,K> {
 }

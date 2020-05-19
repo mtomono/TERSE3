@@ -19,7 +19,7 @@ package math;
  * @author masao
  * @param <K>
  */
-public class KVector<K extends Field<K>> implements VectorSpace<KVector<K>,K> {
+public class KVector<K extends FieldM<K>> implements VectorSpace<KVector<K>,K> {
     public final K body;
     
     public KVector(K body) {

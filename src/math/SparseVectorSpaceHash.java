@@ -21,7 +21,7 @@ import java.util.Map;
  *
  * @author masao
  */
-public class SparseVectorSpaceHash<T,K extends Field<K>> extends SparseVectorSpace<T,K> {
+public class SparseVectorSpaceHash<T,K extends FieldM<K>> extends SparseVectorSpace<T,K> {
     Map<T,K> body;
     public SparseVectorSpaceHash(Map<T,K> body) {
         this.body = body;
