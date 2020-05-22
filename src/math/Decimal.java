@@ -24,6 +24,24 @@ public interface Decimal<K> extends Comparable<K> {
     K div(K v);
     K div(int v);
     K div(long v);
+    default boolean same(K v) {
+        return compareTo(v)==0;
+    }
+    default boolean lt(K v) {
+        return compareTo(v)<0;
+    }
+    default boolean gt(K v) {
+        return compareTo(v)>0;
+    }
+    default boolean isZero() {
+        return same(zero());
+    }
+    default boolean belowZero() {
+        return lt(zero());
+    }
+    default boolean aboveZero() {
+        return gt(zero());
+    }
     
     public static <K extends Decimal<K>> K width(Range<K> range) {
         return range.end.sub(range.start);
