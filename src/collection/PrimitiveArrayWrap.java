@@ -36,6 +36,9 @@ public class PrimitiveArrayWrap {
     public static List<java.lang.Long> wrap(long... body) {
         return new Long(body);
     }
+    public static List<java.lang.Character> wrap(char... body) {
+        return new Character(body);
+    }
     public static double[] unwrapD(List<java.lang.Double> body) {
         double[] retval = new double[body.size()];
         Iterator<java.lang.Double> iter = body.iterator();
@@ -63,6 +66,14 @@ public class PrimitiveArrayWrap {
     public static long[] unwrapL(List<java.lang.Long> body) {
         long[] retval = new long[body.size()];
         Iterator<java.lang.Long> iter = body.iterator();
+        int i = 0;
+        while (iter.hasNext())
+            retval[i++]=iter.next();
+        return retval;
+    }
+    public static char[] unwrapC(List<java.lang.Character> body) {
+        char[] retval = new char[body.size()];
+        Iterator<java.lang.Character> iter = body.iterator();
         int i = 0;
         while (iter.hasNext())
             retval[i++]=iter.next();
@@ -159,6 +170,29 @@ public class PrimitiveArrayWrap {
         @Override
         public java.lang.Long set(int index, java.lang.Long v) {
             java.lang.Long retval = body[index];
+            body[index] = v;
+            return retval;
+        }
+    }
+    public static class Character extends AbstractList<java.lang.Character> {
+        char[] body;
+        public Character(char[] body) {
+            this.body = body;
+        }
+
+        @Override
+        public java.lang.Character get(int index) {
+            return body[index];
+        }
+
+        @Override
+        public int size() {
+            return body.length;
+        }
+        
+        @Override
+        public java.lang.Character set(int index, java.lang.Character v) {
+            java.lang.Character retval = body[index];
             body[index] = v;
             return retval;
         }
