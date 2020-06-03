@@ -10,8 +10,9 @@ import orderedSet.Range;
 /**
  *
  * @author masao
+ * @param <K>
  */
-public interface Decimal<K> extends Comparable<K> {
+public interface Decimal<K extends Decimal<K>> extends Field<K>,Comparable<K> {
     K zero();
     K one();
     K negate();
