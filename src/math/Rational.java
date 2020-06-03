@@ -15,14 +15,14 @@
 package math;
 
 import collection.TList;
-import static java.lang.Math.abs;
+import static java.lang.Long.compare;
 import java.math.BigDecimal;
 
 /**
  *
  * @author masao
  */
-public class Rational implements FieldM<Rational> {
+public class Rational implements Decimal<Rational> {
     public final long numerator;
     public final long denominator;
     
@@ -49,8 +49,21 @@ public class Rational implements FieldM<Rational> {
         return gcd(n,r);
     }
     
+    public Rational abs() {
+        return new Rational(java.lang.Math.abs(numerator),java.lang.Math.abs(denominator));
+    }
+    
+    public Rational negate() {
+        return new Rational(-numerator,denominator);
+    }
+    
+    @Override
+    public int compareTo(Rational other) {
+        return compare(numerator*other.denominator, other.numerator*denominator);
+    }
+    
     public Rational reduce() {
-        long gcd = abs(gcd(numerator, denominator));
+        long gcd = java.lang.Math.abs(gcd(numerator, denominator));
         return new Rational(numerator/gcd, denominator/gcd);
     }
     
@@ -99,10 +112,30 @@ public class Rational implements FieldM<Rational> {
     public Rational mul(Rational value) {
         return new Rational(numerator*value.numerator, denominator*value.denominator);
     }
+    
+    @Override
+    public Rational mul(int value) {
+        return new Rational(numerator*value, denominator);
+    }
+
+    @Override
+    public Rational mul(long value) {
+        return new Rational(numerator*value, denominator);
+    }
 
     @Override
     public Rational div(Rational value) {
         return new Rational(numerator*value.denominator, denominator*value.numerator);
+    }
+
+    @Override
+    public Rational div(int value) {
+        return new Rational(numerator, denominator*value);
+    }
+
+    @Override
+    public Rational div(long value) {
+        return new Rational(numerator, denominator*value);
     }
 
     @Override
