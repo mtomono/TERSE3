@@ -70,22 +70,22 @@ public class DoubleK implements Decimal<DoubleK> {
 
     @Override
     public DoubleK mul(int v) {
-        return mul(v);
+        return mul(new DoubleK(v));
     }
 
     @Override
     public DoubleK mul(long v) {
-        return mul(v);
+        return mul(new DoubleK(v));
     }
 
     @Override
     public DoubleK div(int v) {
-        return div(v);
+        return div(new DoubleK(v));
     }
 
     @Override
     public DoubleK div(long v) {
-        return div(v);
+        return div(new DoubleK(v));
     }
 
     @Override
