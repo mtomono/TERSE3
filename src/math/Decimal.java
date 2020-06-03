@@ -13,16 +13,10 @@ import orderedSet.Range;
  * @param <K>
  */
 public interface Decimal<K extends Decimal<K>> extends Field<K>,Comparable<K> {
-    K zero();
-    K one();
     K negate();
     K abs();
-    K add(K v);
-    K sub(K v);
-    K mul(K v);
     K mul(int v);
     K mul(long v);
-    K div(K v);
     K div(int v);
     K div(long v);
     default boolean same(K v) {
