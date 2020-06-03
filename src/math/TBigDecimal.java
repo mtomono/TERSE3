@@ -6,8 +6,6 @@
 package math;
 
 import java.math.BigDecimal;
-import static java.math.BigDecimal.ONE;
-import static java.math.BigDecimal.ZERO;
 import java.math.RoundingMode;
 import static java.math.RoundingMode.HALF_EVEN;
 
