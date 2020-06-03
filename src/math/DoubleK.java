@@ -18,11 +18,11 @@ package math;
  *
  * @author masao
  */
-public class DoubleK implements FieldM<DoubleK> {
+public class DoubleK implements Decimal<DoubleK> {
     public final double body;
     
-    static public final DoubleK zero = new DoubleK(0);
-    static public final DoubleK one = new DoubleK(0);
+    static public final DoubleK ZERO = new DoubleK(0);
+    static public final DoubleK ONE = new DoubleK(0);
     
     public DoubleK(double body) {
         this.body = body;
@@ -50,11 +50,46 @@ public class DoubleK implements FieldM<DoubleK> {
 
     @Override
     public DoubleK zero() {
-        return zero;
+        return ZERO;
     }
     
     @Override
     public DoubleK one() {
-        return one;
+        return ONE;
+    }
+
+    @Override
+    public DoubleK negate() {
+        return new DoubleK(-body);
+    }
+
+    @Override
+    public DoubleK abs() {
+        return new DoubleK(Math.abs(body));
+    }
+
+    @Override
+    public DoubleK mul(int v) {
+        return mul(v);
+    }
+
+    @Override
+    public DoubleK mul(long v) {
+        return mul(v);
+    }
+
+    @Override
+    public DoubleK div(int v) {
+        return div(v);
+    }
+
+    @Override
+    public DoubleK div(long v) {
+        return div(v);
+    }
+
+    @Override
+    public int compareTo(DoubleK o) {
+        return Double.compare(body, o.body);
     }
 }
