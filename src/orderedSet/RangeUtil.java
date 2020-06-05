@@ -22,7 +22,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import static java.util.stream.Collectors.toList;
-import static math.TBigDecimal.b;
+import static math.KBigDecimal.b;
 
 /**
  *
