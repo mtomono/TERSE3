@@ -37,15 +37,9 @@ public interface Quantity<Q extends Quantity<Q,K,U>,K extends Decimal<K>, U> ext
         compatible(other);
         return inherit(amount().sub(other.amount()));
     }
-    default K div(Q other) {
-        return other.amount().div(amount());
-    }
-    default K scaleDiv(Q other) {
-        return div(other);
-    }
     default K scale(Q other) {
         compatible(other);
-        return scaleDiv(other);
+        return other.amount().div(amount());
     }
     default Q scale(K other) {
         return inherit(amount().mul(other));
@@ -56,11 +50,8 @@ public interface Quantity<Q extends Quantity<Q,K,U>,K extends Decimal<K>, U> ext
     default Q negate() {
         return inherit(amount().negate());
     }
-    default K exchangeDiv(Q other) {
-        return div(other);
-    }
     default Exchange<K,U> exchange(Q other) {
-        return new Exchange(exchangeDiv(other), unit(), other.unit());
+        return new Exchange(other.amount().div(amount()), unit(), other.unit());
     }
     default Q exchange(Exchange<K,U> exchange) {
         assert unit().equals(exchange.from) : "wrong exchange is applied";
