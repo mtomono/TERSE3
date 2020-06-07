@@ -8,7 +8,9 @@ package math;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import static java.math.RoundingMode.HALF_EVEN;
+import java.text.DecimalFormat;
 import java.util.Objects;
+import string.Strings;
 
 /**
  *
@@ -17,12 +19,6 @@ import java.util.Objects;
 public class KBigDecimal implements Decimal<KBigDecimal> { 
     static public KBigDecimal ZERO=new KBigDecimal(BigDecimal.ZERO);
     static public KBigDecimal ONE=new KBigDecimal(BigDecimal.ONE);
-    static public BigDecimal c(int value) {
-        return new BigDecimal(value);
-    }
-    static public BigDecimal c(long value) {
-        return new BigDecimal(value);
-    }
     static public BigDecimal c(double value) {
         return new BigDecimal(value);
     }
@@ -41,10 +37,7 @@ public class KBigDecimal implements Decimal<KBigDecimal> {
     static public KBigDecimal b(KBigDecimal value) {
         return b(value.v);
     }
-    static public KBigDecimal b(int value) {
-        return b(c(value));
-    }
-    static public KBigDecimal b(long value) {
+    static public KBigDecimal b(double value) {
         return b(c(value));
     }
     static public KBigDecimal b(String value) {
@@ -54,11 +47,19 @@ public class KBigDecimal implements Decimal<KBigDecimal> {
     public KBigDecimal(BigDecimal body) {
         this.v=body;
     }
+    public KBigDecimal create(BigDecimal v) {
+        return new KBigDecimal(v);
+    }
+    
+    public BigDecimal value() {
+        return v;
+    }
+    
     public KBigDecimal add(BigDecimal value) {
-        return new KBigDecimal(v.add(value));
+        return create(v.add(value));
     }
    public KBigDecimal add(KBigDecimal value) {
-        return add(value.v);
+        return add(value.value());
     }
     public KBigDecimal add(int v) {
         return add(c(v));
@@ -70,7 +71,7 @@ public class KBigDecimal implements Decimal<KBigDecimal> {
         return add(c(v));
     }
     public KBigDecimal sub(BigDecimal value) {
-        return new KBigDecimal(v.subtract(value));
+        return create(v.subtract(value));
     }
     public KBigDecimal sub(KBigDecimal value) {
         return sub(value.v);
@@ -85,7 +86,7 @@ public class KBigDecimal implements Decimal<KBigDecimal> {
         return sub(c(v));
     }
     public KBigDecimal mul(BigDecimal value) {
-        return new KBigDecimal(v.multiply(value));
+        return create(v.multiply(value));
     }
     public KBigDecimal mul(KBigDecimal value) {
         return mul(value.v);
@@ -102,7 +103,7 @@ public class KBigDecimal implements Decimal<KBigDecimal> {
         return mul(c(v));
     }
     public KBigDecimal div(BigDecimal value) {
-        return new KBigDecimal(v.divide(value));
+        return create(v.divide(value));
     }
     public KBigDecimal div(BigDecimal value, int scale, RoundingMode r) {
         return new KBigDecimal(v.divide(value, scale, r));
@@ -122,10 +123,18 @@ public class KBigDecimal implements Decimal<KBigDecimal> {
         return div(c(v));
     }
     public KBigDecimal abs() {
-        return new KBigDecimal(v.abs());
+        return create(v.abs());
     }
+    @Override
+    public KBigDecimal negate() {
+        return create(v.negate());
+    }
+
     public KBigDecimal percent() {
         return div(c(100));
+    }
+    public KBigDecimal setScale(int scale) {
+        return create(v.setScale(scale));
     }
     public KBigDecimal zero() {
         return ZERO;
@@ -151,14 +160,16 @@ public class KBigDecimal implements Decimal<KBigDecimal> {
         hash = 37 * hash + Objects.hashCode(this.v);
         return hash;
     }
+
+    public String format() {
+        String zero = Strings.n('0', v.scale());
+        String dot = v.scale()>0?".":"";
+        return new DecimalFormat("#,###"+dot+zero+";-#,###"+dot+zero).format(v);
+    }
+    
     @Override
     public String toString() {
         return v.toString();
-    }
-
-    @Override
-    public KBigDecimal negate() {
-        return new KBigDecimal(v.negate());
     }
 
     @Override
