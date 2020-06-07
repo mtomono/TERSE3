@@ -10,47 +10,60 @@ import math.Decimal;
 /**
  *
  * @author masao
+ * @param <Q>
  * @param <K>
  * @param <U>
  */
-public class Quantity<K extends Decimal<K>, U> {
-    final K body;
-    final U unit;
-    public Quantity(K body, U unit) {
-        this.body = body;
-        this.unit = unit;
+public interface Quantity<Q extends Quantity<Q,K,U>,K extends Decimal<K>, U> extends Comparable<Q> {
+    Q create(K amount, U unit);
+    K amount();
+    U unit();
+    default void compatible(Q other) {
+        assert unit().equals(other.unit()) : "units are incompatible";
     }
-    
-    public Quantity<K,U> add(Quantity<K,U> other) {
+    default Q inherit(K other) {
+        return create(other, unit());
+    }
+    @Override
+    default int compareTo(Q other) {
         compatible(other);
-        return new Quantity(body.add(other.body), unit);
+        return amount().compareTo(other.amount());
     }
-    
-    public Quantity<K,U> sub(Quantity<K,U> other) {
+    default Q add(Q other) {
         compatible(other);
-        return new Quantity(body.sub(other.body), unit);
+        return inherit(amount().add(other.amount()));
     }
-    
-    public K scale(Quantity<K,U> other) {
+    default Q sub(Q other) {
         compatible(other);
-        return body.mul(other.body);
+        return inherit(amount().sub(other.amount()));
     }
-    
-    public Quantity<K,U> scale(K other) {
-        return new Quantity<>(body.div(other),unit);
+    default K div(Q other) {
+        return other.amount().div(amount());
     }
-    
-    public <V> Exchange<K,U,V> exchange(Quantity<K,V> other) {
-        return new Exchange<>(other.body.div(body), unit, other.unit);
+    default K scaleDiv(Q other) {
+        return div(other);
     }
-    
-    public <V> Quantity<K,V> exchange(Exchange<K,U,V> exchange) {
-        assert unit.equals(exchange.from) : "wrong exchange is applied";
-        return new Quantity<>(body.mul(exchange.rate), exchange.to);
+    default K scale(Q other) {
+        compatible(other);
+        return scaleDiv(other);
     }
-    
-    public void compatible(Quantity<K,U> other) {
-        if (!unit.equals(other.unit))
-            throw new RuntimeException("incompatible money");
+    default Q scale(K other) {
+        return inherit(amount().mul(other));
+    }
+    default Q abs() {
+        return inherit(amount().abs());
+    }
+    default Q negate() {
+        return inherit(amount().negate());
+    }
+    default K exchangeDiv(Q other) {
+        return div(other);
+    }
+    default Exchange<K,U> exchange(Q other) {
+        return new Exchange(exchangeDiv(other), unit(), other.unit());
+    }
+    default Q exchange(Exchange<K,U> exchange) {
+        assert unit().equals(exchange.from) : "wrong exchange is applied";
+        return create(amount().mul(exchange.rate), exchange.to);
     }
 }
