@@ -5,11 +5,13 @@
  */
 package math;
 
+import debug.Te;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import static java.math.RoundingMode.HALF_EVEN;
 import java.text.DecimalFormat;
 import java.util.Objects;
+import java.util.function.BinaryOperator;
 import string.Strings;
 
 /**
@@ -108,8 +110,18 @@ public class KBigDecimal implements Decimal<KBigDecimal> {
     public KBigDecimal div(BigDecimal value, int scale, RoundingMode r) {
         return new KBigDecimal(v.divide(value, scale, r));
     }
-     public KBigDecimal div(KBigDecimal value) {
+    public KBigDecimal div(KBigDecimal value) {
         return div(value.v);
+    }
+    public KBigDecimal overrideDiv(BinaryOperator<KBigDecimal> op) {
+        return new KBigDecimal(v) {
+            public KBigDecimal div(KBigDecimal v) {
+                return op.apply(this,v);
+            }
+        };
+    }
+    public KBigDecimal scaleDiv(int scale, RoundingMode r) {
+        return overrideDiv((t,o)->t.div(o.v,scale,r));
     }
     @Override
     public KBigDecimal div(int v) {
