@@ -29,6 +29,7 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collector;
+import math.Decimal;
 import orderedSet.Range;
 
 /**
@@ -138,6 +139,14 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
     
     public TList<T> sfix() {
         return new TListRandom<>(a2l((T[])toArray()));
+    }
+    
+    public <S extends T> TList<S> extract(Class<S> clazz) {
+        return filter(e->e.getClass().equals(clazz)).map(e->(S)e);
+    }
+    
+    public <S> TList<S> cast() {
+        return map(e->(S)e);
     }
     
     /**
@@ -674,6 +683,10 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
     }
     
 //-----------Calculating
+    
+    public <K extends Decimal<K>> K averageK(Function<T,K> f, K zero) {
+        return sumK(f, zero).div(size());
+    }
     public BigDecimal averageBD(Function<T,BigDecimal> f) {
         return sumBD(f).divide(new BigDecimal(size()));
     }
@@ -702,6 +715,10 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
      */
     public double averageI(ToIntFunction<T> f) {
         return stream().mapToInt(f).average().orElse(0);
+    }
+    
+    public <K extends Decimal<K>> K sumK(Function<T,K> f, K zero) {
+        return stream().map(f).reduce(zero,(a,b)->a.add(b));
     }
 
     public BigDecimal sumBD(Function<T,BigDecimal> f) {
