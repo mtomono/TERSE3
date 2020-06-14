@@ -5,7 +5,6 @@
  */
 package math;
 
-import debug.Te;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import static java.math.RoundingMode.HALF_EVEN;
@@ -21,6 +20,10 @@ import string.Strings;
 public class KBigDecimal implements Decimal<KBigDecimal> { 
     static public KBigDecimal ZERO=new KBigDecimal(BigDecimal.ZERO);
     static public KBigDecimal ONE=new KBigDecimal(BigDecimal.ONE);
+    static public KBigDecimalBuilder db=new KBigDecimalBuilder();
+    static public KBigDecimalBuilder builder() {
+        return db;
+    }
     static public BigDecimal c(double value) {
         return new BigDecimal(value);
     }
