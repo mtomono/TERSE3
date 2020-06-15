@@ -49,10 +49,12 @@ public class KRational implements Decimal<KRational> {
         return gcd(n,r);
     }
     
+    @Override
     public KRational abs() {
         return new KRational(java.lang.Math.abs(numerator),java.lang.Math.abs(denominator));
     }
     
+    @Override
     public KRational negate() {
         return new KRational(-numerator,denominator);
     }
@@ -146,6 +148,21 @@ public class KRational implements Decimal<KRational> {
     @Override
     public KRational one() {
         return one;
+    }
+    
+    @Override
+    public boolean isInteger() {
+        return numerator/denominator*denominator==numerator;
+    }
+    
+    @Override
+    public int getIntegerPart() {
+        return (int)getLongPart();
+    }
+    
+    @Override
+    public long getLongPart() {
+        return numerator/denominator;
     }
     
     @Override

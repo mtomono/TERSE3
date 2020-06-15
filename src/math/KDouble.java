@@ -14,6 +14,9 @@
  */
 package math;
 
+import static java.lang.Math.floor;
+import static java.lang.Math.round;
+
 /**
  *
  * @author masao
@@ -87,7 +90,22 @@ public class KDouble implements Decimal<KDouble> {
     public KDouble div(long v) {
         return div(new KDouble(v));
     }
+    
+    @Override
+    public boolean isInteger() {
+        return round(body)==body;
+    }
+    
+    @Override
+    public int getIntegerPart() {
+        return (int)floor(body);
+    }
 
+    @Override
+    public long getLongPart() {
+        return (long)floor(body);
+    }
+    
     @Override
     public int compareTo(KDouble o) {
         return Double.compare(body, o.body);

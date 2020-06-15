@@ -63,6 +63,7 @@ public class KBigDecimal implements Decimal<KBigDecimal> {
     public KBigDecimal add(BigDecimal value) {
         return create(v.add(value));
     }
+    @Override
    public KBigDecimal add(KBigDecimal value) {
         return add(value.value());
     }
@@ -78,6 +79,7 @@ public class KBigDecimal implements Decimal<KBigDecimal> {
     public KBigDecimal sub(BigDecimal value) {
         return create(v.subtract(value));
     }
+    @Override
     public KBigDecimal sub(KBigDecimal value) {
         return sub(value.v);
     }
@@ -93,6 +95,7 @@ public class KBigDecimal implements Decimal<KBigDecimal> {
     public KBigDecimal mul(BigDecimal value) {
         return create(v.multiply(value));
     }
+    @Override
     public KBigDecimal mul(KBigDecimal value) {
         return mul(value.v);
     }
@@ -113,11 +116,13 @@ public class KBigDecimal implements Decimal<KBigDecimal> {
     public KBigDecimal div(BigDecimal value, int scale, RoundingMode r) {
         return new KBigDecimal(v.divide(value, scale, r));
     }
+    @Override
     public KBigDecimal div(KBigDecimal value) {
         return div(value.v);
     }
     public KBigDecimal overrideDiv(BinaryOperator<KBigDecimal> op) {
         return new KBigDecimal(v) {
+            @Override
             public KBigDecimal div(KBigDecimal v) {
                 return op.apply(this,v);
             }
@@ -137,6 +142,7 @@ public class KBigDecimal implements Decimal<KBigDecimal> {
     public KBigDecimal div(String v) {
         return div(c(v));
     }
+    @Override
     public KBigDecimal abs() {
         return create(v.abs());
     }
@@ -151,12 +157,27 @@ public class KBigDecimal implements Decimal<KBigDecimal> {
     public KBigDecimal setScale(int scale) {
         return create(v.setScale(scale));
     }
+    @Override
     public KBigDecimal zero() {
         return ZERO;
     }
+    @Override
     public KBigDecimal one() {
         return ONE;
     }
+    @Override
+    public boolean isInteger() {
+        return c(v.longValue()).equals(v);
+    }
+    @Override
+    public int getIntegerPart() {
+        return v.intValue();
+    }
+    @Override
+    public long getLongPart() {
+        return v.longValue();
+    }
+    
     @Override
     public boolean equals(Object e) {
         if (e == null) {
