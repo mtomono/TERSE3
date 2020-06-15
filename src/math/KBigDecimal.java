@@ -18,12 +18,9 @@ import string.Strings;
  * @author masao
  */
 public class KBigDecimal implements Decimal<KBigDecimal> { 
-    static public KBigDecimal ZERO=new KBigDecimal(BigDecimal.ZERO);
-    static public KBigDecimal ONE=new KBigDecimal(BigDecimal.ONE);
-    static public KBigDecimalBuilder db=new KBigDecimalBuilder();
-    static public KBigDecimalBuilder builder() {
-        return db;
-    }
+    final static public KBigDecimal ZERO=new KBigDecimal(BigDecimal.ZERO);
+    final static public KBigDecimal ONE=new KBigDecimal(BigDecimal.ONE);
+    final static public KBigDecimalBuilder db=new KBigDecimalBuilder();
     static public BigDecimal c(double value) {
         return new BigDecimal(value);
     }
@@ -170,14 +167,17 @@ public class KBigDecimal implements Decimal<KBigDecimal> {
         return c(v.longValue()).equals(v);
     }
     @Override
-    public int getIntegerPart() {
+    public int intPart() {
         return v.intValue();
     }
     @Override
-    public long getLongPart() {
+    public long longPart() {
         return v.longValue();
     }
     
+    public DecimalBuilder<KBigDecimal> builder() {
+        return db;
+    }
     @Override
     public boolean equals(Object e) {
         if (e == null) {

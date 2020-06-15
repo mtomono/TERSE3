@@ -20,8 +20,9 @@ public interface Decimal<K extends Decimal<K>> extends Field<K>,Comparable<K> {
     K div(int v);
     K div(long v);
     boolean isInteger();
-    int getIntegerPart();
-    long getLongPart();
+    int intPart();
+    long longPart();
+    DecimalBuilder<K> builder();
     default boolean same(K v) {
         return compareTo(v)==0;
     }
@@ -33,6 +34,9 @@ public interface Decimal<K extends Decimal<K>> extends Field<K>,Comparable<K> {
     }
     default boolean isZero() {
         return same(zero());
+    }
+    default boolean isOne() {
+        return same(one());
     }
     default boolean belowZero() {
         return lt(zero());
