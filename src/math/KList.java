@@ -6,7 +6,6 @@
 package math;
 
 import collection.TList;
-import java.util.List;
 import java.util.function.Function;
 
 /**
@@ -24,17 +23,24 @@ public class KList<T,K extends Decimal<K>> {
     }
     
     public K average(Function<T,K> f) {
-        return sum(f).div(body.size());
+        return sigma(f).div(body.size());
     }
 
-    public K sum(Function<T,K> f) {
+    public K sigma(Function<T,K> f) {
         return body.stream().map(f).reduce(db.zero(),(a,b)->a.add(b));
     }
     
-    public K mul(Function<T,K> f) {
+    public K pai(Function<T,K> f) {
         return body.stream().map(f).reduce(db.one(),(a,b)->a.mul(b));
     }
+    
+    public TList<K> add(Function<T,K> f) {
+        return body.map(f).accum(db.zero(), (a,b)->a.add(b));
+    }
 
+    public TList<K> mul(Function<T,K> f) {
+        return body.map(f).accum(db.one(), (a,b)->a.mul(b));
+    }
     public TList<T> toT() {
         return body;
     }
