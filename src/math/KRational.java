@@ -23,7 +23,7 @@ import java.math.BigDecimal;
  * @author masao
  */
 public class KRational implements Decimal<KRational> {
-    final static public DecimalBuilder<KRational> db=new KRationalBuilder();
+    final static public DecimalField<KRational> builder=new KRationalField();
     public final long numerator;
     public final long denominator;
     
@@ -166,8 +166,8 @@ public class KRational implements Decimal<KRational> {
         return numerator/denominator;
     }
     
-    public DecimalBuilder<KRational> builder() {
-        return db;
+    public DecimalField<KRational> builder() {
+        return builder;
     }
     
     @Override

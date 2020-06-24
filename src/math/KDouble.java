@@ -22,7 +22,7 @@ import static java.lang.Math.round;
  * @author masao
  */
 public class KDouble implements Decimal<KDouble> {
-    final public static DecimalBuilder<KDouble> db=new KDoubleBuilder();
+    final public static DecimalField<KDouble> builder=new KDoubleField();
     public final double body;
     
     static public final KDouble ZERO = new KDouble(0);
@@ -107,8 +107,8 @@ public class KDouble implements Decimal<KDouble> {
         return (long)floor(body);
     }
     
-    public DecimalBuilder<KDouble> builder() {
-        return db;
+    public DecimalField<KDouble> builder() {
+        return builder;
     }
     
     @Override

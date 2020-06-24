@@ -11,7 +11,7 @@ package math;
  * @param <B>
  * @param <K>
  */
-public interface DecimalBuilder<K extends Decimal<K>> {
+public interface DecimalField<K extends Decimal<K>> {
     K zero();
     K one();
     K k(int i);

@@ -5,34 +5,33 @@
  */
 package math;
 
-import static math.KBigDecimal.ONE;
-import static math.KBigDecimal.ZERO;
-import static math.KBigDecimal.b;
+import static math.KDouble.ONE;
+import static math.KDouble.ZERO;
 
 /**
  *
  * @author masao
  */
-public class KBigDecimalBuilder implements DecimalBuilder<KBigDecimal> {
+public class KDoubleField implements DecimalField<KDouble> {
 
     @Override
-    public KBigDecimal zero() {
+    public KDouble zero() {
         return ZERO;
     }
 
     @Override
-    public KBigDecimal one() {
+    public KDouble one() {
         return ONE;
     }
 
     @Override
-    public KBigDecimal k(int i) {
-        return b(i);
+    public KDouble k(int i) {
+        return new KDouble(i);
     }
 
     @Override
-    public KBigDecimal k(long l) {
-        return b(l);
+    public KDouble k(long l) {
+        return new KDouble(l);
     }
     
 }

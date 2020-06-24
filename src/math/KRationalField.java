@@ -13,7 +13,7 @@ import static math.KRational.zero;
  *
  * @author masao
  */
-public class KRationalBuilder implements DecimalBuilder<KRational> {
+public class KRationalField implements DecimalField<KRational> {
 
     @Override
     public KRational zero() {
