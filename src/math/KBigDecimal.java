@@ -20,7 +20,7 @@ import string.Strings;
 public class KBigDecimal implements Decimal<KBigDecimal> { 
     final static public KBigDecimal ZERO=new KBigDecimal(BigDecimal.ZERO);
     final static public KBigDecimal ONE=new KBigDecimal(BigDecimal.ONE);
-    final static public KBigDecimalField builder=new KBigDecimalField();
+    final static public KBigDecimalField field=new KBigDecimalField();
     static public BigDecimal c(double value) {
         return new BigDecimal(value);
     }
@@ -175,8 +175,9 @@ public class KBigDecimal implements Decimal<KBigDecimal> {
         return v.longValue();
     }
     
+    @Override
     public DecimalField<KBigDecimal> builder() {
-        return builder;
+        return field;
     }
     @Override
     public boolean equals(Object e) {
