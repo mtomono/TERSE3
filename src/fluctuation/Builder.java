@@ -22,7 +22,7 @@ import math.DecimalField;
 import orderedSet.Range;
 
 /**
- *
+ * Builder of Fluctuation.
  * @author masao
  * @param <K>
  */
@@ -46,6 +46,16 @@ public class Builder<K extends Decimal<K>> {
         }
         Fluctuation<K> build() {
             return new Fluctuation<>(time(),q(),entries(),accumulates(),Builder.this);
+        }
+    }
+    public abstract class BuildingR extends Building {
+        @Override
+        TList<Long> time() {
+            return accumulates().flatMapc(p->TList.sof(p.l().start,p.l().end));
+        }
+        @Override
+        TList<K> q() {
+            return accumulates().flatMapc(p->TList.sof(p.r(),p.r().negate()));
         }
     }
     public class TqBuilding extends Building {
@@ -74,14 +84,10 @@ public class Builder<K extends Decimal<K>> {
             return entries;
         }
     }
-    public class AccumulatesBuilding extends Building {
+    public class AccumulatesBuilding extends BuildingR {
         TList<P<Range<Long>,K>> accumulates;
         AccumulatesBuilding(TList<P<Range<Long>,K>> accumulates) {
             this.accumulates=accumulates;
-        }
-        @Override
-        TList<P<Long,K>> entries() {
-            return accumulates.flatMapc(p->TList.sof(P.p(p.l().start,p.r()),P.p(p.l().end,p.r().negate())));
         }
         @Override
         TList<P<Range<Long>,K>> accumulates() {
