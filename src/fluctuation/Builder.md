@@ -57,9 +57,13 @@ Because of that demanding cost, I wanted to avoid the conversions from and to Ac
 As long as using the circulated conversions shown in class Conversions, it's impossible to avoid a wasteful detour go through Accumulations.
 So to avoid this wasteful detour, class Builder has this structure.
 
+![triangle](Builder02.jpg)
+
 Of course, the conversion route back from Accumulates is needed.
 By adding that path to BuildingR, a subclass of Building, makes everything perfect.
 And it's really easy.
+
+![triangle](Builder03.jpg)
 
 A decision though simple is needed to make use of these.
 Which form of data do you start from?.
