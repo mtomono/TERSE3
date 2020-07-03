@@ -57,11 +57,11 @@ public class Fluctuation<K extends Decimal<K>> {
     public Fluctuation<K> scale(K scale) {
         return tq.scale(scale);
     }
-    public Fluctuation<K> add(Fluctuation<K> other) {
-        return entries.add(other);
-    }
     public Fluctuation<K> negate() {
         return tq.negate();
+    }
+    public Fluctuation<K> add(Fluctuation<K> other) {
+        return entries.add(other);
     }
     public Fluctuation<K> sub(Fluctuation<K> other) {
         return add(other.negate());
