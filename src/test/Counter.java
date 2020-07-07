@@ -5,7 +5,6 @@
  */
 package test;
 
-import collection.P;
 import collection.TList;
 import java.util.List;
 import parser.ListSource;

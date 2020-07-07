@@ -161,9 +161,9 @@ public class Fluctuation<K extends Decimal<K>> {
          * amount.
          * this can be considered as l1-distance in this vector space.
          * and the one fall short of the other in aspect of the amount can never
-         * contain the other. thus, this can be used as an index of Extents.
-         * Meaning, by sorting Extents in aspect of amount will make it easier to 
-         * find an Extents fits in the other Extents.
+         * contain the other. thus, this can be used as an index of Fluctuations
+         * Meaning, by sorting Fluctuations in aspect of amount will make it easier to 
+         * find an Fluctuations fits in the other Fluctuations.
          * @return 
          */
         public K amount() {

@@ -19,13 +19,13 @@ import java.io.PrintStream;
 import java.util.function.Function;
 
 /**
- * measure performance of a method call.
- * to measure performance of a method call x() of type X, use this object in this way.
+ * measure performance of a method call.to measure performance of a method call x() of type X, use this object in this way.
  * static Performance<X> pf = new Performance<>(System.err,x->"");
  *      :
  *      :
  * return pf.start().end(x());
  * @author masao
+ * @param <T>
  */
 public class Performance<T> {
     PrintStream pstr;

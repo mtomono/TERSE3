@@ -160,7 +160,7 @@ public class ScaledAxis extends AbstractList<Double> {
      * class (meaning leave the error of double). that will also give you a legitimate sequence of cubes
      * after all. but, as the author of this software, i believe this way of correction should be better.
      * because it's better to follow easier principle even as a underlying class.
-     * @param rate
+     * @param original
      * @return 
      */
     public ScaledAxis compensate(ScaledAxis original) {

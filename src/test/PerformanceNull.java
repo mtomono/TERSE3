@@ -18,12 +18,13 @@ import java.io.PrintStream;
 import java.util.function.Function;
 
 /**
- * placeholder for Performance.
- * some methods are critical for performance. thus, it's wise to prepare a Performance object
- * around that method. but performance check is taken in occasional manner. to keep the deployment of 
- * Performance objects, constructor of this class is made to be compatible with Performance, but at the 
- * same time, this class does nothing inside.
+ * placeholder for Performance.some methods are critical for performance.
+ * thus, it's wise to prepare a Performance object
+ around that method. but performance check is taken in occasional manner. to keep the deployment of 
+ Performance objects, constructor of this class is made to be compatible with Performance, but at the 
+ same time, this class does nothing inside.
  * @author masao
+ * @param <T>
  */
 public class PerformanceNull<T> extends Performance<T> {
     public PerformanceNull(PrintStream pstr, Function<? super T, String> monitor) {

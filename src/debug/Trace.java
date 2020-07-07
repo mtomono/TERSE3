@@ -44,12 +44,31 @@ public interface Trace {
         assert u(log);
     }
 
+    /**
+     * indent down
+     * @param log
+     * @return 
+     */
     boolean d(Function<String, String>... log);
 
+    /**
+     * log
+     * @param log
+     * @return 
+     */
     boolean l(Function<String, String>... log);
 
+    /**
+     * indent up
+     * @param log
+     * @return 
+     */
     boolean u(Function<String, String>... log);
     
+    /**
+     * carriage return
+     * @return 
+     */
     boolean cr();
     
 }
