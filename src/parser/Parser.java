@@ -125,7 +125,7 @@ public interface Parser<S, T, U> {
     }
 
     /**
-     * literal
+     * literal.
      * @return 
      */
     default Parser<S, T, S> l() {
@@ -137,6 +137,10 @@ public interface Parser<S, T, U> {
         };
     }
     
+    /**
+     * section.
+     * @return 
+     */
     default Parser<S,T,List<Integer>> sec() {
         return s->{
             int start = s.pos;
@@ -158,6 +162,11 @@ public interface Parser<S, T, U> {
         return tee(c->System.out.println(f.apply(c)));
     }
 
+    /**
+     * debugging method.
+     * @param str
+     * @return 
+     */
     default Parser<S,T,U> touches(String str) {
         return s->{
             System.out.println(str);
