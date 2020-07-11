@@ -5,10 +5,8 @@
  */
 package collection.label;
 
-import collection.P;
 import collection.TList;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 /**
  *
