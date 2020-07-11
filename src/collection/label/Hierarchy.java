@@ -20,6 +20,7 @@ import java.util.function.BiConsumer;
 /**
  *
  * @author masao
+ * @param <T>
  */
 public class Hierarchy<T> {
     final public TList<Integer> hierarchy;
