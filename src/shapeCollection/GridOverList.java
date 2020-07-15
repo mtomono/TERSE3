@@ -27,34 +27,34 @@ import java.util.function.Predicate;
  * @author masao
  * @param <T>
  */
-public class GridX<T> {
+public class GridOverList<T> {
     final public GridCoord axis;
     final public TList<T> body;
     
-    public GridX(GridCoord axis, Function<TList<Integer>,T> f) {
+    public GridOverList(GridCoord axis, Function<TList<Integer>,T> f) {
         this(axis, TList.range(0,axis.size()).map(i->f.apply(axis.address(i))));
     }
     
-    public GridX(GridCoord axis, TList<T> body) {
+    public GridOverList(GridCoord axis, TList<T> body) {
         assert body.size() >= axis.size() : "body has to be bigger than axis";
         this.axis = axis;
         this.body = body;
     }
     
-    static public <T> GridX<T> empty() {
-        return new GridX<>(new GridCoord(TList.empty()), TList.empty());
+    static public <T> GridOverList<T> empty() {
+        return new GridOverList<>(new GridCoord(TList.empty()), TList.empty());
     }
     
-    public GridX<T> fix() {
-        return new GridX(axis, body.fix());
+    public GridOverList<T> fix() {
+        return new GridOverList(axis, body.fix());
     }
     
-    public GridX<T> sfix() {
-        return new GridX(axis, body.sfix());
+    public GridOverList<T> sfix() {
+        return new GridOverList(axis, body.sfix());
     }
     
-    public GridX<T> straight() {
-        return new GridX(axis.straight(), asList());
+    public GridOverList<T> straight() {
+        return new GridOverList(axis.straight(), asList());
     }
     
     public T get(Integer... address) {
@@ -78,15 +78,15 @@ public class GridX<T> {
      * @param address
      * @return
      */
-    public GridX<T> cset(T v, Integer... address) {
+    public GridOverList<T> cset(T v, Integer... address) {
         return cset(v, TList.sof(address));
     }
-    public GridX<T> cset(T v, List<Integer> address) {
+    public GridOverList<T> cset(T v, List<Integer> address) {
         set(v, address);
         return this;
     }
     
-    public GridX<T> multiCSet(Collection<List<Integer>> at, Function<List<Integer>,T> f) {
+    public GridOverList<T> multiCSet(Collection<List<Integer>> at, Function<List<Integer>,T> f) {
         at.forEach(p->set(f.apply(p),p));
         return this;
     }
@@ -106,12 +106,12 @@ public class GridX<T> {
      * @param slice
      * @return
      */
-    public GridX<T> translate(GridCoord slice) {
+    public GridOverList<T> translate(GridCoord slice) {
         assert (axis.contains(slice)) : "slice is not contained in axis";
-        return new GridX<>(slice, TList.range(0, slice.size()).map((i) -> get(slice.address(i))));
+        return new GridOverList<>(slice, TList.range(0, slice.size()).map((i) -> get(slice.address(i))));
     }
 
-    public GridX<T> intersect(GridCoord x) {
+    public GridOverList<T> intersect(GridCoord x) {
         return translate(axis.intersect(x));
     }
 
@@ -123,20 +123,20 @@ public class GridX<T> {
         return axis.i2a(filterAt(p));
     }
     
-    public <U> GridX<U> map(Function<T,U> f) {
-        return new GridX<>(axis, body.map(f));
+    public <U> GridOverList<U> map(Function<T,U> f) {
+        return new GridOverList<>(axis, body.map(f));
     }
     
-    public <S,U> GridX<U> pair(GridX<S> slice, BiFunction<T,S,U>f) {
-        GridX<S> effectivePart = slice.intersect(axis);
-        return new GridX<>(effectivePart.axis,TList.range(0, effectivePart.axis.size()).map((i) -> f.apply(get(effectivePart.axis.address(i)), effectivePart.body.get(i))));
+    public <S,U> GridOverList<U> pair(GridOverList<S> slice, BiFunction<T,S,U>f) {
+        GridOverList<S> effectivePart = slice.intersect(axis);
+        return new GridOverList<>(effectivePart.axis,TList.range(0, effectivePart.axis.size()).map((i) -> f.apply(get(effectivePart.axis.address(i)), effectivePart.body.get(i))));
     }
         
-    public GridX<T> reverse(Integer... axis) {
+    public GridOverList<T> reverse(Integer... axis) {
         return reverse(TList.sof(axis));
     }
-    public GridX<T> reverse(TList<Integer> axis) {
-        return new GridX<>(this.axis.reverse(axis), body);
+    public GridOverList<T> reverse(TList<Integer> axis) {
+        return new GridOverList<>(this.axis.reverse(axis), body);
     }
     
     /**
@@ -149,52 +149,52 @@ public class GridX<T> {
      * @param axis
      * @return 
      */
-    public GridX<T> reverseYA(Integer... axis) {
-        return GridX.this.reverseYA(TList.sof(axis));
+    public GridOverList<T> reverseYA(Integer... axis) {
+        return GridOverList.this.reverseYA(TList.sof(axis));
     }
-    public GridX<T> reverseYA(TList<Integer> axis) {
+    public GridOverList<T> reverseYA(TList<Integer> axis) {
         return transform(TList::reverse, axis);
     }
     
-    public GridX<T> shift(Integer... vector) {
+    public GridOverList<T> shift(Integer... vector) {
         return shift(TList.sof(vector));
     }
-    public GridX<T> shift(List<Integer> vector) {
-        return new GridX<>(axis.shift(vector), body);
+    public GridOverList<T> shift(List<Integer> vector) {
+        return new GridOverList<>(axis.shift(vector), body);
     }
     
-    public GridX<T> transform(TList<Integer> order, Integer... changed) {
+    public GridOverList<T> transform(TList<Integer> order, Integer... changed) {
         return transform(order, TList.sof(changed));
     }
-    public GridX<T> transform(TList<Integer> order, TList<Integer> changed) {
-        return new GridX<>(axis.transform(order, changed), body);
+    public GridOverList<T> transform(TList<Integer> order, TList<Integer> changed) {
+        return new GridOverList<>(axis.transform(order, changed), body);
     }
     
-    public GridX<T> transform(Function<TList<Integer>,TList<Integer>> f, Integer... changed) {
+    public GridOverList<T> transform(Function<TList<Integer>,TList<Integer>> f, Integer... changed) {
         return transform(f, TList.sof(changed));
     }
-    public GridX<T> transform(Function<TList<Integer>, TList<Integer>>f, TList<Integer> changed) {
-        return new GridX<>(axis.transform(f, changed), body);
+    public GridOverList<T> transform(Function<TList<Integer>, TList<Integer>>f, TList<Integer> changed) {
+        return new GridOverList<>(axis.transform(f, changed), body);
     }
     
-    public GridX<T> append(GridX<T>... other) {
+    public GridOverList<T> append(GridOverList<T>... other) {
         return append(TList.sof(other));
     }
-    public GridX<T> append(TList<GridX<T>> other) {
+    public GridOverList<T> append(TList<GridOverList<T>> other) {
         return GridConcatList.concat(other.startFrom(this));
     }
     
-    public GridX<T> flip(TList<Integer> order) {
-        return new GridX<>(new GridCoordFlipped(axis, order), body);
+    public GridOverList<T> flip(TList<Integer> order) {
+        return new GridOverList<>(new GridCoordFlipped(axis, order), body);
     }
     
-    public GridX<T> flip(int from, int to) {
-        return new GridX<>(new GridCoordFlipped(axis, from, to), body);
+    public GridOverList<T> flip(int from, int to) {
+        return new GridOverList<>(new GridCoordFlipped(axis, from, to), body);
     }
     
-    public TList<GridX<T>> dissolve(Integer axisIndex) {
+    public TList<GridOverList<T>> dissolve(Integer axisIndex) {
         GridCoord lower = new GridCoord(axis.axis.hide(TList.sof(axisIndex)));
-        return axis.axis.get(axisIndex).v().map(i->new GridX<T>(lower, TList.range(0,lower.size()).map(j->get(lower.address(j).insertAt(axisIndex,i)))));
+        return axis.axis.get(axisIndex).v().map(i->new GridOverList<T>(lower, TList.range(0,lower.size()).map(j->get(lower.address(j).insertAt(axisIndex,i)))));
     }
 
     @Override
@@ -202,10 +202,10 @@ public class GridX<T> {
         if (e == null) {
             return false;
         }
-        if (!(e instanceof GridX)) {
+        if (!(e instanceof GridOverList)) {
             return false;
         }
-        GridX t = (GridX) e;
+        GridOverList t = (GridOverList) e;
         if (!t.axis.contains(axis))
             return false;
         if (!axis.contains(t.axis))

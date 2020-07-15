@@ -30,16 +30,16 @@ import orderedSet.Range;
  */
 public class GridConcatList<T> extends AbstractList<T> {
     int axisIndex;
-    TList<GridX<T>> grids;
+    TList<GridOverList<T>> grids;
     TList<Range<Integer>> map;
     GridCoord axis;
     
-    static public <T> GridX<T> concat(GridX<T>... grids) {
+    static public <T> GridOverList<T> concat(GridOverList<T>... grids) {
         return concat(TList.sof(grids));
     }
-    static public <T> GridX<T> concat(TList<GridX<T>> grids) {
+    static public <T> GridOverList<T> concat(TList<GridOverList<T>> grids) {
         if (grids.isEmpty())
-            return GridX.empty();
+            return GridOverList.empty();
         if (grids.size()==1)
             return grids.get(0);
         TList<Integer> candidates = grids.get(0).axis.axis.pair(grids.get(1).axis.axis).filterAt(p->!p.l().vr.equals(p.r().vr));
@@ -48,18 +48,18 @@ public class GridConcatList<T> extends AbstractList<T> {
         return concat(target,grids.sortTo(inc((g) -> g.axis.axis.get(target).vr.start())));
     }
     
-    static public <T> GridX<T> concat(int axisIndex, GridX<T>... grids) {
+    static public <T> GridOverList<T> concat(int axisIndex, GridOverList<T>... grids) {
         return concat(axisIndex,TList.sof(grids));
     }
-    static public <T> GridX<T> concat(int axisIndex, TList<GridX<T>> grids) {
+    static public <T> GridOverList<T> concat(int axisIndex, TList<GridOverList<T>> grids) {
         GridConcatList<T> gcl = new GridConcatList(axisIndex, grids);
-        return new GridX<>(gcl.axis, TList.set(gcl));
+        return new GridOverList<>(gcl.axis, TList.set(gcl));
     }
     
-    public GridConcatList(int axisIndex, GridX<T>... grids) {
+    public GridConcatList(int axisIndex, GridOverList<T>... grids) {
         this(axisIndex,TList.sof(grids));
     }
-    public GridConcatList(int axisIndex, TList<GridX<T>> grids) {
+    public GridConcatList(int axisIndex, TList<GridOverList<T>> grids) {
         assert grids.map(g->g.axis.axis.size()).isUniform() : "all GridX have to have the same dimension";
         assert grids.map(g->g.axis.axis).transposeT(l->l).pickUp(TList.range(0,grids.get(0).axis.axis.size())
                 .filter(i->i!=axisIndex)).forAll(l->l.map(g->g.vr).isUniform()) 
@@ -71,7 +71,7 @@ public class GridConcatList<T> extends AbstractList<T> {
         this.axis = new GridCoord((grids.get(0).axis).axis.fix().cset(axisIndex, new GridAxis(map.get(0).start(),map.last().end()-1)));
     }
     
-    GridX<T> fallIn(List<Integer> address) {
+    GridOverList<T> fallIn(List<Integer> address) {
         return grids.get(abs(Collections.binarySearch(map.map(r->r.end()), address.get(axisIndex))+1));
     }
     

@@ -105,6 +105,7 @@ public class GridCore {
         return cubes.go(localFrom, localTo).sfix();
     }
     
+    @Override
     public String toString() {
         return basis.toString()+":"+origin;
     }

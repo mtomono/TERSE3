@@ -24,7 +24,7 @@ import java.util.List;
  * 
  * the structure of this class tells one thing.
  * 
- * to keep the structure in the list in GridX even after flipping axis,
+ * to keep the structure in the list in GridOverList even after flipping axis,
  * we need to stick to the order of the axis in base GridCoord, because the 
  * list is ordered in the order of base GridCoord.
  * 
