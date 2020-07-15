@@ -48,22 +48,6 @@ public class Grid<T> implements Cloneable {
         return new Grid<>(from, to, (a,b)->safe).mark(blocked, p->block);
     }
     
-    public Grid<T> reFix() {
-        return new Grid<>(from, to, x, y, xr, yr, togo, sigTogo, reFixSpace());
-    }
-    
-    public Grid<T> reSFix() {
-        return new Grid<>(from, to, x, y, xr, yr, togo, sigTogo, reSfixSpace());
-    }
-    
-    TList<TList<T>> reFixSpace() {
-        return space.map(l->l.fix()).fix();
-    }
-    
-    TList<TList<T>> reSfixSpace() {
-        return space.map(l->l.sfix()).sfix();
-    }
-    
     public Grid(TPoint2i from, TPoint2i to, BiFunction<Integer, Integer, T> f) {
         this.from = from;
         this.to = to;
