@@ -36,7 +36,7 @@ public class GridBuilder {
         return point3(v[0],v[1],v[2]);
     }
     static public GridMono gmono(TList<TVector3d> basis, TPoint3d origin, int... fromAndTo) {
-        GridCore coord=new GridCore(basis,origin);
+        GridScale coord=new GridScale(basis,origin);
         GridCoord gcoord=GridCoord.gcoord(fromAndTo);
         GridGraph graph=GridGraphBuilder.builder(gcoord).alt3d().build();
         return new GridMono(graph,coord);

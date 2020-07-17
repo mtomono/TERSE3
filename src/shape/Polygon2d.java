@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Optional;
 import orderedSet.Range;
 import static shape.ShapeUtil.err;
-import solver.graph.GridCore;
+import solver.graph.GridScale;
 
 /**
  *
@@ -74,11 +74,11 @@ public class Polygon2d extends TList<TPoint2d> {
         return expand(0);
     }
     
-    public TList<List<Integer>> digitize(GridCore grid, double v) {
+    public TList<List<Integer>> digitize(GridScale grid, double v) {
         return expand(v).digitize(grid);
     }
     
-    public TList<List<Integer>> digitize(GridCore grid) {
+    public TList<List<Integer>> digitize(GridScale grid) {
         return digitize(grid,0);
     }
     

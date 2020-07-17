@@ -32,9 +32,9 @@ import shapeCollection.GridAxis;
  */
 public class GridMono implements GridSpace{
     final public GridGraph graph;
-    final public GridCore coord;
+    final public GridScale coord;
     
-    public GridMono(GridGraph graph, GridCore coord) {
+    public GridMono(GridGraph graph, GridScale coord) {
         this.graph=graph;
         this.coord=coord;
     }

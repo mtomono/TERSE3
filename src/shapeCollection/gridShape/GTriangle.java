@@ -19,7 +19,7 @@ import collection.TList;
 import static java.lang.Math.abs;
 import java.util.List;
 import shape.TPoint2d;
-import solver.graph.GridCore;
+import solver.graph.GridScale;
 
 /**
  *
@@ -27,8 +27,8 @@ import solver.graph.GridCore;
  */
 public class GTriangle {
     TList<TPoint2d> shape;
-    GridCore coord;
-    public GTriangle(TList<TPoint2d> shape, GridCore coord) {
+    GridScale coord;
+    public GTriangle(TList<TPoint2d> shape, GridScale coord) {
         this.shape=close(shape.rotate(longestEdgeFromX(close(shape))));
         this.coord=coord;
     }

@@ -31,26 +31,26 @@ import shape.TVector2d;
 import shapeCollection.Cubes;
 
 /**
- * Core of Grid system.
+ * Core Scale of Grid system.
  * very basic coordination system. also, divides spece into cubes.
  * everything is in blinded manner, meaning, doesn't know where to stop.
  * @author masao
  */
-public class GridCore {
-    static public GridCore ortho = new GridCore(TList.sof(x1,y1,z1),zero);
+public class GridScale {
+    static public GridScale ortho = new GridScale(TList.sof(x1,y1,z1),zero);
     final public TList<TVector3d> basis;
     final public TPoint3d origin;
     final public TMatrix3d globalize;
     final public TMatrix3d localize;
     final public Cubes cubes;
     
-    static public GridCore c2d(TList<TVector2d> basis, TPoint2d origin) {
-        return new GridCore(basis.map(v->v.expand()).append(z1),origin.expand());
+    static public GridScale c2d(TList<TVector2d> basis, TPoint2d origin) {
+        return new GridScale(basis.map(v->v.expand()).append(z1),origin.expand());
     }
-    static public GridCore c2d(TVector2d x, TVector2d y, TPoint2d origin) {
+    static public GridScale c2d(TVector2d x, TVector2d y, TPoint2d origin) {
         return c2d(TList.sof(x,y),origin);
     }
-    public GridCore(TList<TVector3d> basis, TPoint3d origin) {
+    public GridScale(TList<TVector3d> basis, TPoint3d origin) {
         assert !basis.isEmpty() : "bases cannot be empty";
         this.basis=basis;
         this.origin=origin;

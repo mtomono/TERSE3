@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 import static shape.ShapeUtil.err;
-import solver.graph.GridCore;
+import solver.graph.GridScale;
 
 /**
  *
@@ -60,7 +60,7 @@ public class Polygon3d extends TList<TPoint3d> {
         return Polygon3d.c(subList(from, to));
     }
     
-    public TList<List<Integer>> digitize(GridCore grid) {
+    public TList<List<Integer>> digitize(GridScale grid) {
         return asEdges().flatMapc(e->grid.toCube(e.start,e.end));
     }
     

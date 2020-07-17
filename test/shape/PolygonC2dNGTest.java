@@ -14,7 +14,7 @@ import static shape.PolygonC2d.X;
 import static shape.PolygonC2d.Y;
 import static shape.ShapeUtil.pni;
 import static shape.ShapeUtil.point2;
-import solver.graph.GridCore;
+import solver.graph.GridScale;
 
 /**
  *
@@ -117,7 +117,7 @@ public class PolygonC2dNGTest {
     public void testDigitizeEdges() {
         System.out.println(test.TestUtils.methodName(0));
         PolygonC2d tested = PolygonC2d.c(point2(0,0),point2(5,0),point2(5,5),point2(1,2));
-        TList<List<Integer>> result = tested.digitizeEdges(GridCore.ortho);
+        TList<List<Integer>> result = tested.digitizeEdges(GridScale.ortho);
         TList<List<Integer>> expected = TList.sof(
                 pni(0,0,0),pni(1,0,0),pni(2,0,0),pni(3,0,0),pni(4,0,0),pni(5,0,0),
                 pni(5,0,0),pni(5,1,0),pni(5,2,0),pni(5,3,0),pni(5,4,0),pni(5,5,0),
@@ -132,7 +132,7 @@ public class PolygonC2dNGTest {
     public void testDigitize() {
         System.out.println(test.TestUtils.methodName(0));
         PolygonC2d tested = PolygonC2d.c(point2(0,0),point2(5,0),point2(5,5),point2(1,2));
-        TList<List<Integer>> result = tested.digitize(GridCore.ortho);
+        TList<List<Integer>> result = tested.digitize(GridScale.ortho);
         TList<List<Integer>> expected = TList.sof(
                 pni(0,0,0),pni(0,1,0),
                 pni(1,0,0),pni(1,1,0),pni(1,2,0),
@@ -160,7 +160,7 @@ public class PolygonC2dNGTest {
     public void testDigitizeWithReflex() {
         System.out.println(test.TestUtils.methodName(0));
         PolygonC2d tested = PolygonC2d.c(point2(0,0),point2(4,3),point2(5,0),point2(5,5),point2(1,2),point2(0,5));
-        TList<List<Integer>> result = tested.digitize(GridCore.ortho,0,Y);
+        TList<List<Integer>> result = tested.digitize(GridScale.ortho,0,Y);
         TList<List<Integer>> expected = TList.sof(
                 pni(0,0,0),pni(1,0,0),pni(0,1,0),pni(1,1,0),pni(2,1,0),pni(1,2,0),pni(2,2,0),pni(3,2,0),pni(2,3,0),pni(3,3,0),pni(4,3,0),pni(3,4,0),pni(4,4,0),pni(5,4,0),pni(4,5,0),pni(5,5,0), 
                 pni(5,0,0),pni(4,1,0),pni(5,1,0),pni(4,2,0),pni(5,2,0),pni(4,3,0),pni(5,3,0),pni(4,4,0),pni(5,4,0),pni(5,5,0), 
@@ -174,7 +174,7 @@ public class PolygonC2dNGTest {
     public void testDigitizeWithReflexUnique() {
         System.out.println(test.TestUtils.methodName(0));
         PolygonC2d tested = PolygonC2d.c(point2(0,0),point2(4,3),point2(5,0),point2(5,5),point2(1,2),point2(0,5));
-        TList<List<Integer>> result = tested.digitize(GridCore.ortho,0,Y).sfix().unique(lexical());
+        TList<List<Integer>> result = tested.digitize(GridScale.ortho,0,Y).sfix().unique(lexical());
         TList<List<Integer>> expected = TList.sof(
                 pni(0,0,0),pni(0,1,0),pni(0,2,0),pni(0,3,0),pni(0,4,0),pni(0,5,0),
                 pni(1,0,0),pni(1,1,0),pni(1,2,0),pni(1,3,0),

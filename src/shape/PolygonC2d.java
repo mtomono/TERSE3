@@ -21,8 +21,8 @@ import static java.lang.Math.abs;
 import java.util.ArrayList;
 import java.util.List;
 import shape.PolygonC2d.Edge;
-import solver.graph.GridCore;
-import static solver.graph.GridCore.ortho;
+import solver.graph.GridScale;
+import static solver.graph.GridScale.ortho;
 
 /**
  * Polygon Closed 2d.
@@ -56,15 +56,15 @@ public class PolygonC2d extends TList<TPoint2d> {
         return Polygon2d.c(this.append(get(0)));
     }
     
-    public TList<List<Integer>> digitizeEdges(GridCore grid, double v) {
+    public TList<List<Integer>> digitizeEdges(GridScale grid, double v) {
         return toPolygon().digitize(grid,v);
     }
     
-    public TList<List<Integer>> digitizeEdges(GridCore grid) {
+    public TList<List<Integer>> digitizeEdges(GridScale grid) {
         return digitizeEdges(grid, 0);
     }
     
-    public PolygonC2d localize(GridCore grid) {
+    public PolygonC2d localize(GridScale grid) {
         return c(map(p->grid.localize(p.expand()).shrink()).sfix());
     }
     
@@ -75,7 +75,7 @@ public class PolygonC2d extends TList<TPoint2d> {
      * @param grid
      * @return 
      */
-    public TList<List<Integer>> digitize(GridCore grid) {
+    public TList<List<Integer>> digitize(GridScale grid) {
         return digitize(grid,0);
     }
     
@@ -87,11 +87,11 @@ public class PolygonC2d extends TList<TPoint2d> {
      * @param v
      * @return 
      */
-    public TList<List<Integer>> digitize(GridCore grid, double v) {
+    public TList<List<Integer>> digitize(GridScale grid, double v) {
         return digitize(grid,v,X);
     }
     
-    public TList<List<Integer>> digitize(GridCore grid, double v, int axis) {
+    public TList<List<Integer>> digitize(GridScale grid, double v, int axis) {
         assert grid.is2d():"grid must be 2d (if not, do some transformation)";
         return localize(grid).monotonize(axis).flatMapc(c->c.digitizeLocallyMonotonized(v, axis));
     }
