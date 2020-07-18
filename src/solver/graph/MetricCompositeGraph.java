@@ -16,7 +16,6 @@ package solver.graph;
 
 import collection.P;
 import collection.TList;
-import solver.graph.MetricGraph;
 
 /**
  *
