@@ -52,7 +52,17 @@ public class GridSolver {
     }
     
     public GridSolver astar() {
-        this.ngb.astar(metric);
+        return astar(metric);
+    }
+    
+    /**
+     * astar with unique metric.
+     * in general, astar can take different metric other than graph.
+     * @param metricForAstar
+     * @return 
+     */
+    public GridSolver astar(Metric<List<Integer>> metricForAstar) {
+        this.ngb.astar(metricForAstar);
         return this;
     }
     
