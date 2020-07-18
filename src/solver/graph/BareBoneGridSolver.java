@@ -17,7 +17,7 @@ import shapeCollection.GridCoord;
 public class BareBoneGridSolver {
     MetricGraph<List<Integer>> graph;
     public BareBoneGridSolver(GridCoord gcoord) {
-        this.graph=GridGraphBuilder.builder(gcoord).alt().build().metricize(metric(3));
+        this.graph=new MetricizedGraph<>(metric(3),GridGraphBuilder.builder(gcoord).alt().build());
     }
     
     public TList<List<Integer>> solve(List<Integer> from, List<Integer>to, Collection<List<Integer>> blocks) {
