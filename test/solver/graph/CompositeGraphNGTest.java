@@ -11,7 +11,6 @@ import java.util.Optional;
 import math.VectorOp;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
-import static shape.ShapeUtil.p3i;
 import static shape.ShapeUtil.pni;
 
 /**

@@ -49,7 +49,7 @@ public class GridMono implements GridSpace{
     }
     
     public MetricGraph<List<Integer>> metricGraph(Metric<List<Integer>> metric) {
-        return new MetricGridGraph(graph,metric);
+        return new MetricizedGraph<>(metric,graph);
     }
     
     @Override

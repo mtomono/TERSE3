@@ -39,7 +39,7 @@ public class GridGraph implements Graph<List<Integer>> {
     
     @Override
     public MetricGraph<List<Integer>> metricize(Metric<List<Integer>> metric) {
-        return new MetricGridGraph(this,metric);
+        return new MetricizedGraph<>(metric,this);
     }
     
     @Override

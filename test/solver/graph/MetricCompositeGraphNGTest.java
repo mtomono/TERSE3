@@ -6,37 +6,40 @@
 package solver.graph;
 
 import collection.TList;
+import debug.Te;
 import static java.lang.Math.sqrt;
 import java.util.List;
 import java.util.Optional;
+import math.VectorOp;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
-import static shape.ShapeUtil.p3i;
-import shape.TPoint3i;
+import static shape.ShapeUtil.pni;
 
 /**
  *
  * @author masao
  */
 public class MetricCompositeGraphNGTest {
-    MetricGridGraphOld<TPoint3i> grid;
-    MetricGeneralGraph<TPoint3i> bypass;
-    TList<TPoint3i> blocks0;
-    TList<TPoint3i> blocks1;
-    TList<TPoint3i> blocks2;
-    MetricCompositeGraph<TPoint3i> layeredGraph0;
-    MetricCompositeGraph<TPoint3i> layeredGraph1;
+    MetricGraph grid;
+    MetricGeneralGraph<List<Integer>> bypass;
+    TList<List<Integer>> blocks0;
+    TList<List<Integer>> blocks1;
+    TList<List<Integer>> blocks2;
+    MetricCompositeGraph<List<Integer>> layeredGraph0;
+    MetricCompositeGraph<List<Integer>> layeredGraph1;
     Metric<List<Integer>> l2=Metric.<Double>l2().morph(Metric.weight(TList.sof(1,1,3)));
+    static List<Integer> l(Integer... v) {
+        return pni(v);
+    }
     public MetricCompositeGraphNGTest() {
-        grid = MetricGridGraph3dBuilder.builder(0,0,0, 20,20,5).build();
-        bypass = MetricGeneralGraphBuilder.<TPoint3i>builder().a(p3i(1,1,3), p3i(16,16,3), sqrt(15*15*2)).build();
+        grid = GridGraphBuilder.builder(0,0,0, 20,20,5).build().metricize(l2);
+        bypass = MetricGeneralGraphBuilder.<List<Integer>>builder().a(l(1,1,3), l(16,16,3), sqrt(15*15*2)).build();
         layeredGraph0 = new MetricCompositeGraph<>(grid);
         layeredGraph1 = new MetricCompositeGraph<>(grid,bypass);
-        blocks0 = TList.sof(
-                p3i(0,0,0),p3i(1,0,0),p3i(2,0,0),p3i(0,1,0),p3i(1,1,0),p3i(2,1,0),p3i(0,2,0),p3i(1,2,0),p3i(2,2,0)
+        blocks0 = TList.sof(l(0,0,0),l(1,0,0),l(2,0,0),l(0,1,0),l(1,1,0),l(2,1,0),l(0,2,0),l(1,2,0),l(2,2,0)
         );
-        blocks1 = blocks0.map(p->TList.range(0,6).map(i->p.addR(p3i(0,0,i)))).sfix().flatMap(l->l).sfix();
-        blocks2 = blocks1.map(p->p.addR(p3i(15,15,0)));
+        blocks1 = blocks0.map(p->TList.range(0,6).map(i->VectorOp.addI(p,l(0,0,i)))).sfix().flatMap(l->l).sfix();
+        blocks2 = blocks1.map(p->VectorOp.addI(p, l(15,15,0)));
     }
     
     @Test
@@ -64,9 +67,9 @@ public class MetricCompositeGraphNGTest {
     @Test(expectedExceptions=AssertionError.class)
     public void testFromIsReacheable() {
         System.out.println(test.TestUtils.methodName(0));
-        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(layeredGraph0,p3i(15,18,0),p3i(17,15,4)).earlyExit().astar(l2).white(blocks2).build();
+        NodeGraph<List<Integer>> d = NodeGraphBuilder.builder(layeredGraph0,l(15,18,0),l(17,15,4)).earlyExit().astar(l2).white(blocks2).build();
         d.fillLoop();
-        TList<TPoint3i> result = d.findRoute();
+        TList<List<Integer>> result = d.findRoute();
         int expected = 0;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
@@ -76,9 +79,9 @@ public class MetricCompositeGraphNGTest {
     @Test(expectedExceptions=AssertionError.class)
     public void testToIsReacheable() {
         System.out.println(test.TestUtils.methodName(0));
-        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(layeredGraph0,p3i(15,16,0),p3i(17,18,4)).earlyExit().astar(l2).white(blocks2).build();
+        NodeGraph<List<Integer>> d = NodeGraphBuilder.builder(layeredGraph0,l(15,16,0),l(17,18,4)).earlyExit().astar(l2).white(blocks2).build();
         d.fillLoop();
-        TList<TPoint3i> result = d.findRoute();
+        TList<List<Integer>> result = d.findRoute();
         int expected = 0;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
@@ -88,7 +91,7 @@ public class MetricCompositeGraphNGTest {
     @Test
     public void testFindCostInBlocks1() {
         System.out.println(test.TestUtils.methodName(0));
-        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(layeredGraph0,p3i(0,1,0),p3i(2,0,4)).earlyExit().astar(l2).white(blocks1).build();
+        NodeGraph<List<Integer>> d = NodeGraphBuilder.builder(layeredGraph0,l(0,1,0),l(2,0,4)).earlyExit().astar(l2).white(blocks1).build();
         d.fillLoop();
         double result = d.findCost().get();
         double expected = 15;
@@ -100,10 +103,10 @@ public class MetricCompositeGraphNGTest {
     @Test
     public void testFindRouteInBlocks1() {
         System.out.println(test.TestUtils.methodName(0));
-        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(layeredGraph0,p3i(0,1,0),p3i(2,0,4)).earlyExit().astar(l2).white(blocks1).build();
+        NodeGraph<List<Integer>> d = NodeGraphBuilder.builder(layeredGraph0,l(0,1,0),l(2,0,4)).earlyExit().astar(l2).white(blocks1).build();
         d.fillLoop();
-        TList<TPoint3i> result = d.findRoute();
-        TList<TPoint3i> expected = TList.sof(p3i(0,1,0), p3i(0,1,1), p3i(0,1,2), p3i(0,1,3), p3i(1,1,3), p3i(1,0,3), p3i(1,0,4), p3i(2,0,4));
+        TList<List<Integer>> result = d.findRoute();
+        TList<List<Integer>> expected = TList.sof(l(0,1,0), l(0,1,1), l(0,1,2), l(0,1,3), l(1,1,3), l(1,0,3), l(1,0,4), l(2,0,4));
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
         assertEquals(result, expected);
@@ -112,7 +115,7 @@ public class MetricCompositeGraphNGTest {
     @Test
     public void testFindCostInBlocks2() {
         System.out.println(test.TestUtils.methodName(0));
-        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(layeredGraph0,p3i(15,16,0),p3i(17,15,4)).earlyExit().astar(l2).white(blocks2).build();
+        NodeGraph<List<Integer>> d = NodeGraphBuilder.builder(layeredGraph0,l(15,16,0),l(17,15,4)).earlyExit().astar(l2).white(blocks2).build();
         d.fillLoop();
         double result = d.findCost().get();
         double expected = 15;
@@ -124,10 +127,10 @@ public class MetricCompositeGraphNGTest {
     @Test
     public void testFindRouteInBlocks2() {
         System.out.println(test.TestUtils.methodName(0));
-        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(layeredGraph0,p3i(15,16,0),p3i(17,15,4)).earlyExit().astar(l2).white(blocks2).build();
+        NodeGraph<List<Integer>> d = NodeGraphBuilder.builder(layeredGraph0,l(15,16,0),l(17,15,4)).earlyExit().astar(l2).white(blocks2).build();
         d.fillLoop();
-        TList<TPoint3i> result = d.findRoute();
-        TList<TPoint3i> expected = TList.sof(p3i(15,16,0), p3i(15,16,1), p3i(15,16,2), p3i(15,16,3), p3i(16,16,3), p3i(16,15,3), p3i(16,15,4), p3i(17,15,4));
+        TList<List<Integer>> result = d.findRoute();
+        TList<List<Integer>> expected = TList.sof(l(15,16,0), l(15,16,1), l(15,16,2), l(15,16,3), l(16,16,3), l(16,15,3), l(16,15,4), l(17,15,4));
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
         assertEquals(result, expected);
@@ -136,7 +139,7 @@ public class MetricCompositeGraphNGTest {
     @Test
     public void testFindCostInBlocks1x2() {
         System.out.println(test.TestUtils.methodName(0));
-        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(layeredGraph0,p3i(0,1,0),p3i(17,15,4)).earlyExit().astar(l2).white(blocks1.append(blocks2)).build();
+        NodeGraph<List<Integer>> d = NodeGraphBuilder.builder(layeredGraph0,l(0,1,0),l(17,15,4)).earlyExit().astar(l2).white(blocks1.append(blocks2)).build();
         d.fillLoop();
         Optional<Double> result = d.findCost();
         Optional<Double> expected = Optional.empty();
@@ -148,7 +151,7 @@ public class MetricCompositeGraphNGTest {
     @Test
     public void testFindCostInBlocks1x2wBypass() {
         System.out.println(test.TestUtils.methodName(0));
-        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(layeredGraph1,p3i(0,1,0),p3i(17,15,4)).earlyExit().astar(l2).white(blocks1.append(blocks2)).build();
+        NodeGraph<List<Integer>> d = NodeGraphBuilder.builder(layeredGraph1,l(0,1,0),l(17,15,4)).earlyExit().astar(l2).white(blocks1.append(blocks2)).build();
         d.fillLoop();
         double result = d.findCost().get();
         double expected = 36.21320343559643;
@@ -160,10 +163,10 @@ public class MetricCompositeGraphNGTest {
     @Test
     public void testFindRouteInBlocks1x2wBypass() {
         System.out.println(test.TestUtils.methodName(0));
-        NodeGraph<TPoint3i> d = NodeGraphBuilder.builder(layeredGraph1,p3i(0,1,0),p3i(17,15,4)).earlyExit().astar(l2).white(blocks1.append(blocks2)).build();
+        NodeGraph<List<Integer>> d = NodeGraphBuilder.builder(layeredGraph1,l(0,1,0),l(17,15,4)).earlyExit().astar(l2).white(blocks1.append(blocks2)).build();
         d.fillLoop();
-        TList<TPoint3i> result = d.findRoute();
-        TList<TPoint3i> expected = TList.sof(p3i(0,1,0), p3i(1,1,0), p3i(1,1,1), p3i(1,1,2), p3i(1,1,3), p3i(16,16,3), p3i(17,16,3), p3i(17,15,3), p3i(17,15,4));
+        TList<List<Integer>> result = d.findRoute();
+        TList<List<Integer>> expected = TList.sof(l(0,1,0), l(1,1,0), l(1,1,1), l(1,1,2), l(1,1,3), l(16,16,3), l(17,16,3), l(17,15,3), l(17,15,4));
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
         assertEquals(result, expected);
