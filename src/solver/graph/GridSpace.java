@@ -26,10 +26,6 @@ import shape.TPoint3d;
  * globalize and localize points in view of cube.
  * when grids are multiple, it handles the situation by increasing the dimension of cube.
  * in that case this class adds new dimension at the head of the list.
- * 
- * this class can produce metric for route searching. for that purpose, this comes with
- * the facility of calculating compensation rate for horisontal vs vertical.
- * 
  * @author masao
  */
 public interface GridSpace {
@@ -52,9 +48,9 @@ public interface GridSpace {
     TList<List<Integer>> toCube(TList<TPoint3d> line);
     
     default Metric<List<Integer>> globalMetric(Metric<List<Double>> base, double costv) {
-        return base.morph(Metric.<Double>weight(TList.sof(1,1,costv)).compose(this::globalizeI));
+        return base.morph(Metric.<Double>costv(costv).compose(this::globalizeI));
     }
     default Metric<List<Integer>> localMetric(Metric<List<Double>> base, double costv) {
-        return base.morph(Metric.weight(TList.sof(1,1,costv)));
+        return base.morph(Metric.<Integer>costv(costv));
     }
 }
