@@ -57,11 +57,4 @@ public interface GridSpace {
     default Metric<List<Integer>> localMetric(Metric<List<Double>> base, double costv) {
         return base.morph(Metric.weight(TList.sof(1,1,costv)));
     }
-    
-    default Function<Double, Metric<List<Integer>>> globalMetricFactory(Metric<List<Double>> base) {
-        return costv->globalMetric(base,costv);
-    }
-    default Function<Double, Metric<List<Integer>>> localMetricFactory(Metric<List<Double>> base) {
-        return costv->localMetric(base,costv);
-    }
 }
