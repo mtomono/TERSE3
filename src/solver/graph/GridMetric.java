@@ -7,7 +7,6 @@ package solver.graph;
 
 import collection.TList;
 import java.util.List;
-import java.util.function.Function;
 
 /**
  *
