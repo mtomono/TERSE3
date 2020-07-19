@@ -20,10 +20,10 @@ public interface GridMetric extends Metric<List<Double>> {
     static public GridMetric t(Metric<List<Double>> m) {
         return (f,t)->m.measure(f,t);
     }
-    public static GridMetric l2d() {
+    public static GridMetric l2() {
         return (f,t)->Math.sqrt(TList.set(t).pair(f,(x,y)->x-y).map(d->d*d).sumD(i->i));
     }
-    public static GridMetric l1d() {
+    public static GridMetric l1() {
         return (f,t)->TList.set(t).pair(f,(x,y)->Math.abs(x-y)).sumD(i->i);
     }
     default Metric<List<Integer>> i() {

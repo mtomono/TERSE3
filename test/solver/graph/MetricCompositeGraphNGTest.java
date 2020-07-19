@@ -27,7 +27,7 @@ public class MetricCompositeGraphNGTest {
     TList<List<Integer>> blocks2;
     MetricCompositeGraph<List<Integer>> layeredGraph0;
     MetricCompositeGraph<List<Integer>> layeredGraph1;
-    Metric<List<Integer>> l2=GridMetric.l2d().weight(TList.sof(1,1,3)).i();
+    Metric<List<Integer>> l2=GridMetric.l2().weight(TList.sof(1,1,3)).i();
     static List<Integer> l(Integer... v) {
         return pni(v);
     }
