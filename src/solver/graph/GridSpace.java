@@ -15,10 +15,11 @@
 package solver.graph;
 
 import collection.TList;
+import debug.Te;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 import shape.TPoint3d;
+import static solver.graph.GridMetric.t;
 
 /**
  * Space defined with grids.
@@ -48,9 +49,9 @@ public interface GridSpace {
     TList<List<Integer>> toCube(TList<TPoint3d> line);
     
     default Metric<List<Integer>> globalMetric(Metric<List<Double>> base, double costv) {
-        return base.morph(Metric.<Double>costv(costv).compose(this::globalizeI));
+        return t(base).costv(costv).morph(this::globalizeI);
     }
     default Metric<List<Integer>> localMetric(Metric<List<Double>> base, double costv) {
-        return base.morph(Metric.<Integer>costv(costv));
+        return t(base).costv(costv).i();
     }
 }

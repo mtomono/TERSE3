@@ -100,7 +100,7 @@ public class GridScale {
     }
     
     public TList<List<Integer>> toCube(TPoint3d localFrom, TPoint3d localTo) {
-        if (Metric.<Integer>l1().measure(round(localTo),round(localFrom))<1)
+        if (GridMetric.l1d().i().measure(round(localTo),round(localFrom))<1)
             return TList.wrap(round(localTo));
         return cubes.go(localFrom, localTo).sfix();
     }

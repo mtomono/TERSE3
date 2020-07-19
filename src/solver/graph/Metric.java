@@ -41,38 +41,4 @@ public interface Metric<K> {
     default public <S> Metric<S> morph(Function<S,K> morph) {
         return (f,t)->measure(morph.apply(f),morph.apply(t));
     }
-    static public <N extends Number> Metric<List<N>> l2() {
-        return (f,t)->sqrt(TList.set(t).pair(f,(x,y)->x.doubleValue()-y.doubleValue()).map(d->d*d).sumD(i->i));
-    }
-    static public <N extends Number> Metric<List<N>> l1() {
-        return (f,t)->TList.set(t).pair(f,(x,y)->abs(x.doubleValue()-y.doubleValue())).sumD(i->i);
-    }
-    static public Metric<List<Double>> l2d() {
-        return (f,t)->sqrt(TList.set(t).pair(f,(x,y)->x-y).map(d->d*d).sumD(i->i));
-    }
-    static public Metric<List<Double>> l1d() {
-        return (f,t)->TList.set(t).pair(f,(x,y)->abs(x-y)).sumD(i->i);
-    }
-    
-    static public <N extends Number> Function<List<N>,List<Double>> weight(TList<? extends Number> weight) {
-        return l->weight.pair(l,(a,b)->a.doubleValue()*b.doubleValue());
-    }
-    
-    static public <N extends Number> Function<List<N>,List<Double>> costv(double costv) {
-        return weight(TList.sof(1,1,costv));
-    }
-
-    /**
-     * do not use this method.
-     * this method is placed here only to show how the morph() and weight() can work together.
-     * @param weight
-     * @return 
-     */
-    static public Metric<List<Integer>> metric(double... weight) {
-        return Metric.<Double>l1().<List<Integer>>morph(Metric.<Integer>weight(TList.set(wrap(weight))));
-        /* 
-        designator right before morph() and weight() could be omitted. 
-        they remain here to show you how the type change is going on inside this short phrase.
-        */
-    }
 }

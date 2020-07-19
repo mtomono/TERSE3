@@ -25,6 +25,6 @@ public class BareBoneGridSolver {
     }
     
     static public Metric<List<Integer>> metric(double v) {
-        return Metric.l1d().morph(Metric.costv(v));
+        return GridMetric.l1d().costv(v).i();
     }
 }

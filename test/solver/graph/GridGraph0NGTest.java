@@ -18,7 +18,7 @@ import static shape.ShapeUtil.pni;
 public class GridGraph0NGTest {
     GridGraph graph;
     TList<List<Integer>> blocks;
-    Metric<List<Integer>> l1=Metric.<Double>l1().morph(Metric.weight(TList.sof(1,1,3)));
+    Metric<List<Integer>> l1=GridMetric.l1d().weight(TList.sof(1,1,3)).i();
     public GridGraph0NGTest() {
         graph = GridGraphBuilder.builder(0,0, 5,5).build();
         blocks = TList.sof(
