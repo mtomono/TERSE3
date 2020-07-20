@@ -19,6 +19,7 @@ import collection.TList;
 
 /**
  * Knapsack problem solver.
+ * Count means the number of combination which fulfill the given condition.
  * 
  * @author masao
  */

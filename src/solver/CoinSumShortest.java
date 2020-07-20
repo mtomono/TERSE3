@@ -20,6 +20,7 @@ import java.util.Comparator;
 
 /**
  * Knapsack problem solver.
+ * Shortest means the shortest way to fulfill the given condition.
  * 
  * @author masao
  */
