@@ -6,16 +6,10 @@
 package solver;
 
 import collection.TList;
-import java.util.TreeMap;
-import orderedSet.Comparators;
 import static org.testng.Assert.*;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import static shape.ShapeUtil.p2i;
-import shape.TPoint2i;
-import shapeCollection.Grid;
-import static solver.Solvers.extract2i;
-import test.TestUtils;
 
 /**
  *
@@ -39,7 +33,7 @@ public class CoinKnapsackNGTest {
                 new Luggage(5,8)
         );
         
-        int result = new CoinKnapsack().target(Solvers.extract2i(tested,Luggage::weight,Luggage::value)).solve(17).value;
+        int result = new CoinKnapsack().target(tested.map(l->p2i(l.weight(),l.value()))).solve(17).value;
         int expected = 27;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
@@ -55,7 +49,7 @@ public class CoinKnapsackNGTest {
                 new Luggage(10,11)
         );
         
-        Result<Integer> result = new CoinKnapsack().target(Solvers.extract2i(tested,Luggage::weight,Luggage::value)).solve(29);
+        Result<Integer> result = new CoinKnapsack().target(tested.map(l->p2i(l.weight(),l.value()))).solve(29);
         int expected = 31;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
