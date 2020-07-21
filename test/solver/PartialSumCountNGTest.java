@@ -46,6 +46,16 @@ public class PartialSumCountNGTest {
         assertEquals(result.size(), expected);
     }
     @Test
+    public void testLine14() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> tested = TList.sof(4,1,1,1);
+        TList<Integer> result = new PartialSumCountLine().solve(tested,5);
+        Integer expected = 3;
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result.last(), expected);
+    }
+    @Test
     public void testBasic10() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Integer> tested = TList.sof(5,2,12,7,23);
@@ -55,5 +65,15 @@ public class PartialSumCountNGTest {
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
         assertEquals(result.size(), expected);
+    }
+    @Test
+    public void testLine10() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> tested = TList.sof(5,2,12,7,23);
+        TList<Integer> result = new PartialSumCountLine().solve(tested,14);
+        Integer expected = 2;
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result.last(), expected);
     }
 }
