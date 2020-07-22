@@ -35,6 +35,16 @@ public class CoinSumCountNGTest {
         assertEquals(result.size(), expected);
     }
     @Test
+    public void testLine() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> tested = TList.sof(5,2,1,7,6);
+        TList<Integer> result = new CoinSumCountLine().solve(tested,12);
+        Integer expected = 23;
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result.last(), expected);
+    }
+    @Test
     public void testBasic14() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Integer> tested = TList.sof(4,1,1,1);
@@ -46,6 +56,16 @@ public class CoinSumCountNGTest {
         assertEquals(result.size(), expected);
     }
     @Test
+    public void testLine14() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> tested = TList.sof(4,1,1,1);
+        TList<Integer> result = new CoinSumCountLine().solve(tested,5);
+        Integer expected = 24;
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result.last(), expected);
+    }
+    @Test
     public void testBasic10() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Integer> tested = TList.sof(5,2,12,7,23);
@@ -55,5 +75,15 @@ public class CoinSumCountNGTest {
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
         assertEquals(result.size(), expected);
+    }
+    @Test
+    public void testLine10() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> tested = TList.sof(5,2,12,7,23);
+        TList<Integer> result = new CoinSumCountLine().solve0(tested,14);
+        Integer expected = 5;
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result.last(), expected);
     }
 }

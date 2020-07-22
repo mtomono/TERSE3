@@ -41,6 +41,22 @@ public class CoinKnapsackNGTest {
     }
 
     @Test
+    public void testLine17() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Luggage> tested = TList.of(
+                new Luggage(2,3),
+                new Luggage(3,1),
+                new Luggage(5,8)
+        );
+        
+        TList<Integer> result = new CoinKnapsackLine().solve0(tested.map(l->p2i(l.weight(),l.value())),17);
+        Integer expected = 27;
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result.last(), expected);
+    }
+
+    @Test
     public void testBasic29() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Luggage> tested = TList.of(
@@ -54,5 +70,20 @@ public class CoinKnapsackNGTest {
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
         assertEquals(result.value, (Integer)expected);
+    }
+    @Test
+    public void testLine29() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Luggage> tested = TList.of(
+                new Luggage(2,2),
+                new Luggage(5,5),
+                new Luggage(10,11)
+        );
+        
+        TList<Integer> result = new CoinKnapsackLine().solve0(tested.map(l->p2i(l.weight(),l.value())),29);
+        Integer expected = 31;
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result.last(), expected);
     }
 }
