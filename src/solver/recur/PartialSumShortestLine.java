@@ -12,7 +12,7 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.
  */
-package solver;
+package solver.recur;
 
 import collection.TList;
 import function.Holder;
@@ -24,18 +24,13 @@ import static java.lang.Integer.min;
  * @author masao
  * @param <T>
  */
-public class CoinSumCountLine<T> {
+public class PartialSumShortestLine<T> {
     static public TList<Integer> solve(TList<Integer> items, int capacity) {
-        Holder<TList<Integer>> h = new Holder<>(TList.nCopies(capacity, 0).startFrom(1));
+        Holder<TList<Integer>> h = new Holder<>(TList.nCopies(capacity, -1).startFrom(0));
         items.forEach(i->{
             TList<Integer> pre = h.push(h.get().fix());
-            TList.range(min(i,capacity+1),capacity+1).forEach(j->h.get().set(j, h.get().get(j)+h.get().get(j-i)));
+            TList.range(min(i,capacity+1),capacity+1).forEach(j->h.get().set(j, TList.sof(pre.get(j),pre.get(j-i)+1).filter(x->x>0).min(x->x).orElse(-1)));
         });
         return h.get();
-    }
-    static public TList<Integer> solve0(TList<Integer> items, int capacity) {
-        TList<Integer> line = TList.nCopies(capacity, 0).startFrom(1).fix();
-        items.forEach(i->TList.range(min(i,capacity+1),capacity+1).forEach(j->line.set(j, line.get(j)+line.get(j-i))));
-        return line;
     }
 }

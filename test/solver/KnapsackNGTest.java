@@ -5,6 +5,7 @@
  */
 package solver;
 
+import solver.recur.KnapsackLine;
 import collection.TList;
 import debug.Te;
 import java.util.TreeMap;

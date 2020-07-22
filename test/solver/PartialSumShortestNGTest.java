@@ -5,6 +5,7 @@
  */
 package solver;
 
+import solver.recur.PartialSumShortestLine;
 import collection.TList;
 import static org.testng.Assert.*;
 import org.testng.annotations.BeforeMethod;
