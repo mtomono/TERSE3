@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package solver;
+package solver.dp;
 
-import solver.recur.CoinSumShortestLine;
+import solver.recur.*;
 import collection.TList;
 import static org.testng.Assert.*;
 import org.testng.annotations.BeforeMethod;
@@ -25,43 +25,43 @@ public class CoinSumShortestNGTest {
     }
     
     @Test
-    public void testBasic12() {
+    public void testLine12() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Integer> tested = TList.sof(2,1,7);
-        Result<Boolean> result = new CoinSumShortest().target(tested).solve(12);
-        int expected = 4;
+        TList<Integer> result = KnapsackDP.shortest(tested,12).csolve();
+        Integer expected = 4;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
-        assertEquals(result.content.size(), expected);
+        assertEquals(result.last(), expected);
     }
     @Test
-    public void testBasic29() {
+    public void testLine29() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Integer> tested = TList.sof(4,11,8,2);
-        Result<Boolean> result = new CoinSumShortest().target(tested).solve(29);
-        int expected = 4;
+        TList<Integer> result = KnapsackDP.shortest(tested,29).csolve();
+        Integer expected = 4;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
-        assertEquals(result.content.size(), expected);
+        assertEquals(result.last(), expected);
     }
     @Test
-    public void testBasic26() {
+    public void testLine26() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Integer> tested = TList.sof(5,2,12,7,23);
-        Result<Boolean> result = new CoinSumShortest().target(tested).solve(26);
-        int expected = 3;
+        TList<Integer> result = KnapsackDP.shortest(tested,26).csolve();
+        Integer expected = 3;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
-        assertEquals(result.content.size(), expected);
+        assertEquals(result.last(), expected);
     }
     @Test
-    public void testBasic34() {
+    public void testLine34() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Integer> tested = TList.sof(5,2,12,7,23);
-        Result<Boolean> result = new CoinSumShortest().target(tested).solve(34);
-        int expected = 4;
+        TList<Integer> result = KnapsackDP.shortest(tested,34).csolve();
+        Integer expected = 4;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
-        assertEquals(result.content.size(), expected);
+        assertEquals(result.last(), expected);
     }
 }

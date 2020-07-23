@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package solver;
+package solver.dp;
 
 import collection.TList;
 import static org.testng.Assert.*;
@@ -24,36 +24,33 @@ public class CoinSumNGTest {
     }
     
     @Test
-    public void testBasic() {
+    public void testLine() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Integer> tested = TList.sof(2,1,6);
-        Result<Boolean> result = new CoinSum().target(tested).solve(15);
-        boolean expected = true;
-        if (result.value) System.out.println(tested.pickUp(result.content));
+        TList<Boolean> result = KnapsackDP.cut(tested,15).csolve();
+        Boolean expected = true;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
-        assertEquals(result.value, (Boolean)expected);
+        assertEquals(result.last(), expected);
     }
     @Test
-    public void testBasic14() {
+    public void testLine14() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Integer> tested = TList.sof(5,2);
-        Result<Boolean> result = new CoinSum().target(tested).solve(13);
-        boolean expected = true;
-        if (result.value) System.out.println(tested.pickUp(result.content));
+        TList<Boolean> result = KnapsackDP.cut(tested,13).csolve();
+        Boolean expected = true;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
-        assertEquals(result.value, (Boolean)expected);
+        assertEquals(result.last(), expected);
     }
     @Test
-    public void testBasic10() {
+    public void testLine10() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Integer> tested = TList.sof(6,12,7,23);
-        Result<Boolean> result = new CoinSum().target(tested).solve(10);
-        boolean expected = false;
-        if (result.value) System.out.println(tested.pickUp(result.content));
+        TList<Boolean> result = KnapsackDP.cut(tested,10).csolve();
+        Boolean expected = false;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
-        assertEquals(result.value, (Boolean)expected);
+        assertEquals(result.last(), expected);
     }
 }

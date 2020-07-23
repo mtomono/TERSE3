@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package solver;
+package solver.dp;
 
-import solver.recur.CoinKnapsackLine;
 import collection.TList;
 import static org.testng.Assert.*;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import static shape.ShapeUtil.p2i;
+import solver.Luggage;
 
 /**
  *
@@ -26,7 +26,7 @@ public class CoinKnapsackNGTest {
     }
 
     @Test
-    public void testBasic17() {
+    public void testLine17() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Luggage> tested = TList.of(
                 new Luggage(2,3),
@@ -34,15 +34,15 @@ public class CoinKnapsackNGTest {
                 new Luggage(5,8)
         );
         
-        int result = new CoinKnapsack().target(tested.map(l->p2i(l.weight(),l.value()))).solve(17).value;
-        int expected = 27;
+        TList<Integer> result = KnapsackDP.knapsack(tested.map(l->p2i(l.weight(),l.value())),17).csolve();
+        Integer expected = 27;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
-        assertEquals(result, expected);
+        assertEquals(result.last(), expected);
     }
 
     @Test
-    public void testBasic29() {
+    public void testLine29() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Luggage> tested = TList.of(
                 new Luggage(2,2),
@@ -50,10 +50,10 @@ public class CoinKnapsackNGTest {
                 new Luggage(10,11)
         );
         
-        Result<Integer> result = new CoinKnapsack().target(tested.map(l->p2i(l.weight(),l.value()))).solve(29);
-        int expected = 31;
+        TList<Integer> result = KnapsackDP.knapsack(tested.map(l->p2i(l.weight(),l.value())),29).csolve();
+        Integer expected = 31;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
-        assertEquals(result.value, (Integer)expected);
+        assertEquals(result.last(), expected);
     }
 }

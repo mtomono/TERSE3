@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package solver;
+package solver.recur;
 
 import collection.TList;
 import static org.testng.Assert.*;
@@ -14,9 +14,9 @@ import org.testng.annotations.Test;
  *
  * @author masao
  */
-public class CoinSumCountNGTest {
+public class PartialSumShortestNGTest {
     
-    public CoinSumCountNGTest() {
+    public PartialSumShortestNGTest() {
     }
 
     @BeforeMethod
@@ -24,36 +24,43 @@ public class CoinSumCountNGTest {
     }
     
     @Test
-    public void testBasic() {
+    public void testLine() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Integer> tested = TList.sof(5,2,1,7,6);
-        TList<Result<Boolean>> result = new CoinSumCount().target(tested).solve(12);
-        int expected = 23;
-        System.out.println(result.map(r->r.content));
+        TList<Integer> result = new PartialSumShortestLine().solve(tested,12);
+        Integer expected = 2;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
-        assertEquals(result.size(), expected);
+        assertEquals(result.last(), expected);
     }
     @Test
-    public void testBasic14() {
+    public void testLine5() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Integer> tested = TList.sof(4,1,1,1);
-        TList<Result<Boolean>> result = new CoinSumCount().target(tested).solve(5);
-        int expected = 24;
-        System.out.println(result.map(r->r.content));
+        TList<Integer> result = new PartialSumShortestLine().solve(tested,5);
+        Integer expected = 2;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
-        assertEquals(result.size(), expected);
+        assertEquals(result.last(), expected);
     }
     @Test
-    public void testBasic10() {
+    public void testLine14() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Integer> tested = TList.sof(5,2,12,7,23);
-        TList<Result<Boolean>> result = new CoinSumCount().target(tested).solve(14);
-        int expected = 5;
-        System.out.println(result.map(r->r.content));
+        TList<Integer> result = new PartialSumShortestLine().solve(tested,14);
+        Integer expected = 2;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
-        assertEquals(result.size(), expected);
+        assertEquals(result.last(), expected);
+    }
+    @Test
+    public void testLine24() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> tested = TList.sof(5,2,12,7,23);
+        TList<Integer> result = new PartialSumShortestLine().solve(tested,24);
+        Integer expected = 3;
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result.last(), expected);
     }
 }
