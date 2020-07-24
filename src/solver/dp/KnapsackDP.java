@@ -19,6 +19,7 @@ import collection.TList;
 import function.Holder;
 import static java.lang.Integer.max;
 import static java.lang.Integer.min;
+import java.util.function.Function;
 import shape.TPoint2i;
 
 /**
@@ -80,6 +81,9 @@ public class KnapsackDP<T,R> {
             update.update(lines.last(), lines.last(1), i);
         });
         return lines;
+    }
+    public <S> TList<TList<S>> psolvew(Function<R,S> f) {
+        return psolvew().map(l->l.map(f));
     }
     public TList<TList<R>> csolvew() {
         TList<TList<R>> lines = TList.c();

@@ -9,6 +9,7 @@ import collection.TList;
 import static org.testng.Assert.*;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import static solver.dp.ReverseDP.cut;
 
 /**
  *
@@ -28,6 +29,8 @@ public class PartialSumNGTest {
         System.out.println(test.TestUtils.methodName(0));
         TList<Integer> tested = TList.sof(5,2,1,7,6);
         TList<Boolean> result = KnapsackDP.cut(tested,14).psolve();
+        System.out.println(KnapsackDP.cut(tested,14).psolvew(b->b?1:0).toWrappedString());
+        System.out.println(KnapsackDP.cut(tested,14).psolvew().transform(tt->cut(tested,tt).items()).toWrappedString());
         boolean expected = true;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);

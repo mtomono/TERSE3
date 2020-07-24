@@ -10,6 +10,8 @@ import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import solver.Luggage;
 import static shape.ShapeUtil.p2i;
+import shape.TPoint2i;
+import static solver.dp.ReverseDP.knapsack;
 
 /**
  *
@@ -31,8 +33,10 @@ public class KnapsackNGTest {
                 new Luggage(5,8)
         );
         
-        TList<Integer> result = KnapsackDP.knapsack(tested.map(l->p2i(l.weight(),l.value())).sfix(),15).psolve();
-        System.out.println(KnapsackDP.count(tested.map(l->l.value()).sfix(),20).psolvew().toWrappedString());
+        TList<TPoint2i> ttested = tested.map(l->p2i(l.weight(),l.value())).sfix();
+        TList<Integer> result = KnapsackDP.knapsack(ttested,15).psolve();
+        System.out.println(KnapsackDP.knapsack(ttested,15).psolvew().toWrappedString());
+        System.out.println(KnapsackDP.knapsack(ttested,15).psolvew().transform(tt->knapsack(ttested,tt).items()).toWrappedString());
         Integer expected = 20;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
