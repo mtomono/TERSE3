@@ -21,7 +21,7 @@ public class ReverseDP {
             super(body);
         }
         public TList<TList<Integer>> items() {
-            return this.map(l->l.seek(1).map(p->p.r()));
+            return this.map(l->l.seek(-1).map(p->p.r()));
         }
     }
     static public RList cut(TList<Integer>items, TList<TList<Boolean>> output) {
@@ -29,10 +29,10 @@ public class ReverseDP {
         if (!output.last().last()) return new RList(TList.empty());
         Holder<TList<TList<P<Integer,Integer>>>> path = new Holder<>(TList.of(TList.of(P.p(output.last().size()-1,-1))));
         TList.range(0,items.size()).reverse().forEach(i->{
-            TList<TList<P<Integer,Integer>>> wo = path.get().filter(p->output.get(i).get(p.last().l()));
-            TList<TList<P<Integer,Integer>>> wi = path.get().map(p->p.append(P.p(p.last().l()-items.get(i),i)))
-                    .filter(p->p.last().l()>=0)
-                    .filter(p->output.get(i).get(p.last().l()));
+            TList<TList<P<Integer,Integer>>> wo = path.get().filter(p->output.get(i).get(p.get(0).l()));
+            TList<TList<P<Integer,Integer>>> wi = path.get().map(p->p.startFrom(P.p(p.get(0).l()-items.get(i),i)))
+                    .filter(p->p.get(0).l()>=0)
+                    .filter(p->output.get(i).get(p.get(0).l()));
             path.set(wo.append(wi).fix());
         });
         return new RList(path.get());
@@ -41,10 +41,10 @@ public class ReverseDP {
         if (output.last().isEmpty()) return new RList(TList.empty());
         Holder<TList<TList<P<Integer,Integer>>>> path = new Holder<>(TList.of(TList.of(P.p(output.last().size()-1,-1))));
         TList.range(0,items.size()).reverse().forEach(i->{
-            TList<TList<P<Integer,Integer>>> wo = path.get().filter(p->output.get(i+1).get(p.last().l()).equals(output.get(i).get(p.last().l())));
-            TList<TList<P<Integer,Integer>>> wi = path.get().map(p->p.append(P.p(p.last().l()-items.get(i).x,i)))
-                    .filter(p->p.last().l()>=0)
-                    .filter(p->output.get(i+1).get(p.last(1).l()).equals(output.get(i).get(p.last().l())+items.get(i).y));
+            TList<TList<P<Integer,Integer>>> wo = path.get().filter(p->output.get(i+1).get(p.get(0).l()).equals(output.get(i).get(p.get(0).l())));
+            TList<TList<P<Integer,Integer>>> wi = path.get().map(p->p.startFrom(P.p(p.get(0).l()-items.get(i).x,i)))
+                    .filter(p->p.get(0).l()>=0)
+                    .filter(p->output.get(i+1).get(p.get(1).l()).equals(output.get(i).get(p.get(0).l())+items.get(i).y));
             path.set(wo.append(wi).fix());
         });
         return new RList(path.get());
