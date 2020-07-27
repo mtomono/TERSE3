@@ -94,7 +94,8 @@ public class KnapsackNGTest {
         
         TList<TPoint2i> ttested=tested.map(l->p2i(l.weight(),l.value())).sfix();
         TList<Integer> result = KnapsackDP.knapsack(ttested,60).psolve();
-        System.out.println(KnapsackDP.knapsack(ttested,60).psolvew().transform(tt->knapsack(ttested,tt).items()).toWrappedString());
+        System.out.println(KnapsackDP.knapsack(ttested, 60).psolvew().transform(tt->OneExample.knapsack(ttested,tt).path()).toString());
+        //System.out.println(KnapsackDP.knapsack(ttested,60).psolvew().transform(tt->knapsack(ttested,tt).items()).toWrappedString());
         Integer expected = 95;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
