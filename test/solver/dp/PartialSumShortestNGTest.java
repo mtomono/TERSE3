@@ -29,7 +29,7 @@ public class PartialSumShortestNGTest {
         TList<Integer> tested = TList.sof(5,2,1,7,6);
         TList<Integer> result = KnapsackDP.shortest(tested,12).psolve();
         System.out.println(KnapsackDP.shortest(tested,12).psolvew().toWrappedString());
-        System.out.println(KnapsackDP.shortest(tested,12).psolvew().transform(tt->OneExample.shortest(tested,tt).path()).toString());
+        System.out.println(KnapsackDP.shortest(tested,12).psolvew().transform(tt->OneExample.shortest(tested,tt).path().items()).toString());
         Integer expected = 2;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
