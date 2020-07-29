@@ -30,7 +30,7 @@ public class PartialSumNGTest {
         TList<Boolean> result = KnapsackDP.cut(tested,14).psolve();
         System.out.println(KnapsackDP.cut(tested,14).psolvew(b->b?1:0).toWrappedString());
         //System.out.println(KnapsackDP.cut(tested,14).psolvew().transform(tt->OneExample.cut(tested,tt).map).toWrappedString());
-        System.out.println(KnapsackDP.cut(tested,14).psolvew().transform(tt->OneExample.cut(tested,tt).path().left().left().items()).toString());
+        System.out.println(KnapsackDP.cut(tested,14).psolvew().transform(tt->OneExample.cut(tested,tt).left().next().next().items()).toString());
         boolean expected = true;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
