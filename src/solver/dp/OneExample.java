@@ -98,21 +98,8 @@ abstract public class OneExample<T,R> {
             return new Path(body, dir);
         }
         public TList<P<Integer,Integer>> find(TList<P<Integer,Integer>> start) {
-            return findLoop(start);
-        }
-        public TList<P<Integer,Integer>> findLoop(TList<P<Integer,Integer>> start) {
-            Stack<TList<P<Integer,Integer>>> stack = new Stack<>();
-            stack.push(start);
-            while (true) {
-                if (stack.empty()) return TList.empty();
-                TList<P<Integer,Integer>> l = stack.pop();
-                if (l.get(0).l()==0) return l;
-                trace(l).reverse().forEach(nn->stack.push(nn));
-            }
-        }
-        public TList<P<Integer,Integer>> findRec(TList<P<Integer,Integer>> start) {
             if (start.get(0).l()==0) return start;
-            return trace(start).map(nn->findRec(nn)).get(0);
+            return trace(start).map(nn->find(nn)).get(0);
         }
 
         public TList<TList<P<Integer,Integer>>> trace(TList<P<Integer,Integer>> l) {
