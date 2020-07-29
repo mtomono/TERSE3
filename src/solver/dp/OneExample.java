@@ -1,15 +1,24 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ Copyright 2017, 2018 Masao Tomono
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.
  */
+
 package solver.dp;
 
 import collection.P;
 import collection.TList;
 import iterator.AbstractBufferedIterator;
 import java.util.Iterator;
-import java.util.Stack;
 import java.util.function.UnaryOperator;
 import shape.TPoint2i;
 
@@ -57,25 +66,16 @@ abstract public class OneExample<T,R> {
         this.start=P.p(items.size(),output.last().size()-1);
         this.map=TList.range(1,start.l()+1).map(i->TList.range(0,start.r()+1).map(j->P.p(i, j)).map(p->TList.sof(taken(p), notTaken(p))).sfix()).sfix();
     }
-        
     abstract public TList<P<Integer,Integer>> taken(P<Integer,Integer> n);
     public TList<P<Integer,Integer>> notTaken(P<Integer,Integer> n) {
         return TList.sof(P.p(n.l()-1,n.r())).filter(nn->value(n).equals(value(nn)));
     }
-
-    /**
-     * get value in output.
-     * @param n
-     * @return 
-     */
     public R value(P<Integer,Integer> n) {
         return output.get(n.l()).get(n.r());
     }    
-    
     public Path right() {
         return new Path(right);
     }
-    
     public Path left() {
         return new Path(left);
     }
@@ -101,11 +101,9 @@ abstract public class OneExample<T,R> {
             if (start.get(0).l()==0) return start;
             return trace(start).map(nn->find(nn)).get(0);
         }
-
         public TList<TList<P<Integer,Integer>>> trace(TList<P<Integer,Integer>> l) {
             return branches(l.get(0)).flatMap(x->x).map(nn->l.startFrom(nn));
         }
-
         public TList<TList<P<Integer,Integer>>> branches(P<Integer,Integer> n) {
             return dir.apply(map.get(n.l()-1).get(n.r()));
         } 
