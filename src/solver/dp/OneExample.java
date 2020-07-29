@@ -33,7 +33,8 @@ abstract public class OneExample<T,R> {
         return new OneExample<TPoint2i,Integer>(items,output) {
             @Override
             public TList<P<Integer,Integer>> taken(P<Integer,Integer> n) {
-                return TList.sof(P.p(n.l()-1,n.r()-items.get(n.l()-1).x)).filter(nn->nn.r()>=0).filter(nn->value(n).equals(value(nn)+items.get(n.l()-1).y));
+                return TList.sof(P.p(n.l()-1,n.r()-items.get(n.l()-1).x))
+                        .filter(nn->nn.r()>=0).filter(nn->value(n).equals(value(nn)+items.get(n.l()-1).y));
             }
         };
     }
