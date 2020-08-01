@@ -11,8 +11,6 @@ import org.testng.annotations.Test;
 import solver.Luggage;
 import static shape.ShapeUtil.p2i;
 import shape.TPoint2i;
-import static solver.dp.ReverseDP.knapsack;
-import static solver.dp.ReverseDP.knapsack;
 
 /**
  *
@@ -36,8 +34,8 @@ public class KnapsackNGTest {
         
         TList<TPoint2i> ttested = tested.map(l->p2i(l.weight(),l.value())).sfix();
         TList<Integer> result = KnapsackDP.knapsack(ttested,15).psolve();
-        System.out.println(KnapsackDP.knapsack(ttested,15).psolvew().toWrappedString());
-        System.out.println(KnapsackDP.knapsack(ttested,15).psolvew().transform(tt->knapsack(ttested,tt).items()).toWrappedString());
+//        System.out.println(KnapsackDP.knapsack(ttested,15).psolvew().toWrappedString());
+        System.out.println(KnapsackDP.knapsack(ttested,15).psolvew().transform(tt->ReverseDP.knapsack(ttested,tt).right().whole().map(p->p.items())).toWrappedString());
         Integer expected = 20;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
@@ -94,8 +92,9 @@ public class KnapsackNGTest {
         
         TList<TPoint2i> ttested=tested.map(l->p2i(l.weight(),l.value())).sfix();
         TList<Integer> result = KnapsackDP.knapsack(ttested,60).psolve();
-        System.out.println(KnapsackDP.knapsack(ttested, 60).psolvew().transform(tt->OneExample.knapsack(ttested,tt).right().next().items()).toString());
-        //System.out.println(KnapsackDP.knapsack(ttested,60).psolvew().transform(tt->knapsack(ttested,tt).items()).toWrappedString());
+        System.out.println(KnapsackDP.knapsack(ttested, 60).psolvew().transform(tt->ReverseDP.knapsack(ttested,tt).left().first().next().items()).toString());
+        //System.out.println(KnapsackDP.knapsack(ttested, 60).psolvew().transform(tt->ReverseDP.knapsack(ttested,tt).left().whole().map(p->p.items())).toWrappedString());
+        System.out.println(KnapsackDP.knapsack(ttested,60).psolvew().transform(tt->ReverseDPold.knapsack(ttested,tt).items()).toWrappedString());
         Integer expected = 95;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);

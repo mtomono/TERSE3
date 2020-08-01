@@ -77,7 +77,7 @@ public class KnapsackDP<T,R> {
         TList<TList<R>> lines = TList.c();
         lines.add(initialLine);
         items.forEach(i->{
-            lines.add(lines.last().fix());
+            lines.add(lines.last().sfix());
             update.update(lines.last(), lines.last(1), i);
         });
         return lines;
@@ -89,7 +89,7 @@ public class KnapsackDP<T,R> {
         TList<TList<R>> lines = TList.c();
         lines.add(initialLine.fix());
         items.forEach(i->{
-            lines.add(lines.last().fix());
+            lines.add(lines.last().sfix());
             update.update(lines.last(), lines.last(), i);
         });
         return lines;
