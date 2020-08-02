@@ -56,6 +56,10 @@ public class KnapsackDP<T,R> {
         return new KnapsackDP<>(items,capacity,initialLine(capacity, 0, -1),
             (u,r,i)->TList.range(min(i,capacity+1),capacity+1).forEach(j->u.set(j, TList.sof(r.get(j),r.get(j-i)+1).filter(x->x>0).min(x->x).orElse(-1))));
     }
+    static public KnapsackDP<TPoint2i, Integer> numbersLeft(TList<TPoint2i> items, int capacity) {
+        return new KnapsackDP<>(items,capacity,initialLine(capacity, 0, -1),
+            (u,r,i)->TList.range(0,capacity+1).forEach(j->u.set(j, r.get(j)>=0?i.y:((j-i.x<0||u.get(j-i.x)<=0)?-1:u.get(j-i.x)-1))));
+    }
 
     static public <R> TList<R> initialLine(int capacity, R zero, R others) {
         return TList.nCopies(capacity, others).startFrom(zero);
