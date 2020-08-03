@@ -17,9 +17,9 @@ import shape.TPoint2i;
  *
  * @author masao
  */
-public class NumbersLeftNGTest {
+public class NumberOfItemsLeftNGTest {
     
-    public NumbersLeftNGTest() {
+    public NumberOfItemsLeftNGTest() {
     }
 
     @BeforeMethod
@@ -30,7 +30,7 @@ public class NumbersLeftNGTest {
     public void testBasic36() {
         System.out.println(test.TestUtils.methodName(0));
         TList<TPoint2i> tested = TList.sof(5,2,1,7,6).pair(TList.sof(2,2,1,2,2),(a,b)->p2i(a,b));
-        TList<Integer> result = KnapsackDP.numbersLeft(tested,36).psolve();
+        TList<Integer> result = KnapsackDP.numberOfItemsLeft(tested,36).psolve();
         boolean expected = true;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
@@ -40,7 +40,7 @@ public class NumbersLeftNGTest {
     public void testBasic37() {
         System.out.println(test.TestUtils.methodName(0));
         TList<TPoint2i> tested = TList.sof(5,2,1,7,6).pair(TList.sof(2,0,1,2,2),(a,b)->p2i(a,b));
-        TList<Integer> result = KnapsackDP.numbersLeft(tested,39).psolve();
+        TList<Integer> result = KnapsackDP.numberOfItemsLeft(tested,39).psolve();
         boolean expected = false;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
@@ -50,8 +50,8 @@ public class NumbersLeftNGTest {
     public void testBasic21() {
         System.out.println(test.TestUtils.methodName(0));
         TList<TPoint2i> tested = TList.sof(5,2,1,8,45).pair(TList.sof(2,0,0,2,2),(a,b)->p2i(a,b));
-        TList<Integer> result = KnapsackDP.numbersLeft(tested,21).psolve();
-        System.out.println(KnapsackDP.numbersLeft(tested,21).psolvew().toWrappedString());
+        TList<Integer> result = KnapsackDP.numberOfItemsLeft(tested,21).psolve();
+        System.out.println(KnapsackDP.numberOfItemsLeft(tested,21).psolvew().toWrappedString());
         boolean expected = true;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);

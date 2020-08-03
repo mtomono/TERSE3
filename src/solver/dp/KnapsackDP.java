@@ -16,6 +16,7 @@
 package solver.dp;
 
 import collection.TList;
+import debug.Te;
 import function.Holder;
 import static java.lang.Integer.max;
 import static java.lang.Integer.min;
@@ -30,37 +31,38 @@ import shape.TPoint2i;
  */
 public class KnapsackDP<T,R> {
     TList<T> items;
-    int capacity;
     TList<R> initialLine;
     Update<T,R> update;
-    public KnapsackDP(TList<T> items, int capacity, TList<R> initialLine, Update<T,R> update) {
+    public KnapsackDP(TList<T> items, TList<R> initialLine, Update<T,R> update) {
         this.items=items;
-        this.capacity=capacity;
         this.initialLine=initialLine;
         this.update=update;
     }
 
     static public KnapsackDP<TPoint2i, Integer> knapsack(TList<TPoint2i> items, int capacity) {
-        return new KnapsackDP<>(items,capacity,initialLine(capacity, 0, 0),
+        return new KnapsackDP<>(items,initialLine(capacity, 0, 0),
             (u,r,i)->TList.range(min(i.x,capacity+1),capacity+1).forEach(j->u.set(j, max(r.get(j),r.get(j-i.x)+i.y))));
     }
     static public KnapsackDP<Integer, Boolean> cut(TList<Integer> items, int capacity) {
-        return new KnapsackDP<>(items,capacity,initialLine(capacity, true, false),
+        return new KnapsackDP<>(items,initialLine(capacity, true, false),
             (u,r,i)->TList.range(min(i,capacity+1),capacity+1).forEach(j->u.set(j, r.get(j)||r.get(j-i))));
     }
     static public KnapsackDP<Integer, Integer> count(TList<Integer> items, int capacity) {
-        return new KnapsackDP<>(items,capacity,initialLine(capacity, 1, 0),
+        return new KnapsackDP<>(items,initialLine(capacity, 1, 0),
             (u,r,i)->TList.range(min(i,capacity+1),capacity+1).forEach(j->u.set(j, r.get(j)+r.get(j-i))));
     }
     static public KnapsackDP<Integer, Integer> shortest(TList<Integer> items, int capacity) {
-        return new KnapsackDP<>(items,capacity,initialLine(capacity, 0, -1),
+        return new KnapsackDP<>(items,initialLine(capacity, 0, -1),
             (u,r,i)->TList.range(min(i,capacity+1),capacity+1).forEach(j->u.set(j, TList.sof(r.get(j),r.get(j-i)+1).filter(x->x>0).min(x->x).orElse(-1))));
     }
-    static public KnapsackDP<TPoint2i, Integer> numbersLeft(TList<TPoint2i> items, int capacity) {
-        return new KnapsackDP<>(items,capacity,initialLine(capacity, 0, -1),
+    static public KnapsackDP<TPoint2i, Integer> numberOfItemsLeft(TList<TPoint2i> items, int capacity) {
+        return new KnapsackDP<>(items,initialLine(capacity, 0, -1),
             (u,r,i)->TList.range(0,capacity+1).forEach(j->u.set(j, r.get(j)>=0?i.y:((j-i.x<0||u.get(j-i.x)<=0)?-1:u.get(j-i.x)-1))));
     }
-
+    static public KnapsackDP<Integer, Integer> longestIncreasingSubsequence(TList<Integer> items) {
+        return new KnapsackDP<>(TList.range(0,items.size()),initialLine(items.size()-1, 1, 1),
+            (u,r,i)->TList.range(0,i).forEach(j->u.set(i, items.get(j)<items.get(i)?max(u.get(i),r.get(j)+1):u.get(i))));
+    }
     static public <R> TList<R> initialLine(int capacity, R zero, R others) {
         return TList.nCopies(capacity, others).startFrom(zero);
     }
