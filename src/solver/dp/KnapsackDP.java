@@ -59,9 +59,16 @@ public class KnapsackDP<T,R> {
         return new KnapsackDP<>(items,initialLine(capacity, 0, -1),
             (u,r,i)->TList.range(0,capacity+1).forEach(j->u.set(j, r.get(j)>=0?i.y:((j-i.x<0||u.get(j-i.x)<=0)?-1:u.get(j-i.x)-1))));
     }
-    static public KnapsackDP<Integer, Integer> longestIncreasingSubsequence(TList<Integer> items) {
+    static public KnapsackDP<Integer, Integer> lis(TList<Integer> items) {
         return new KnapsackDP<>(TList.range(0,items.size()),initialLine(items.size()-1, 1, 1),
             (u,r,i)->TList.range(0,i).forEach(j->u.set(i, items.get(j)<items.get(i)?max(u.get(i),r.get(j)+1):u.get(i))));
+    }
+    static public <T> KnapsackDP<Integer, Integer> lcs(TList<T> x, TList<T> y) {
+        return new KnapsackDP<>(TList.range(1,x.size()+1),initialLine(y.size(), 0, 0),
+            (u,r,i)->TList.range(1,y.size()+1).forEach(j->u.set(j, y.get(j-1).equals(x.get(i-1))?TList.sof(r.get(j-1)+1,r.get(j),u.get(j-1)).max(l->l).get():TList.sof(r.get(j),u.get(j-1)).max(l->l).get())));
+    }
+    static public KnapsackDP<Integer,Integer> dpMatching(TList<Integer> x,TList<Integer> y) {
+        return null;
     }
     static public <R> TList<R> initialLine(int capacity, R zero, R others) {
         return TList.nCopies(capacity, others).startFrom(zero);

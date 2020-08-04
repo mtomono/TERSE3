@@ -16,9 +16,9 @@ import shape.TPoint2i;
  *
  * @author masao
  */
-public class LisNGTest1 {
+public class LisNGTest {
     
-    public LisNGTest1() {
+    public LisNGTest() {
     }
 
     @BeforeMethod
@@ -29,7 +29,7 @@ public class LisNGTest1 {
     public void testBasic36() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Integer> tested = TList.sof(6,2,3,7,6);
-        TList<Integer> result = KnapsackDP.longestIncreasingSubsequence(tested).psolve();
+        TList<Integer> result = KnapsackDP.lis(tested).psolve();
         Integer expected = 3;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
@@ -39,7 +39,7 @@ public class LisNGTest1 {
     public void testBasic37() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Integer> tested = TList.sof(5,12,3,8,14,17);
-        TList<Integer> result = KnapsackDP.longestIncreasingSubsequence(tested).psolve();
+        TList<Integer> result = KnapsackDP.lis(tested).psolve();
         Integer expected = 4;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
