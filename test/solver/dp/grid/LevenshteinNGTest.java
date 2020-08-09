@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package solver.dp.graph;
+package solver.dp.grid;
 
+import solver.dp.grid.KnapsackDPg;
 import collection.TList;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;

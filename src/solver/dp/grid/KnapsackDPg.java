@@ -13,7 +13,7 @@
    See the License for the specific language governing permissions and limitations under the License.
  */
 
-package solver.dp.graph;
+package solver.dp.grid;
 
 
 import collection.TList;
@@ -27,7 +27,7 @@ import static shape.ShapeUtil.pni;
 import shapeCollection.GridCoord;
 import static shapeCollection.GridCoord.gcoord;
 import shapeCollection.GridOverList;
-import solver.dp.graph.KnapsackDPg.Edge;
+import solver.dp.grid.KnapsackDPg.Edge;
 
 /**
  * KnapsackDP based on grid.
