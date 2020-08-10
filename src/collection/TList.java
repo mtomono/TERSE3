@@ -805,6 +805,7 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
      * @return 
      */
     public Optional<T> getOpt(int index) {
+        if (index<0) return Optional.empty();
         if (body instanceof RandomAccess)
             return index<size()?Optional.of(get(index)):Optional.empty();
         int number = -1;
