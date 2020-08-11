@@ -79,10 +79,10 @@ public class KnapsackDP<T,R> {
     static public <T> KnapsackDP<Integer,Integer> levenshteinStructured(TList<T> x,TList<T> y) {
         BiPredicate<Integer,Integer> match=(i,j)->x.get(i-1).equals(y.get(j-1));
         BiPredicate<Integer,Integer> valid=(i,j)->i>0&&j>0;
-        EdgeGuarded<Integer> insert=new EdgeGuarded<Integer>((p,c,i,j)->c.get(j-1)+1).guard((i,j)->j>0);
-        EdgeGuarded<Integer> delete=new EdgeGuarded<Integer>((p,c,i,j)->p.get(j)+1).guard((i,j)->i>0);
-        EdgeGuarded<Integer> replace=new EdgeGuarded<Integer>((p,c,i,j)->p.get(j-1)+1).guard(valid).guard(match.negate());
-        EdgeGuarded<Integer> forward=new EdgeGuarded<Integer>((p,c,i,j)->p.get(j-1)).guard(valid).guard(match);
+        Edge<Integer> insert=new EdgeGuarded<Integer>((p,c,i,j)->c.get(j-1)+1).guard((i,j)->j>0);
+        Edge<Integer> delete=new EdgeGuarded<Integer>((p,c,i,j)->p.get(j)+1).guard((i,j)->i>0);
+        Edge<Integer> replace=new EdgeGuarded<Integer>((p,c,i,j)->p.get(j-1)+1).guard(valid).guard(match.negate());
+        Edge<Integer> forward=new EdgeGuarded<Integer>((p,c,i,j)->p.get(j-1)).guard(valid).guard(match);
         Edge<Integer> all=composite(insert,delete,replace,forward);
         TList<Integer> initialLine = TList.nCopies(y.size()+1,0).sfix();
         TList.range(1,y.size()+1).forEach(j->initialLine.set(j, all.stepGuarded(null,initialLine,0,j).min(l->l).get()));
@@ -140,6 +140,9 @@ public class KnapsackDP<T,R> {
         default TList<V> stepGuarded(TList<V>p,TList<V>c,int i,int j) {
             return TList.wrap(step(p,c,i,j));
         }
+        default boolean test(int i, int j) {
+            return true;
+        }
     }
     static class EdgeGuarded<V> implements Edge<V>{
         Edge<V> step;
@@ -157,9 +160,12 @@ public class KnapsackDP<T,R> {
         }
         @Override
         public TList<V> stepGuarded(TList<V>p,TList<V>c,int i,int j) {
-            return guard.test(i,j)?TList.wrap(step(p,c,i,j)):TList.empty();
+            return test(i,j)?TList.wrap(step(p,c,i,j)):TList.empty();
         }
-        static public <V> Edge<V> composite(EdgeGuarded<V>... egs) {
+        public boolean test(int i, int j) {
+            return guard.test(i, j);
+        }
+        static public <V> Edge<V> composite(Edge<V>... egs) {
             return new Edge<V>() {
                 @Override
                 public V step(TList<V> p, TList<V> c, int i, int j) {
@@ -167,7 +173,7 @@ public class KnapsackDP<T,R> {
                 }
                 @Override
                 public TList<V> stepGuarded(TList<V> p, TList<V> c, int i, int j) {
-                    return TList.sof(egs).filter(e->e.guard.test(i,j)).map(e->e.step(p,c,i,j));
+                    return TList.sof(egs).filter(e->e.test(i,j)).map(e->e.step(p,c,i,j));
                 }
             };
         }
