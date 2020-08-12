@@ -66,16 +66,32 @@ public class KnapsackDP<T,R> {
             (u,r,i)->TList.range(0,i).forEach(j->u.set(i, items.get(j)<items.get(i)?max(u.get(i),r.get(j)+1):u.get(i))));
     }
     static public <T> KnapsackDP<Integer, Integer> lcs(TList<T> x, TList<T> y) {
+        Edge<Integer> match=(p,c,i,j)->p.get(j-1)+1;
+        Edge<Integer> exBest=(p,c,i,j)->max(p.get(j),c.get(j-1));
         return new KnapsackDP<>(TList.range(1,x.size()+1),initialLine(y.size(), 0, 0),
-            (u,r,i)->TList.range(1,y.size()+1).forEach(j->u.set(j, y.get(j-1).equals(x.get(i-1))?TList.sof(r.get(j-1)+1,r.get(j),u.get(j-1)).max(l->l).get():TList.sof(r.get(j),u.get(j-1)).max(l->l).get())));
+            (u,r,i)->TList.range(1,y.size()+1).forEach(j->u.set(j, 
+                    y.get(j-1).equals(x.get(i-1))?
+                            TList.sof(r.get(j-1)+1,exBest.go(r,u,i,j)).max(l->l).get()
+                           :TList.sof(             r.get(j),u.get(j-1)).max(l->l).get())));
     }
     static public <T> KnapsackDP<Integer,Integer> levenshtein(TList<T> x,TList<T> y) {
+        Edge<Integer> insert=(p,c,i,j)->c.get(j-1)+1;
+        Edge<Integer> delete=(p,c,i,j)->p.get(j)+1;
+        Edge<Integer> replace=(p,c,i,j)->p.get(j-1)+1;
+        Edge<Integer> forward=(p,c,i,j)->p.get(j-1);
         TList<Integer> initialLine=TList.nCopies(y.size()+1, 0).sfix();
-        TList.range(1,y.size()+1).forEach(j->initialLine.set(j, initialLine.get(j-1)+1));
+        TList.range(1,y.size()+1).forEach(j->initialLine.set(j, insert.go(null,initialLine,0,j)));
         return new KnapsackDP<>(TList.range(1,x.size()+1),initialLine,
             (u,r,i)->{
-                u.set(0, r.get(0)+1);
-                TList.range(1,y.size()+1).forEach(j->u.set(j, TList.sof(r.get(j-1)+(x.get(i-1).equals(y.get(j-1))?0:1),r.get(j)+1,u.get(j-1)+1).min(l->l).get()));
+                TList.range(0,         1).forEach(j->u.set(j, 
+                        delete.go(r,null,i,j)));
+                TList.range(1,y.size()+1).forEach(j->u.set(j, 
+                        TList.sof(
+                                (x.get(i-1).equals(y.get(j-1))?
+                                        forward.go(r,u,i,j):replace.go(r,u,i,j))
+                                ,delete.go(r,u,i,j)
+                                ,insert.go(r,u,i,j))
+                        .min(l->l).get()));
             });
     }
     static public <T> KnapsackDP<Integer,Integer> levenshteinStructured(TList<T> x,TList<T> y) {
@@ -138,9 +154,9 @@ public class KnapsackDP<T,R> {
     }
     @FunctionalInterface
     interface Edge<V> {
-        V step(TList<V>p,TList<V>c,int i,int j);
+        V go(TList<V>p,TList<V>c,int i,int j);
         default TList<V> stepGuarded(TList<V>p,TList<V>c,int i,int j) {
-            return TList.wrap(step(p,c,i,j));
+            return TList.wrap(go(p,c,i,j));
         }
         default boolean test(int i, int j) {
             return true;
@@ -157,12 +173,12 @@ public class KnapsackDP<T,R> {
             return new EdgeGuarded<>(step,this.guard.and(guard));
         }
         @Override
-        public V step(TList<V>p,TList<V>c,int i,int j) {
-            return step.step(p,c,i,j);
+        public V go(TList<V>p,TList<V>c,int i,int j) {
+            return step.go(p,c,i,j);
         }
         @Override
         public TList<V> stepGuarded(TList<V>p,TList<V>c,int i,int j) {
-            return test(i,j)?TList.wrap(step(p,c,i,j)):TList.empty();
+            return test(i,j)?TList.wrap(go(p,c,i,j)):TList.empty();
         }
         public boolean test(int i, int j) {
             return guard.test(i, j);
@@ -170,12 +186,12 @@ public class KnapsackDP<T,R> {
         static public <V> Edge<V> composite(Edge<V>... egs) {
             return new Edge<V>() {
                 @Override
-                public V step(TList<V> p, TList<V> c, int i, int j) {
+                public V go(TList<V> p, TList<V> c, int i, int j) {
                     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                 }
                 @Override
                 public TList<V> stepGuarded(TList<V> p, TList<V> c, int i, int j) {
-                    return TList.sof(egs).filter(e->e.test(i,j)).map(e->e.step(p,c,i,j));
+                    return TList.sof(egs).filter(e->e.test(i,j)).map(e->e.go(p,c,i,j));
                 }
             };
         }
