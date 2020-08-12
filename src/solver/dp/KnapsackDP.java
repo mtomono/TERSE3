@@ -70,7 +70,9 @@ public class KnapsackDP<T,R> {
             (u,r,i)->TList.range(1,y.size()+1).forEach(j->u.set(j, y.get(j-1).equals(x.get(i-1))?TList.sof(r.get(j-1)+1,r.get(j),u.get(j-1)).max(l->l).get():TList.sof(r.get(j),u.get(j-1)).max(l->l).get())));
     }
     static public <T> KnapsackDP<Integer,Integer> levenshtein(TList<T> x,TList<T> y) {
-        return new KnapsackDP<>(TList.range(1,x.size()+1),TList.range(0,y.size()+1),
+        TList<Integer> initialLine=TList.nCopies(y.size()+1, 0).sfix();
+        TList.range(1,y.size()+1).forEach(j->initialLine.set(j, initialLine.get(j-1)+1));
+        return new KnapsackDP<>(TList.range(1,x.size()+1),initialLine,
             (u,r,i)->{
                 u.set(0, r.get(0)+1);
                 TList.range(1,y.size()+1).forEach(j->u.set(j, TList.sof(r.get(j-1)+(x.get(i-1).equals(y.get(j-1))?0:1),r.get(j)+1,u.get(j-1)+1).min(l->l).get()));
