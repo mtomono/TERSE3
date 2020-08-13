@@ -62,8 +62,10 @@ public class KnapsackDP<T,R> {
             (u,r,i)->TList.range(0,capacity+1).forEach(j->{
                 if (r.get(j)>=0)
                     u.set(j,i.y);
-                else if ((j-i.x)>=0)
+                else if ((j-i.x)>=0&&u.get(j-i.x)>0)
                     u.set(j, u.get(j-i.x)-1);
+                else
+                    u.set(j, -1);
             }));
     }
     static public KnapsackDP<Integer, Integer> lis(TList<Integer> items) {
