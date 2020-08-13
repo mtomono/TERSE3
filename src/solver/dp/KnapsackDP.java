@@ -59,26 +59,36 @@ public class KnapsackDP<T,R> {
     }
     static public KnapsackDP<TPoint2i, Integer> numberOfItemsLeft(TList<TPoint2i> items, int capacity) {
         return new KnapsackDP<>(items,initialLine(capacity, 0, -1),
-            (u,r,i)->TList.range(0,capacity+1).forEach(j->u.set(j, r.get(j)>=0?i.y:((j-i.x<0||u.get(j-i.x)<=0)?-1:u.get(j-i.x)-1))));
+            (u,r,i)->TList.range(0,capacity+1).forEach(j->{
+                if (r.get(j)>=0)
+                    u.set(j,i.y);
+                else if ((j-i.x)>=0)
+                    u.set(j, u.get(j-i.x)-1);
+            }));
     }
     static public KnapsackDP<Integer, Integer> lis(TList<Integer> items) {
+        Edge<Integer,Integer> asis=(p,c,i,j)->c.get(i);
+        Edge<Integer,Integer> match=(p,c,i,j)->p.get(j)+1;
         return new KnapsackDP<>(TList.range(0,items.size()),initialLine(items.size()-1, 1, 1),
-            (u,r,i)->TList.range(0,i).forEach(j->u.set(i, items.get(j)<items.get(i)?max(u.get(i),r.get(j)+1):u.get(i))));
+            (u,r,i)->TList.range(0,i).forEach(j->u.set(i, 
+                    items.get(j)<items.get(i)?
+                            max(asis.go(r,u,i,j),match.go(r,u,i,j))
+                               :asis.go(r,u,i,j))));
     }
     static public <T> KnapsackDP<Integer, Integer> lcs(TList<T> x, TList<T> y) {
-        Edge<Integer> match=(p,c,i,j)->p.get(j-1)+1;
-        Edge<Integer> exBest=(p,c,i,j)->max(p.get(j),c.get(j-1));
+        Edge<Integer,Integer> asis=(p,c,i,j)->max(p.get(j),c.get(j-1));
+        Edge<Integer,Integer> match=(p,c,i,j)->p.get(j-1)+1;
         return new KnapsackDP<>(TList.range(1,x.size()+1),initialLine(y.size(), 0, 0),
             (u,r,i)->TList.range(1,y.size()+1).forEach(j->u.set(j, 
                     y.get(j-1).equals(x.get(i-1))?
-                            TList.sof(r.get(j-1)+1,exBest.go(r,u,i,j)).max(l->l).get()
-                           :TList.sof(             r.get(j),u.get(j-1)).max(l->l).get())));
+                            max(asis.go(r,u,i,j),match.go(r,u,i,j))
+                               :asis.go(r,u,i,j))));
     }
     static public <T> KnapsackDP<Integer,Integer> levenshtein(TList<T> x,TList<T> y) {
-        Edge<Integer> insert=(p,c,i,j)->c.get(j-1)+1;
-        Edge<Integer> delete=(p,c,i,j)->p.get(j)+1;
-        Edge<Integer> replace=(p,c,i,j)->p.get(j-1)+1;
-        Edge<Integer> forward=(p,c,i,j)->p.get(j-1);
+        Edge<Integer,Integer> insert=(p,c,i,j)->c.get(j-1)+1;
+        Edge<Integer,Integer> delete=(p,c,i,j)->p.get(j)+1;
+        Edge<Integer,Integer> replace=(p,c,i,j)->p.get(j-1)+1;
+        Edge<Integer,Integer> forward=(p,c,i,j)->p.get(j-1);
         TList<Integer> initialLine=TList.nCopies(y.size()+1, 0).sfix();
         TList.range(1,y.size()+1).forEach(j->initialLine.set(j, insert.go(null,initialLine,0,j)));
         return new KnapsackDP<>(TList.range(1,x.size()+1),initialLine,
@@ -97,11 +107,11 @@ public class KnapsackDP<T,R> {
     static public <T> KnapsackDP<Integer,Integer> levenshteinStructured(TList<T> x,TList<T> y) {
         BiPredicate<Integer,Integer> match=(i,j)->x.get(i-1).equals(y.get(j-1));
         BiPredicate<Integer,Integer> valid=(i,j)->i>0&&j>0;
-        Edge<Integer> insert=new EdgeGuarded<Integer>((p,c,i,j)->c.get(j-1)+1).guard((i,j)->j>0);
-        Edge<Integer> delete=new EdgeGuarded<Integer>((p,c,i,j)->p.get(j)+1).guard((i,j)->i>0);
-        Edge<Integer> replace=new EdgeGuarded<Integer>((p,c,i,j)->p.get(j-1)+1).guard(valid).guard(match.negate());
-        Edge<Integer> forward=new EdgeGuarded<Integer>((p,c,i,j)->p.get(j-1)).guard(valid).guard(match);
-        Edge<Integer> all=composite(insert,delete,replace,forward);
+        Edgexx<Integer> insert=new EdgeGuarded<Integer>((p,c,i,j)->c.get(j-1)+1).guard((i,j)->j>0);
+        Edgexx<Integer> delete=new EdgeGuarded<Integer>((p,c,i,j)->p.get(j)+1).guard((i,j)->i>0);
+        Edgexx<Integer> replace=new EdgeGuarded<Integer>((p,c,i,j)->p.get(j-1)+1).guard(valid).guard(match.negate());
+        Edgexx<Integer> forward=new EdgeGuarded<Integer>((p,c,i,j)->p.get(j-1)).guard(valid).guard(match);
+        Edgexx<Integer> all=composite(insert,delete,replace,forward);
         TList<Integer> initialLine = TList.nCopies(y.size()+1,0).sfix();
         TList.range(1,y.size()+1).forEach(j->initialLine.set(j, all.stepGuarded(null,initialLine,0,j).min(l->l).get()));
         return new KnapsackDP<>(TList.range(1,x.size()+1),initialLine,
@@ -153,7 +163,11 @@ public class KnapsackDP<T,R> {
         public void go(TList<R> updated, TList<R> referred, T item);
     }
     @FunctionalInterface
-    interface Edge<V> {
+    interface Edge<U,V> {
+        V go(TList<V>p,TList<V>c,U i,int j);
+    }
+    @FunctionalInterface
+    interface Edgexx<V> {
         V go(TList<V>p,TList<V>c,int i,int j);
         default TList<V> stepGuarded(TList<V>p,TList<V>c,int i,int j) {
             return TList.wrap(go(p,c,i,j));
@@ -162,10 +176,10 @@ public class KnapsackDP<T,R> {
             return true;
         }
     }
-    static class EdgeGuarded<V> implements Edge<V>{
-        Edge<V> step;
+    static class EdgeGuarded<V> implements Edgexx<V>{
+        Edgexx<V> step;
         BiPredicate<Integer,Integer> guard;
-        public EdgeGuarded(Edge<V> step, BiPredicate<Integer,Integer>... guard) {
+        public EdgeGuarded(Edgexx<V> step, BiPredicate<Integer,Integer>... guard) {
             this.step=step;
             this.guard=TList.sof(guard).stream().reduce((a,b)->a.and(b)).orElse((i,j)->true);
         }
@@ -183,8 +197,8 @@ public class KnapsackDP<T,R> {
         public boolean test(int i, int j) {
             return guard.test(i, j);
         }
-        static public <V> Edge<V> composite(Edge<V>... egs) {
-            return new Edge<V>() {
+        static public <V> Edgexx<V> composite(Edgexx<V>... egs) {
+            return new Edgexx<V>() {
                 @Override
                 public V go(TList<V> p, TList<V> c, int i, int j) {
                     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
