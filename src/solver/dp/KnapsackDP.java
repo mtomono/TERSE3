@@ -16,6 +16,7 @@
 package solver.dp;
 
 import collection.TList;
+import debug.Te;
 import function.Holder;
 import static java.lang.Integer.max;
 import static java.lang.Integer.min;
@@ -58,15 +59,16 @@ public class KnapsackDP<T,R> {
             (u,r,i)->TList.range(min(i,capacity+1),capacity+1).forEach(j->u.set(j, TList.sof(r.get(j),r.get(j-i)+1).filter(x->x>0).min(x->x).orElse(-1))));
     }
     static public KnapsackDP<TPoint2i, Integer> numberOfItemsLeft(TList<TPoint2i> items, int capacity) {
+        EdgeDet<TPoint2i,Integer> fulfilled=(p,c,i,j)->p.get(j)>=0;
+        Edge<TPoint2i,Integer> remain=(p,c,i,j)->c.get(j-i.x);
         return new KnapsackDP<>(items,initialLine(capacity, 0, -1),
-            (u,r,i)->TList.range(0,capacity+1).forEach(j->{
-                if (r.get(j)>=0)
-                    u.set(j,i.y);
-                else if ((j-i.x)>=0&&u.get(j-i.x)>0)
-                    u.set(j, u.get(j-i.x)-1);
-                else
-                    u.set(j, -1);
-            }));
+            (u,r,i)->{
+                TList.range(0,capacity+1)
+                        .filter(j-> fulfilled.go(r,u,i,j)).forEach(j->u.set(j,i.y));
+                TList.range(min(i.x,capacity+1),capacity+1)
+                        .filter(j->!fulfilled.go(r,u,i,j))
+                        .filter(j->remain.go(r,u,i,j)>0).forEach(j->u.set(j, remain.go(r,u,i,j)-1));
+            });
     }
     static public KnapsackDP<Integer, Integer> lis(TList<Integer> items) {
         Edge<Integer,Integer> asis=(p,c,i,j)->c.get(i);
@@ -167,6 +169,10 @@ public class KnapsackDP<T,R> {
     @FunctionalInterface
     interface Edge<U,V> {
         V go(TList<V>p,TList<V>c,U i,int j);
+    }
+    @FunctionalInterface
+    interface EdgeDet<U,V> {
+        Boolean go(TList<V>p,TList<V>c,U i,int j);
     }
     @FunctionalInterface
     interface Edgexx<V> {

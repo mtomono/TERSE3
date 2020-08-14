@@ -5,7 +5,6 @@
  */
 package solver.dp;
 
-import solver.*;
 import collection.TList;
 import static org.testng.Assert.*;
 import org.testng.annotations.BeforeMethod;
@@ -31,6 +30,7 @@ public class NumberOfItemsLeftNGTest {
         System.out.println(test.TestUtils.methodName(0));
         TList<TPoint2i> tested = TList.sof(5,2,1,7,6).pair(TList.sof(2,2,1,2,2),(a,b)->p2i(a,b));
         TList<Integer> result = KnapsackDP.numberOfItemsLeft(tested,36).psolve();
+        System.out.println(KnapsackDP.numberOfItemsLeft(tested,36).psolvew().toWrappedString());
         boolean expected = true;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
