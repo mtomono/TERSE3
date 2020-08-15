@@ -63,30 +63,4 @@ public class LevenshteinNGTest {
         System.out.println("expected: "+expected);
         assertEquals(result.last(), expected);
     }
-
-    @Test
-    public void testVINTNER_Structured() {
-        System.out.println(test.TestUtils.methodName(0));
-        TList<Character> x = asCharList("vintner");
-        TList<Character> y = asCharList("writers");
-        TList<Integer> result = KnapsackDP.levenshteinStructured(x,y).psolve();
-        PTe.e(KnapsackDP.levenshteinStructured(x,y).psolvew().toWrappedString());
-        Integer expected = 5;
-        System.out.println("result  : "+result);
-        System.out.println("expected: "+expected);
-        assertEquals(result.last(), expected);
-    }
-
-    @Test
-    public void testPirikapirirara_Structured() {
-        System.out.println(test.TestUtils.methodName(0));
-        TList<Character> x = asCharList("pirikapirirara");
-        TList<Character> y = asCharList("poporinapeperuto");
-        TList<Integer> result = KnapsackDP.levenshteinStructured(x,y).psolve();
-        PTe.e(KnapsackDP.levenshteinStructured(x,y).psolvew().toWrappedString());
-        Integer expected =10;
-        System.out.println("result  : "+result);
-        System.out.println("expected: "+expected);
-        assertEquals(result.last(), expected);
-    }
 }

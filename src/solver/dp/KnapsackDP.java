@@ -16,15 +16,12 @@
 package solver.dp;
 
 import collection.TList;
-import debug.Te;
 import function.Holder;
 import static java.lang.Integer.max;
 import static java.lang.Integer.min;
 import java.util.function.BiFunction;
-import java.util.function.BiPredicate;
 import java.util.function.Function;
 import shape.TPoint2i;
-import static solver.dp.KnapsackDP.EdgeGuarded.composite;
 
 /**
  *
@@ -108,19 +105,6 @@ public class KnapsackDP<T,R> {
                         .min(l->l).get()));
             });
     }
-    static public <T> KnapsackDP<Integer,Integer> levenshteinStructured(TList<T> x,TList<T> y) {
-        BiPredicate<Integer,Integer> match=(i,j)->x.get(i-1).equals(y.get(j-1));
-        BiPredicate<Integer,Integer> valid=(i,j)->i>0&&j>0;
-        Edgexx<Integer> insert=new EdgeGuarded<Integer>((p,c,i,j)->c.get(j-1)+1).guard((i,j)->j>0);
-        Edgexx<Integer> delete=new EdgeGuarded<Integer>((p,c,i,j)->p.get(j)+1).guard((i,j)->i>0);
-        Edgexx<Integer> replace=new EdgeGuarded<Integer>((p,c,i,j)->p.get(j-1)+1).guard(valid).guard(match.negate());
-        Edgexx<Integer> forward=new EdgeGuarded<Integer>((p,c,i,j)->p.get(j-1)).guard(valid).guard(match);
-        Edgexx<Integer> all=composite(insert,delete,replace,forward);
-        TList<Integer> initialLine = TList.nCopies(y.size()+1,0).sfix();
-        TList.range(1,y.size()+1).forEach(j->initialLine.set(j, all.stepGuarded(null,initialLine,0,j).min(l->l).get()));
-        return new KnapsackDP<>(TList.range(1,x.size()+1),initialLine,
-            (u,r,i)->TList.range(0,y.size()+1).forEach(j->u.set(j, all.stepGuarded(r,u,i,j).min(l->l).get())));
-    }
     static public <T> KnapsackDP<Integer,Integer> dpMatching(TList<T> x,TList<T> y, BiFunction<T,T,Integer> cost) {
         return new KnapsackDP<>(TList.range(1,x.size()+1),initialLine(y.size(), 0, 0),
             (u,r,i)->TList.range(1,y.size()+1).forEach(j->u.set(j, TList.sof(r.get(j-1),r.get(j),u.get(j-1)).min(l->l).get()+cost.apply(x.get(i-1), y.get(j-1)))));
@@ -174,48 +158,4 @@ public class KnapsackDP<T,R> {
     interface EdgeDet<U,V> {
         Boolean go(TList<V>p,TList<V>c,U i,int j);
     }
-    @FunctionalInterface
-    interface Edgexx<V> {
-        V go(TList<V>p,TList<V>c,int i,int j);
-        default TList<V> stepGuarded(TList<V>p,TList<V>c,int i,int j) {
-            return TList.wrap(go(p,c,i,j));
-        }
-        default boolean test(int i, int j) {
-            return true;
-        }
-    }
-    static class EdgeGuarded<V> implements Edgexx<V>{
-        Edgexx<V> step;
-        BiPredicate<Integer,Integer> guard;
-        public EdgeGuarded(Edgexx<V> step, BiPredicate<Integer,Integer>... guard) {
-            this.step=step;
-            this.guard=TList.sof(guard).stream().reduce((a,b)->a.and(b)).orElse((i,j)->true);
-        }
-        public EdgeGuarded<V> guard(BiPredicate<Integer,Integer> guard) {
-            return new EdgeGuarded<>(step,this.guard.and(guard));
-        }
-        @Override
-        public V go(TList<V>p,TList<V>c,int i,int j) {
-            return step.go(p,c,i,j);
-        }
-        @Override
-        public TList<V> stepGuarded(TList<V>p,TList<V>c,int i,int j) {
-            return test(i,j)?TList.wrap(go(p,c,i,j)):TList.empty();
-        }
-        public boolean test(int i, int j) {
-            return guard.test(i, j);
-        }
-        static public <V> Edgexx<V> composite(Edgexx<V>... egs) {
-            return new Edgexx<V>() {
-                @Override
-                public V go(TList<V> p, TList<V> c, int i, int j) {
-                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                }
-                @Override
-                public TList<V> stepGuarded(TList<V> p, TList<V> c, int i, int j) {
-                    return TList.sof(egs).filter(e->e.test(i,j)).map(e->e.go(p,c,i,j));
-                }
-            };
-        }
-    }    
 }
