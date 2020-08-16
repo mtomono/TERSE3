@@ -8,7 +8,7 @@ package solver.dp;
 import collection.TList;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
-import solver.Luggage;
+import solver.memo.Luggage;
 import static shape.ShapeUtil.p2i;
 import shape.TPoint2i;
 

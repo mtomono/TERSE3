@@ -3,14 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package solver.dp;
+package solver.memo;
 
+import solver.memo.Result;
+import solver.memo.CoinKnapsack;
 import collection.TList;
 import static org.testng.Assert.*;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import static shape.ShapeUtil.p2i;
-import solver.memo.Luggage;
 
 /**
  *
@@ -26,7 +27,7 @@ public class CoinKnapsackNGTest {
     }
 
     @Test
-    public void testLine17() {
+    public void testBasic17() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Luggage> tested = TList.of(
                 new Luggage(2,3),
@@ -34,15 +35,15 @@ public class CoinKnapsackNGTest {
                 new Luggage(5,8)
         );
         
-        TList<Integer> result = KnapsackDP.knapsack(tested.map(l->p2i(l.weight(),l.value())),17).csolve();
-        Integer expected = 27;
+        int result = new CoinKnapsack().target(tested.map(l->p2i(l.weight(),l.value()))).solve(17).value;
+        int expected = 27;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
-        assertEquals(result.last(), expected);
+        assertEquals(result, expected);
     }
 
     @Test
-    public void testLine29() {
+    public void testBasic29() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Luggage> tested = TList.of(
                 new Luggage(2,2),
@@ -50,10 +51,10 @@ public class CoinKnapsackNGTest {
                 new Luggage(10,11)
         );
         
-        TList<Integer> result = KnapsackDP.knapsack(tested.map(l->p2i(l.weight(),l.value())),29).csolve();
-        Integer expected = 31;
+        Result<Integer> result = new CoinKnapsack().target(tested.map(l->p2i(l.weight(),l.value()))).solve(29);
+        int expected = 31;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
-        assertEquals(result.last(), expected);
+        assertEquals(result.value, (Integer)expected);
     }
 }
