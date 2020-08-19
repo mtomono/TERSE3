@@ -43,7 +43,7 @@ public class KnapsackDP<T,R> {
         return new KnapsackDP<>(items,initialLine(capacity, 0, 0),
             (u,r,i)->TList.range(min(i.x,capacity+1),capacity+1).forEach(j->u.set(j, max(r.get(j),r.get(j-i.x)+i.y))));
     }
-    static public KnapsackDP<Integer, Boolean> cut(TList<Integer> items, int capacity) {
+    static public KnapsackDP<Integer, Boolean> possible(TList<Integer> items, int capacity) {
         return new KnapsackDP<>(items,initialLine(capacity, true, false),
             (u,r,i)->TList.range(min(i,capacity+1),capacity+1).forEach(j->u.set(j, r.get(j)||r.get(j-i))));
     }

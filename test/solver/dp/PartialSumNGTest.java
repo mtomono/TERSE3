@@ -27,11 +27,11 @@ public class PartialSumNGTest {
     public void testLine14() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Integer> tested = TList.sof(5,2,1,7,6);
-        TList<Boolean> result = KnapsackDP.cut(tested,14).psolve();
-        System.out.println(KnapsackDP.cut(tested,14).psolvew(b->b?1:0).toWrappedString());
+        TList<Boolean> result = KnapsackDP.possible(tested,14).psolve();
+        System.out.println(KnapsackDP.possible(tested,14).psolvew(b->b?1:0).toWrappedString());
         //System.out.println(KnapsackDP.cut(tested,14).psolvew().transform(tt->OneExample.cut(tested,tt).map).toWrappedString());
-        System.out.println(KnapsackDP.cut(tested,14).psolvew().transform(tt->ReverseDP.cut(tested,tt).left().first().next().next().items()).toString());
-        System.out.println(KnapsackDP.cut(tested,14).psolvew().transform(tt->ReverseDP.cut(tested,tt).right().whole().map(p->p.items())).toWrappedString());
+        System.out.println(KnapsackDP.possible(tested,14).psolvew().transform(tt->ReverseDP.cut(tested,tt).left().first().next().next().items()).toString());
+        System.out.println(KnapsackDP.possible(tested,14).psolvew().transform(tt->ReverseDP.cut(tested,tt).right().whole().map(p->p.items())).toWrappedString());
         boolean expected = true;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
@@ -41,7 +41,7 @@ public class PartialSumNGTest {
     public void testLine10() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Integer> tested = TList.sof(5,2,12,7,23);
-        TList<Boolean> result = KnapsackDP.cut(tested,10).psolve();
+        TList<Boolean> result = KnapsackDP.possible(tested,10).psolve();
         boolean expected = false;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
