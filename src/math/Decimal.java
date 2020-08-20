@@ -35,6 +35,9 @@ public interface Decimal<K extends Decimal<K>> extends Field<K>,Comparable<K> {
     default boolean same(K v) {
         return compareTo(v)==0;
     }
+    default K inv() {
+        return one().div((K)this);
+    }
     default boolean lt(K v) {
         return compareTo(v)<0;
     }

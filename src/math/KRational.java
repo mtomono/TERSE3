@@ -29,7 +29,10 @@ public class KRational implements Decimal<KRational> {
     
     public static final KRational zero = new KRational(0,1);
     public static final KRational one = new KRational(1,1);
-        
+    
+    public static KRational r(int v) {
+        return new KRational(v,1);
+    }
     public KRational(long numerator, long denominator) {
         assert denominator!=0 : "denominator cannot be zero";
         this.numerator = numerator;
@@ -66,6 +69,8 @@ public class KRational implements Decimal<KRational> {
     }
     
     public KRational reduce() {
+        if (numerator==0)
+            return this;
         long gcd = java.lang.Math.abs(gcd(numerator, denominator));
         return new KRational(numerator/gcd, denominator/gcd);
     }
