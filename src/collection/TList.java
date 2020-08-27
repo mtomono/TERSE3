@@ -98,6 +98,16 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
         return cset(i,o);
     }
     
+    public TList<T> reset(TList<T> other) {
+        ListIterator<T> titer=listIterator();
+        ListIterator<T> oiter=other.listIterator();
+        while (titer.hasNext()&&oiter.hasNext()) {
+            titer.next();
+            titer.set(oiter.next());
+        }
+        return this;
+    }
+    
     public TList<T> insertAt(int at,TList<T> t) {
         return subList(0,at).append(t).append(subList(at,size()));
     }

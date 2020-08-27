@@ -22,19 +22,47 @@ public class KVector<K extends Decimal<K>> {
         this.body=body;
     }
     public KVector<K> scale(K scale) {
+        return scaleR(scale);
+    }
+    public KVector<K> scaleR(K scale) {
         return new KVector<K>(body.map(v->v.mul(scale)));
     }
+    public KVector<K> scaleS(K scale) {
+        body.reset(body.map(v->v.mul(scale)));
+        return this;
+    }
+    public KVector<K> inv(K scale) {
+        return invR(scale);
+    }
+    public KVector<K> invR(K scale) {
+        return new KVector<K>(body.map(v->v.div(scale)));
+    }
+    public KVector<K> invS(K scale) {
+        body.reset(body.map(v->v.div(scale)));
+        return this;
+    }
     public KVector<K> add(KVector<K> other) {
+        return addR(other);
+    }
+    public KVector<K> addR(KVector<K> other) {
         return new KVector<K>(body.pair(other.body,(a,b)->a.add(b)));
     }
+    public KVector<K> addS(KVector<K> other) {
+        body.reset(body.pair(other.body,(a,b)->a.add(b)));
+        return this;
+    }
     public KVector<K> sub(KVector<K> other) {
+        return subR(other);
+    }
+    public KVector<K> subR(KVector<K> other) {
         return new KVector<K>(body.pair(other.body,(a,b)->a.sub(b)));
     }
-    public KVector<K> eliminator(int i) {
-        return scale(body.get(i).inv());
+    public KVector<K> subS(KVector<K> other) {
+        body.reset(body.pair(other.body,(a,b)->a.sub(b)));
+        return this;
     }
-    public KVector<K> eliminate(KVector<K> eliminator, int i) {
-        return sub(eliminator.scale(body.get(i)));
+    public K get(int i) {
+        return body.get(i);
     }
     
     public boolean same(KVector<K> other) {
