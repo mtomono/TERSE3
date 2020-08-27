@@ -45,11 +45,10 @@ public class KMatrix<K extends Decimal<K>> {
         return transpose(body).map(r->new KVector<>(r));
     }
     public KMatrix<K> eliminate() {
-        for (int i=0;i<min(x,y)-1;i++)
-            subMatrix(i,i,x,y).eliminateStep();
+        TList.range(0,min(x,y)-1).forEach(i->subMatrix(i,i,x,y).doolittle());
         return this;
     }
-    public KMatrix<K> eliminateStep() {
+    public KMatrix<K> doolittle() {
         KVector<K> lcolumn=   subMatrix(0,1, 1,y).columns().get(0).invS(body.get(0).get(0));
         KVector<K> eliminator=subMatrix(1,0, x,1).rows().get(0);
         TList<KVector<K>> ee= subMatrix(1,1,x,y).rows();

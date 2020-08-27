@@ -61,7 +61,7 @@ public class KMatrixNGTest {
         System.out.println(test.TestUtils.methodName(0));
         KMatrix<KBigDecimal> result = matrix(TList.sof(
                 TList.sof(b(1),b(2)),
-                TList.sof(b(3),b(5)))).eliminateStep();
+                TList.sof(b(3),b(5)))).doolittle();
         KMatrix<KBigDecimal> expected = matrix(TList.sof(
                 TList.sof(b(1),b(2)),
                 TList.sof(b(3),b(-1))));
@@ -77,7 +77,7 @@ public class KMatrixNGTest {
                                                             {1,0,0},
                                                             {0,1,0},
                                                             {0,0,1}
-                                                        },i->r(i)).eliminateStep();
+                                                        },i->r(i)).doolittle();
         KMatrix<KRational> expected = matrix(new Integer[][]{
                                                             {1,0,0},
                                                             {0,1,0},
@@ -95,7 +95,7 @@ public class KMatrixNGTest {
                                                             {1,2,1},
                                                             {2,5,3},
                                                             {1,1,2}
-                                                        },i->r(i)).eliminateStep();
+                                                        },i->r(i)).doolittle();
         KMatrix<KRational> expected = matrix(new Integer[][]{
                                                             {1,2,1},
                                                             {2,1,1},
