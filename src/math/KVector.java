@@ -5,9 +5,9 @@
  */
 package math;
 
-import collection.P;
 import collection.TList;
 import java.util.Objects;
+import java.util.function.Function;
 
 /**
  *
@@ -15,7 +15,7 @@ import java.util.Objects;
  */
 public class KVector<K extends Decimal<K>> {
     TList<K> body;
-    static public <K extends Decimal<K>> KVector<K> vec(K... v) {
+    static public <K extends Decimal<K>> KVector<K> vector(K... v) {
         return new KVector<>(TList.sof(v));
     }
     public KVector(TList<K> body) {
@@ -60,6 +60,10 @@ public class KVector<K extends Decimal<K>> {
     public KVector<K> subS(KVector<K> other) {
         body.reset(body.pair(other.body,(a,b)->a.sub(b)));
         return this;
+    }
+    public K dot(KVector<K> other) {
+        assert body.size()>0 && other.body.size()>0 : "incompatible with 0 length vector";
+        return body.pair(other.body,(a,b)->a.mul(b)).stream().reduce((a,b)->a.add(b)).get();
     }
     public K get(int i) {
         return body.get(i);

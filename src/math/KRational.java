@@ -70,7 +70,7 @@ public class KRational implements Decimal<KRational> {
     
     public KRational reduce() {
         if (numerator==0)
-            return this;
+            return r(0);
         long gcd = java.lang.Math.abs(gcd(numerator, denominator));
         return new KRational(numerator/gcd, denominator/gcd);
     }
