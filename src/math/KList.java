@@ -15,6 +15,7 @@
 package math;
 
 import collection.TList;
+import debug.Te;
 import java.util.function.Function;
 
 /**
@@ -24,11 +25,11 @@ import java.util.function.Function;
  * @param <K>
  */
 public class KList<T,K extends Decimal<K>> {
-    DecimalField<K> db;
+    MathContext<K> context;
     TList<T> body;
-    public KList(TList<T> body, DecimalField<K> db) {
+    public KList(TList<T> body, MathContext<K> context) {
         this.body=body;
-        this.db=db;
+        this.context=context;
     }
     
     public K average(Function<T,K> f) {
@@ -36,19 +37,19 @@ public class KList<T,K extends Decimal<K>> {
     }
 
     public K sigma(Function<T,K> f) {
-        return body.stream().map(f).reduce(db.zero(),(a,b)->a.add(b));
+        return body.stream().map(f).reduce(context.ZERO,(a,b)->a.add(b));
     }
     
     public K pai(Function<T,K> f) {
-        return body.stream().map(f).reduce(db.one(),(a,b)->a.mul(b));
+        return body.stream().map(f).reduce(context.ONE,(a,b)->a.mul(b));
     }
     
     public TList<K> add(Function<T,K> f) {
-        return body.map(f).accum(db.zero(), (a,b)->a.add(b));
+        return body.map(f).accum(context.ZERO, (a,b)->a.add(b));
     }
 
     public TList<K> mul(Function<T,K> f) {
-        return body.map(f).accum(db.one(), (a,b)->a.mul(b));
+        return body.map(f).accum(context.ONE, (a,b)->a.mul(b));
     }
     public TList<T> toT() {
         return body;

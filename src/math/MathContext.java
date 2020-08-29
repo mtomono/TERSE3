@@ -16,6 +16,8 @@ package math;
 
 import collection.TList;
 import java.util.function.Function;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -23,17 +25,15 @@ import java.util.function.Function;
  * @param <K>
  */
 public class MathContext<K extends Decimal<K>> {
-    public final DecimalField<K> field;
-    public Function<Integer,K> transform;
-    public MathContext(DecimalField<K> field) {
-        this.field=field;
-    }
-    public MathContext<K> transform(Function<Integer,K> f) {
-        this.transform=f;
-        return this;
-    }
-    public KMatrix<K> matrix(Integer[][] matrix) {
-        return matrix(matrix,transform);
+    public final K ZERO;
+    public final K ONE;
+    public MathContext(Class<K> clazz) {
+        try {
+            this.ZERO=(K) clazz.getField("ZERO").get(null);
+            this.ONE=(K) clazz.getField("ONE").get(null);
+        } catch (NoSuchFieldException|SecurityException|IllegalArgumentException|IllegalAccessException ex) {
+            throw new RuntimeException("K class has to have static ZERO/ONE field");
+        }
     }
     public KMatrix<K> matrix(Integer[][] matrix, Function<Integer,K> f) {
         return matrix(TList.sof(matrix).map(a->TList.sof(a).map(f).sfix()).sfix());

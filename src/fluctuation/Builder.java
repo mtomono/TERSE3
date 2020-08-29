@@ -18,7 +18,7 @@ package fluctuation;
 import collection.P;
 import collection.TList;
 import math.Decimal;
-import math.DecimalField;
+import math.MathContext;
 import orderedSet.Range;
 
 /**
@@ -27,9 +27,9 @@ import orderedSet.Range;
  * @param <K>
  */
 public class Builder<K extends Decimal<K>> {
-    final public DecimalField<K> field;
-    protected Builder(DecimalField<K> field) {
-        this.field=field;
+    MathContext<K> base;
+    protected Builder(MathContext<K> context) {
+        this.base=context;
     }
     public abstract class Building {
         TList<Long> time() {

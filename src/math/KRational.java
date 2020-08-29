@@ -23,12 +23,11 @@ import java.math.BigDecimal;
  * @author masao
  */
 public class KRational implements Decimal<KRational> {
-    final static public DecimalField<KRational> builder=new KRationalField();
     public final long numerator;
     public final long denominator;
     
-    public static final KRational zero = new KRational(0,1);
-    public static final KRational one = new KRational(1,1);
+    public static final KRational ZERO = new KRational(0,1);
+    public static final KRational ONE = new KRational(1,1);
     
     public static KRational r(int v) {
         return new KRational(v,1);
@@ -148,12 +147,12 @@ public class KRational implements Decimal<KRational> {
 
     @Override
     public KRational zero() {
-        return zero;
+        return ZERO;
     }
 
     @Override
     public KRational one() {
-        return one;
+        return ONE;
     }
     
     @Override

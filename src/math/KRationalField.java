@@ -14,8 +14,8 @@
  */
 package math;
 
-import static math.KRational.one;
-import static math.KRational.zero;
+import static math.KRational.ZERO;
+import static math.KRational.ONE;
 
 /**
  *
@@ -25,12 +25,12 @@ public class KRationalField implements DecimalField<KRational> {
 
     @Override
     public KRational zero() {
-        return zero;
+        return ZERO;
     }
 
     @Override
     public KRational one() {
-        return one;
+        return ONE;
     }
 
     @Override

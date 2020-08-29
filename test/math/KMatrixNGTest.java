@@ -16,8 +16,8 @@ import org.testng.annotations.Test;
  * @author masao
  */
 public class KMatrixNGTest {
-    MathContext<KBigDecimal> kbdb=new MathContext<>(new KBigDecimalField());
-    MathContext<KRational> krb=new MathContext<>(new KRationalField());
+    MathContext<KBigDecimal> kbdb=new MathContext<>(KBigDecimal.class);
+    MathContext<KRational> krb=new MathContext<>(KRational.class);
     public KMatrixNGTest() {
     }
     

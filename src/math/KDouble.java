@@ -22,7 +22,6 @@ import static java.lang.Math.round;
  * @author masao
  */
 public class KDouble implements Decimal<KDouble> {
-    final public static DecimalField<KDouble> builder=new KDoubleField();
     public final double body;
     
     static public final KDouble ZERO = new KDouble(0);

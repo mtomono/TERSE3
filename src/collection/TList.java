@@ -32,7 +32,7 @@ import java.util.stream.Collector;
 import math.Decimal;
 import math.KList;
 import orderedSet.Range;
-import math.DecimalField;
+import math.MathContext;
 
 /**
  *
@@ -696,8 +696,8 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
     
 //-----------Calculating
     
-    public <K extends Decimal<K>> KList<T,K> toK(DecimalField<K> db) {
-        return new KList<>(this,db);
+    public <K extends Decimal<K>> KList<T,K> toK(MathContext<K> context) {
+        return new KList<>(this,context);
     }
     public BigDecimal averageBD(Function<T,BigDecimal> f) {
         return sumBD(f).divide(new BigDecimal(size()));
