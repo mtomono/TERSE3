@@ -6,9 +6,7 @@
 package math;
 
 import collection.TList;
-import debug.Te;
 import static math.KBigDecimal.b;
-import static math.KMatrix.matrix;
 import static math.KRational.r;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
@@ -18,23 +16,23 @@ import org.testng.annotations.Test;
  * @author masao
  */
 public class KMatrixNGTest {
-    KBigDecimalField kbd=new KBigDecimalField();
-    KRationalField kr=new KRationalField();
+    MathContext<KBigDecimal> kbdb=new MathContext<>(new KBigDecimalField());
+    MathContext<KRational> krb=new MathContext<>(new KRationalField());
     public KMatrixNGTest() {
     }
     
     @Test
     public void testSubMatrix() {
         System.out.println(test.TestUtils.methodName(0));
-        KMatrix<KRational> result = matrix(new Integer[][]{
+        KMatrix<KRational> result = krb.matrix(new Integer[][]{
                                                             {1,0,0},
                                                             {0,1,0},
                                                             {0,0,1}
-                                                        },i->r(i), kr).subMatrix(0,1,2,3);
-        KMatrix<KRational> expected = matrix(new Integer[][]{
+                                                        },i->r(i)).subMatrix(0,1,2,3);
+        KMatrix<KRational> expected = krb.matrix(new Integer[][]{
                                                             {0,1},
                                                             {0,0}
-                                                        },i->r(i), kr);
+                                                        },i->r(i));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
@@ -43,16 +41,16 @@ public class KMatrixNGTest {
     @Test
     public void testSubMatrixForSetting() {
         System.out.println(test.TestUtils.methodName(0));
-        KMatrix<KRational> result = matrix(new Integer[][]{
+        KMatrix<KRational> result = krb.matrix(new Integer[][]{
                                                             {1,0,0},
                                                             {0,1,0},
                                                             {0,0,1}
-                                                        },i->r(i), kr).subMatrix(1,1,3,3);
+                                                        },i->r(i)).subMatrix(1,1,3,3);
         result.body.get(0).reset(TList.sof(r(2),r(2)));
-        KMatrix<KRational> expected = matrix(new Integer[][]{
+        KMatrix<KRational> expected = krb.matrix(new Integer[][]{
                                                             {2,2},
                                                             {0,1}
-                                                        },i->r(i), kr);
+                                                        },i->r(i));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
@@ -61,12 +59,12 @@ public class KMatrixNGTest {
     @Test
     public void testEliminate1235() {
         System.out.println(test.TestUtils.methodName(0));
-        KMatrix<KBigDecimal> result = matrix(TList.sof(
+        KMatrix<KBigDecimal> result = kbdb.matrix(TList.sof(
                 TList.sof(b(1),b(2)),
-                TList.sof(b(3),b(5))),kbd).doolittleStep();
-        KMatrix<KBigDecimal> expected = matrix(TList.sof(
+                TList.sof(b(3),b(5)))).doolittleStep();
+        KMatrix<KBigDecimal> expected = kbdb.matrix(TList.sof(
                 TList.sof(b(1),b(2)),
-                TList.sof(b(3),b(-1))),kbd);
+                TList.sof(b(3),b(-1))));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
@@ -75,16 +73,16 @@ public class KMatrixNGTest {
     @Test
     public void testEliminateI3() {
         System.out.println(test.TestUtils.methodName(0));
-        KMatrix<KRational> result = matrix(new Integer[][]{
+        KMatrix<KRational> result = krb.matrix(new Integer[][]{
                                                             {1,0,0},
                                                             {0,1,0},
                                                             {0,0,1}
-                                                        },i->r(i), kr).doolittleStep();
-        KMatrix<KRational> expected = matrix(new Integer[][]{
+                                                        },i->r(i)).doolittleStep();
+        KMatrix<KRational> expected = krb.matrix(new Integer[][]{
                                                             {1,0,0},
                                                             {0,1,0},
                                                             {0,0,1}
-                                                        },i->r(i), kr);
+                                                        },i->r(i));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
@@ -93,16 +91,16 @@ public class KMatrixNGTest {
     @Test
     public void testEliminate121253112() {
         System.out.println(test.TestUtils.methodName(0));
-        KMatrix<KRational> result = matrix(new Integer[][]{
+        KMatrix<KRational> result = krb.matrix(new Integer[][]{
                                                             {1,2,1},
                                                             {2,5,3},
                                                             {1,1,2}
-                                                        },i->r(i), kr).doolittleStep();
-        KMatrix<KRational> expected = matrix(new Integer[][]{
+                                                        },i->r(i)).doolittleStep();
+        KMatrix<KRational> expected = krb.matrix(new Integer[][]{
                                                             {1,2,1},
                                                             {2,1,1},
                                                             {1,-1,1}
-                                                        },i->r(i), kr);
+                                                        },i->r(i));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertTrue(result.same(expected));
@@ -111,16 +109,16 @@ public class KMatrixNGTest {
     @Test
     public void testEliminate121253112e() {
         System.out.println(test.TestUtils.methodName(0));
-        KMatrix<KRational> result = matrix(new Integer[][]{
+        KMatrix<KRational> result = krb.matrix(new Integer[][]{
                                                             {1,2,1},
                                                             {2,5,3},
                                                             {1,1,2}
-                                                        },i->r(i), kr).doolittle();
-        KMatrix<KRational> expected = matrix(new Integer[][]{
+                                                        },i->r(i)).doolittle();
+        KMatrix<KRational> expected = krb.matrix(new Integer[][]{
                                                             {1,2,1},
                                                             {2,1,1},
                                                             {1,-1,2}
-                                                        },i->r(i), kr);
+                                                        },i->r(i));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result,expected);
@@ -129,16 +127,16 @@ public class KMatrixNGTest {
     @Test
     public void testScaleR() {
         System.out.println(test.TestUtils.methodName(0));
-        KMatrix<KRational> result = matrix(new Integer[][]{
+        KMatrix<KRational> result = krb.matrix(new Integer[][]{
                                                             {1,0,0},
                                                             {0,1,0},
                                                             {0,0,1}
-                                                        },i->r(i), kr).scaleR(r(2));
-        KMatrix<KRational> expected = matrix(new Integer[][]{
+                                                        },i->r(i)).scaleR(r(2));
+        KMatrix<KRational> expected = krb.matrix(new Integer[][]{
                                                             {2,0,0},
                                                             {0,2,0},
                                                             {0,0,2}
-                                                        },i->r(i), kr);
+                                                        },i->r(i));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
@@ -147,16 +145,16 @@ public class KMatrixNGTest {
     @Test
     public void testScaleS() {
         System.out.println(test.TestUtils.methodName(0));
-        KMatrix<KRational> result = matrix(new Integer[][]{
+        KMatrix<KRational> result = krb.matrix(new Integer[][]{
                                                             {1,0,0},
                                                             {0,1,0},
                                                             {0,0,1}
-                                                        },i->r(i), kr).scaleS(r(2));
-        KMatrix<KRational> expected = matrix(new Integer[][]{
+                                                        },i->r(i)).scaleS(r(2));
+        KMatrix<KRational> expected = krb.matrix(new Integer[][]{
                                                             {2,0,0},
                                                             {0,2,0},
                                                             {0,0,2}
-                                                        },i->r(i), kr);
+                                                        },i->r(i));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
@@ -165,16 +163,16 @@ public class KMatrixNGTest {
     @Test
     public void testInvR() {
         System.out.println(test.TestUtils.methodName(0));
-        KMatrix<KRational> result = matrix(new Integer[][]{
+        KMatrix<KRational> result = krb.matrix(new Integer[][]{
                                                             {2,0,0},
                                                             {0,2,0},
                                                             {0,0,2}
-                                                        },i->r(i), kr).invR(r(2));
-        KMatrix<KRational> expected = matrix(new Integer[][]{
+                                                        },i->r(i)).invR(r(2));
+        KMatrix<KRational> expected = krb.matrix(new Integer[][]{
                                                             {1,0,0},
                                                             {0,1,0},
                                                             {0,0,1}
-                                                        },i->r(i), kr);
+                                                        },i->r(i));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
@@ -183,16 +181,16 @@ public class KMatrixNGTest {
     @Test
     public void testInvS() {
         System.out.println(test.TestUtils.methodName(0));
-        KMatrix<KRational> result = matrix(new Integer[][]{
+        KMatrix<KRational> result = krb.matrix(new Integer[][]{
                                                             {2,0,0},
                                                             {0,2,0},
                                                             {0,0,2}
-                                                        },i->r(i), kr).invS(r(2));
-        KMatrix<KRational> expected = matrix(new Integer[][]{
+                                                        },i->r(i)).invS(r(2));
+        KMatrix<KRational> expected = krb.matrix(new Integer[][]{
                                                             {1,0,0},
                                                             {0,1,0},
                                                             {0,0,1}
-                                                        },i->r(i), kr);
+                                                        },i->r(i));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
@@ -201,16 +199,16 @@ public class KMatrixNGTest {
     @Test
     public void testMapS() {
         System.out.println(test.TestUtils.methodName(0));
-        KMatrix<KRational> result = matrix(new Integer[][]{
+        KMatrix<KRational> result = krb.matrix(new Integer[][]{
                                                             {2,0,0},
                                                             {0,2,0},
                                                             {0,0,2}
-                                                        },i->r(i), kr).invS(r(2)).mapS(r->r.reduce());
-        KMatrix<KRational> expected = matrix(new Integer[][]{
+                                                        },i->r(i)).invS(r(2)).mapS(r->r.reduce());
+        KMatrix<KRational> expected = krb.matrix(new Integer[][]{
                                                             {1,0,0},
                                                             {0,1,0},
                                                             {0,0,1}
-                                                        },i->r(i), kr);
+                                                        },i->r(i));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
@@ -219,21 +217,21 @@ public class KMatrixNGTest {
     @Test
     public void testAddR() {
         System.out.println(test.TestUtils.methodName(0));
-        KMatrix<KRational> added = matrix(new Integer[][]{
+        KMatrix<KRational> added = krb.matrix(new Integer[][]{
                                                             {0,0,1},
                                                             {0,1,0},
                                                             {1,0,0}
-                                                        },i->r(i), kr);
-        KMatrix<KRational> result = matrix(new Integer[][]{
+                                                        },i->r(i));
+        KMatrix<KRational> result = krb.matrix(new Integer[][]{
                                                             {1,0,0},
                                                             {0,1,0},
                                                             {0,0,1}
-                                                        },i->r(i), kr).addR(added);
-        KMatrix<KRational> expected = matrix(new Integer[][]{
+                                                        },i->r(i)).addR(added);
+        KMatrix<KRational> expected = krb.matrix(new Integer[][]{
                                                             {1,0,1},
                                                             {0,2,0},
                                                             {1,0,1}
-                                                        },i->r(i), kr);
+                                                        },i->r(i));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
@@ -242,21 +240,21 @@ public class KMatrixNGTest {
     @Test
     public void testAddS() {
         System.out.println(test.TestUtils.methodName(0));
-        KMatrix<KRational> added = matrix(new Integer[][]{
+        KMatrix<KRational> added = krb.matrix(new Integer[][]{
                                                             {0,0,1},
                                                             {0,1,0},
                                                             {1,0,0}
-                                                        },i->r(i), kr);
-        KMatrix<KRational> result = matrix(new Integer[][]{
+                                                        },i->r(i));
+        KMatrix<KRational> result = krb.matrix(new Integer[][]{
                                                             {1,0,0},
                                                             {0,1,0},
                                                             {0,0,1}
-                                                        },i->r(i), kr).addS(added);
-        KMatrix<KRational> expected = matrix(new Integer[][]{
+                                                        },i->r(i)).addS(added);
+        KMatrix<KRational> expected = krb.matrix(new Integer[][]{
                                                             {1,0,1},
                                                             {0,2,0},
                                                             {1,0,1}
-                                                        },i->r(i), kr);
+                                                        },i->r(i));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
@@ -265,21 +263,21 @@ public class KMatrixNGTest {
     @Test
     public void testSubR() {
         System.out.println(test.TestUtils.methodName(0));
-        KMatrix<KRational> added = matrix(new Integer[][]{
+        KMatrix<KRational> added = krb.matrix(new Integer[][]{
                                                             {0,0,1},
                                                             {0,1,0},
                                                             {1,0,0}
-                                                        },i->r(i), kr);
-        KMatrix<KRational> result = matrix(new Integer[][]{
+                                                        },i->r(i));
+        KMatrix<KRational> result = krb.matrix(new Integer[][]{
                                                             {1,0,0},
                                                             {0,1,0},
                                                             {0,0,1}
-                                                        },i->r(i), kr).subR(added);
-        KMatrix<KRational> expected = matrix(new Integer[][]{
+                                                        },i->r(i)).subR(added);
+        KMatrix<KRational> expected = krb.matrix(new Integer[][]{
                                                             {1,0,-1},
                                                             {0,0,0},
                                                             {-1,0,1}
-                                                        },i->r(i), kr);
+                                                        },i->r(i));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
@@ -288,21 +286,21 @@ public class KMatrixNGTest {
     @Test
     public void testSubS() {
         System.out.println(test.TestUtils.methodName(0));
-        KMatrix<KRational> added = matrix(new Integer[][]{
+        KMatrix<KRational> added = krb.matrix(new Integer[][]{
                                                             {0,0,1},
                                                             {0,1,0},
                                                             {1,0,0}
-                                                        },i->r(i), kr);
-        KMatrix<KRational> result = matrix(new Integer[][]{
+                                                        },i->r(i));
+        KMatrix<KRational> result = krb.matrix(new Integer[][]{
                                                             {1,0,0},
                                                             {0,1,0},
                                                             {0,0,1}
-                                                        },i->r(i), kr).subS(added);
-        KMatrix<KRational> expected = matrix(new Integer[][]{
+                                                        },i->r(i)).subS(added);
+        KMatrix<KRational> expected = krb.matrix(new Integer[][]{
                                                             {1,0,-1},
                                                             {0,0,0},
                                                             {-1,0,1}
-                                                        },i->r(i), kr);
+                                                        },i->r(i));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
@@ -311,21 +309,21 @@ public class KMatrixNGTest {
     @Test
     public void testMul() {
         System.out.println(test.TestUtils.methodName(0));
-        KMatrix<KRational> added = matrix(new Integer[][]{
+        KMatrix<KRational> added = krb.matrix(new Integer[][]{
                                                             {0,0,1},
                                                             {0,1,0},
                                                             {1,0,0}
-                                                        },i->r(i), kr);
-        KMatrix<KRational> result = matrix(new Integer[][]{
+                                                        },i->r(i));
+        KMatrix<KRational> result = krb.matrix(new Integer[][]{
                                                             {1,0,0},
                                                             {0,1,0},
                                                             {0,0,1}
-                                                        },i->r(i), kr).mul(added);
-        KMatrix<KRational> expected = matrix(new Integer[][]{
+                                                        },i->r(i)).mul(added);
+        KMatrix<KRational> expected = krb.matrix(new Integer[][]{
                                                             {0,0,1},
                                                             {0,1,0},
                                                             {1,0,0}
-                                                        },i->r(i), kr);
+                                                        },i->r(i));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
@@ -334,16 +332,16 @@ public class KMatrixNGTest {
     @Test
     public void testFillLower() {
         System.out.println(test.TestUtils.methodName(0));
-        KMatrix<KRational> result = matrix(new Integer[][]{
+        KMatrix<KRational> result = krb.matrix(new Integer[][]{
                                                             {1,1,1},
                                                             {1,1,1},
                                                             {1,1,1}
-                                                        },i->r(i), kr).fillLower(r(0));
-        KMatrix<KRational> expected = matrix(new Integer[][]{
+                                                        },i->r(i)).fillLower(r(0));
+        KMatrix<KRational> expected = krb.matrix(new Integer[][]{
                                                             {1,1,1},
                                                             {0,1,1},
                                                             {0,0,1}
-                                                        },i->r(i), kr);
+                                                        },i->r(i));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
@@ -352,16 +350,16 @@ public class KMatrixNGTest {
     @Test
     public void testFillUpper() {
         System.out.println(test.TestUtils.methodName(0));
-        KMatrix<KRational> result = matrix(new Integer[][]{
+        KMatrix<KRational> result = krb.matrix(new Integer[][]{
                                                             {1,1,1},
                                                             {1,1,1},
                                                             {1,1,1}
-                                                        },i->r(i), kr).fillUpper(r(0));
-        KMatrix<KRational> expected = matrix(new Integer[][]{
+                                                        },i->r(i)).fillUpper(r(0));
+        KMatrix<KRational> expected = krb.matrix(new Integer[][]{
                                                             {1,0,0},
                                                             {1,1,0},
                                                             {1,1,1}
-                                                        },i->r(i), kr);
+                                                        },i->r(i));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
@@ -370,16 +368,16 @@ public class KMatrixNGTest {
     @Test
     public void testFillDiagonal() {
         System.out.println(test.TestUtils.methodName(0));
-        KMatrix<KRational> result = matrix(new Integer[][]{
+        KMatrix<KRational> result = krb.matrix(new Integer[][]{
                                                             {1,1,1},
                                                             {1,1,1},
                                                             {1,1,1}
-                                                        },i->r(i), kr).fillDiagonal(TList.sof(0,0,0).map(i->r(i)));
-        KMatrix<KRational> expected = matrix(new Integer[][]{
+                                                        },i->r(i)).fillDiagonal(TList.sof(0,0,0).map(i->r(i)));
+        KMatrix<KRational> expected = krb.matrix(new Integer[][]{
                                                             {0,1,1},
                                                             {1,0,1},
                                                             {1,1,0}
-                                                        },i->r(i), kr);
+                                                        },i->r(i));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
@@ -388,11 +386,11 @@ public class KMatrixNGTest {
     @Test
     public void testGetDiagonal() {
         System.out.println(test.TestUtils.methodName(0));
-        TList<KRational> result = matrix(new Integer[][]{
+        TList<KRational> result = krb.matrix(new Integer[][]{
                                                             {1,2,1},
                                                             {2,5,3},
                                                             {1,1,2}
-                                                        },i->r(i), kr).getDiagonal();
+                                                        },i->r(i)).getDiagonal();
         TList<KRational> expected = TList.sof(1,5,2).map(i->r(i));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
@@ -401,22 +399,22 @@ public class KMatrixNGTest {
     @Test
     public void testLu() {
         System.out.println(test.TestUtils.methodName(0));
-        KMatrix<KRational> original = matrix(new Integer[][]{
+        KMatrix<KRational> original = krb.matrix(new Integer[][]{
                                                             {1,2,1},
                                                             {2,5,3},
                                                             {1,1,2}
-                                                        },i->r(i), kr);
+                                                        },i->r(i));
         TList<KMatrix<KRational>> result = original.lu();
-        TList<KMatrix<KRational>> expected = TList.sof(matrix(new Integer[][]{
+        TList<KMatrix<KRational>> expected = TList.sof(krb.matrix(new Integer[][]{
                                                             {1,0,0},
                                                             {2,1,0},
                                                             {1,-1,1}
-                                                        },i->r(i), kr),
-                                                       matrix(new Integer[][]{
+                                                        },i->r(i)),
+                                                       krb.matrix(new Integer[][]{
                                                             {1,2,1},
                                                             {0,1,1},
                                                             {0,0,2}
-                                                        },i->r(i), kr));
+                                                        },i->r(i)));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result,expected);

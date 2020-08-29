@@ -1,31 +1,39 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ Copyright 2017, 2018 Masao Tomono
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.
  */
 package math;
 
 import collection.TList;
 import java.util.Objects;
-import java.util.function.Function;
 
 /**
  *
  * @author masao
+ * @param <K>
  */
 public class KVector<K extends Decimal<K>> {
     TList<K> body;
-    static public <K extends Decimal<K>> KVector<K> vector(K... v) {
-        return new KVector<>(TList.sof(v));
-    }
-    public KVector(TList<K> body) {
+    MathContext<K> context;
+    public KVector(TList<K> body, MathContext<K> context) {
         this.body=body;
+        this.context=context;
     }
     public KVector<K> scale(K scale) {
         return scaleR(scale);
     }
     public KVector<K> scaleR(K scale) {
-        return new KVector<K>(body.map(v->v.mul(scale)));
+        return context.vector(body.map(v->v.mul(scale)));
     }
     public KVector<K> scaleS(K scale) {
         body.reset(body.map(v->v.mul(scale)));
@@ -35,7 +43,7 @@ public class KVector<K extends Decimal<K>> {
         return invR(scale);
     }
     public KVector<K> invR(K scale) {
-        return new KVector<K>(body.map(v->v.div(scale)));
+        return context.vector(body.map(v->v.div(scale)));
     }
     public KVector<K> invS(K scale) {
         body.reset(body.map(v->v.div(scale)));
@@ -45,7 +53,7 @@ public class KVector<K extends Decimal<K>> {
         return addR(other);
     }
     public KVector<K> addR(KVector<K> other) {
-        return new KVector<K>(body.pair(other.body,(a,b)->a.add(b)));
+        return context.vector(body.pair(other.body,(a,b)->a.add(b)));
     }
     public KVector<K> addS(KVector<K> other) {
         body.reset(body.pair(other.body,(a,b)->a.add(b)));
@@ -55,7 +63,7 @@ public class KVector<K extends Decimal<K>> {
         return subR(other);
     }
     public KVector<K> subR(KVector<K> other) {
-        return new KVector<K>(body.pair(other.body,(a,b)->a.sub(b)));
+        return context.vector(body.pair(other.body,(a,b)->a.sub(b)));
     }
     public KVector<K> subS(KVector<K> other) {
         body.reset(body.pair(other.body,(a,b)->a.sub(b)));

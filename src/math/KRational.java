@@ -169,12 +169,7 @@ public class KRational implements Decimal<KRational> {
     @Override
     public long longPart() {
         return numerator/denominator;
-    }
-    
-    public DecimalField<KRational> builder() {
-        return builder;
-    }
-    
+    }    
     @Override
     public boolean equals(Object e) {
         if (e == null) {

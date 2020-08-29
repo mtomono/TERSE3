@@ -31,7 +31,6 @@ public interface Decimal<K extends Decimal<K>> extends Field<K>,Comparable<K> {
     boolean isInteger();
     int intPart();
     long longPart();
-    DecimalField<K> builder();
     default boolean same(K v) {
         return compareTo(v)==0;
     }

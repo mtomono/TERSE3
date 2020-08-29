@@ -106,16 +106,10 @@ public class KDouble implements Decimal<KDouble> {
     public long longPart() {
         return (long)floor(body);
     }
-    
-    public DecimalField<KDouble> builder() {
-        return builder;
-    }
-    
-    @Override
+        @Override
     public int compareTo(KDouble o) {
         return Double.compare(body, o.body);
     }
-
     @Override
     public boolean equals(Object e) {
         if (e == null) {
@@ -127,7 +121,6 @@ public class KDouble implements Decimal<KDouble> {
         KDouble t = (KDouble) e;
         return body==t.body;
     }
-
     @Override
     public int hashCode() {
         int hash = 5;

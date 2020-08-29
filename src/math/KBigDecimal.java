@@ -183,11 +183,6 @@ public class KBigDecimal implements Decimal<KBigDecimal> {
     public long longPart() {
         return v.longValue();
     }
-    
-    @Override
-    public DecimalField<KBigDecimal> builder() {
-        return field;
-    }
     @Override
     public boolean equals(Object e) {
         if (e == null) {
