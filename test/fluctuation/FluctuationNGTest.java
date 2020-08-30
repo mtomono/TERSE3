@@ -7,7 +7,6 @@ package fluctuation;
 
 import math.KBigDecimal;
 import static math.KBigDecimal.b;
-import math.MathContext;
 import orderedSet.Range;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
@@ -20,7 +19,7 @@ public class FluctuationNGTest {
     fluctuation.Builder<KBigDecimal> builder;
     
     public FluctuationNGTest() {
-        this.builder=Fluctuation.builder(new MathContext<>(KBigDecimal.class));
+        this.builder=Fluctuation.builder(KBigDecimal.class);
     }
 
     @Test
