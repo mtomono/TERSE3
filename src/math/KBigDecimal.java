@@ -29,7 +29,6 @@ import string.Strings;
 public class KBigDecimal implements Decimal<KBigDecimal> { 
     final static public KBigDecimal ZERO=new KBigDecimal(BigDecimal.ZERO);
     final static public KBigDecimal ONE=new KBigDecimal(BigDecimal.ONE);
-    final static public KBigDecimalField field=new KBigDecimalField();
     static public BigDecimal c(double value) {
         return new BigDecimal(value);
     }

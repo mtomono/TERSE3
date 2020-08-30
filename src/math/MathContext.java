@@ -16,8 +16,6 @@ package math;
 
 import collection.TList;
 import java.util.function.Function;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -34,6 +32,12 @@ public class MathContext<K extends Decimal<K>> {
         } catch (NoSuchFieldException|SecurityException|IllegalArgumentException|IllegalAccessException ex) {
             throw new RuntimeException("K class has to have static ZERO/ONE field");
         }
+    }
+    public K zero() {
+        return ZERO;
+    }
+    public K one() {
+        return ONE;
     }
     public KMatrix<K> matrix(Integer[][] matrix, Function<Integer,K> f) {
         return matrix(TList.sof(matrix).map(a->TList.sof(a).map(f).sfix()).sfix());
