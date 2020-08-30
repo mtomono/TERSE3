@@ -33,7 +33,7 @@ public class KMatrix<K extends Decimal<K>> {
     public KMatrix(TList<TList<K>> body, MathContext<K> context) {
         this.body=body;
         this.context=context;
-        assert body.map(r->r.size()).isUniform() : "all the raw have to have the same size";
+        assert body.map(r->r.size()).isUniform() : "all the raws have to have the same size";
         this.x=body.isEmpty()?0:body.get(0).size();
         this.y=body.size();
     }
