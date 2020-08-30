@@ -27,9 +27,9 @@ import orderedSet.Range;
  * @param <K>
  */
 public class Builder<K extends Decimal<K>> {
-    MathContext<K> base;
+    MathContext<K> context;
     protected Builder(MathContext<K> context) {
-        this.base=context;
+        this.context=context;
     }
     public abstract class Building {
         TList<Long> time() {

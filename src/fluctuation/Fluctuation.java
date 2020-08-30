@@ -37,8 +37,8 @@ public class Fluctuation<K extends Decimal<K>> {
     final public Entries entries;
     final public Accumulates accumulates;
     
-    static public <K extends Decimal<K>> Builder<K> builder(MathContext<K> context) {
-        return new Builder<>(context);
+    static public <K extends Decimal<K>> Builder<K> builder(Class<K> context) {
+        return new Builder<>(new MathContext<>(context));
     }
         
     protected Fluctuation(TList<Long> time, TList<K> q, TList<P<Long,K>> entries, TList<P<Range<Long>,K>> accumulates, Builder<K> builder) {
@@ -105,8 +105,8 @@ public class Fluctuation<K extends Decimal<K>> {
             return q.forAll(x->!x.belowZero());
         }
         public TList<Boolean> noticeableChanges(K limit) {
-            Holder<K> h=new Holder<>(builder.base.ZERO);
-            return q.iterator().map(x->h.set(h.get().add(x)).abs().gt(limit)).tee(t->h.set(t?builder.base.ZERO:h.get())).asList();
+            Holder<K> h=new Holder<>(builder.context.zero());
+            return q.iterator().map(x->h.set(h.get().add(x)).abs().gt(limit)).tee(t->h.set(t?builder.context.zero():h.get())).asList();
         }
     }
 
@@ -126,7 +126,7 @@ public class Fluctuation<K extends Decimal<K>> {
         }
         public Fluctuation<K> unify() {
             return builder.entries(body.diffChunk((a,b)->!a.l().equals(b.l())).filter(l->!l.isEmpty())
-                    .map(l->P.p(l.get(0).l(), l.toK(builder.base).sigma(p->p.r()))));
+                    .map(l->P.p(l.get(0).l(), l.toK(builder.context).sigma(p->p.r()))));
         }
         public Fluctuation<K> nonzero() {
             return builder.entries(body.filter(p->!p.r().isZero()));
@@ -135,7 +135,7 @@ public class Fluctuation<K extends Decimal<K>> {
             return enclose(enclosure.l(),enclosure.r());
         }
         public Fluctuation<K> enclose(Range<Long> range, K opening) {
-            return builder.entries(body.filter(p->range.contains(p.l())).startFrom(P.p(range.start,opening)).append(P.p(range.end,builder.base.ZERO)));
+            return builder.entries(body.filter(p->range.contains(p.l())).startFrom(P.p(range.start,opening)).append(P.p(range.end,builder.context.zero())));
         }
         public Fluctuation<K> unenclose() {
             return builder.entries(body.seek(1).seek(-1));
@@ -148,7 +148,7 @@ public class Fluctuation<K extends Decimal<K>> {
             this.body=body;
         }
         public K dot(Fluctuation<K> target) {
-            return body.cross(target.accumulates.body, (a,b)->a.r().mul(b.r()).mul(a.l().intersect(b.l()).map(t->widthL(t)).orElse(0L))).stream().reduce(builder.base.ZERO, (a,b)->a.add(b));
+            return body.cross(target.accumulates.body, (a,b)->a.r().mul(b.r()).mul(a.l().intersect(b.l()).map(t->widthL(t)).orElse(0L))).stream().reduce(builder.context.zero(), (a,b)->a.add(b));
         }
         public Fluctuation<K> accumulate() {
             return builder.entries(body.map(x->P.p(x.l().start, x.r())));
@@ -163,7 +163,7 @@ public class Fluctuation<K extends Decimal<K>> {
          * @return 
          */
         public K amount() {
-            return amounts().toK(builder.base).sigma(k->k);
+            return amounts().toK(builder.context).sigma(k->k);
         }
         public TList<K> amounts() {
             return body.map(p->p.r().mul(widthL(p.l())));
