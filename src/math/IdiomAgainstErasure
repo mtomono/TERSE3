@@ -1,0 +1,33 @@
+T<K> x(Class<K> c)
+As we know, Java runtime does not retain the parameter type information of an
+object. It's a policy called 'erasure'. This is adopted mainly because of
+compatibility with older Java which didn't have parameter type.
+This short cutting came with fallouts. One main fallout is the object does not
+know which class of object to create when there is no object. This is a quite
+common situation when you are handling a container which can be empty.
+I'll give you a very simple example for this. Think you got a list of numbers and
+summing them up. Then what do you expect from an empty list? Should be zero,
+isn't it?
+But remember, there's no object in the list and the type of the number should be
+given as parameter type to the list. The runtime does not have any clue how to
+create 'zero'.
+Still there are people argue that the way allowing empty list was wrong.
+I say no it's not. In many cases, it's a good idea to allow any container to be
+empty to simplify the calculation.
+Anyway. Here I come up with the way to countermeasure 'erasure' and the formula
+is summarized as T<K> x(Class<K> c).
+The main problem is literally the 'erasure', losing parameter class.
+The main idea to countermeasure to it is to put back the 'class' to objects as
+a parameter.
+There comes the parameter 'Class<K> c'. Not hilarious solution, I know. Because
+this is redundant. I'm so sorry. But still, this redundancy is checked by
+the compiler. I'm easy enough to think it's better than nothing.
+You might say that there is no guarantee for classes to follow a rule imposed
+by you. I'm talking about an interface which can force classes inheriting itself
+to follow some guidelines.
+Look carefully. You can impose any rule by this method x() and tests.
+I'm sure I have to admit that this kind of failure cannot be detected by
+any static analysis which I mean in compile time. Thus, finding that kind of failure
+always comes with latency. I have to admit that. I never say that this technique
+exceeds than more common ways like inheritance. But this is a too good idea to
+miss when you have to cover the problem caused by 'erasure'.

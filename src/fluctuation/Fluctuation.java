@@ -38,7 +38,10 @@ public class Fluctuation<K extends Decimal<K>> {
     final public Accumulates accumulates;
     
     static public <K extends Decimal<K>> Builder<K> builder(Class<K> context) {
-        return new Builder<>(new MathContext<>(context));
+        return builder(new MathContext<>(context));
+    }
+    static public <K extends Decimal<K>> Builder<K> builder(MathContext<K> context) {
+        return new Builder<>(context);
     }
         
     protected Fluctuation(TList<Long> time, TList<K> q, TList<P<Long,K>> entries, TList<P<Range<Long>,K>> accumulates, Builder<K> builder) {
