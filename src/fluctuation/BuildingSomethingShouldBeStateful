@@ -1,0 +1,10 @@
+Building Something Should Be Stateful
+
+Stateless objects are easy to handle. You can copy them, call any methods in
+random way, and still you can expect a certain result.
+You might want objects to be stateless. If they are stateless, you are freed
+from consideration about consistency when you want to concentrate in calculation
+itself.
+In many cases, objects are stateful while they are being built.
+Those states which occur during building process can be put into its builder and
+isolated from the resulting objects which will be stateless.
