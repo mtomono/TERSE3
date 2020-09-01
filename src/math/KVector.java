@@ -70,8 +70,7 @@ public class KVector<K extends Decimal<K>> {
         return this;
     }
     public K dot(KVector<K> other) {
-        if (body.isEmpty()||other.body.isEmpty()) return context.ZERO;
-        return body.pair(other.body,(a,b)->a.mul(b)).stream().reduce((a,b)->a.add(b)).get();
+        return body.pair(other.body,(a,b)->a.mul(b)).toK(context).sigma(k->k);
     }
     public K get(int i) {
         return body.get(i);

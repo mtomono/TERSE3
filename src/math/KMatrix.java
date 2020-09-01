@@ -117,8 +117,8 @@ public class KMatrix<K extends Decimal<K>> {
         assertSquare();
         KMatrix<K> doolittle=sfix().doolittle();
         return TList.sof(
-                doolittle.fillUpper(context.ZERO).fillDiagonal(context.ONE),
-                doolittle.fillLower(context.ZERO)
+                doolittle.fillUpper(context.zero()).fillDiagonal(context.one()),
+                doolittle.fillLower(context.zero())
         );
     }
     public KMatrix<K> doolittle() {
