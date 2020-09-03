@@ -6,5 +6,5 @@ You might want objects to be stateless. If they are stateless, you are freed
 from consideration about consistency when you want to concentrate in calculation
 itself.
 In many cases, objects are stateful while they are being built.
-Those states which occur during building process can be put into its builder and
-isolated from the resulting objects which will be stateless.
+Those states which occur during building process can be moved into its builder
+and isolated from the resulting objects which will be stateless.
