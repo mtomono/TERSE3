@@ -2232,4 +2232,15 @@ public class TListNGTest {
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
     }
+    
+    @Test
+    public void testSwap() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> tested=TList.sof(0,1,2,3,4);
+        TList<Integer> result = tested.swap(1, 3);
+        TList<Integer> expected = TList.sof(0,3,2,1,4);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
 }
