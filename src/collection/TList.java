@@ -98,6 +98,13 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
         return cset(i,o);
     }
     
+    public TList<T> swap(int i0,int i1) {
+        T buffer=get(i0);
+        set(i0,get(i1));
+        set(i1,buffer);
+        return this;
+    }
+    
     public TList<T> reset(TList<T> other) {
         ListIterator<T> titer=listIterator();
         ListIterator<T> oiter=other.listIterator();
@@ -422,6 +429,18 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
      */
     static public <T> TList<T> sof(T... t) {
         return new TListRandom<>(a2l(t));
+    }
+    
+    static public TList<Integer> sofi(int... t) {
+        return TList.set(PrimitiveArrayWrap.wrap(t));
+    }
+    
+    static public <T> TList<TList<T>> sof2(T[][] t) {
+        return TList.sof(t).map(a->TList.sof(a));
+    }
+    
+    static public TList<TList<Integer>> sof2(int[][] t) {
+        return TList.sof(t).map(a->TList.sofi(a));
     }
     
     @Deprecated
