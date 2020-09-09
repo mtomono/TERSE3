@@ -324,6 +324,10 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
             return rangeBase(to, from).reverse();
     }
     
+    public TList<Integer> index() {
+        return TList.range(0,size());
+    }
+    
     /**
      * generate a list of integers in a row, but...
      * yeah. there was a time i believed in a faith that goes like, "every range
