@@ -99,9 +99,7 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
     }
     
     public TList<T> swap(int i0,int i1) {
-        T buffer=get(i0);
-        set(i0,get(i1));
-        set(i1,buffer);
+        set(i0,set(i1,get(i0)));
         return this;
     }
     
@@ -394,6 +392,18 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
         return set(i2l(body));
     }
     
+    static public <T> TList<T> set(Function<Integer,T> op, int size) {
+        return TList.set(new AbstractList<T>() {
+            @Override
+            public T get(int index) {
+                return op.apply(index);
+            }
+            @Override
+            public int size() {
+                return size;
+            }
+        });
+    }
     public List<T> out() {
         return fix();
     }
