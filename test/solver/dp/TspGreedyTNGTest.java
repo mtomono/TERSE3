@@ -5,7 +5,6 @@
  */
 package solver.dp;
 
-import static collection.PrimitiveArrayWrap.wrap;
 import collection.TList;
 import static function.ComparePolicy.inc;
 import static org.testng.Assert.*;
@@ -17,9 +16,9 @@ import test.Clock;
  *
  * @author masao
  */
-public class TspGreedyNGTest {
+public class TspGreedyTNGTest {
     
-    public TspGreedyNGTest() {
+    public TspGreedyTNGTest() {
     }
     @Test
     public void testScaleR() {
@@ -29,7 +28,7 @@ public class TspGreedyNGTest {
         int vertices=20000;
         int[][] map=generator(vertices).generate();
         p.record("numbers generated").show();
-        TspGreedyArray tsp = new TspGreedyArray(vertices,map);
+        TspGreedyT tsp = new TspGreedyT(vertices,map);
         p.record("ready").show();
         TList<Integer> tested = tsp.solve();
         p.record("solved").show();

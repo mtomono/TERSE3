@@ -108,13 +108,13 @@ public class TspNGTest {
     @Test
     public void testScaleR() {
         System.out.println(test.TestUtils.methodName(0));
-        int vertices=25;
+        int vertices=10; // 20 vertices might take 70sec. max available is 25 for -Xss 4196m.
         Tsp tsp = new Tsp(vertices,generator(vertices).generate());
         int result = tsp.solve();
         int expected = 10;
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
-        assertEquals(result, expected);
+        //assertEquals(result, expected); answer is random.
     }
 
 }

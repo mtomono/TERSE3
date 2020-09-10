@@ -91,7 +91,7 @@ public class TspHalfBakedNGTest {
     @Test
     public void testScaleR() {
         System.out.println(test.TestUtils.methodName(0));
-        int vertices=3000;
+        int vertices=100; // this could tolerate to 3000 when -Xss is set to 4196m.
         MVMap<Integer,P<Integer,Integer>> map=generator(vertices).generateMap();
         System.out.println("numbers generated");
         TspHalfBaked tsp = new TspHalfBaked(vertices,map);
@@ -106,7 +106,7 @@ public class TspHalfBakedNGTest {
     @Test
     public void testScaleR2() {
         System.out.println(test.TestUtils.methodName(0));
-        int vertices=3000;
+        int vertices=100; // this could tolerate to 3000 when -Xss is set to 4196m.
         MVMap<Integer,P<Integer,Integer>> map=generator2(vertices,2000).generateMap();
         System.out.println("numbers generated");
         TspHalfBaked tsp = new TspHalfBaked(vertices,map);

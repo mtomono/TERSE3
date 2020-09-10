@@ -5,11 +5,12 @@
  */
 package solver.dp;
 
-import collection.MVOrderedMap;
-import collection.P;
+import collection.ArrayInt;
+import static collection.ArrayInt.arrayInt;
+import collection.ArrayInt2;
+import static collection.PrimitiveArrayWrap.unwrapI;
 import static collection.PrimitiveArrayWrap.wrap;
 import collection.TList;
-import java.util.HashMap;
 import static solver.dp.Tsp.initTable;
 import static solver.dp.Tsp.sentinel;
 
@@ -17,7 +18,7 @@ import static solver.dp.Tsp.sentinel;
  *
  * @author masao
  */
-public class TspGreedy {
+public class TspGreedyT {
     static public Builder builder(int vertices) {
         return new Builder(vertices);
     }
@@ -36,32 +37,24 @@ public class TspGreedy {
         public Builder e(int... graph) {
             return e(TList.set(wrap(graph)));
         }
-        public TspGreedy build() {
-            return new TspGreedy(vertices,graph);
+        public TspGreedyT build() {
+            return new TspGreedyT(vertices,graph);
         }
     }
-    int[][] graph;
     int vertices;
     int start=0;
-    public TspGreedy(int vertices,int[][] graph) {
+    ArrayInt route;
+    ArrayInt2 grapha;
+    public TspGreedyT(int vertices,int[][] graph) {
         this.vertices=vertices;
-        this.graph=graph;
+        this.grapha=new ArrayInt2(graph);
+        this.route=arrayInt(unwrapI(TList.range(0,vertices)));
     }
-    public int[] solve() {
-        int[] route=new int[vertices];
-        for (int i=0;i<vertices;i++) route[i]=i;
-        for (int i=0;i<vertices-1;i++) {
-            int min=graph[route[i]][route[i+1]];
-            int minat=i+1;
-            for (int j=i+1;j<vertices;j++) 
-                if (graph[route[i]][route[j]]<min) {
-                    min=graph[route[i]][route[j]];
-                    minat=j;
-                }
-            int next=route[i+1];
-            route[i+1]=route[minat];
-            route[minat]=next;
-        }
-        return route;
+    public int distance(int i,int j) {
+        return grapha.get(route.get(i),route.get(j));
+    }
+    public TList<Integer> solve() {
+        route.index().seek(-1).forEach(i->route.swap(i+1,route.min(i+1,j->distance(i,j))));
+        return route.asList();
     }
 }
