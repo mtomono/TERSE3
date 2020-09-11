@@ -51,10 +51,10 @@ public class TspGreedyT {
         this.route=arrayInt(unwrapI(TList.range(0,vertices)));
     }
     public int distance(int i,int j) {
-        return grapha.get(route.get(i),route.get(j));
+        return grapha.get(i,j);
     }
     public TList<Integer> solve() {
-        route.index().seek(-1).forEach(i->route.swap(i+1,route.min(i+1,j->distance(i,j))));
+        route.index().seek(-1).forEach(i->route.seek(i+1).swap(0,route.seek(i+1).min(j->distance(i,j))));
         return route.asList();
     }
 }
