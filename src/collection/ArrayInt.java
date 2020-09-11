@@ -5,7 +5,12 @@
  */
 package collection;
 
+import debug.Te;
+import java.util.NoSuchElementException;
+import java.util.PrimitiveIterator;
+import java.util.function.Function;
 import java.util.function.IntConsumer;
+import java.util.function.IntPredicate;
 import java.util.function.IntUnaryOperator;
 
 /**
@@ -25,6 +30,22 @@ public interface ArrayInt {
     default ArrayInt index() {
         return new Index(length());
     }
+    default PrimitiveIterator.OfInt iterator() {
+        return new IteratorInt(this);
+    }
+    default PrimitiveIterator.OfInt fiterator(IntPredicate pred) {
+        return new FilterInt(this,pred);
+    }
+    default ArrayInt asArray(Function<ArrayInt,PrimitiveIterator.OfInt> f) {
+        ArrayInt retval=new Plain(new int[length()]);
+        PrimitiveIterator.OfInt iter=f.apply(this);
+        int i=0;
+        for (i=0;iter.hasNext();i++) retval.set(i,iter.nextInt());
+        return retval.subArray(0, i);
+    }
+    default ArrayInt fix() {
+        return asArray(a->a.iterator());
+    }
     default TList<Integer> asList() {
         return TList.set(i->ArrayInt.this.get(i),length());
     }
@@ -37,6 +58,9 @@ public interface ArrayInt {
     default ArrayInt map(IntUnaryOperator op) {
         return new Map(this,op);
     }
+    default ArrayInt filter(IntPredicate pred) {
+        return asArray(a->a.fiterator(pred));
+    }
     default void forEach(IntConsumer c) {
         for(int i=0;i<length();i++) c.accept(i);
     }
@@ -47,11 +71,12 @@ public interface ArrayInt {
     default int min(int from, int to, IntUnaryOperator op) {
         int min=op.applyAsInt(get(from));
         int retval=0;
-        for (int i=from+1;i<to;i++)
+        for (int i=from+1;i<to;i++) {
             if (op.applyAsInt(get(i))<min) {
                 min=op.applyAsInt(get(i));
                 retval=i;
             }
+        }
         return retval;
     }
     default int min(int seek, IntUnaryOperator op) {
@@ -66,14 +91,17 @@ public interface ArrayInt {
         public Plain(int[] body) {
             this.body=body;
         }
+        @Override
         public int get(int i) {
             return body[i];
         }
+        @Override
         public int set(int i, int v) {
             int retval=get(i);
             body[i]=v;
             return retval;
         }
+        @Override
         public int length() {
             return body.length;
         }
@@ -89,12 +117,15 @@ public interface ArrayInt {
             this.to=to;
             this.length=to-from;
         }
+        @Override
         public int get(int i) {
             return body.get(from+i);
         }
+        @Override
         public int set(int i, int v) {
             return body.set(from+i, v);
         }
+        @Override
         public int length() {
             return length;
         }
@@ -136,5 +167,48 @@ public interface ArrayInt {
         public int length() {
             return length;
         }
+    }
+    static class IteratorInt implements PrimitiveIterator.OfInt {
+        int i;
+        ArrayInt body;
+        public IteratorInt(ArrayInt body) {
+            this.i=0;
+            this.body=body;
+        }
+        @Override
+        public int nextInt() {
+            return body.get(i++);
+        }
+
+        @Override
+        public boolean hasNext() {
+            return i<body.length();
+        }
+    }
+    static class FilterInt implements PrimitiveIterator.OfInt {
+        int i;
+        ArrayInt body;
+        IntPredicate pred;
+        public FilterInt(ArrayInt body,IntPredicate pred) {
+            this.i=0;
+            this.body=body;
+            this.pred=pred;
+        }
+        @Override
+        public int nextInt() {
+            if (hasNext())
+                return body.get(i++);
+            else
+                throw new NoSuchElementException("ArrayInt.FilterInt failed");
+        }
+        @Override
+        public boolean hasNext() {
+            while(i<body.length()) {
+                if (pred.test(body.get(i))) return true;
+                i++;
+            }
+            return false;
+        }
+        
     }
 }

@@ -57,4 +57,14 @@ public class ArrayIntNGTest {
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
     }
+    
+    @Test
+    public void testFilter() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> result = arrayInt(0,1,2,3,4).filter(i->i%2==0).asList();
+        TList<Integer> expected = TList.sofi(0,2,4);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
 }
