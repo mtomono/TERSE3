@@ -691,7 +691,7 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
      * @param map
      * @return 
      */
-    public <S> TList<S> accumFromInit(S init, BiFunction<S,T,S> map) {
+    public <S> TList<S> accumWithSeed(S init, BiFunction<S,T,S> map) {
         return accumFromStart(t->map.apply(init,t),map);
     }
     
