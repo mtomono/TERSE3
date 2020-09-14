@@ -65,7 +65,7 @@ public interface ArrayInt {
     default ArrayIntIterator iterator() {
         return new PlainIterator(this);
     }
-    default ArrayIntIterator FilterIter(IntPredicate pred) {
+    default ArrayIntIterator filterIter(IntPredicate pred) {
         return new FilterIterator(this,pred);
     }
     default ArrayIntIterator accumWithSeedIter(int start, IntBinaryOperator op) {
@@ -121,7 +121,7 @@ public interface ArrayInt {
         return diffToObj(1,op);
     }
     default TList<ArrayInt> reverseChunk(IntPredicate pred) {
-        ArrayInt divides=concat(one(0),FilterIter(pred),one(length())).asArray();
+        ArrayInt divides=concat(one(0),index().filterIter(i->pred.test(get(i))),one(length())).asArray();
         return divides.diffToObj((a,b)->subArray(a,b));
     }
     default ArrayInt map(IntUnaryOperator op) {
@@ -149,7 +149,7 @@ public interface ArrayInt {
         return accumFromStartIter(start,op).asArray();
     }
     default ArrayInt filter(IntPredicate pred) {
-        return FilterIter(pred).asArray();
+        return filterIter(pred).asArray();
     }
     default boolean forAll(IntPredicate pred) {
         for (int i=0;i<length();i++)

@@ -128,6 +128,16 @@ public class ArrayIntNGTest {
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
     }
+    
+    @Test
+    public void testReverseChunk() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<TList<Integer>> result = arrayInt(10,11,1,12,13,14,2,15).reverseChunk(i->i<10).map(a->a.asList());
+        TList<TList<Integer>> expected = TList.sof(10,11,1,12,13,14,2,15).reverseChunk(i->i<10);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
 
     @Test
     public void testMap() {
