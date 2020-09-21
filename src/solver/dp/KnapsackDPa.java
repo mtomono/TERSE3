@@ -16,6 +16,10 @@ import java.util.function.Consumer;
  * @author masao
  */
 public class KnapsackDPa {
+    @FunctionalInterface
+    static public interface Row {
+        void row(int i,ArrayInt r,ArrayInt u);
+    }
     int items;
     int capacity;
     public final ArrayInt2 dp;
@@ -40,10 +44,6 @@ public class KnapsackDPa {
     public ArrayInt2 solveCoin() {
         ArrayInt.range(1, items).forEach(i->solve.row(i,dp.get(i).reset(dp.get(i-1)),dp.get(i)));
         return dp;
-    }
-    @FunctionalInterface
-    static public interface Row {
-        void row(int i,ArrayInt r,ArrayInt u);
     }
     static public KnapsackDPa knapsack(ArrayInt weight,ArrayInt value,int capacity) {
         return new KnapsackDPa(weight.length(),capacity)
