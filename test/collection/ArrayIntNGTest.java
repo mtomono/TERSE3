@@ -179,4 +179,14 @@ public class ArrayIntNGTest {
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
     }
+    
+    @Test
+    public void testRangeSubArray() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> result = ArrayInt.range(0, 10).seek(1).asList();
+        TList<Integer> expected = TList.range(1,10);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
 }

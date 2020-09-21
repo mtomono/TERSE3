@@ -5,12 +5,16 @@
  */
 package solver.dp;
 
+import collection.ArrayInt;
+import static collection.ArrayInt.arrayInt;
 import collection.TList;
+import java.util.Random;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import solver.memo.Luggage;
 import static shape.ShapeUtil.p2i;
 import shape.TPoint2i;
+import test.Clock;
 
 /**
  *
@@ -173,5 +177,16 @@ public class KnapsackNGTest {
         System.out.println("expected: "+expected);
         assertEquals(result.last(), expected);
     }
-    
+
+    @Test
+    public void testKnapsackScaleRandom() {
+        Clock p = new Clock();
+        p.record();
+        System.out.println(test.TestUtils.methodName(0));
+        int scale=100000;
+        ArrayInt weight=arrayInt(new Random().ints(scale,2,20).toArray());
+        ArrayInt value =arrayInt(new Random().ints(scale,0,100).toArray());
+        TList<Integer> result = KnapsackDP.knapsack(weight.asList().pair(value.asList(), (a,b)->p2i(a,b)).sfix(),6000).psolve();
+        System.out.println(result.last());
+    }
 }

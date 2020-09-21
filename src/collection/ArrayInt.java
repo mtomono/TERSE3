@@ -12,6 +12,7 @@ import java.util.AbstractList;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.PrimitiveIterator;
+import java.util.function.Function;
 import java.util.function.IntBinaryOperator;
 import java.util.function.IntConsumer;
 import java.util.function.IntFunction;
@@ -34,6 +35,12 @@ public interface ArrayInt {
     static public ArrayInt range(int from, int to) {
         return new Range(from,to);
     }
+    static public ArrayInt set(TList<Integer> body) {
+        return set(body,i->i);
+    }
+    static public <T> ArrayInt set(TList<T>body, ToIntFunction<T> map) {
+        return ArrayIntIterator.fromList(body, map).asArray();
+    }
     public int get(int i);
     public int set(int i, int v);
     public int length();
@@ -54,6 +61,10 @@ public interface ArrayInt {
     }
     default ArrayInt reset(ArrayInt other,int seek) {
         this.seek(seek).reset(other); 
+        return this;
+    }
+    default ArrayInt setAll(int v) {
+        for (int i=0;i<length();i++) set(i,v);
         return this;
     }
     default IntUnaryOperator asMap() {
@@ -177,13 +188,18 @@ public interface ArrayInt {
         return false;
     }
     default void forEach(IntConsumer c) {
-        for(int i=0;i<length();i++) c.accept(i);
+        for(int i=0;i<length();i++) c.accept(get(i));
     }
     default ArrayInt swap(int i,int j) {
         set(j,set(i,get(j)));
         return this;
     }
+    default boolean containsIndex(int index) {
+        return 0<=index&&index<length();
+    }
     default int min(int from, int to, IntUnaryOperator op) {
+        if (!containsIndex(from)||to<=from)
+            throw new RuntimeException("min: no value left");
         int min=op.applyAsInt(get(from));
         int retval=0;
         for (int i=from+1;i<to;i++) {
@@ -201,6 +217,8 @@ public interface ArrayInt {
         return min(0,length(),op);
     }
     default int max(int from, int to, IntUnaryOperator op) {
+        if (!containsIndex(from)||to<=from)
+            throw new RuntimeException("max: no value left");
         int max=op.applyAsInt(get(from));
         int retval=0;
         for (int i=from+1;i<to;i++) {
@@ -368,6 +386,22 @@ public interface ArrayInt {
         }
         default ArrayIntIterator append(ArrayIntIterator... iters) {
             return new ConcatIterator(TList.sof(iters).startFrom(this).sfix());
+        }
+        default int min() {
+            if (!hasNext())
+                throw new RuntimeException("min: no value left");
+            int min=next();
+            while (hasNext())
+                min=Integer.min(min,nextInt());
+            return min;
+        }
+        default int max() {
+            if (!hasNext())
+                throw new RuntimeException("min: no value left");
+            int max=next();
+            while (hasNext())
+                max=Integer.max(max,nextInt());
+            return max;
         }
     }
     static class EmptyIterator implements ArrayIntIterator {

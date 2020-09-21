@@ -20,4 +20,13 @@ public class ArrayInt2 {
     public ArrayInt get(int i) {
         return new ArrayInt.Plain(body[i]);
     }
+    public ArrayInt last() {
+        return get(body.length-1);
+    }
+    public ArrayInt last(int i) {
+        return get(body.length-1-i);
+    }
+    public TList<ArrayInt> asList() {
+        return TList.sof(body).map(a->new ArrayInt.Plain(a));
+    }
 }
