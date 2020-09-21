@@ -32,8 +32,18 @@ public class ArrayIntNGTest {
     @Test
     public void testMin() {
         System.out.println(test.TestUtils.methodName(0));
-        int result = arrayInt(3,2,0,4,1).min(0,5,i->i);
+        int result = arrayInt(3,2,0,4,1).min(i->i);
         int expected = 2;
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    
+    @Test
+    public void testMax() {
+        System.out.println(test.TestUtils.methodName(0));
+        int result = arrayInt(3,2,0,4,1).max(i->i);
+        int expected = 3;
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);

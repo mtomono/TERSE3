@@ -7,12 +7,13 @@ package collection;
 
 import static collection.ArrayInt.ArrayIntIterator.concat;
 import static collection.ArrayInt.ArrayIntIterator.one;
+import function.IntBiFunction;
+import function.IntBiPredicate;
 import iterator.Iterators;
 import java.util.AbstractList;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.PrimitiveIterator;
-import java.util.function.Function;
 import java.util.function.IntBinaryOperator;
 import java.util.function.IntConsumer;
 import java.util.function.IntFunction;
@@ -197,43 +198,11 @@ public interface ArrayInt {
     default boolean containsIndex(int index) {
         return 0<=index&&index<length();
     }
-    default int min(int from, int to, IntUnaryOperator op) {
-        if (!containsIndex(from)||to<=from)
-            throw new RuntimeException("min: no value left");
-        int min=op.applyAsInt(get(from));
-        int retval=0;
-        for (int i=from+1;i<to;i++) {
-            if (op.applyAsInt(get(i))<min) {
-                min=op.applyAsInt(get(i));
-                retval=i;
-            }
-        }
-        return retval;
-    }
-    default int min(int seek, IntUnaryOperator op) {
-        return seek>0?min(seek,length(),op):min(0,length()+seek,op);
-    }
     default int min(IntUnaryOperator op) {
-        return min(0,length(),op);
-    }
-    default int max(int from, int to, IntUnaryOperator op) {
-        if (!containsIndex(from)||to<=from)
-            throw new RuntimeException("max: no value left");
-        int max=op.applyAsInt(get(from));
-        int retval=0;
-        for (int i=from+1;i<to;i++) {
-            if (op.applyAsInt(get(i))>max) {
-                max=op.applyAsInt(get(i));
-                retval=i;
-            }
-        }
-        return retval;
-    }
-    default int max(int seek, IntUnaryOperator op) {
-        return seek>0?max(seek,length(),op):max(0,length()+seek,op);
+        return index().iterator().min(i->op.applyAsInt(get(i)));
     }
     default int max(IntUnaryOperator op) {
-        return max(0,length(),op);
+        return index().iterator().max(i->op.applyAsInt(get(i)));
     }
     default ArrayInt tee(IntConsumer c) {
         return map(i->{
@@ -346,10 +315,6 @@ public interface ArrayInt {
             return length;
         }
     }
-    @FunctionalInterface
-    interface IntBiFunction<T> {
-        T apply(int a,int b);
-    }
     public static interface ArrayIntIterator extends PrimitiveIterator.OfInt {
         int maxSize();
         public static <T> ArrayIntIterator fromList(TList<T> list, ToIntFunction<T> f) {
@@ -387,21 +352,28 @@ public interface ArrayInt {
         default ArrayIntIterator append(ArrayIntIterator... iters) {
             return new ConcatIterator(TList.sof(iters).startFrom(this).sfix());
         }
-        default int min() {
-            if (!hasNext())
-                throw new RuntimeException("min: no value left");
-            int min=next();
-            while (hasNext())
-                min=Integer.min(min,nextInt());
-            return min;
+        default int min(IntUnaryOperator op) {
+            return minmax(op,(in,ex)->in<ex);
         }
-        default int max() {
+        default int max(IntUnaryOperator op) {
+            return minmax(op,(in,ex)->in>ex);
+        }
+        default int minmax(IntUnaryOperator op, IntBiPredicate comp) {
             if (!hasNext())
-                throw new RuntimeException("min: no value left");
-            int max=next();
-            while (hasNext())
-                max=Integer.max(max,nextInt());
-            return max;
+                throw new RuntimeException("minmax: no value left");
+            int x=nextInt();
+            int y=op.applyAsInt(x);
+            int retval=x;
+            int value=y;
+            while (hasNext()) {
+                x=nextInt();
+                y=op.applyAsInt(x);
+                if(comp.test(y,value)) {
+                    retval=x;
+                    value=y;
+                }
+            }
+            return retval;
         }
     }
     static class EmptyIterator implements ArrayIntIterator {
