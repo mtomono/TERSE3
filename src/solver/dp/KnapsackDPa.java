@@ -66,7 +66,7 @@ public class KnapsackDPa {
         return new KnapsackDPa(numbers.length(),capacity)
                 .row((i,r,u)->{
                     int x=numbers.get(i-1);
-                    ArrayInt.range(x, capacity+1).forEach(j->u.set(j, arrayInt(r.get(j),r.get(j-x)).filterIter(k->k>0).min(k->k)));
+                    ArrayInt.range(x, capacity+1).forEach(j->arrayInt(r.get(j),r.get(j-x)).filterIter(k->k>0).check(it->it.min(k->k)).ifPresent(k->u.set(j, k)));
                 })
                 .init(a->a.get(0).setAll(-1).set(0,0));
     }

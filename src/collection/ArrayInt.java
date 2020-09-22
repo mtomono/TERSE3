@@ -7,17 +7,20 @@ package collection;
 
 import static collection.ArrayInt.ArrayIntIterator.concat;
 import static collection.ArrayInt.ArrayIntIterator.one;
+import static collection.P.op;
 import function.IntBiFunction;
 import function.IntBiPredicate;
 import iterator.Iterators;
 import java.util.AbstractList;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.OptionalInt;
 import java.util.PrimitiveIterator;
 import java.util.function.IntBinaryOperator;
 import java.util.function.IntConsumer;
 import java.util.function.IntFunction;
 import java.util.function.IntPredicate;
+import java.util.function.IntSupplier;
 import java.util.function.IntUnaryOperator;
 import java.util.function.ToIntFunction;
 import java.util.stream.IntStream;
@@ -359,8 +362,6 @@ public interface ArrayInt {
             return minmax(op,(in,ex)->in>ex);
         }
         default int minmax(IntUnaryOperator op, IntBiPredicate comp) {
-            if (!hasNext())
-                throw new RuntimeException("minmax: no value left");
             int x=nextInt();
             int y=op.applyAsInt(x);
             int retval=x;
@@ -374,6 +375,9 @@ public interface ArrayInt {
                 }
             }
             return retval;
+        }
+        default OptionalInt check(ToIntFunction<ArrayIntIterator> s) {
+            return hasNext()?OptionalInt.of(s.applyAsInt(this)):OptionalInt.empty();
         }
     }
     static class EmptyIterator implements ArrayIntIterator {
