@@ -7,9 +7,10 @@ package collection;
 
 import static collection.ArrayInt.ArrayIntIterator.concat;
 import static collection.ArrayInt.ArrayIntIterator.one;
-import static collection.P.op;
 import function.IntBiFunction;
 import function.IntBiPredicate;
+import static function.IntBiPredicate.gt;
+import static function.IntBiPredicate.lt;
 import iterator.Iterators;
 import java.util.AbstractList;
 import java.util.Iterator;
@@ -20,7 +21,6 @@ import java.util.function.IntBinaryOperator;
 import java.util.function.IntConsumer;
 import java.util.function.IntFunction;
 import java.util.function.IntPredicate;
-import java.util.function.IntSupplier;
 import java.util.function.IntUnaryOperator;
 import java.util.function.ToIntFunction;
 import java.util.stream.IntStream;
@@ -356,10 +356,10 @@ public interface ArrayInt {
             return new ConcatIterator(TList.sof(iters).startFrom(this).sfix());
         }
         default int min(IntUnaryOperator op) {
-            return minmax(op,(in,ex)->in<ex);
+            return minmax(op,lt);
         }
         default int max(IntUnaryOperator op) {
-            return minmax(op,(in,ex)->in>ex);
+            return minmax(op,gt);
         }
         default int minmax(IntUnaryOperator op, IntBiPredicate comp) {
             int x=nextInt();

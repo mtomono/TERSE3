@@ -12,4 +12,10 @@ package function;
 @FunctionalInterface
 public interface IntBiPredicate {
     public boolean test(int a, int b);
+    static public IntBiPredicate lt=(a,b)->a<b;
+    static public IntBiPredicate gt=(a,b)->a>b;
+    static public IntBiPredicate le=(a,b)->a<=b;
+    static public IntBiPredicate ge=(a,b)->a>=b;
+    static public IntBiPredicate eq=(a,b)->a==b;
+    static public IntBiPredicate ne=(a,b)->a!=b;
 }
