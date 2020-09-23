@@ -17,6 +17,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.OptionalInt;
 import java.util.PrimitiveIterator;
+import java.util.function.Function;
 import java.util.function.IntBinaryOperator;
 import java.util.function.IntConsumer;
 import java.util.function.IntFunction;
@@ -212,6 +213,9 @@ public interface ArrayInt {
             c.accept(i);
             return i;
         });
+    }
+    default <T> T transform(Function<ArrayInt,T> f) {
+        return f.apply(this);
     }
     
     static class Plain implements ArrayInt {
