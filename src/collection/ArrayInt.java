@@ -356,6 +356,9 @@ public interface ArrayInt {
         default ArrayIntIterator filter(IntPredicate pred) {
             return new FilterWrap(this,pred);
         }
+        default void forEach(IntConsumer cons) {
+            while(hasNext()) cons.accept(nextInt());
+        }
         default ArrayIntIterator append(ArrayIntIterator... iters) {
             return new ConcatIterator(TList.sof(iters).startFrom(this).sfix());
         }
@@ -619,8 +622,10 @@ public interface ArrayInt {
         protected void findNext() {
             while (body.hasNext()) {
                 int i=body.nextInt();
-                if (pred.test(i))
+                if (pred.test(i)) {
                     nextFound(i);
+                    return;
+                }
             }
         }
         @Override

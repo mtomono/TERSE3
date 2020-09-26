@@ -29,4 +29,7 @@ public class ArrayInt2 {
     public TList<ArrayInt> asList() {
         return TList.sof(body).map(a->new ArrayInt.Plain(a));
     }
+    public TList<TList<Integer>> asList2() {
+        return asList().map(a->a.asList());
+    }
 }
