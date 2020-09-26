@@ -5,20 +5,20 @@
  */
 package solver.dp;
 
-import collection.TList;
+import collection.ArrayInt;
+import static collection.ArrayInt.arrayInt;
+import collection.ArrayInt2;
 import static org.testng.Assert.*;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import static shape.ShapeUtil.p2i;
-import shape.TPoint2i;
 
 /**
  *
  * @author masao
  */
-public class NumberOfItemsLeftNGTest {
+public class CsumLimitedANGTest {
     
-    public NumberOfItemsLeftNGTest() {
+    public CsumLimitedANGTest() {
     }
 
     @BeforeMethod
@@ -28,33 +28,36 @@ public class NumberOfItemsLeftNGTest {
     @Test
     public void testBasic36() {
         System.out.println(test.TestUtils.methodName(0));
-        TList<TPoint2i> tested = TList.sof(5,2,1,7,6).pair(TList.sof(2,2,1,2,2),(a,b)->p2i(a,b));
-        TList<Integer> result = KnapsackDP.numberOfItemsLeft(tested,36).psolve();
-        System.out.println(KnapsackDP.numberOfItemsLeft(tested,36).psolvew().toWrappedString());
+        ArrayInt numbers = arrayInt(5,2,1,7,6);
+        ArrayInt limits = arrayInt(2,2,1,2,2);
+        ArrayInt2 result = KnapsackDPa.csumLimited(numbers,limits,36).solvePackages();
+        System.out.println(KnapsackDPa.csumLimited(numbers,limits,36).solvePackages().asList().map(a->a.asList()).toWrappedString());
         boolean expected = true;
-        System.out.println("result  : "+result);
+        System.out.println("result  : "+result.last().last());
         System.out.println("expected: "+expected);
-        assertEquals(result.last()>=0, expected);
+        assertEquals(result.last().last()>=0, expected);
     }
     @Test
     public void testBasic37() {
         System.out.println(test.TestUtils.methodName(0));
-        TList<TPoint2i> tested = TList.sof(5,2,1,7,6).pair(TList.sof(2,0,1,2,2),(a,b)->p2i(a,b));
-        TList<Integer> result = KnapsackDP.numberOfItemsLeft(tested,39).psolve();
+        ArrayInt numbers = arrayInt(5,2,1,7,6);
+        ArrayInt limits = arrayInt(2,0,1,2,2);
+        ArrayInt2 result = KnapsackDPa.csumLimited(numbers,limits,39).solvePackages();
         boolean expected = false;
-        System.out.println("result  : "+result);
+        System.out.println("result  : "+result.last().last());
         System.out.println("expected: "+expected);
-        assertEquals(result.last()>=0, expected);
+        assertEquals(result.last().last()>=0, expected);
     }
     @Test
     public void testBasic21() {
         System.out.println(test.TestUtils.methodName(0));
-        TList<TPoint2i> tested = TList.sof(5,2,1,8,45).pair(TList.sof(2,0,0,2,2),(a,b)->p2i(a,b));
-        TList<Integer> result = KnapsackDP.numberOfItemsLeft(tested,21).psolve();
-        System.out.println(KnapsackDP.numberOfItemsLeft(tested,21).psolvew().toWrappedString());
+        ArrayInt numbers = arrayInt(5,2,1,8,45);
+        ArrayInt limits = arrayInt(2,0,0,2,2);
+        ArrayInt2 result = KnapsackDPa.csumLimited(numbers,limits,21).solvePackages();
+        System.out.println(KnapsackDPa.csumLimited(numbers,limits,21).solvePackages().asList2().toWrappedString());
         boolean expected = true;
-        System.out.println("result  : "+result);
+        System.out.println("result  : "+result.last().last());
         System.out.println("expected: "+expected);
-        assertEquals(result.last()>=0, expected);
+        assertEquals(result.last().last()>=0, expected);
     }
 }

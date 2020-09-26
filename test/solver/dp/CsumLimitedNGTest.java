@@ -16,9 +16,9 @@ import shape.TPoint2i;
  *
  * @author masao
  */
-public class NumberOfItemsLeftNGTest {
+public class CsumLimitedNGTest {
     
-    public NumberOfItemsLeftNGTest() {
+    public CsumLimitedNGTest() {
     }
 
     @BeforeMethod

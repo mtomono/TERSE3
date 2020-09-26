@@ -8,6 +8,7 @@ package solver.dp;
 import collection.ArrayInt;
 import static collection.ArrayInt.arrayInt;
 import collection.ArrayInt2;
+import debug.Te;
 import static java.lang.Integer.max;
 import java.util.function.Consumer;
 
@@ -66,8 +67,18 @@ public class KnapsackDPa {
         return new KnapsackDPa(numbers.length(),capacity)
                 .row((i,r,u)->{
                     int x=numbers.get(i-1);
-                    ArrayInt.range(x, capacity+1).forEach(j->arrayInt(r.get(j),r.get(j-x)).filterIter(k->k>0).check(it->it.min(k->k)).ifPresent(k->u.set(j, k)));
+                    ArrayInt.range(x, capacity+1).forEach(j->arrayInt(r.get(j),r.get(j-x)+1).filterIter(k->k>0).check(it->it.min(k->k)).ifPresent(k->u.set(j, k)));
                 })
                 .init(a->a.get(0).setAll(-1).set(0,0));
+    }
+    static public KnapsackDPa csumLimited(ArrayInt numbers, ArrayInt limits, int capacity) {
+        return new KnapsackDPa(numbers.length(),capacity)
+                .row((i,r,u)->{
+                    int x=numbers.get(i-1);
+                    int l=limits.get(i-1);
+                    ArrayInt.range(0,capacity+1).filter(j->r.get(j)>=0).forEach(j->u.set(j,l));
+                    ArrayInt.range(x,capacity+1).filterIter(j->!(r.get(j)>=0)).filter(j->u.get(j-x)>0).forEach(j->u.set(j,u.get(j-x)-1));
+                })
+                .init(a->a.get(0).setAll(-1).set(0, 0));
     }
 }
