@@ -54,7 +54,7 @@ public class TspGreedyT {
         return grapha.get(i,j);
     }
     public TList<Integer> solve() {
-        route.index().seek(-1).forEach(i->route.seek(i+1).swap(0,route.seek(i+1).min(j->distance(i,j))));
+        route.index().seek(-1).forEach(i->route.seek(i+1).swap(0,route.seek(i+1).minIndex(j->distance(i,j))));
         return route.asList();
     }
 }
