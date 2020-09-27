@@ -5,20 +5,21 @@
  */
 package solver.dp;
 
+import collection.ArrayInt;
+import static collection.ArrayInt.arrayInt;
+import collection.ArrayInt2;
 import collection.TList;
 import static org.testng.Assert.*;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import static shape.ShapeUtil.p2i;
-import shape.TPoint2i;
 
 /**
  *
  * @author masao
  */
-public class LisNGTest {
+public class LisANGTest {
     
-    public LisNGTest() {
+    public LisANGTest() {
     }
 
     @BeforeMethod
@@ -28,12 +29,13 @@ public class LisNGTest {
     @Test
     public void testBasic36() {
         System.out.println(test.TestUtils.methodName(0));
-        TList<Integer> tested = TList.sof(6,2,3,7,6);
-        TList<Integer> result = KnapsackDP.lis(tested).psolve();
-        Integer expected = 3;
-        System.out.println("result  : "+result);
+        ArrayInt tested = arrayInt(6,2,3,7,6);
+        ArrayInt2 result = KnapsackDPa.lis(tested).solvePackages();
+        int expected = 3;
+        System.out.println(result.asList2().toWrappedString());
+        System.out.println("result  : "+result.last().max(i->i));
         System.out.println("expected: "+expected);
-        assertEquals(result.max(i->i).get(), expected);
+        assertEquals(result.last().max(i->i), expected);
     }
     @Test
     public void testBasic37() {

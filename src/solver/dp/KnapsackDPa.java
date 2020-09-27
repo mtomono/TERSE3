@@ -67,7 +67,7 @@ public class KnapsackDPa {
         return new KnapsackDPa(numbers.length(),capacity)
                 .row((i,r,u)->{
                     int x=numbers.get(i-1);
-                    ArrayInt.range(x, capacity+1).forEach(j->arrayInt(r.get(j),r.get(j-x)+1).filterIter(k->k>0).check(it->it.min(k->k)).ifPresent(k->u.set(j, k)));
+                    ArrayInt.range(x, capacity+1).forEach(j->arrayInt(r.get(j),r.get(j-x)+1).filterIter(k->k>0).checkEmpty(it->it.min(k->k)).ifPresent(k->u.set(j, k)));
                 })
                 .init(a->a.get(0).setAll(-1).set(0,0));
     }
@@ -76,9 +76,14 @@ public class KnapsackDPa {
                 .row((i,r,u)->{
                     int x=numbers.get(i-1);
                     int l=limits.get(i-1);
-                    ArrayInt.range(0,capacity+1).filter(j->r.get(j)>=0).forEach(j->u.set(j,l));
+                    ArrayInt.range(0,capacity+1).filterIter(j->r.get(j)>=0).forEach(j->u.set(j,l));
                     ArrayInt.range(x,capacity+1).filterIter(j->!(r.get(j)>=0)).filter(j->u.get(j-x)>0).forEach(j->u.set(j,u.get(j-x)-1));
                 })
                 .init(a->a.get(0).setAll(-1).set(0, 0));
+    }
+    static public KnapsackDPa lis(ArrayInt numbers) {
+        return new KnapsackDPa(numbers.length()-1,numbers.length()-1)
+                .row((i,r,u)->ArrayInt.range(0, i).forEach(j->u.set(i, numbers.get(j)<numbers.get(i)?max(u.get(i),r.get(j)+1):u.get(i))))
+                .init(a->a.get(0).setAll(1));
     }
 }
