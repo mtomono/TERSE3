@@ -32,7 +32,7 @@ public class ArrayIntNGTest {
     @Test
     public void testMin() {
         System.out.println(test.TestUtils.methodName(0));
-        int result = arrayInt(3,2,0,4,1).min(i->i);
+        int result = arrayInt(3,2,0,4,1).minIndex(i->i);
         int expected = 2;
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
@@ -42,7 +42,7 @@ public class ArrayIntNGTest {
     @Test
     public void testMax() {
         System.out.println(test.TestUtils.methodName(0));
-        int result = arrayInt(3,2,0,4,1).max(i->i);
+        int result = arrayInt(3,2,0,4,1).maxIndex(i->i);
         int expected = 3;
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
@@ -154,6 +154,16 @@ public class ArrayIntNGTest {
         System.out.println(test.TestUtils.methodName(0));
         TList<Integer> result = arrayInt(0,1,2,3,4).map(i->i+1).asList();
         TList<Integer> expected = TList.sofi(1,2,3,4,5);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    
+    @Test
+    public void testFilterIter() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> result = arrayInt(0,1,2,3,4).filterIter(i->i%2==0).asArray().asList();
+        TList<Integer> expected = TList.sofi(0,2,4);
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
