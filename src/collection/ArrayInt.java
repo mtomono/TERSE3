@@ -7,6 +7,7 @@ package collection;
 
 import static collection.ArrayInt.ArrayIntIterator.concat;
 import static collection.ArrayInt.ArrayIntIterator.one;
+import static collection.c.i2l;
 import function.IntBiFunction;
 import function.IntBiPredicate;
 import static function.IntBiPredicate.gt;
@@ -104,7 +105,7 @@ public interface ArrayInt {
         return iterator().asArray();
     }
     default TList<Integer> asList() {
-        return TList.set(i->ArrayInt.this.get(i),length());
+        return TList.set(iterator());
     }
     default ArrayInt subArray(int from, int to) {
         return new SubArray(this,from,to);
@@ -165,7 +166,7 @@ public interface ArrayInt {
         return accumFromStartIter(start,op).asArray();
     }
     default ArrayInt filter(IntPredicate pred) {
-        return filterIter(pred).asArray();
+        return new Filter(this,pred);
     }
     default boolean forAll(IntPredicate pred) {
         for (int i=0;i<length();i++)
@@ -202,11 +203,17 @@ public interface ArrayInt {
     default boolean containsIndex(int index) {
         return 0<=index&&index<length();
     }
-    default int min(IntUnaryOperator op) {
+    default int minIndex(IntUnaryOperator op) {
         return index().iterator().min(i->op.applyAsInt(get(i)));
     }
-    default int max(IntUnaryOperator op) {
+    default int maxIndex(IntUnaryOperator op) {
         return index().iterator().max(i->op.applyAsInt(get(i)));
+    }
+    default int min(IntUnaryOperator op) {
+        return iterator().min(op);
+    }
+    default int max(IntUnaryOperator op) {
+        return iterator().max(op);
     }
     default ArrayInt tee(IntConsumer c) {
         return map(i->{
@@ -302,6 +309,30 @@ public interface ArrayInt {
             return body.length();
         }
     }
+    static class Filter implements ArrayInt {
+        ArrayInt body;
+        IntPredicate pred;
+        public Filter(ArrayInt body,IntPredicate pred) {
+            this.body=body;
+            this.pred=pred;
+        }
+        @Override
+        public ArrayIntIterator iterator() {
+            return body.filterIter(pred);
+        }
+        @Override
+        public int get(int index) {
+            return iterator().skip(index).nextInt();
+        }
+        @Override
+        public int set(int i, int v) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+        @Override
+        public int length() {
+            return iterator().count();
+        }
+    }
     static class Range implements ArrayInt {
         int from;
         int length;
@@ -339,10 +370,19 @@ public interface ArrayInt {
         public static ArrayIntIterator empty() {
             return new EmptyIterator();
         }
+        default int count() {
+            int retval=0;
+            for (;hasNext();nextInt()) retval++;
+            return retval;
+        }
         default int sum() {
             int retval=0;
             while(hasNext()) retval+=nextInt();
             return retval;
+        }
+        default ArrayIntIterator skip(int n) {
+            for (int i=0;i<n;i++) nextInt();
+            return this;
         }
         default ArrayInt asArray() {
             ArrayInt retval=new Plain(new int[maxSize()]);
@@ -383,7 +423,7 @@ public interface ArrayInt {
             }
             return retval;
         }
-        default OptionalInt check(ToIntFunction<ArrayIntIterator> s) {
+        default OptionalInt checkEmpty(ToIntFunction<ArrayIntIterator> s) {
             return hasNext()?OptionalInt.of(s.applyAsInt(this)):OptionalInt.empty();
         }
     }
