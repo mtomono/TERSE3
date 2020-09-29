@@ -40,11 +40,11 @@ public class LisANGTest {
     @Test
     public void testBasic37() {
         System.out.println(test.TestUtils.methodName(0));
-        TList<Integer> tested = TList.sof(5,12,3,8,14,17);
-        TList<Integer> result = KnapsackDP.lis(tested).psolve();
-        Integer expected = 4;
-        System.out.println("result  : "+result);
+        ArrayInt tested = arrayInt(5,12,3,8,14,17);
+        ArrayInt2 result = KnapsackDPa.lis(tested).solvePackages();
+        int expected = 4;
+        System.out.println("result  : "+result.last().max(i->i));
         System.out.println("expected: "+expected);
-        assertEquals(result.max(i->i).get(), expected);
+        assertEquals(result.last().max(i->i), expected);
     }
 }
