@@ -41,7 +41,7 @@ public class Parsers {
         return s-> {
             if (!f.test(s.peek()))
                 throw new ParseException(s.explain("Reached unexpected item"));
-            s.next();
+            s.seek();
             return null;
         };
     }

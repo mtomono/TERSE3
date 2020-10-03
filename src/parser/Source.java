@@ -24,7 +24,7 @@ import java.util.Objects;
  * @param <T>
  */
 public abstract class Source<S, T> {
-    int pos;
+    public int pos;
     final public S src;
     abstract public Source<S, T> clone();
     abstract public T peek() throws ParseException;
@@ -55,7 +55,7 @@ public abstract class Source<S, T> {
         return hash;
     }
 
-    public void next() {
+    public void seek() {
         pos++;
     }
     public void revert(Source<S, T> s) throws ParseException{
