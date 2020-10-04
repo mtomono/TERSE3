@@ -178,7 +178,7 @@ public class KnapsackNGTest {
         assertEquals(result.last(), expected);
     }
 
-    @Test
+    @Test(groups={"performance"})
     public void testKnapsackScaleRandom() {
         Clock p = new Clock();
         p.record();

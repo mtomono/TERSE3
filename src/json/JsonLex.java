@@ -5,10 +5,8 @@
  */
 package json;
 
-import debug.Te;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import static json.JsonLex.TokenTypes.isIgnored;
 import parser.Lexer;
 import parser.ParseException;
 import parser.Source;
@@ -38,9 +36,6 @@ public class JsonLex extends Lexer{
         private TokenTypes(boolean ignored) {
             this.ignored=ignored;
         }
-        static boolean isIgnored(int type) {
-            return values()[type].ignored;
-        }
     }
     static Pattern spaces = Pattern.compile("[ \t\f\r\n]+");
     static Pattern string = Pattern.compile("\"[^\"]*\"");
@@ -55,22 +50,12 @@ public class JsonLex extends Lexer{
         retval.pos=pos;
         return retval;
     }
-    
     @Override
-    public void findNext() throws ParseException {
-        Token retval;
-        while (pos<src.length()-1) {
-            if(isIgnored((retval=peek()).type)) 
-                ignore(retval);
-            else {
-                nextFound(retval);
-                return;
-            }
-        }
-    }
-    
+    public boolean isIgnored(Token token) {
+        return TokenTypes.values()[token.type].ignored;
+    }    
     @Override
-    public Token peek() throws ParseException {
+    public Token nextToken() throws ParseException {
         char at=src.charAt(pos);
         switch(at) {
             case '{': return new Token(TokenTypes.BRACE.ordinal(),pos,pos+1);

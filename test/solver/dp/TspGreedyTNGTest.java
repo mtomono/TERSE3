@@ -20,7 +20,7 @@ public class TspGreedyTNGTest {
     
     public TspGreedyTNGTest() {
     }
-    @Test
+    @Test(groups={"performance"})
     public void testScaleR() {
         Clock p = new Clock();
         p.record();

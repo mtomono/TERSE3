@@ -5,6 +5,8 @@
  */
 package parser;
 
+import java.util.function.Predicate;
+
 /**
  *
  * @author masao
@@ -12,15 +14,28 @@ package parser;
 abstract public class Lexer extends Source<String,Token> {
     protected Token next;
     protected boolean hasNext;
-    abstract public void findNext() throws ParseException;
+    abstract public boolean isIgnored(Token token);
+    abstract public Token nextToken() throws ParseException;
+    static public Parser<String,Token,Token> satisfy(Predicate<Token> pred) {
+        return s->{
+            Token retval=s.peek();
+            if (!pred.test(retval))
+                throw new ParseException(s.explain("Reached unexpected item"));
+            return retval;
+        };
+    }
     public Lexer(String src) {
         super(src);
         hasNext=false;
     }
-    public boolean hasNext() throws ParseException{
+    public boolean hasNext() throws ParseException {
         hasNext=false;
         findNext();
         return hasNext;
+    }
+    @Override
+    public Token peek() throws ParseException {
+        return next();
     }
     public Token next() throws ParseException {
         if (!hasNext&&!hasNext())
@@ -28,10 +43,16 @@ abstract public class Lexer extends Source<String,Token> {
         pos=next.end;
         return next;            
     }
-    public Token nextNoSeek() throws ParseException {
-        if (!hasNext)
-            throw new ParseException("no next symbol");
-        return next;            
+    public void findNext() throws ParseException {
+        Token retval;
+        while (pos<src.length()-1) {
+            if(isIgnored(retval=nextToken())) 
+                ignore(retval);
+            else {
+                nextFound(retval);
+                return;
+            }
+        }
     }
     public void nextFound(Token next) {
         hasNext=true;
@@ -39,11 +60,6 @@ abstract public class Lexer extends Source<String,Token> {
     }
     public void ignore(Token next) {
         pos=next.end;
-    }
-    @Override
-    public void seek() {
-        if (hasNext)
-            pos=next.end;
     }
     @Override
     public String sub(int... sec) {

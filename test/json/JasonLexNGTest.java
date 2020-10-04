@@ -20,24 +20,33 @@ public class JasonLexNGTest {
     @Test
     public void testClone() {
     }
-
-    @Test
-    public void testLex() throws Exception {
-        System.out.println(test.TestUtils.methodName(0));
-        String src="  {\"parameter0\":\"value0\" ,\"parameter1\":\"value1\" ,\"parameter2\":\"value2\" } ";
-        for(int i=0;i<1000000;i++) {
-            JsonLex lexer=new JsonLex(src);
-            while (lexer.hasNext()) lexer.toString(lexer.next());
-        }
-        JsonLex lexer=new JsonLex(src);
-        while (lexer.hasNext()) System.out.println(lexer.toString(lexer.next()));
-        /*
-        int result = 0;
-        int expected = 0;
-        System.out.println("result  : " + result);
-        System.out.println("expected: " + expected);
-        assertEquals(result, expected);
-        */
-    }
     
+    public String lex() throws Exception {
+        String src="  {\"parameter0\":\"value0\" ,\"parameter1\":\"value1\" ,\"parameter2\":\"value2\" } ";
+        JsonLex lexer=new JsonLex(src);
+        StringBuilder retval=new StringBuilder();
+        while (lexer.hasNext()) retval.append(lexer.toString(lexer.peek())).append("\n");
+        return retval.toString();
+    }
+    @Test
+    public void testOneLexNoPrint() throws Exception {
+        System.out.println(test.TestUtils.methodName(0));
+        lex();
+    }
+    @Test
+    public void testOneLex() throws Exception {
+        System.out.println(test.TestUtils.methodName(0));
+        System.out.println(lex());
+    }
+    @Test(groups={"performance"})
+    public void testMLex() throws Exception {
+        System.out.println(test.TestUtils.methodName(0));
+        for(int i=0;i<1000000;i++) lex();
+    }
+    @Test(groups={"performance"})
+    public void testLex() throws Exception {
+        testOneLex();
+        testMLex();
+        testOneLex();
+    }
 }

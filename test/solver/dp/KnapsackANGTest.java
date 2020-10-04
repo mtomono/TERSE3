@@ -83,7 +83,7 @@ public class KnapsackANGTest {
         assertEquals(result, (int)expected);
     }
 
-    @Test
+    @Test(groups={"performance"})
     public void testKnapsackArrayScaleRandom() {
         Clock p = new Clock();
         p.record();
