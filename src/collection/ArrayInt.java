@@ -7,7 +7,7 @@ package collection;
 
 import static collection.ArrayInt.ArrayIntIterator.concat;
 import static collection.ArrayInt.ArrayIntIterator.one;
-import static collection.c.i2l;
+import debug.Te;
 import function.IntBiFunction;
 import function.IntBiPredicate;
 import static function.IntBiPredicate.gt;
@@ -188,9 +188,12 @@ public interface ArrayInt {
     default boolean isDescendingOrEqual() {
         return diff((a,b)->b-a).forAll(i->i<=0);
     }
+    default boolean contains(int v) {
+        return exists(i->i==v);
+    }
     default boolean exists(IntPredicate pred) {
         for (int i=0;i<length();i++)
-            if (pred.test(i)) return true;
+            if (pred.test(get(i))) return true;
         return false;
     }
     default void forEach(IntConsumer c) {
