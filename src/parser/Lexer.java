@@ -16,17 +16,21 @@ abstract public class Lexer extends Source<String,Token> {
     protected boolean hasNext;
     abstract public boolean isIgnored(Token token);
     abstract public Token nextToken() throws ParseException;
-    static public Parser<String,Token,Token> satisfy(Predicate<Token> pred) {
+    static public Parser<String,Token,Token> is(Predicate<Token> pred) {
         return s->{
             Token retval=s.peek();
             if (!pred.test(retval))
-                throw new ParseException(s.explain("Reached unexpected item"));
+                throw new ParseException(s.explain("Reached unexpected item :"+retval));
             return retval;
         };
     }
     public Lexer(String src) {
         super(src);
         hasNext=false;
+    }
+    public Lexer reset() {
+        pos=0;
+        return this;
     }
     public boolean hasNext() throws ParseException {
         hasNext=false;
@@ -35,6 +39,8 @@ abstract public class Lexer extends Source<String,Token> {
     }
     @Override
     public Token peek() throws ParseException {
+        if (!hasNext())
+            throw new ParseException("reached end of source");
         return next();
     }
     public Token next() throws ParseException {
@@ -45,7 +51,7 @@ abstract public class Lexer extends Source<String,Token> {
     }
     public void findNext() throws ParseException {
         Token retval;
-        while (pos<src.length()-1) {
+        while (pos<src.length()) {
             if(isIgnored(retval=nextToken())) 
                 ignore(retval);
             else {

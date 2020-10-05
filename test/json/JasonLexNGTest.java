@@ -22,10 +22,16 @@ public class JasonLexNGTest {
     }
     
     public String lex() throws Exception {
-        String src="  {\"parameter0\":\"value0\" ,\"parameter1\":\"value1\" ,\"parameter2\":\"value2\" } ";
+        String src="  {\"parameter0\":\"value0\" ,"
+                + "\"parameter1\":\"value1\" ,"
+                + "\"parameter2\":\"value2\","
+                + "\"parameter3\": true, "
+                + "\"parameter4\" :false,  "
+                + "\"parameter5\":null, "
+                + "\"parameter6\":-1043.25}";
         JsonLex lexer=new JsonLex(src);
         StringBuilder retval=new StringBuilder();
-        while (lexer.hasNext()) retval.append(lexer.toString(lexer.peek())).append("\n");
+        while (lexer.hasNext()) retval.append(lexer.toString(lexer.next())).append("\n");
         return retval.toString();
     }
     @Test

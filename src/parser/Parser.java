@@ -207,7 +207,7 @@ public interface Parser<S, T, U> {
         return s-> {
             U x = parse(s);
             if (!p.test(x))
-                throw new ParseException("Hit exception");
+                throw new ParseException("accept: tested negative");
             return x;
         };
     }
