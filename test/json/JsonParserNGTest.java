@@ -29,7 +29,7 @@ public class JsonParserNGTest {
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
     }
-    @Test
+    @Test(groups={"performance"})
     public void testParseJsonxmany() throws ParseException {
         System.out.println(test.TestUtils.methodName(0));
         String src="{\"m0\":true , \"m1\":\"a\", \"m2\":\"bb\", \"m3\":\"ccc\"}";
