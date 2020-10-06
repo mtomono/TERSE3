@@ -23,7 +23,7 @@ public class JsonParserNGTest {
         System.out.println(test.TestUtils.methodName(0));
         String src="{\"m0\":true , \"m1\":\"a\", \"m2\":\"bb\", \"m3\":\"ccc\"}";
         JsonLex lexer=new JsonLex(src);
-        String result = JsonParser.create("\"m2\"").parse(lexer).substring();
+        String result = JsonParser.get("\"m2\"").parse(lexer).substring();
         String expected = "\"bb\"";
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
@@ -35,7 +35,7 @@ public class JsonParserNGTest {
         String src="{\"m0\":true , \"m1\":\"a\", \"m2\":\"bb\", \"m3\":\"ccc\"}";
         JsonLex lexer=new JsonLex(src);
         String result="";
-        for(int i=0;i<1000000;i++) result=JsonParser.create("\"m2\"").parse(lexer.reset()).substring();
+        for(int i=0;i<1000000;i++) result=JsonParser.get("\"m2\"").parse(lexer.reset(src)).substring();
         String expected = "\"bb\"";
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);

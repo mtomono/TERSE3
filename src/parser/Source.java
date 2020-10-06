@@ -25,7 +25,7 @@ import java.util.Objects;
  */
 public abstract class Source<S, T> {
     public int pos;
-    final public S src;
+    public S src;
     abstract public Source<S, T> clone();
     abstract public T peek() throws ParseException;
     abstract public S sub(int... sec);
@@ -38,6 +38,11 @@ public abstract class Source<S, T> {
         this.src = src;
     }
 
+    public Source<S,T> reset(S src) {
+        pos=0;
+        this.src=src;
+        return this;
+    }
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Source)) {

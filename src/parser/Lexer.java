@@ -28,20 +28,16 @@ abstract public class Lexer extends Source<String,Token> {
         super(src);
         hasNext=false;
     }
-    public Lexer reset() {
-        pos=0;
-        return this;
-    }
-    public boolean hasNext() throws ParseException {
-        hasNext=false;
-        findNext();
-        return hasNext;
-    }
     @Override
     public Token peek() throws ParseException {
         if (!hasNext())
             throw new ParseException("reached end of source");
         return next();
+    }
+    public boolean hasNext() throws ParseException {
+        hasNext=false;
+        findNext();
+        return hasNext;
     }
     public Token next() throws ParseException {
         if (!hasNext&&!hasNext())

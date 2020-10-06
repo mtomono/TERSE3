@@ -23,7 +23,7 @@ import parser.Token;
  * @author masao
  */
 public class JsonParser {
-    static Parser<String,Token,Token> create(String targetKey) {
+    static Parser<String,Token,Token> get(String targetKey) {
         Parser<String,Token,Token> value =is(STRING,TRUE,FALSE,NULL,NUMBER);
         Parser<String,Token,Token> target = is(STRING).accept(t->t.substring().equals(targetKey)).next(is(COLON)).next(value);
         Parser<String,Token,Token> skipped = is(STRING).except(t->t.substring().equals(targetKey)).tr().next(is(COLON)).next(value);
