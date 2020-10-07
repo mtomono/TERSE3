@@ -7,7 +7,7 @@ package json;
 
 import collection.ArrayInt;
 import collection.TList;
-import debug.Te;
+import java.math.BigDecimal;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import parser.BasicRegex;
@@ -46,6 +46,36 @@ public class JsonLex extends Lexer{
         private TokenTypes(boolean ignored) {
             this.ignored=ignored;
         }
+    }
+    static public boolean asBoolean(Token t) {
+        switch(TokenTypes.values()[t.type]) {
+            case TRUE: return true;
+            case FALSE: return false;
+            case STRING: {
+                if (t.substring().equals("true")) return true; 
+                if (t.substring().equals("false")) return false;
+            }
+        }
+        throw new RuntimeException("unexpected value occured");
+    }
+    static public String asString(Token t) {
+        if (t.type==TokenTypes.STRING.ordinal()) return t.stripQuote();
+        return t.substring();
+    }
+    static public int asInt(Token t) {
+        if (t.type==TokenTypes.STRING.ordinal()) return Integer.parseInt(t.stripQuote());
+        if (t.type==TokenTypes.NUMBER.ordinal()) return Integer.parseInt(t.substring());
+        throw new RuntimeException("unexpected value occured");
+    }
+    static public double asDouble(Token t) {
+        if (t.type==TokenTypes.STRING.ordinal()) return Double.parseDouble(t.stripQuote());
+        if (t.type==TokenTypes.NUMBER.ordinal()) return Double.parseDouble(t.substring());
+        throw new RuntimeException("unexpected value occured");
+    }
+    static public BigDecimal asBigDecimal(Token t) {
+        if (t.type==TokenTypes.STRING.ordinal()) return new BigDecimal(t.stripQuote());
+        if (t.type==TokenTypes.NUMBER.ordinal()) return new BigDecimal(t.substring());
+        throw new RuntimeException("unexpected value occured");
     }
     public static Parser<String,Token,Token> is(TokenTypes... types) {
         ArrayInt typesA=ArrayInt.set(TList.sof(types).map(ti->ti.ordinal()));

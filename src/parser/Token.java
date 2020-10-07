@@ -23,6 +23,9 @@ public class Token {
     public String substring() {
         return src.substring(start,end);
     }
+    public String stripQuote() {
+        return src.substring(start+1,end-1);
+    }
     public String toString() {
         return String.format("(%d %d %d : %s )", type,start,end,substring());
     }

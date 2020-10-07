@@ -23,8 +23,8 @@ public class JsonParserNGTest {
         System.out.println(test.TestUtils.methodName(0));
         String src="{\"m0\":true , \"m1\":\"a\", \"m2\":\"bb\", \"m3\":\"ccc\"}";
         JsonLex lexer=new JsonLex(src);
-        String result = JsonParser.get("\"m2\"").parse(lexer).substring();
-        String expected = "\"bb\"";
+        String result = JsonParser.get("m2",JsonLex::asString).parse(lexer);
+        String expected = "bb";
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
@@ -32,11 +32,11 @@ public class JsonParserNGTest {
     @Test(groups={"performance"})
     public void testParseJsonxmany() throws ParseException {
         System.out.println(test.TestUtils.methodName(0));
-        String src="{\"m0\":true , \"m1\":\"a\", \"m2\":\"bb\", \"m3\":\"ccc\"}";
-        JsonLex lexer=new JsonLex(src);
+        String json="  {\"ignore1\": 250.5, \"ignore2\": \"NG\" , \"interest\": \"OK\",\"ignore3\": \"NG\" } sa";
+        JsonLex lexer=new JsonLex(json);
         String result="";
-        for(int i=0;i<1000000;i++) result=JsonParser.get("\"m2\"").parse(lexer.reset(src)).substring();
-        String expected = "\"bb\"";
+        for(int i=0;i<1000000;i++) result=JsonParser.get("interest",JsonLex::asString).parse(lexer.reset(json));
+        String expected = "OK";
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);

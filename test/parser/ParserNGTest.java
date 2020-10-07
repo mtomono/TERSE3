@@ -129,6 +129,16 @@ public class ParserNGTest {
         extractor.parse(new StrSource("{ \"ignore1\": \"NG\", \"ignore2\": \"NG\" , \"ignore3\": \"NG\" } "));
     }
 
+    @Test(groups="performance")
+    public void testLoad() throws ParseException {
+        final Parser<String, Character, String> extractor = JsonParserFactory.create("interest");
+        final String json="  {\"ignore1\": 250.5, \"ignore2\": \"NG\" , \"interest\": \"OK\",\"ignore3\": \"NG\" } ";
+        final StrSource src = new StrSource(json);
+        String result = "";
+        for (int i=0;i<1000000/40;i++)
+            result=extractor.parse(src.reset(json));
+        assertEquals(result,"OK");
+    }
     @Test
     public void testJudgeJsonValue() throws ParseException {
         System.out.println(methodName(0));
