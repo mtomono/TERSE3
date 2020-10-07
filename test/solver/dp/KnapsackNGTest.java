@@ -46,7 +46,7 @@ public class KnapsackNGTest {
         assertEquals(result.last(), expected);
     }
 
-    @Test
+    @Test(groups="performance")
     public void testKnapsackLineLarge() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Luggage> tested = TList.of(
