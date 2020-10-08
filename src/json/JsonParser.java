@@ -6,6 +6,7 @@
 package json;
 
 import collection.ArrayInt;
+import collection.P;
 import collection.TList;
 import java.util.function.Function;
 import json.JsonLex.TokenTypes;
@@ -35,6 +36,12 @@ public class JsonParser {
     static <U> Parser<String,Token,U> get(String targetKey, Function<Token,U> f) {
         Parser<String,Token,Token> value =is(STRING,TRUE,FALSE,NULL,NUMBER);
         Parser<String,Token,Token> target = is(STRING).accept(t->asString(t).equals(targetKey)).next(is(COLON)).next(value);
+        Parser<String,Token,Token> skipped = is(STRING).except(t->asString(t).equals(targetKey)).tr().next(is(COLON)).next(value);
+        return is(BRACE).next(many(skipped.next(is(COMMA)))).next(target.apply(f).tor(is(UNBRACE).apply(x->null)));
+    }
+    static <U> Parser<String,Token,U> getx(String targetKey, Function<P<String,Token>,U> f) {
+        Parser<String,Token,Token> value =is(STRING,TRUE,FALSE,NULL,NUMBER);
+        Parser<String,Token,P<String,Token>> target = is(STRING).accept(t->asString(t).equals(targetKey)).next(is(COLON)).next(value.lp());
         Parser<String,Token,Token> skipped = is(STRING).except(t->asString(t).equals(targetKey)).tr().next(is(COLON)).next(value);
         return is(BRACE).next(many(skipped.next(is(COMMA)))).next(target.apply(f).tor(is(UNBRACE).apply(x->null)));
     }

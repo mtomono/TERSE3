@@ -137,6 +137,18 @@ public interface Parser<S, T, U> {
         };
     }
     
+    default <V> Parser<S,T,V> l(BiFunction<S,U,V> f) {
+        return s->{
+            int start = s.pos;
+            U u = parse(s);
+            int end = s.pos;
+            return f.apply(s.sub(start, end),u);
+        };
+    }
+    default Parser<S,T,P<S,U>> lp() {
+        return l((a,b)->P.p(a, b));
+    }
+    
     /**
      * section.
      * @return 

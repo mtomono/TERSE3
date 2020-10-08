@@ -46,34 +46,42 @@ public class JsonLex extends Source<String,Token> implements Iterator<Token> {
             this.ignored=ignored;
         }
     }
+    static String stripQuote(String s) {
+        return s.substring(1,s.length()-1);
+    }
     static public boolean asBoolean(Token t) {
+        String str=t.substring();
         switch(TokenTypes.values()[t.type]) {
             case TRUE: return true;
             case FALSE: return false;
             case STRING: {
-                if (t.substring().equals("true")) return true; 
-                if (t.substring().equals("false")) return false;
+                if (str.equals("true")) return true; 
+                if (str.equals("false")) return false;
             }
         }
         throw new RuntimeException("unexpected value occured");
     }
     static public String asString(Token t) {
-        if (t.type==TokenTypes.STRING.ordinal()) return t.stripQuote();
+        String str=t.substring();
+        if (t.type==TokenTypes.STRING.ordinal()) return stripQuote(str);
         return t.substring();
     }
     static public int asInt(Token t) {
-        if (t.type==TokenTypes.STRING.ordinal()) return Integer.parseInt(t.stripQuote());
-        if (t.type==TokenTypes.NUMBER.ordinal()) return Integer.parseInt(t.substring());
+        String str=t.substring();
+        if (t.type==TokenTypes.STRING.ordinal()) return Integer.parseInt(stripQuote(str));
+        if (t.type==TokenTypes.NUMBER.ordinal()) return Integer.parseInt(str);
         throw new RuntimeException("unexpected value occured");
     }
     static public double asDouble(Token t) {
-        if (t.type==TokenTypes.STRING.ordinal()) return Double.parseDouble(t.stripQuote());
-        if (t.type==TokenTypes.NUMBER.ordinal()) return Double.parseDouble(t.substring());
+        String str=t.substring();
+        if (t.type==TokenTypes.STRING.ordinal()) return Double.parseDouble(stripQuote(str));
+        if (t.type==TokenTypes.NUMBER.ordinal()) return Double.parseDouble(str);
         throw new RuntimeException("unexpected value occured");
     }
     static public BigDecimal asBigDecimal(Token t) {
-        if (t.type==TokenTypes.STRING.ordinal()) return new BigDecimal(t.stripQuote());
-        if (t.type==TokenTypes.NUMBER.ordinal()) return new BigDecimal(t.substring());
+        String str=t.substring();
+        if (t.type==TokenTypes.STRING.ordinal()) return new BigDecimal(stripQuote(str));
+        if (t.type==TokenTypes.NUMBER.ordinal()) return new BigDecimal(str);
         throw new RuntimeException("unexpected value occured");
     }
     static Pattern spaces = Pattern.compile(BasicRegex.spaces);
