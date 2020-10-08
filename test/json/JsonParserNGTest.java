@@ -70,7 +70,7 @@ public class JsonParserNGTest {
         for(int i=0;i<1000000;i++) testTheBestBase();
     }
     /**
-     * history for performance improvement.
+     * war history for performance improvement.
      * The first generation.
      * all of the syntax were described by parse.
      * still this test is available through parser.JsonParserNGTest.testLoad().
