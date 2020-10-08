@@ -37,12 +37,4 @@ public enum TokenType {
     private TokenType(boolean ignored) {
         this.ignored=ignored;
     }
-    static public Parser<String,TokenType,TokenType> is(Predicate<TokenType> pred) {
-        return s->{
-            TokenType retval=s.peek();
-            if (!pred.test(retval))
-                throw new ParseException(s.explain("Reached unexpected item :"+retval));
-            return retval;
-        };
-    }
 }
