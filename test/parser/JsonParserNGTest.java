@@ -13,7 +13,7 @@ import org.testng.annotations.Test;
 import static parser.Parsers.*;
 import static test.TestUtils.methodName;
 
-public class ParserNGTest {
+public class JsonParserNGTest {
 
     public static class JsonParserFactory {
         static final Parser<String, Character, String> boolValue = str("true").or(str("false"));
@@ -44,7 +44,7 @@ public class ParserNGTest {
         }
     }
 
-    public ParserNGTest() {
+    public JsonParserNGTest() {
     }
 
     @BeforeMethod
@@ -129,14 +129,14 @@ public class ParserNGTest {
         extractor.parse(new StrSource("{ \"ignore1\": \"NG\", \"ignore2\": \"NG\" , \"ignore3\": \"NG\" } "));
     }
 
+    final public static String standardJsonTest="  {\"ignore1\": 250.5, \"ignore2\": \"NG\" , \"interest\": \"OK\"    ,\"ignore3\": \"NG\" } ";
     @Test(groups="performance")
     public void testLoad() throws ParseException {
         final Parser<String, Character, String> extractor = JsonParserFactory.create("interest");
-        final String json="  {\"ignore1\": 250.5, \"ignore2\": \"NG\" , \"interest\": \"OK\"    ,\"ignore3\": \"NG\" } ";
-        final StrSource src = new StrSource(json);
+        final StrSource src = new StrSource(standardJsonTest);
         String result = "";
-        for (int i=0;i<1000000/50;i++)
-            result=extractor.parse(src.reset(json));
+        for (int i=0;i<1000000/130;i++)
+            result=extractor.parse(src.reset(standardJsonTest));
         assertEquals(result,"OK");
     }
     @Test

@@ -15,7 +15,7 @@ import parser.Token;
  *
  * @author masao
  */
-public enum TokenTypes {
+public enum TokenType {
     BRACE,
     UNBRACE,
     SQUARE,
@@ -31,15 +31,15 @@ public enum TokenTypes {
     INVALID;
 
     final public boolean ignored;
-    private TokenTypes() {
+    private TokenType() {
         this.ignored=false;
     }
-    private TokenTypes(boolean ignored) {
+    private TokenType(boolean ignored) {
         this.ignored=ignored;
     }
-    static public Parser<String,TokenTypes,TokenTypes> is(Predicate<TokenTypes> pred) {
+    static public Parser<String,TokenType,TokenType> is(Predicate<TokenType> pred) {
         return s->{
-            TokenTypes retval=s.peek();
+            TokenType retval=s.peek();
             if (!pred.test(retval))
                 throw new ParseException(s.explain("Reached unexpected item :"+retval));
             return retval;

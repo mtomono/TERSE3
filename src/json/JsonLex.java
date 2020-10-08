@@ -13,13 +13,13 @@ import java.util.regex.Pattern;
 import parser.BasicRegex;
 import parser.ParseException;
 import parser.Source;
-import static json.TokenTypes.*;
+import static json.TokenType.*;
 
 /**
  *
  * @author masao
  */
-public class JsonLex extends Source<String,TokenTypes> implements Iterator<TokenTypes> {
+public class JsonLex extends Source<String,TokenType> implements Iterator<TokenType> {
     final static boolean IGNORED=true;
 
     static Pattern spaces = Pattern.compile(BasicRegex.spaces);
@@ -29,7 +29,7 @@ public class JsonLex extends Source<String,TokenTypes> implements Iterator<Token
     static Pattern falsep=Pattern.compile("false");
     static Pattern nullp=Pattern.compile("null");
     Matcher matcher;
-    final public Iterator<TokenTypes> ignored;
+    final public Iterator<TokenType> ignored;
     public JsonLex(String src,int pos) {
         super(src);
         this.pos=pos;
@@ -40,12 +40,12 @@ public class JsonLex extends Source<String,TokenTypes> implements Iterator<Token
         this(src,0);
     }
     @Override
-    public Source<String, TokenTypes> clone() {
+    public Source<String, TokenType> clone() {
         JsonLex retval=new JsonLex(src,pos);
         return retval;
     }
     @Override
-    public TokenTypes peek() throws ParseException {
+    public TokenType peek() throws ParseException {
         try {
             return this.next();
         } catch (NoSuchElementException e) {
@@ -61,14 +61,14 @@ public class JsonLex extends Source<String,TokenTypes> implements Iterator<Token
         return pos<src.length();
     }
     @Override
-    public TokenTypes next() {
+    public TokenType next() {
         if (!hasNext())
             throw new NoSuchElementException("reached end of src");
-        TokenTypes retval=nextToken();
+        TokenType retval=nextToken();
         return retval;
     }
     
-    public TokenTypes nextToken() {
+    public TokenType nextToken() {
         char at=src.charAt(pos);
         switch(at) {
             case '{': {pos++;return BRACE;}
