@@ -30,9 +30,9 @@ public class JasonLexNGTest {
                 + "\"parameter4\" :false,  "
                 + "\"parameter5\":null, "
                 + "\"parameter6\":-1043.25}";
-        Iterator<Token> lexer=new JsonLex(src).ignored;
+        Iterator<TokenTypes> lexer=new JsonLex(src).ignored;
         StringBuilder retval=new StringBuilder();
-        while (lexer.hasNext()) retval.append(JsonLex.toString(lexer.next())).append("\n");
+        while (lexer.hasNext()) retval.append(lexer.next()).append("\n");
         return retval.toString();
     }
     @Test

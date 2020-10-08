@@ -132,7 +132,7 @@ public class ParserNGTest {
     @Test(groups="performance")
     public void testLoad() throws ParseException {
         final Parser<String, Character, String> extractor = JsonParserFactory.create("interest");
-        final String json="  {\"ignore1\": 250.5, \"ignore2\": \"NG\" , \"interest\": \"OK\",\"ignore3\": \"NG\" } ";
+        final String json="  {\"ignore1\": 250.5, \"ignore2\": \"NG\" , \"interest\": \"OK\"    ,\"ignore3\": \"NG\" } ";
         final StrSource src = new StrSource(json);
         String result = "";
         for (int i=0;i<1000000/50;i++)

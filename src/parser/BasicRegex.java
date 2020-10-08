@@ -10,7 +10,7 @@ package parser;
  * @author masao
  */
 public class BasicRegex {
-    public static String spaces="[ \t\f\r\n]+";
+    public static String spaces="[ \t\f\r\n]*";
     public static String doubleQuoteStr="\"([^\"]*)\"";
     public static String singleQuoteStr="\'([^\']*)\'";
     public static String integer="[+-]?\\d+";
