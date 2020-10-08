@@ -25,7 +25,7 @@ public class PartialMSumNGTest {
     public void setUpMethod() throws Exception {
     }
     
-    @Test
+    @Test(groups={"performance","ifNeeded"})
     public void testBasic36() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Integer> tested = TList.sof(5,2,1,7,6).pair(TList.sof(2,2,1,2,2),(a,b)->TList.nCopies(a, b)).flatMap(l->l);
