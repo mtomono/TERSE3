@@ -135,7 +135,7 @@ public class JsonParserNGTest {
         final Parser<String, Character, String> extractor = JsonParserFactory.create("interest");
         final StrSource src = new StrSource(standardJsonTest);
         String result = "";
-        for (int i=0;i<1000000/130;i++)
+        for (int i=0;i<1000000/60;i++)
             result=extractor.parse(src.reset(standardJsonTest));
         assertEquals(result,"OK");
     }
