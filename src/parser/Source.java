@@ -29,9 +29,6 @@ public abstract class Source<S, T> {
     abstract public Source<S, T> clone();
     abstract public T peek() throws ParseException;
     abstract public S sub(int... sec);
-    abstract public T get(int at) throws ParseException;
-    abstract public S rest();
-    abstract public void forward(int at);
 
     public Source(S src) {
         this.pos=0;

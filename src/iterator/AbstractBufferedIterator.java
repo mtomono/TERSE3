@@ -47,8 +47,7 @@ abstract public class AbstractBufferedIterator<T> implements Iterator<T> {
 
     @Override
     public T next() {
-        prepare();
-        if (!has) 
+        if (!has&&!hasNext())
             throw new NoSuchElementException("AbstractIterator.next() : gone beyond boundary (actual class is " + this.getClass().getName() + ")");
         has = false;
         return buffer;

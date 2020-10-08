@@ -5,8 +5,9 @@
  */
 package json;
 
-import static org.testng.Assert.*;
+import java.util.Iterator;
 import org.testng.annotations.Test;
+import parser.Token;
 
 /**
  *
@@ -29,9 +30,9 @@ public class JasonLexNGTest {
                 + "\"parameter4\" :false,  "
                 + "\"parameter5\":null, "
                 + "\"parameter6\":-1043.25}";
-        JsonLex lexer=new JsonLex(src);
+        Iterator<Token> lexer=new JsonLex(src).ignored;
         StringBuilder retval=new StringBuilder();
-        while (lexer.hasNext()) retval.append(lexer.toString(lexer.next())).append("\n");
+        while (lexer.hasNext()) retval.append(JsonLex.toString(lexer.next())).append("\n");
         return retval.toString();
     }
     @Test

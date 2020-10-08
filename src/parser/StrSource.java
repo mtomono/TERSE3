@@ -34,17 +34,9 @@ public class StrSource extends Source<String, Character> {
     
     @Override
     public final Character peek() throws ParseException {
-        if (pos >= src.length())
+        if (pos>=src.length())
             throw new ParseException("unexpectedly reached end of text.");
         return src.charAt(pos);
-    }
-    
-    @Override
-    public final String explain(String e) {
-        String ret = super.explain(e);
-        if (src!=null && 0<=pos && pos<src.length()) 
-            ret += ": '" + src.charAt(pos) + "'";
-        return ret;
     }
 
     @Override
@@ -53,19 +45,10 @@ public class StrSource extends Source<String, Character> {
     }
 
     @Override
-    public Character get(int at) throws ParseException {
-        if (src.length()<=pos)
-            throw new ParseException("unexpectedly reached end of text.");
-        return src.charAt(at);
-    }
-    
-    @Override
-    public String rest() {
-        return src.substring(pos);
-    }
-    
-    @Override
-    public void forward(int jump) {
-        this.pos = this.pos+jump;
+    public final String explain(String e) {
+        String ret = super.explain(e);
+        if (src!=null && 0<=pos && pos<src.length()) 
+            ret += ": '" + src.charAt(pos) + "'";
+        return ret;
     }
 }

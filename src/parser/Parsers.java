@@ -194,13 +194,13 @@ public class Parsers {
         return string(str, c->chr(c)).l();
     }
     
-    public static final Parser<String, Character, String> lex(String regex) {
-        Pattern p = Pattern.compile("^"+regex);
+    public static final Parser<String, Character, String> regex(String regex) {
+        Pattern p = Pattern.compile(regex);
         return s->{
-            Matcher m = p.matcher(s.rest());
-            if(!m.find())
+            Matcher m = p.matcher(s.src);
+            if(!m.find(s.pos)||m.start()!=s.pos)
                 throw new ParseException("lex : regex didn't matched");
-            s.forward(m.end());
+            s.pos=m.end();
             return m.group();
         };
     }

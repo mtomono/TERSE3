@@ -135,7 +135,7 @@ public class ParserNGTest {
         final String json="  {\"ignore1\": 250.5, \"ignore2\": \"NG\" , \"interest\": \"OK\",\"ignore3\": \"NG\" } ";
         final StrSource src = new StrSource(json);
         String result = "";
-        for (int i=0;i<1000000/40;i++)
+        for (int i=0;i<1000000/50;i++)
             result=extractor.parse(src.reset(json));
         assertEquals(result,"OK");
     }

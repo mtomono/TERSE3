@@ -5,11 +5,21 @@
  */
 package parser;
 
+import java.util.function.Predicate;
+
 /**
  *
  * @author masao
  */
 public class Token {
+    static public Parser<String,Token,Token> is(Predicate<Token> pred) {
+        return s->{
+            Token retval=s.peek();
+            if (!pred.test(retval))
+                throw new ParseException(s.explain("Reached unexpected item :"+retval));
+            return retval;
+        };
+    }
     final public String src;
     final public int type;
     final public int start;

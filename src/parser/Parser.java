@@ -118,7 +118,7 @@ public interface Parser<S, T, U> {
      */
     default Parser<S, T, T> t() {
         return s->{
-            T ret = s.get(s.pos);
+            T ret = s.peek();
             parse(s);
             return ret;
         };

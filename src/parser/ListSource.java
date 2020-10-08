@@ -54,21 +54,4 @@ public class ListSource<T> extends Source<List<T>, T> {
     public List<T> sub(int... sec) {
         return src.subList(sec[0], sec[1]);
     }
-
-    @Override
-    public T get(int at) throws ParseException {
-        if (src.size()<=pos)
-            throw new ParseException("unexpectedly reached end of text.");
-        return src.get(at);
-    }
-    
-    @Override
-    public List<T> rest() {
-        return src.subList(pos,src.size());
-    }
-    
-    @Override
-    public void forward(int jump) {
-        this.pos = this.pos+jump;
-    }
 }

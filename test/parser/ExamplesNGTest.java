@@ -8,9 +8,9 @@ package parser;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import static parser.Parsers.anyChar;
-import static parser.Parsers.lex;
 import static parser.Parsers.many;
 import static parser.Parsers.str;
+import static parser.Parsers.regex;
 
 /**
  *
@@ -52,30 +52,14 @@ public class ExamplesNGTest {
     }
     
     @Test
-    public void testLex() throws ParseException {
+    public void testRegex() throws ParseException {
         System.out.println(test.TestUtils.methodName(0));
         String texted = "xxxx123xxxx";
         Parser<String,Character,String> xxxx = str("xxxx");
-        Parser<String,Character,String> n = lex("[0-9]*");
+        Parser<String,Character,String> n = regex("[0-9]*");
         Parser<String,Character,String> p = xxxx.next(n).prev(xxxx);
-        System.out.println(p.parse(new StrSource(texted)));
-        int result = 0;
-        int expected = 0;
-        System.out.println("result  : " + result);
-        System.out.println("expected: " + expected);
-        assertEquals(result, expected);
-    }
-
-    @Test
-    public void testLex_() throws ParseException {
-        System.out.println(test.TestUtils.methodName(0));
-        String texted = "xxxx123xxxx";
-        Parser<String,Character,String> xxxx = str("xxxx");
-        Parser<String,Character,String> n = lex("[0-9]*");
-        Parser<String,Character,String> p = xxxx.next(n).prev(xxxx);
-        System.out.println(p.parse(new StrSource(texted)));
-        int result = 0;
-        int expected = 0;
+        String result = p.parse(new StrSource(texted));
+        String expected = "123";
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
