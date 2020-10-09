@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package solver.dp;
+package solver.tsp;
 
+import solver.tsp.TspHalfBaked;
 import collection.MVMap;
 import collection.P;
 import collection.TList;
@@ -12,8 +13,8 @@ import debug.Te;
 import static function.ComparePolicy.inc;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
-import static solver.dp.TspRandomGraphGenerator.generator;
-import static solver.dp.TspRandomGraphGenerator2.generator2;
+import static solver.tsp.TspRandomGraphGenerator.generator;
+import static solver.tsp.TspRandomGraphGenerator2.generator2;
 
 /**
  *

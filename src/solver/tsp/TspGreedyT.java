@@ -12,18 +12,22 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.
  */
-package solver.dp;
+package solver.tsp;
 
+import collection.ArrayInt;
+import static collection.ArrayInt.arrayInt;
+import collection.ArrayInt2;
+import static collection.PrimitiveArrayWrap.unwrapI;
 import static collection.PrimitiveArrayWrap.wrap;
 import collection.TList;
-import static solver.dp.Tsp.initTable;
-import static solver.dp.Tsp.sentinel;
+import static solver.tsp.Tsp.initTable;
+import static solver.tsp.Tsp.sentinel;
 
 /**
  *
  * @author masao
  */
-public class TspGreedyArray {
+public class TspGreedyT {
     static public Builder builder(int vertices) {
         return new Builder(vertices);
     }
@@ -42,36 +46,24 @@ public class TspGreedyArray {
         public Builder e(int... graph) {
             return e(TList.set(wrap(graph)));
         }
-        public TspGreedyArray build() {
-            return new TspGreedyArray(vertices,graph);
+        public TspGreedyT build() {
+            return new TspGreedyT(vertices,graph);
         }
     }
-    int[][] graph;
     int vertices;
     int start=0;
-    int[] route;
-    public TspGreedyArray(int vertices,int[][] graph) {
+    ArrayInt route;
+    ArrayInt2 grapha;
+    public TspGreedyT(int vertices,int[][] graph) {
         this.vertices=vertices;
-        this.graph=graph;
-        this.route=new int[vertices];
-        for (int i=0;i<vertices;i++) route[i]=i;
+        this.grapha=new ArrayInt2(graph);
+        this.route=arrayInt(unwrapI(TList.range(0,vertices)));
     }
-    public int distance(int i, int j) {
-        return graph[route[i]][route[j]];
+    public int distance(int i,int j) {
+        return grapha.get(i,j);
     }
     public TList<Integer> solve() {
-        for (int i=0;i<vertices-1;i++) {
-            int min=distance(i,i+1);
-            int minat=i+1;
-            for (int j=i+1;j<vertices;j++) 
-                if (distance(i,j)<min) {
-                    min=distance(i,j);
-                    minat=j;
-                }
-            int next=route[i+1];
-            route[i+1]=route[minat];
-            route[minat]=next;
-        }
-        return TList.set(wrap(route));
+        route.index().seek(-1).forEach(i->route.seek(i+1).swap(0,route.seek(i+1).minIndex(j->distance(i,j))));
+        return route.asList();
     }
 }

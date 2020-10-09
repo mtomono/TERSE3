@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package solver.dp;
+package solver.tsp;
 
+import solver.tsp.TspGreedyS;
 import collection.TList;
 import static function.ComparePolicy.inc;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
-import static solver.dp.TspRandomGraphGenerator.generator;
+import static solver.tsp.TspRandomGraphGenerator.generator;
 import test.Clock;
 
 /**

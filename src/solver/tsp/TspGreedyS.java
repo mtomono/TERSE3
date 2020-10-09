@@ -12,18 +12,19 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.
  */
-package solver.dp;
+package solver.tsp;
 
+import static collection.PrimitiveArrayWrap.unwrapI;
 import static collection.PrimitiveArrayWrap.wrap;
 import collection.TList;
+import static solver.tsp.Tsp.initTable;
+import static solver.tsp.Tsp.sentinel;
 
 /**
- * This is a strict solver of Tsp.
- * using DP.
+ *
  * @author masao
  */
-public class Tsp {
-    static int sentinel=-1;
+public class TspGreedyS {
     static public Builder builder(int vertices) {
         return new Builder(vertices);
     }
@@ -42,35 +43,40 @@ public class Tsp {
         public Builder e(int... graph) {
             return e(TList.set(wrap(graph)));
         }
-        public Tsp build() {
-            return new Tsp(vertices,graph);
+        public TspGreedyS build() {
+            return new TspGreedyS(vertices,graph);
         }
     }
-    int[][] graph;
-    int start=0;
     int vertices;
-    int[][] dp;
-    public Tsp(int vertices,int[][] graph) {
+    int[][] graph;
+    int[] route;
+    int start=0;
+    public TspGreedyS(int vertices,int[][] graph) {
         this.vertices=vertices;
         this.graph=graph;
-        dp=new int[1<<vertices][vertices];
-        initTable(dp,sentinel);
-        dp[0][start]=0;
+        this.route=unwrapI(TList.range(0,vertices));
     }
-    public int solve() {
-        for (int S=1; S<(1<<vertices);S++)
-            for(int from=0;from<vertices;from++) for(int to=0;to<vertices;to++) 
-                if ((S&(1<<from))!=0) if (graph[from][to]!=sentinel&&dp[S-(1<<from)][from]!=sentinel)
-                    dp[S][to]=Integer.min(dp[S][to]==sentinel?Integer.MAX_VALUE:dp[S][to],dp[S-(1<<from)][from]+graph[from][to]);
-        return dp[(1<<vertices)-1][start];
+    public int distance(int i,int j) {
+        return graph[route[i]][route[j]];
     }
-    public TList<TList<Integer>> dp() {
-        return toTList(dp);
+    public void swap(int i, int j) {
+        int buf=route[i];
+        route[i]=route[j];
+        route[j]=buf;
     }
-    static public void initTable(int[][] table, int v) {
-        for(int i=0;i<table.length;i++) for(int j=0;j<table[0].length;j++) table[i][j]=v;
+    public TList<Integer> solve() {
+        TList.range(0,vertices-1).forEach(i->swap(i+1,min(i)));
+        return TList.set(wrap(route));
     }
-    static public TList<TList<Integer>> toTList(int[][] table) {
-        return TList.sof(table).map(a->TList.set(wrap(a)));
+    public int min(int i) {
+        int min=distance(i,i+1);
+        int minat=i+1;
+        for(int j=i+2;j<vertices;j++) {
+            if (distance(i,j)<min) {
+                min=distance(i,j);
+                minat=j;
+            }
+        }
+        return minat;
     }
 }

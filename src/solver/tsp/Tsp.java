@@ -12,22 +12,18 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.
  */
-package solver.dp;
+package solver.tsp;
 
-import collection.ArrayInt;
-import static collection.ArrayInt.arrayInt;
-import collection.ArrayInt2;
-import static collection.PrimitiveArrayWrap.unwrapI;
 import static collection.PrimitiveArrayWrap.wrap;
 import collection.TList;
-import static solver.dp.Tsp.initTable;
-import static solver.dp.Tsp.sentinel;
 
 /**
- *
+ * This is a strict solver of Tsp.
+ * using DP.
  * @author masao
  */
-public class TspGreedyT {
+public class Tsp {
+    public static final int sentinel=-1;
     static public Builder builder(int vertices) {
         return new Builder(vertices);
     }
@@ -46,24 +42,35 @@ public class TspGreedyT {
         public Builder e(int... graph) {
             return e(TList.set(wrap(graph)));
         }
-        public TspGreedyT build() {
-            return new TspGreedyT(vertices,graph);
+        public Tsp build() {
+            return new Tsp(vertices,graph);
         }
     }
-    int vertices;
+    int[][] graph;
     int start=0;
-    ArrayInt route;
-    ArrayInt2 grapha;
-    public TspGreedyT(int vertices,int[][] graph) {
+    int vertices;
+    int[][] dp;
+    public Tsp(int vertices,int[][] graph) {
         this.vertices=vertices;
-        this.grapha=new ArrayInt2(graph);
-        this.route=arrayInt(unwrapI(TList.range(0,vertices)));
+        this.graph=graph;
+        dp=new int[1<<vertices][vertices];
+        initTable(dp,sentinel);
+        dp[0][start]=0;
     }
-    public int distance(int i,int j) {
-        return grapha.get(i,j);
+    public int solve() {
+        for (int S=1; S<(1<<vertices);S++)
+            for(int from=0;from<vertices;from++) for(int to=0;to<vertices;to++) 
+                if ((S&(1<<from))!=0) if (graph[from][to]!=sentinel&&dp[S-(1<<from)][from]!=sentinel)
+                    dp[S][to]=Integer.min(dp[S][to]==sentinel?Integer.MAX_VALUE:dp[S][to],dp[S-(1<<from)][from]+graph[from][to]);
+        return dp[(1<<vertices)-1][start];
     }
-    public TList<Integer> solve() {
-        route.index().seek(-1).forEach(i->route.seek(i+1).swap(0,route.seek(i+1).minIndex(j->distance(i,j))));
-        return route.asList();
+    public TList<TList<Integer>> dp() {
+        return toTList(dp);
+    }
+    static public void initTable(int[][] table, int v) {
+        for(int i=0;i<table.length;i++) for(int j=0;j<table[0].length;j++) table[i][j]=v;
+    }
+    static public TList<TList<Integer>> toTList(int[][] table) {
+        return TList.sof(table).map(a->TList.set(wrap(a)));
     }
 }

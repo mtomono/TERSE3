@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package solver.dp;
+package solver.tsp;
 
+import solver.tsp.TspRandomGraphGenerator;
+import solver.tsp.TspRandomGraphGenerator2;
 import collection.MVMap;
 import collection.P;
 import collection.TList;

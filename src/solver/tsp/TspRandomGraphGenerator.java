@@ -12,7 +12,7 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.
  */
-package solver.dp;
+package solver.tsp;
 
 import collection.MVMap;
 import collection.P;
@@ -26,7 +26,7 @@ import java.util.Random;
  * @author masao
  */
 public class TspRandomGraphGenerator {
-    static TspRandomGraphGenerator generator(int vertices) {
+    public static TspRandomGraphGenerator generator(int vertices) {
         return new TspRandomGraphGenerator(vertices);
     }
     int vertices;
