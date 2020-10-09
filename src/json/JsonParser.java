@@ -39,16 +39,16 @@ public interface JsonParser extends Parser<String,TokenType,TokenType> {
     }
     static <U> Parser<String,TokenType,U> get(String targetKey, BiFunction<String,TokenType,U> f) {
         Parser<String,TokenType,TokenType> value =is(STRING,TRUE,FALSE,NULL,NUMBER);
-        Parser<String,TokenType,U> target = is(STRING).l().accept(t->stripQuote(t.trim()).equals(targetKey)).next(is(COLON)).next(value.l(trim(f)));
-        Parser<String,TokenType,TokenType> skipped = is(STRING).l().except(t->stripQuote(t.trim()).equals(targetKey)).tr().next(is(COLON)).next(value);
+        Parser<String,TokenType,U> target = is(STRING).l().accept(t->stripQuote(t.strip()).equals(targetKey)).next(is(COLON)).next(value.l(strip(f)));
+        Parser<String,TokenType,TokenType> skipped = is(STRING).l().except(t->stripQuote(t.strip()).equals(targetKey)).tr().next(is(COLON)).next(value);
         return is(BRACE).next(many(skipped.next(is(COMMA)))).next(target.tor(is(UNBRACE).apply(x->null)));
     }
 
     static public String stripQuote(String s) {
         return s.substring(1,s.length()-1);
     }
-    static public <U> BiFunction<String,TokenType,U> trim(BiFunction<String,TokenType,U> f) {
-        return (s,t)->f.apply(s.trim(),t);
+    static public <U> BiFunction<String,TokenType,U> strip(BiFunction<String,TokenType,U> f) {
+        return (s,t)->f.apply(s.strip(),t);
     }
     static public boolean asBoolean(String str,TokenType t) {
         switch(t) {
