@@ -45,6 +45,18 @@ public class JsonParserNGTest {
         assertEquals(result, expected);
     }
     @Test
+    public void testParseJsonDouble02() throws ParseException {
+        System.out.println(test.TestUtils.methodName(0));
+        String src="{\"m0\":true , \"m1\":.02, \"m2\":   \"bb\", \"m3\":\"ccc\"}";
+        String srcwos="{\"m0\":true,\"m1\":\"a\",\"m2\":\"bb\",\"m3\":\"ccc\"}";
+        JsonLex lexer=new JsonLex(src);
+        Double result = JsonParser.get("m1",JsonParser::asDouble).parse(lexer);
+        Double expected = 0.02;
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    @Test
     public void testParseJsonInt() throws ParseException {
         System.out.println(test.TestUtils.methodName(0));
         String src="{\"m0\":true , \"m1\":-123, \"m2\":   \"bb\", \"m3\":\"ccc\"}";
