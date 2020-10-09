@@ -23,6 +23,6 @@ public class BasicRegex {
     public static String doubleQuoteStr="\"([^\"]*)\"";
     public static String singleQuoteStr="\'([^\']*)\'";
     public static String integer="[+-]?\\d+";
-    public static String decimal="[+-]?(?:\\d+.?\\d*|.\\d+)";
-    public static String number="[+-]?(?:\\d+.?\\d*|.\\d+)(?:[eE][+-]?\\d+)?";
+    public static String decimal="[+-]?(?:\\d+\\.?\\d*|.\\d+)";
+    public static String number="[+-]?(?:\\d+\\.?\\d*|.\\d+)(?:[eE][+-]?\\d+)?";
 }

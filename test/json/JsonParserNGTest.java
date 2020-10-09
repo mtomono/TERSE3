@@ -21,13 +21,61 @@ public class JsonParserNGTest {
     }
 
     @Test
-    public void testParseJson() throws ParseException {
+    public void testParseJsonString() throws ParseException {
         System.out.println(test.TestUtils.methodName(0));
-        String src="{\"m0\":true , \"m1\":\"a\", \"m2\":   \"bb\", \"m3\":\"ccc\"}";
+        String src="{\"m0\":true , \"m1\":123.02, \"m2\":   \"bb\", \"m3\":\"ccc\"}";
         String srcwos="{\"m0\":true,\"m1\":\"a\",\"m2\":\"bb\",\"m3\":\"ccc\"}";
         JsonLex lexer=new JsonLex(src);
         String result = JsonParser.get("m2",JsonParser::asString).parse(lexer);
         String expected = "bb";
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    @Test
+    public void testParseJsonDouble() throws ParseException {
+        System.out.println(test.TestUtils.methodName(0));
+        String src="{\"m0\":true , \"m1\":123.02, \"m2\":   \"bb\", \"m3\":\"ccc\"}";
+        String srcwos="{\"m0\":true,\"m1\":\"a\",\"m2\":\"bb\",\"m3\":\"ccc\"}";
+        JsonLex lexer=new JsonLex(src);
+        Double result = JsonParser.get("m1",JsonParser::asDouble).parse(lexer);
+        Double expected = 123.02;
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    @Test
+    public void testParseJsonInt() throws ParseException {
+        System.out.println(test.TestUtils.methodName(0));
+        String src="{\"m0\":true , \"m1\":-123, \"m2\":   \"bb\", \"m3\":\"ccc\"}";
+        String srcwos="{\"m0\":true,\"m1\":\"a\",\"m2\":\"bb\",\"m3\":\"ccc\"}";
+        JsonLex lexer=new JsonLex(src);
+        Integer result = JsonParser.get("m1",JsonParser::asInt).parse(lexer);
+        Integer expected = -123;
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    @Test
+    public void testParseJsonTrue() throws ParseException {
+        System.out.println(test.TestUtils.methodName(0));
+        String src="{\"m0\":true , \"m1\":123.02, \"m2\":   \"bb\", \"m3\":true}";
+        String srcwos="{\"m0\":true,\"m1\":\"a\",\"m2\":\"bb\",\"m3\":\"ccc\"}";
+        JsonLex lexer=new JsonLex(src);
+        Boolean result = JsonParser.get("m3",JsonParser::asBoolean).parse(lexer);
+        Boolean expected = true;
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    @Test
+    public void testParseJsonFalse() throws ParseException {
+        System.out.println(test.TestUtils.methodName(0));
+        String src="{\"m0\":true , \"m1\":123.02, \"m2\":   \"bb\", \"m3\":false}";
+        String srcwos="{\"m0\":true,\"m1\":\"a\",\"m2\":\"bb\",\"m3\":\"ccc\"}";
+        JsonLex lexer=new JsonLex(src);
+        Boolean result = JsonParser.get("m3",JsonParser::asBoolean).parse(lexer);
+        Boolean expected = false;
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
