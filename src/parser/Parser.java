@@ -252,18 +252,26 @@ public interface Parser<S, T, U> {
         };
     }
     
-    default <V> Parser<S,T,U> reduce(BiFunction<U,U,U> f) {
-        return s-> {
-            return reduceBase(s, parse(s), f);
-        };
-    }
-    
     default <V> V reduceBase(Source<S, T> s, V start, BiFunction<V, U, V> f) {
         try {
             return reduceBase(s, f.apply(start, parse(s)), f);
         } catch (ParseException e) {
             return start;
         }
+    }
+    
+    /**
+     * dynamic reduce.
+     * this is a kind of reduce. but the reduce is defined by a Parser which
+     * can return different function depending of parsing.
+     * @param <V>
+     * @param p
+     * @return 
+     */
+    default <V> Parser<S,T,U> reduce(Parser<S,T,Function<U,U>> p) {
+        return s-> {
+            return reduce(s, parse(s), p);
+        };
     }
     
     public static <S, T, U> U reduce(Source<S, T> s, U start, Parser<S, T, Function<U, U>> p) {
@@ -274,27 +282,6 @@ public interface Parser<S, T, U> {
         }
     }
     
-    public static <S, T, U> Parser<S, T, U> reduce(Supplier<U> start, Parser<S, T, Function<U, U>> p) {
-        return s-> reduce(s, start.get(), p);
-    }
-    
-    /**
-     * p reduce
-     * reduce in which all the values (initial values and step values) are collected
-     * from parser.
-     * @param <S>
-     * @param <T>
-     * @param <U>
-     * @param start
-     * @param p
-     * @return 
-     */
-    public static <S, T, U> Parser<S, T, U> preduce(Parser<S, T, U> start, Parser<S, T, Function<U, U>> p) {
-        return s-> {
-            U init = start.parse(s);
-            return reduce(s, init, p);
-        };
-    }
     default <V, W> Parser<S, T, W> relay(Parser<S, T, V> p, BiFunction<U, V, W> f) {
         return s-> f.apply(parse(s), p.parse(s));
     }

@@ -20,7 +20,6 @@ import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import static parser.Parser.or;
-import static parser.Parser.preduce;
 import static parser.Parser.reduce;
 import static parser.Parser.seq;
 import static parser.Parser.tor;
@@ -163,7 +162,6 @@ public class Parsers {
     public static final Parser<String, Character, Character> charsInDoubleQuote = tor(esc, anyChar.t().except(c->c==('\"')));
     public static final Parser<String, Character, String> wholeDoubleQuote = chr('\"').next(charsInDoubleQuote.many()).prev(chr('\"')).l();
     public static final Parser<String, Character, String> wholeSingleQuote = chr('\'').next(charsInSingleQuote.many()).prev(chr('\'')).l();
-    public static final Parser<String, Character, String> doubleQuotex = chr('\"').next(reduce(()->new StringBuilder(), charsInDoubleQuote.apply(c->(sb->sb.append(c)))).apply(sb->sb.toString())).prev(chr('\"'));
     public static final Parser<String, Character, String> doubleQuote = chr('\"').next(charsInDoubleQuote.reduce(()->new StringBuilder(),(a,b)->a.append(b)).apply(sb->sb.toString())).prev(chr('\"'));
     public static final Parser<String, Character, String> singleQuote = chr('\'').next(charsInSingleQuote.reduce(()->new StringBuilder(),(a,b)->a.append(b)).apply(sb->sb.toString())).prev(chr('\''));
 
@@ -181,13 +179,13 @@ public class Parsers {
     };
 
     public static final Parser<String, Character, Double> term = 
-        preduce(factor, or(
+        factor.reduce(or(
                 chr('*').next(factor.apply((u, v)->u*v)), 
                 chr('/').next(factor.apply((u, v)->u/v))
             ));
     
     public static final Parser<String, Character, Double> expr =
-        preduce(term, or(
+        term.reduce(or(
                 chr('+').next(term.apply((u, v)->u+v)), 
                 chr('-').next(term.apply((u, v)->u-v))
             ));    
