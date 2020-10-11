@@ -172,7 +172,7 @@ public class JsonParserNGTest {
                 + "\"string\" : \"string\" } ";
         JsonLex lexer=new JsonLex(src);
         List<P<String,String>> result = null;
-        for(int i=0;i<1000000;i++) result=JsonParser.getAllList(()->new ArrayList<>()).parse(lexer.reset(src));
+        for(int i=0;i<1000000;i++) result=JsonParser.getAllList().parse(lexer.reset(src));
         List<P<String,String>> expected= TList.sof(
             P.p("true", "true"),
             P.p("false", "false"),

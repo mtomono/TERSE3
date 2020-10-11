@@ -57,10 +57,10 @@ public interface JsonParser extends Parser<String,TokenType,TokenType> {
         Parser<String,TokenType,P<String,String>> property = is(STRING).l().apply(t->stripQuote(t)).tr().prev(is(COLON)).and(value.l(JsonParser::asString));
         return is(BRACE).next(property.prev(is(COMMA).tor(is(UNBRACE))).reduce(s,(a,b)->{a.put(b.l(),b.r());return a;}));
     }
-    static Parser<String,TokenType,List<P<String,String>>> getAllList(Supplier<List<P<String,String>>> s) {
+    static Parser<String,TokenType,List<P<String,String>>> getAllList() {
         Parser<String,TokenType,TokenType> value =is(STRING,TRUE,FALSE,NULL,NUMBER);
         Parser<String,TokenType,P<String,String>> property = is(STRING).l().apply(t->stripQuote(t)).tr().prev(is(COLON)).and(value.l(JsonParser::asString));
-        return is(BRACE).next(property.prev(is(COMMA).tor(is(UNBRACE))).reduce(s,(a,b)->{a.add(b);return a;}));
+        return is(BRACE).next(property.prev(is(COMMA).tor(is(UNBRACE))).many(p->p));
     }
 
     static public String stripQuote(String s) {
