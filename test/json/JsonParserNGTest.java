@@ -132,6 +132,32 @@ public class JsonParserNGTest {
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
     }
+    @Test
+    public void testGetAllList() throws ParseException {
+        System.out.println(test.TestUtils.methodName(0));
+        String src=" {  "
+                + "\"true\" : true , "
+                + "\"false\" : false , "
+                + "\"double\" : 123.02 , "
+                + "\"negativeDouble\" : -123.02 , "
+                + "\"int\" : 123 , "
+                + "\"negativeInt\" : -123 ,  "
+                + "\"string\" : \"string\" } ";
+        JsonLex lexer=new JsonLex(src);
+        List<P<String,String>> result = JsonParser.getAllList().parse(lexer);
+        List<P<String,String>> expected= TList.sof(
+            P.p("true", "true"),
+            P.p("false", "false"),
+            P.p("double", "123.02"),
+            P.p("negativeDouble","-123.02"),
+            P.p("int", "123"),
+            P.p("negativeInt", "-123"),
+            P.p("string","string")
+        );
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
     @Test(groups="performance")
     public void testGetAllLoad() throws ParseException {
         System.out.println(test.TestUtils.methodName(0));
