@@ -53,13 +53,19 @@ public interface JsonParser extends Parser<String,TokenType,TokenType> {
         return is(BRACE).next(skipped.next(is(COMMA).tor(is(UNBRACE).end())).many()).next(target);
     }
     static Parser<String,TokenType,Map<String,String>> getAll(Supplier<Map<String,String>> s) {
+        return getAll(s,JsonParser::asString);
+    }
+    static <U>Parser<String,TokenType,Map<String,U>> getAll(Supplier<Map<String,U>> s,BiFunction<String,TokenType,U> f) {
         Parser<String,TokenType,TokenType> value =is(STRING,TRUE,FALSE,NULL,NUMBER);
-        Parser<String,TokenType,P<String,String>> property = is(STRING).l().apply(t->stripQuote(t)).tr().prev(is(COLON)).and(value.l(JsonParser::asString));
+        Parser<String,TokenType,P<String,U>> property = is(STRING).l().apply(t->stripQuote(t)).tr().prev(is(COLON)).and(value.l(f));
         return is(BRACE).next(property.prev(is(COMMA).tor(is(UNBRACE))).reduce(s,(a,b)->{a.put(b.l(),b.r());return a;}));
     }
-    static Parser<String,TokenType,List<P<String,String>>> getAllList() {
+    static Parser<String,TokenType,TList<P<String,String>>> getAllList() {
+        return getAllList(JsonParser::asString);
+    }
+    static <U>Parser<String,TokenType,TList<P<String,U>>> getAllList(BiFunction<String,TokenType,U> f) {
         Parser<String,TokenType,TokenType> value =is(STRING,TRUE,FALSE,NULL,NUMBER);
-        Parser<String,TokenType,P<String,String>> property = is(STRING).l().apply(t->stripQuote(t)).tr().prev(is(COLON)).and(value.l(JsonParser::asString));
+        Parser<String,TokenType,P<String,U>> property = is(STRING).l().apply(t->stripQuote(t)).tr().prev(is(COLON)).and(value.l(f));
         return is(BRACE).next(property.prev(is(COMMA).tor(is(UNBRACE))).many(p->p));
     }
 
@@ -69,10 +75,41 @@ public interface JsonParser extends Parser<String,TokenType,TokenType> {
     static public <U> BiFunction<String,TokenType,U> strip(BiFunction<String,TokenType,U> f) {
         return (s,t)->f.apply(s.strip(),t);
     }
-    static public boolean asBoolean(String str,TokenType t) {
+    static public Object asToken(String str, TokenType t) {
         switch(t) {
             case TRUE: return true;
             case FALSE: return false;
+            case STRING: return stripQuote(str);
+            case NUMBER: {
+                if (str.contains(".")||str.contains("e"))
+                    return Double.parseDouble(str);
+                else
+                    return Integer.parseInt(str);
+            }
+            case NULL: return null;
+        }
+        throw new RuntimeException("unexpected value occured");
+    }
+    static public Object asTokenBD(String str, TokenType t) {
+        switch(t) {
+            case TRUE: return true;
+            case FALSE: return false;
+            case STRING: return stripQuote(str);
+            case NUMBER: {
+                if (str.contains(".")||str.contains("e"))
+                    return new BigDecimal(str);
+                else
+                    return Integer.parseInt(str);
+            }
+            case NULL: return null;
+        }
+        throw new RuntimeException("unexpected value occured");
+    }
+    static public Boolean asBoolean(String str,TokenType t) {
+        switch(t) {
+            case TRUE: return Boolean.TRUE;
+            case FALSE: return Boolean.FALSE;
+            case NULL: return Boolean.FALSE;
             case STRING: {
                 if (str.equals("true")) return true; 
                 if (str.equals("false")) return false;
@@ -82,14 +119,15 @@ public interface JsonParser extends Parser<String,TokenType,TokenType> {
     }
     static public String asString(String str,TokenType t) {
         if (t==STRING) return stripQuote(str);
+        if (t==NULL) return null;
         return str;
     }
-    static public int asInt(String str,TokenType t) {
+    static public Integer asInt(String str,TokenType t) {
         if (t==STRING) return Integer.parseInt(stripQuote(str));
         if (t==NUMBER) return Integer.parseInt(str);
         throw new RuntimeException("unexpected value occured");
     }
-    static public double asDouble(String str,TokenType t) {
+    static public Double asDouble(String str,TokenType t) {
         if (t==STRING) return Double.parseDouble(stripQuote(str));
         if (t==NUMBER) return Double.parseDouble(str);
         throw new RuntimeException("unexpected value occured");

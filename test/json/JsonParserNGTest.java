@@ -7,7 +7,7 @@ package json;
 
 import collection.P;
 import collection.TList;
-import java.util.ArrayList;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -106,6 +106,10 @@ public class JsonParserNGTest {
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
     }
+    
+    
+    
+    
     @Test
     public void testGetAll() throws ParseException {
         System.out.println(test.TestUtils.methodName(0));
@@ -128,32 +132,6 @@ public class JsonParserNGTest {
             put("negativeInt","-123");
             put("string","string");
         }};
-        System.out.println("result  : " + result);
-        System.out.println("expected: " + expected);
-        assertEquals(result, expected);
-    }
-    @Test
-    public void testGetAllList() throws ParseException {
-        System.out.println(test.TestUtils.methodName(0));
-        String src=" {  "
-                + "\"true\" : true , "
-                + "\"false\" : false , "
-                + "\"double\" : 123.02 , "
-                + "\"negativeDouble\" : -123.02 , "
-                + "\"int\" : 123 , "
-                + "\"negativeInt\" : -123 ,  "
-                + "\"string\" : \"string\" } ";
-        JsonLex lexer=new JsonLex(src);
-        List<P<String,String>> result = JsonParser.getAllList().parse(lexer);
-        List<P<String,String>> expected= TList.sof(
-            P.p("true", "true"),
-            P.p("false", "false"),
-            P.p("double", "123.02"),
-            P.p("negativeDouble","-123.02"),
-            P.p("int", "123"),
-            P.p("negativeInt", "-123"),
-            P.p("string","string")
-        );
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
@@ -185,8 +163,8 @@ public class JsonParserNGTest {
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
     }
-    @Test(groups="performance")
-    public void testGetAllLoadList() throws ParseException {
+    @Test
+    public void testGetAllTranslated() throws ParseException {
         System.out.println(test.TestUtils.methodName(0));
         String src=" {  "
                 + "\"true\" : true , "
@@ -197,8 +175,60 @@ public class JsonParserNGTest {
                 + "\"negativeInt\" : -123 ,  "
                 + "\"string\" : \"string\" } ";
         JsonLex lexer=new JsonLex(src);
-        List<P<String,String>> result = null;
-        for(int i=0;i<1000000;i++) result=JsonParser.getAllList().parse(lexer.reset(src));
+        Map<String,Object> result = JsonParser.getAll(()->new TreeMap<>(),JsonParser::asToken).parse(lexer);
+        Map<String,?> expected = new HashMap<String,Object>() {{
+            put("true",true);
+            put("false",false);
+            put("double",123.02);
+            put("negativeDouble",-123.02);
+            put("int",123);
+            put("negativeInt",-123);
+            put("string","string");
+        }};
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    @Test(groups="performance")
+    public void testGetAllTranslatedLoad() throws ParseException {
+        System.out.println(test.TestUtils.methodName(0));
+        String src=" {  "
+                + "\"true\" : true , "
+                + "\"false\" : false , "
+                + "\"double\" : 123.02 , "
+                + "\"negativeDouble\" : -123.02 , "
+                + "\"int\" : 123 , "
+                + "\"negativeInt\" : -123 ,  "
+                + "\"string\" : \"string\" } ";
+        JsonLex lexer=new JsonLex(src);
+        Map<String,Object> result = null;
+        for(int i=0;i<1000000;i++) result=JsonParser.getAll(()->new TreeMap<>(),JsonParser::asToken).parse(lexer.reset(src));
+        Map<String,?> expected = new TreeMap<String,Object>() {{
+            put("true",true);
+            put("false",false);
+            put("double",123.02);
+            put("negativeDouble",-123.02);
+            put("int",123);
+            put("negativeInt",-123);
+            put("string","string");
+        }};
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    @Test
+    public void testGetAllList() throws ParseException {
+        System.out.println(test.TestUtils.methodName(0));
+        String src=" {  "
+                + "\"true\" : true , "
+                + "\"false\" : false , "
+                + "\"double\" : 123.02 , "
+                + "\"negativeDouble\" : -123.02 , "
+                + "\"int\" : 123 , "
+                + "\"negativeInt\" : -123 ,  "
+                + "\"string\" : \"string\" } ";
+        JsonLex lexer=new JsonLex(src);
+        List<P<String,String>> result = JsonParser.getAllList(JsonParser::asString).parse(lexer);
         List<P<String,String>> expected= TList.sof(
             P.p("true", "true"),
             P.p("false", "false"),
@@ -212,6 +242,143 @@ public class JsonParserNGTest {
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
     }
+    @Test(groups="performance")
+    public void testGetAllListLoad() throws ParseException {
+        System.out.println(test.TestUtils.methodName(0));
+        String src=" {  "
+                + "\"true\" : true , "
+                + "\"false\" : false , "
+                + "\"double\" : 123.02 , "
+                + "\"negativeDouble\" : -123.02 , "
+                + "\"int\" : 123 , "
+                + "\"negativeInt\" : -123 ,  "
+                + "\"string\" : \"string\" } ";
+        JsonLex lexer=new JsonLex(src);
+        List<P<String,String>> result = null;
+        for(int i=0;i<1000000;i++) result=JsonParser.getAllList(JsonParser::asString).parse(lexer.reset(src));
+        List<P<String,String>> expected= TList.sof(
+            P.p("true", "true"),
+            P.p("false", "false"),
+            P.p("double", "123.02"),
+            P.p("negativeDouble","-123.02"),
+            P.p("int", "123"),
+            P.p("negativeInt", "-123"),
+            P.p("string","string")
+        );
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    @Test
+    public void testGetAllListTranslated() throws ParseException {
+        System.out.println(test.TestUtils.methodName(0));
+        String src=" {  "
+                + "\"true\" : true , "
+                + "\"false\" : false , "
+                + "\"double\" : 123.02 , "
+                + "\"negativeDouble\" : -123.02 , "
+                + "\"int\" : 123 , "
+                + "\"negativeInt\" : -123 ,  "
+                + "\"string\" : \"string\" } ";
+        JsonLex lexer=new JsonLex(src);
+        List<P<String,Object>> result = JsonParser.getAllList(JsonParser::asToken).parse(lexer);
+        List<P<String,?>> expected= TList.sof(
+            P.p("true", true),
+            P.p("false", false),
+            P.p("double", 123.02),
+            P.p("negativeDouble",-123.02),
+            P.p("int", 123),
+            P.p("negativeInt", -123),
+            P.p("string","string")
+        );
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    @Test(groups="performance")
+    public void testGetAllListTranslatedLoad() throws ParseException {
+        System.out.println(test.TestUtils.methodName(0));
+        String src=" {  "
+                + "\"true\" : true , "
+                + "\"false\" : false , "
+                + "\"double\" : 123.02 , "
+                + "\"negativeDouble\" : -123.02 , "
+                + "\"int\" : 123 , "
+                + "\"negativeInt\" : -123 ,  "
+                + "\"string\" : \"string\" } ";
+        JsonLex lexer=new JsonLex(src);
+        List<P<String,Object>> result = null;
+        for(int i=0;i<1000000;i++) result=JsonParser.getAllList(JsonParser::asToken).parse(lexer.reset(src));
+        List<P<String,?>> expected= TList.sof(
+            P.p("true", true),
+            P.p("false", false),
+            P.p("double", 123.02),
+            P.p("negativeDouble",-123.02),
+            P.p("int", 123),
+            P.p("negativeInt", -123),
+            P.p("string","string")
+        );
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    @Test
+    public void testGetAllListTranslatedBD() throws ParseException {
+        System.out.println(test.TestUtils.methodName(0));
+        String src=" {  "
+                + "\"true\" : true , "
+                + "\"false\" : false , "
+                + "\"double\" : 123.02 , "
+                + "\"negativeDouble\" : -123.02 , "
+                + "\"int\" : 123 , "
+                + "\"negativeInt\" : -123 ,  "
+                + "\"string\" : \"string\" } ";
+        JsonLex lexer=new JsonLex(src);
+        List<P<String,Object>> result = JsonParser.getAllList(JsonParser::asTokenBD).parse(lexer);
+        List<P<String,?>> expected= TList.sof(
+            P.p("true", true),
+            P.p("false", false),
+            P.p("double", new BigDecimal("123.02")),
+            P.p("negativeDouble", new BigDecimal("-123.02")),
+            P.p("int", 123),
+            P.p("negativeInt", -123),
+            P.p("string","string")
+        );
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    @Test(groups="performance")
+    public void testGetAllListTranslatedBDLoad() throws ParseException {
+        System.out.println(test.TestUtils.methodName(0));
+        String src=" {  "
+                + "\"true\" : true , "
+                + "\"false\" : false , "
+                + "\"double\" : 123.02 , "
+                + "\"negativeDouble\" : -123.02 , "
+                + "\"int\" : 123 , "
+                + "\"negativeInt\" : -123 ,  "
+                + "\"string\" : \"string\" } ";
+        JsonLex lexer=new JsonLex(src);
+        List<P<String,Object>> result = null;
+        for(int i=0;i<1000000;i++) result=JsonParser.getAllList(JsonParser::asTokenBD).parse(lexer.reset(src));
+        List<P<String,?>> expected= TList.sof(
+            P.p("true", true),
+            P.p("false", false),
+            P.p("double", new BigDecimal("123.02")),
+            P.p("negativeDouble", new BigDecimal("-123.02")),
+            P.p("int", 123),
+            P.p("negativeInt", -123),
+            P.p("string","string")
+        );
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+
+    
+    
+    
     @Test
     public void testParseJsonWithSpacesToMarks() throws ParseException {
         System.out.println(test.TestUtils.methodName(0));
