@@ -15,13 +15,15 @@
 
 package parser;
 
-import java.util.Arrays;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import static java.util.stream.Collectors.toList;
+import static parser.Parser.or;
+import static parser.Parser.preduce;
+import static parser.Parser.reduce;
+import static parser.Parser.seq;
+import static parser.Parser.tor;
 
 /**
  *
@@ -81,95 +83,7 @@ public class Parsers {
     public static final Parser<String, Character, Character> comma = chr(',');
     public static final Parser<String, Character, Character> semicolon = chr(';');
     public static final Parser<String, Character, Character> underbar = chr('_');
-    
-    
-    public static final <S, T, U> Parser<S, T, U> sequence(Parser<S, T, U>... args) {
-        return s-> {
-            for (Parser arg : args) 
-                arg.parse(s);
-            return null;
-        };
-    }
-    
-    public static final <S, T, U> Parser<S, T, U> seq(Parser<S, T, U>... args) {
-        return sequence(args);
-    }
-    
-    public static final <S, T, U> Parser<S, T, U> replicate(int n, Parser<S, T, U> p) {
-        return s-> {
-            for(int i = 0; i < n; ++i) {
-                p.parse(s);
-            }
-            return null;
-        };
-    }
-    
-    public static final <S, T, U> Parser<S, T, U> rep(int n, Parser<S, T, U> p) {
-        return replicate(n, p);
-    }
-    
-    public static final <S, T, U> Parser<S, T, U> many(Parser<S, T, U> p) {
-        return s-> {
-            try {
-                for (;;) {
-                    p.parse(s);
-                }
-            } catch (ParseException e) {
-            }
-            return null;
-        };
-    }
-    
-    public static final <S, T, U> U reduce(Source<S, T> s, U start, Parser<S, T, Function<U, U>> p) {
-        try {
-            return reduce(s, p.parse(s).apply(start), p);
-        } catch (ParseException e) {
-            return start;
-        }
-    }
-    
-    public static final <S, T, U> Parser<S, T, U> reduce(Supplier<U> start, Parser<S, T, Function<U, U>> p) {
-        return s-> reduce(s, start.get(), p);
-    }
-    
-    /**
-     * p reduce
-     * reduce in which all the values (initial values and step values) are collected
-     * from parser.
-     * @param <S>
-     * @param <T>
-     * @param <U>
-     * @param start
-     * @param p
-     * @return 
-     */
-    public static final <S, T, U> Parser<S, T, U> preduce(Parser<S, T, U> start, Parser<S, T, Function<U, U>> p) {
-        return s-> {
-            U init = start.parse(s);
-            return reduce(s, init, p);
-        };
-    }
-    
-    public static final <S, T, U> Parser<S, T, U> many(int min, Parser<S, T, U> p) {
-        return sequence(replicate(min, p), many(p));
-    }
-    
-    public static final <S, T, U> Parser<S, T, U> upto(int max, Parser<S, T, U> p) {
-        return s-> {
-            try {
-                for (int i=0; i<max; i++) {
-                    p.parse(s);
-                }
-            } catch (ParseException e) {
-            }
-            return null;
-        };
-    }
-    
-    public static final <S, T, U> Parser<S, T, U> manyUpto(int min, int max, Parser<S, T, U> p) {
-        return sequence(replicate(min, p), upto(max-min, p));
-    }
-    
+            
     /**
      * parser factory for string like structure.
      * still leaving the possibility for char to Object encoding.
@@ -204,34 +118,12 @@ public class Parsers {
             return m.group();
         };
     }
-                
-    public static final <S, T, U> Parser<S, T, U> or(Parser<S, T, U>... ps) {
-        return s-> {
-            ParseException thrown = new ParseException("Or is empty.");
-            for (Parser<S, T, U> p : ps) {
-                Source<S, T> bak = s.clone();
-                try {
-                    return p.parse(s);
-                } catch (ParseException e) {
-                    thrown = e;
-                    if (!s.equals(bak)) {
-                        throw e;
-                    }
-                }
-            }
-            throw thrown;
-        };
-    }
-    
-    public static final <S, T, U> Parser<S, T, U> tor(Parser<S, T, U>... ps) {
-        return or(Arrays.asList(ps).stream().map(p->p.tr()).collect(toList()).toArray(ps));
-    }
-    
+
     public static <S,T> Parser<S,T,T> not(Predicate<T> p) {
-        return many(Parsers.<S,T>any().t().except(p).tr());
+        return Parsers.<S,T>any().t().except(p).tr().many();
     }
     public static <S,T> Parser<S,T,S> notL(Predicate<S> p) {
-        return many(Parsers.<S,T>any().l().except(p).tr());
+        return Parsers.<S,T>any().l().except(p).tr().many();
     }
     public static <S,T> Parser<S,T,T> not(T c) {
         return Parsers.not(x->x.equals(c));
@@ -240,13 +132,13 @@ public class Parsers {
         return Parsers.notL(x->x.equals(s));
     }
     
-    public static final Parser<String, Character, String> integerStr = seq(upto(1, chr('-')), many(1, digit)).l();
-    public static final Parser<String, Character, String> integerStrDelimited = seq(upto(1, chr('-')), many(1, digit.or(comma))).l();
+    public static final Parser<String, Character, String> integerStr = Parser.seq(chr('-').upto(1), digit.than(1)).l();
+    public static final Parser<String, Character, String> integerStrDelimited = Parser.seq(chr('-').upto(1), digit.or(comma)).than(1).l();
     public static final Parser<String, Character, Integer> integer = integerStr.apply(s->Integer.parseInt(s));
-    public static final Parser<String, Character, String> numberStr = seq(integerStr, manyUpto(0, 1, sequence(dot, many(digit))).l()).l();
-    public static final Parser<String, Character, String> numberStrDelimited = seq(integerStrDelimited, manyUpto(0, 1, sequence(dot, many(digit))).l()).l();
+    public static final Parser<String, Character, String> numberStr = Parser.seq(integerStr, seq(dot, digit.many()).many(0,1).l()).l();
+    public static final Parser<String, Character, String> numberStrDelimited = Parser.seq(integerStrDelimited, seq(dot, digit.many()).many(0,1).l()).l();
     public static final Parser<String, Character, Double> number = numberStr.apply(s->Double.parseDouble(s));
-    public static final Parser<String, Character, String> spaces = many(space.or(tab).or(cr)).l();
+    public static final Parser<String, Character, String> spaces = space.or(tab).or(cr).many().l();
     public static final Parser<String, Character, Character> octal = digit.t().accept(c->c<'8');
     public static final Parser<String, Character, Character> hex = or(digit, alpha.t().apply(c->Character.toLowerCase(c)).accept(c->'a'<=c&&c<='f'));
     public static final Parser<String, Character, Character> esc = chr('\\').next(or(
@@ -258,21 +150,22 @@ public class Parsers {
                             chr('b').apply(s->'\b'),
                             chr('r').apply(s->'\r'),
                             chr('f').apply(s->'\f'),
-                            rep(3, octal).l().apply(s->(char)Integer.parseInt(s, 8)),
-                            chr('u').next(rep(4, hex).l().apply(s->(char)Integer.parseInt(s, 16)))
+                            octal.rep(3).l().apply(s->(char)Integer.parseInt(s, 8)),
+                            chr('u').next(hex.rep(4).l().apply(s->(char)Integer.parseInt(s, 16)))
                         ));
-    public static final Parser<String, Character, Character> escTab = seq(chr('\\'), chr('t')).apply(s->'\t');
-    public static final Parser<String, Character, Character> escBackSlash = seq(chr('\\'), chr('\\')).apply(s->'\\');
-    public static final Parser<String, Character, Character> escNewLine = seq(chr('\\'), chr('n')).apply(s->'\n');
-    public static final Parser<String, Character, Character> escQuote = seq(chr('\\'), chr('\'')).apply(s->'\'');
-    public static final Parser<String, Character, Character> escDoubleQuote = seq(chr('\\'), chr('\"')).apply(s->'\"');
+    public static final Parser<String, Character, Character> escTab = Parser.seq(chr('\\'), chr('t')).apply(s->'\t');
+    public static final Parser<String, Character, Character> escBackSlash = Parser.seq(chr('\\'), chr('\\')).apply(s->'\\');
+    public static final Parser<String, Character, Character> escNewLine = Parser.seq(chr('\\'), chr('n')).apply(s->'\n');
+    public static final Parser<String, Character, Character> escQuote = Parser.seq(chr('\\'), chr('\'')).apply(s->'\'');
+    public static final Parser<String, Character, Character> escDoubleQuote = Parser.seq(chr('\\'), chr('\"')).apply(s->'\"');
     public static final Parser<String, Character, Character> escapes = tor(escBackSlash, escTab, escNewLine, escQuote, escDoubleQuote);
     public static final Parser<String, Character, Character> charsInSingleQuote = tor(esc, anyChar.t().except(c->c==('\'')));
     public static final Parser<String, Character, Character> charsInDoubleQuote = tor(esc, anyChar.t().except(c->c==('\"')));
-    public static final Parser<String, Character, String> wholeDoubleQuote = chr('\"').next(many(charsInDoubleQuote)).prev(chr('\"')).l();
-    public static final Parser<String, Character, String> wholeSingleQuote = chr('\'').next(many(charsInSingleQuote)).prev(chr('\'')).l();
-    public static final Parser<String, Character, String> doubleQuote = chr('\"').next(reduce(()->new StringBuilder(), charsInDoubleQuote.apply(c->(sb->sb.append(c)))).apply(sb->sb.toString())).prev(chr('\"'));
-    public static final Parser<String, Character, String> singleQuote = chr('\'').next(reduce(()->new StringBuilder(), charsInSingleQuote.apply(c->(sb->sb.append(c)))).apply(sb->sb.toString())).prev(chr('\''));
+    public static final Parser<String, Character, String> wholeDoubleQuote = chr('\"').next(charsInDoubleQuote.many()).prev(chr('\"')).l();
+    public static final Parser<String, Character, String> wholeSingleQuote = chr('\'').next(charsInSingleQuote.many()).prev(chr('\'')).l();
+    public static final Parser<String, Character, String> doubleQuotex = chr('\"').next(reduce(()->new StringBuilder(), charsInDoubleQuote.apply(c->(sb->sb.append(c)))).apply(sb->sb.toString())).prev(chr('\"'));
+    public static final Parser<String, Character, String> doubleQuote = chr('\"').next(charsInDoubleQuote.reduce(()->new StringBuilder(),(a,b)->a.append(b)).apply(sb->sb.toString())).prev(chr('\"'));
+    public static final Parser<String, Character, String> singleQuote = chr('\'').next(charsInSingleQuote.reduce(()->new StringBuilder(),(a,b)->a.append(b)).apply(sb->sb.toString())).prev(chr('\''));
 
     //----- formula -------------
     

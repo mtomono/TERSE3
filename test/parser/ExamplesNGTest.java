@@ -8,7 +8,6 @@ package parser;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import static parser.Parsers.anyChar;
-import static parser.Parsers.many;
 import static parser.Parsers.str;
 import static parser.Parsers.regex;
 
@@ -24,7 +23,7 @@ public class ExamplesNGTest {
     @Test//(expectedExceptions = {parser.ParseException.class})
     public void testSkipFail() throws Exception{
         System.out.println(test.TestUtils.methodName(0));
-        Parser<String,Character,Character> skip = many(anyChar.t().except(c->c.equals('%')));
+        Parser<String,Character,Character> skip = anyChar.t().except(c->c.equals('%')).many();
         String tested = "the reason behind";
         skip.parse(new StrSource(tested));
         // This case must end with exception because pos is already at the end of the string.
@@ -39,7 +38,7 @@ public class ExamplesNGTest {
     @Test
     public void testSkipPass() throws Exception {
         System.out.println(test.TestUtils.methodName(0));
-        Parser<String,Character,String> skip = many(anyChar.l().except(c->c.equals("%")));
+        Parser<String,Character,String> skip = anyChar.l().except(c->c.equals("%")).many();
         String tested = "the reason behind";
         String result = skip.l().parse(new StrSource(tested));
         // this is okay contrary to the case depicted in testSkipFail.

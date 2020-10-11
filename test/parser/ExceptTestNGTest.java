@@ -5,11 +5,10 @@
  */
 package parser;
 
+import static org.testng.Assert.assertEquals;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import static parser.Parsers.anyChar;
-import static parser.Parsers.many;
-import static parser.Parsers.rep;
 import static parser.Parsers.str;
 
 /**
@@ -27,9 +26,14 @@ public class ExceptTestNGTest {
     
     @Test
     public void test() throws ParseException {
-        Parser<String, Character, String> abc = many(rep(3, anyChar).l().except(s->s.equals("abc")).tr()).next(str("abc"));
+        System.out.println(test.TestUtils.methodName(0));
+        Parser<String, Character, String> abc = anyChar.rep(3).l().except(s->s.equals("abc")).tr().many().next(str("abc"));
         StrSource src=new StrSource("cccfffdddabc");
-        abc.parse(src);
+        String result=abc.l().parse(src);
+        String expected="cccfffdddabc";
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
     }
     
 }

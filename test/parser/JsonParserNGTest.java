@@ -20,8 +20,8 @@ public class JsonParserNGTest {
         static final Parser<String, Character, String> nullValue = str("null");
         static final Parser<String, Character, String> value = doubleQuote.or(numberStr).or(boolValue).or(nullValue);
 
-        static final Parser<String, Character, Character> garbage = many(anyChar.t().except(c->c=='"').tr());
-        static final Parser<String, Character, Character> skipping = many(anyChar.t().except(c->c==','));
+        static final Parser<String, Character, Character> garbage = anyChar.t().except(c->c=='"').tr().many();
+        static final Parser<String, Character, Character> skipping = anyChar.t().except(c->c==',').many();
         static final Parser<String, Character, Character> nameSeparator = s(chr(':'));
 
         static <U> Parser<String, Character, U> create(String targetKey, Function<String, U> f) {
@@ -36,7 +36,7 @@ public class JsonParserNGTest {
                                     .next(skipping)
                                     .next(garbage));
 
-            return garbage.next(many(skipMember)).next(targetMember);
+            return garbage.next(skipMember.many()).next(targetMember);
         }
 
         static Parser<String, Character, String> create(String targetKey) {
@@ -129,14 +129,14 @@ public class JsonParserNGTest {
         extractor.parse(new StrSource("{ \"ignore1\": \"NG\", \"ignore2\": \"NG\" , \"ignore3\": \"NG\" } "));
     }
 
-    final public static String standardJsonTest="  {\"ignore1\": 250.5, \"ignore2\": \"NG\" , \"interest\": \"OK\"    ,\"ignore3\": \"NG\" } ";
+    final public static String jsonTestStr="  {\"ignore1\": 250.5, \"ignore2\": \"NG\" , \"interest\": \"OK\"    ,\"ignore3\": \"NG\" } ";
     @Test(groups="performance")
     public void testLoad() throws ParseException {
         final Parser<String, Character, String> extractor = JsonParserFactory.create("interest");
-        final StrSource src = new StrSource(standardJsonTest);
+        final StrSource src = new StrSource(jsonTestStr);
         String result = "";
         for (int i=0;i<1000000/60;i++)
-            result=extractor.parse(src.reset(standardJsonTest));
+            result=extractor.parse(src.reset(jsonTestStr));
         assertEquals(result,"OK");
     }
     @Test

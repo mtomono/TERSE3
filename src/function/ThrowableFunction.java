@@ -14,13 +14,33 @@
  */
 package function;
 
+import java.util.function.Function;
+
 /**
  *
  * @author masao
  * @param <S>
  * @param <T>
+ * @param <U>
  */
 @FunctionalInterface
-public interface ThrowableFunction<S,T> {
-    T apply(S s) throws Exception;
+public interface ThrowableFunction<S,T,U extends Exception> {
+    T apply(S s) throws U;
+    default Function<S,T> uncheck() {
+        return s->{
+            T retval;
+            try {
+                retval=apply(s);
+            } catch(Exception u) {
+                throw new RuntimeException(u);
+            }
+            return retval;
+        };
+    }
+    static public <S,T> ThrowableFunction<S,T,Exception> c(ThrowableFunction<S,T,Exception> f) {
+        return f;
+    }
+    static public <S,T,U extends Exception> ThrowableFunction<S,T,U> c(ThrowableFunction<S,T,U> f, Class<U> e) {
+        return f;
+    }
 }

@@ -37,6 +37,10 @@ public class JsonLex extends Source<String,TokenType> implements Iterator<TokenT
     static Pattern truep=Pattern.compile("true");
     static Pattern falsep=Pattern.compile("false");
     static Pattern nullp=Pattern.compile("null");
+    static String trailingSpaces="[ \t\f\r\n]*";
+    static Pattern bracep=Pattern.compile("\\{"+trailingSpaces);
+    static Pattern commap=Pattern.compile(","+trailingSpaces);
+    static Pattern colonp=Pattern.compile(":"+trailingSpaces);
     Matcher matcher;
     final public Iterator<TokenType> ignored;
     public JsonLex(String src,int pos) {
@@ -80,35 +84,44 @@ public class JsonLex extends Source<String,TokenType> implements Iterator<TokenT
     public TokenType nextToken() {
         char at=src.charAt(pos);
         switch(at) {
-            case '{': {pos++;return BRACE;}
+            //case '{': {pos++;return BRACE;}
+            case '{': {matcher=matcher.usePattern(bracep);matcher.find(pos);pos=matcher.end();return BRACE;}
             case '}': {pos++;return UNBRACE;}
             case '[': {pos++;return SQUARE;}
             case ']': {pos++;return UNSQUARE;}
-            case ',': {pos++;return COMMA;}
-            case ':': {pos++;return COLON;}
+            //case ',': {pos++;return COMMA;}
+            case ',': {matcher=matcher.usePattern(commap);matcher.find(pos);pos=matcher.end();return COMMA;}
+            //case ':': {pos++;return COLON;}
+            case ':': {matcher=matcher.usePattern(colonp);matcher.find(pos);pos=matcher.end();return COLON;}
             case '"': {
                 matcher=matcher.usePattern(string);
                 if (matcher.find(pos)&&matcher.start()==pos) {pos=matcher.end();return STRING;}
+                break;
             }
             case 't': {
                 matcher=matcher.usePattern(truep);
                 if (matcher.find(pos)&&matcher.start()==pos) {pos=matcher.end();return TRUE;}
+                break;
             }
             case 'f': {
                 matcher=matcher.usePattern(falsep);
                 if (matcher.find(pos)&&matcher.start()==pos) {pos=matcher.end();return FALSE;}
+                break;
             }
             case 'n': {
                 matcher=matcher.usePattern(nullp);
                 if (matcher.find(pos)&&matcher.start()==pos) {pos=matcher.end();return NULL;}
+                break;
             }
             case'0': case '1':case'2':case'3':case'4':case'5':case'6':case'7':case'8': case'9':case'.':case'-':case'+': {
                 matcher=matcher.usePattern(number);
                 if (matcher.find(pos)&&matcher.start()==pos) {pos=matcher.end();return NUMBER;}
+                break;
             }
             case' ':case'\t':case'\f':case'\r':case'\n': {
                 matcher=matcher.usePattern(spaces);
                 if (matcher.find(pos)&&matcher.start()==pos) {pos=matcher.end();return SPACES;}
+                break;
             }
         }
         pos=src.length();

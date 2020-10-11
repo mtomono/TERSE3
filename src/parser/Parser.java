@@ -19,9 +19,12 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import collection.P;
 import collection.TList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
+import static java.util.stream.Collectors.toList;
 
 /**
  *
@@ -185,6 +188,12 @@ public interface Parser<S, T, U> {
             return parse(s);
         };
     }
+    
+    default Parser<S,T,U> end() {
+        return s->{
+            throw new ParseCompleteException();
+        };
+    }
 
     default <V> Parser<S, T, V> apply(Function<U, V> f) {
         return s-> f.apply(parse(s));
@@ -237,20 +246,55 @@ public interface Parser<S, T, U> {
      * @param start
      * @return 
      */
-    default <V> Parser<S, T, V> reduce(BiFunction<V, U, V> f, V start) {
+    default <V> Parser<S, T, V> reduce(Supplier<V> start,BiFunction<V, U, V> f) {
         return s-> {
-            return reduceBase(s, f, start);
+            return reduceBase(s, start.get(),f);
         };
     }
     
-    default <V> V reduceBase(Source<S, T> s, BiFunction<V, U, V> f, V start) {
+    default <V> Parser<S,T,U> reduce(BiFunction<U,U,U> f) {
+        return s-> {
+            return reduceBase(s, parse(s), f);
+        };
+    }
+    
+    default <V> V reduceBase(Source<S, T> s, V start, BiFunction<V, U, V> f) {
         try {
-            return reduceBase(s, f, f.apply(start, parse(s)));
+            return reduceBase(s, f.apply(start, parse(s)), f);
         } catch (ParseException e) {
             return start;
         }
     }
     
+    public static <S, T, U> U reduce(Source<S, T> s, U start, Parser<S, T, Function<U, U>> p) {
+        try {
+            return reduce(s, p.parse(s).apply(start), p);
+        } catch (ParseException e) {
+            return start;
+        }
+    }
+    
+    public static <S, T, U> Parser<S, T, U> reduce(Supplier<U> start, Parser<S, T, Function<U, U>> p) {
+        return s-> reduce(s, start.get(), p);
+    }
+    
+    /**
+     * p reduce
+     * reduce in which all the values (initial values and step values) are collected
+     * from parser.
+     * @param <S>
+     * @param <T>
+     * @param <U>
+     * @param start
+     * @param p
+     * @return 
+     */
+    public static <S, T, U> Parser<S, T, U> preduce(Parser<S, T, U> start, Parser<S, T, Function<U, U>> p) {
+        return s-> {
+            U init = start.parse(s);
+            return reduce(s, init, p);
+        };
+    }
     default <V, W> Parser<S, T, W> relay(Parser<S, T, V> p, BiFunction<U, V, W> f) {
         return s-> f.apply(parse(s), p.parse(s));
     }
@@ -289,9 +333,131 @@ public interface Parser<S, T, U> {
      * @return 
      */
     default <V> Parser<S, T, P<U, V>> and(Parser<S, T, V> p) {
+        return and(p,(a,b)->P.p(a,b));
+    }
+    
+    default <V,W> Parser<S,T,W> and(Parser<S,T,V> p, BiFunction<U,V,W> f) {
         return s-> {
-            return new P<>(parse(s), p.parse(s));
+            return f.apply(parse(s), p.parse(s));
         };
     }
     
+    default <V> Parser<S, T, V> rep(int n, Function<TList<U>,V> f) {
+        return s-> {
+            TList<U> retval=TList.c();
+            for(int i = 0; i < n; ++i)
+                retval.add(parse(s));
+            return f.apply(retval);
+        };
+    }
+
+    default <V> Parser<S, T, V> rep(int n) {
+        return s-> {
+            for(int i = 0; i < n; ++i) {
+                parse(s);
+            }
+            return null;
+        };
+    }
+    
+    default <V> Parser<S,T,V> many(Function<TList<U>,V> f) {
+        return s-> {
+            TList<U> retval=TList.c();
+            try {
+                for (;;) {
+                    retval.add(parse(s));
+                }
+            } catch (ParseException e) {
+            }
+            return f.apply(retval);
+        };
+    }
+    
+    default <V> Parser<S,T,V> many() {
+        return s-> {
+            try {
+                for (;;) {
+                    parse(s);
+                }
+            } catch (ParseException e) {
+            }
+            return null;
+        };
+    }
+
+    default <V> Parser<S,T,V> than(int min, Function<TList<U>,V> f) {
+        return rep(min,l->l).and(many(l->l),(a,b)->f.apply(a.append(b)));
+    }
+    default <V> Parser<S,T,V> than(int min) {
+        return rep(min).and(many(),(a,b)->null);
+    }
+    
+    default <V> Parser<S,T,V> upto(int max, Function<TList<U>,V> f) {
+        return s-> {
+            TList<U> retval=TList.c();
+            try {
+                for (int i=0; i<max; i++) {
+                    retval.add(parse(s));
+                }
+            } catch (ParseException e) {
+            }
+            return f.apply(retval);
+        };
+    }
+    default <V> Parser<S,T,V> upto(int max) {
+        return s-> {
+            try {
+                for (int i=0; i<max; i++) {
+                    parse(s);
+                }
+            } catch (ParseException e) {
+            }
+            return null;
+        };
+    }
+    default <V> Parser<S,T,V> many(int min,int max,Function<TList<U>,V> f) {
+        return rep(min,l->l).and(upto(max-min,l->l),(a,b)->f.apply(a.append(b)));
+    }
+    default <V> Parser<S,T,V> many(int min,int max) {
+        return rep(min).and(upto(max-min),(a,b)->null);
+    }
+    
+    public static <S, T, U, V> Parser<S, T, V> seq(Function<TList<U>,V> f,Parser<S, T, U>... args) {
+        return s-> {
+            TList<U> retval=TList.c();
+            for (Parser<S,T,U> arg : args) 
+                retval.add(arg.parse(s));
+            return f.apply(retval);
+        };
+    }
+    
+    public static <S, T, U, V> Parser<S, T, V> seq(Parser<S, T, U>... args) {
+        return s-> {
+            for (Parser<S,T,U> arg : args) 
+                arg.parse(s);
+            return null;
+        };
+    }
+
+    public static <S, T, U> Parser<S, T, U> or(Parser<S, T, U>... ps) {
+        return s-> {
+            ParseException thrown = new ParseException("Or is empty.");
+            for (Parser<S, T, U> p : ps) {
+                Source<S, T> bak = s.clone();
+                try {
+                    return p.parse(s);
+                } catch (ParseException e) {
+                    thrown = e;
+                    if (!s.equals(bak)) {
+                        throw e;
+                    }
+                }
+            }
+            throw thrown;
+        };
+    }
+    
+    public static  <S, T, U> Parser<S, T, U> tor(Parser<S, T, U>... ps) {
+        return or(Arrays.asList(ps).stream().map(p->p.tr()).collect(toList()).toArray(ps));
+    }
 }

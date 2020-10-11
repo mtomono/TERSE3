@@ -14,13 +14,17 @@
  */
 package json;
 
+import collection.P;
 import collection.TList;
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.function.Supplier;
 import static json.TokenType.*;
 import parser.ParseException;
 import parser.Parser;
-import static parser.Parsers.many;
+import parser.Parsers;
 
 /**
  *
@@ -37,11 +41,26 @@ public interface JsonParser extends Parser<String,TokenType,TokenType> {
             return retval;
         };
     }
+    public class NotFoundException extends RuntimeException {
+        public NotFoundException(String msg) {
+            super(msg);
+        }
+    }
     static <U> Parser<String,TokenType,U> get(String targetKey, BiFunction<String,TokenType,U> f) {
         Parser<String,TokenType,TokenType> value =is(STRING,TRUE,FALSE,NULL,NUMBER);
         Parser<String,TokenType,U> target = is(STRING).l().accept(t->stripQuote(t.strip()).equals(targetKey)).next(is(COLON)).next(value.l(strip(f)));
         Parser<String,TokenType,TokenType> skipped = is(STRING).l().except(t->stripQuote(t.strip()).equals(targetKey)).tr().next(is(COLON)).next(value);
-        return is(BRACE).next(many(skipped.next(is(COMMA)))).next(target.tor(is(UNBRACE).apply(x->null)));
+        return is(BRACE).next(skipped.next(is(COMMA).tor(is(UNBRACE).end())).many()).next(target);
+    }
+    static Parser<String,TokenType,Map<String,String>> getAll(Supplier<Map<String,String>> s) {
+        Parser<String,TokenType,TokenType> value =is(STRING,TRUE,FALSE,NULL,NUMBER);
+        Parser<String,TokenType,P<String,String>> property = is(STRING).l().apply(t->stripQuote(t)).tr().prev(is(COLON)).and(value.l(JsonParser::asString));
+        return is(BRACE).next(property.prev(is(COMMA).tor(is(UNBRACE))).reduce(s,(a,b)->{a.put(b.l(),b.r());return a;}));
+    }
+    static Parser<String,TokenType,List<P<String,String>>> getAllList(Supplier<List<P<String,String>>> s) {
+        Parser<String,TokenType,TokenType> value =is(STRING,TRUE,FALSE,NULL,NUMBER);
+        Parser<String,TokenType,P<String,String>> property = is(STRING).l().apply(t->stripQuote(t)).tr().prev(is(COLON)).and(value.l(JsonParser::asString));
+        return is(BRACE).next(property.prev(is(COMMA).tor(is(UNBRACE))).reduce(s,(a,b)->{a.add(b);return a;}));
     }
 
     static public String stripQuote(String s) {

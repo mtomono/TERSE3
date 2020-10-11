@@ -1,0 +1,21 @@
+in JsonLex#nextToken(), i left some remnant of a decision making process.
+here i describe the situation.
+spaces between symbols have to be skipped. to skip them, there were 2 choices.
+1)to skip symbols in JsonParser, it requires backtracking in parsing process (means tr()) between every symbols.
+2)another choice is to skip symbols in JsonLex. in this case, literals taken in JsonParser cannot avoid from containing leading spaces.
+i chose latter one, because 1) had considerable performance fallouts.
+
+the problem here is how to take care of spaces contained in symbols? 
+there were three choices below.
+a) by letting single letter tokens like '{', ':' or ',' to absorb trailing spaces. they are already absorbing leading ones. thus results like '  {  ', '   : ' and ' ,    '.
+b) by trimming off spaces after literals are taken from the source.
+c) by not allowing spaces from the beginning.
+without question, c) is the fastest in perspective of performance. but that's not always the case that such a rule can be kept.
+b) is susceptible to the length of spaces. simply because it's processing spaces twice. 
+first, it have to cut out the spaces as token. and second, it have to trim them from literals.
+still, when there is no space, cost of trimming is almost nothing and this choice has possibility of enjoying the fullest speed comes with c).
+compared to that, 1) is stable. but this means replacing a simple letter check of single letter token to a full fledged regex.
+of course, that replacement cannot happen without cost. when the source is around 100 characters length, it's like 0.2-0.3μ sec in 5μ sec.
+
+currently, i chose 1). usually, 0.2-0.3μ sec doesn't matter. 
+only in case someone needs to use the final improvement, i left this note here.

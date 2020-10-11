@@ -6,13 +6,11 @@
 package parser;
 
 import collection.TList;
-import static function.TSupplier.f;
 import java.util.List;
 import java.util.function.Predicate;
-import static parser.Parsers.many;
+import static parser.Parser.seq;
 import static parser.Parsers.not;
 import static parser.Parsers.satisfy;
-import static parser.Parsers.seq;
 
 /**
  *
@@ -24,7 +22,7 @@ public class Parenthesis<S,T> {
     };
     
     public static final <S,T> Parser<S,T,T> content(Parser<S,T,T> parenthesis, Predicate<T> start, Predicate<T> end) {
-        return seq(not(start.or(end)),many(seq(parenthesis,not(start.or(end)))));
+        return seq(not(start.or(end)),seq(parenthesis,not(start.or(end))).many());
     }
     
     final public PlaceHolder<S,T,T> parenthesis;
