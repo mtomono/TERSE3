@@ -47,6 +47,11 @@ public interface ArrayInt {
     static public <T> ArrayInt set(TList<T>body, ToIntFunction<T> map) {
         return ArrayIntIterator.fromList(body, map).asArray();
     }
+    static public <T> ArrayInt extract(TList<T>src, ToIntFunction<T> f) {
+        ArrayInt retval=new Plain(new int[src.size()]);
+        retval.index().forEach(i->retval.set(i, f.applyAsInt(src.get(i))));
+        return retval;
+    }
     public int get(int i);
     public int set(int i, int v);
     public int length();

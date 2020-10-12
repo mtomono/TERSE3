@@ -285,10 +285,6 @@ public class Range<T extends Comparable<? super T>> {
         return cover(punches).map(w->w.negate(punches)).orElse(TList.empty());
     }
     
-    static public <T extends Comparable<? super T>> TList<Range<T>> mergeOverlaps(TList<Range<T>> punches) {
-        return cover(punches).map(w->TList.set(new RangeSet<>(w.negate(punches)).negate(w))).orElse(TList.empty());
-    }
-    
     public static <T extends Comparable<? super T>> Optional<Range<T>> cover(TList<Range<T>> rl) {
         if (rl.isEmpty()) return Optional.empty();
         return Optional.of(new Range<>(rl.map(r->r.start).min((a,b)->a.compareTo(b)).get(),rl.map(r->r.end).max((a,b)->a.compareTo(b)).get()));

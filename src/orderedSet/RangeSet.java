@@ -82,6 +82,10 @@ public class RangeSet<T extends Comparable<? super T>> extends AbstractList<Rang
         return rs.sortTo(inc(r->r.start())).diffChunk((a,b)->!a.overlaps(b)).map(rl->rl.stream().reduce((a,b)->a.cover(b))).filter(or->or.isPresent()).map(or->or.get()).transform(l->new RangeSet<>(l));
     }
    
+    static public <T extends Comparable<? super T>> TList<Range<T>> mergeOverlaps(TList<Range<T>> punches) {
+        return Range.cover(punches).map(w->TList.set(new RangeSet<>(w.negate(punches)).negate(w))).orElse(TList.empty());
+    }
+    
     protected RangeSet() {
         super();
     }
