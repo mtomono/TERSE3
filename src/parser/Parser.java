@@ -21,6 +21,7 @@ import collection.P;
 import collection.TList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -400,6 +401,16 @@ public interface Parser<S, T, U> {
             } catch (ParseException e) {
             }
             return null;
+        };
+    }
+    default <V> Parser<S,T,Optional<V>> opt(Function<U,V> f) {
+        return s->{
+            Optional<V> retval= Optional.empty();
+            try{
+                retval=Optional.of(f.apply(parse(s)));
+            } catch (ParseException e) {
+            }
+            return retval;
         };
     }
     default <V> Parser<S,T,V> many(int min,int max,Function<TList<U>,V> f) {

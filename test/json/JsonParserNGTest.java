@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeMap;
 import static org.testng.Assert.*;
 import org.testng.annotations.BeforeGroups;
@@ -106,7 +107,28 @@ public class JsonParserNGTest {
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
     }
-    
+    @Test
+    public void testParseJsonGetOFase() throws ParseException {
+        System.out.println(test.TestUtils.methodName(0));
+        String src="{\"m0\":true , \"m1\":123.02, \"m2\":   \"bb\", \"m3\":false} ";
+        JsonLex lexer=new JsonLex(src);
+        Optional<Boolean> result = JsonParser.getO("none",JsonParser::asBoolean).parse(lexer);
+        Optional<Boolean> expected = Optional.empty();
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    @Test
+    public void testParseJsonGetONotFound() throws ParseException {
+        System.out.println(test.TestUtils.methodName(0));
+        String src="{\"m0\":true , \"m1\":123.02, \"m2\":   \"bb\", \"m3\":false} ";
+        JsonLex lexer=new JsonLex(src);
+        Optional<Boolean> result = JsonParser.getO("m3",JsonParser::asBoolean).parse(lexer);
+        Optional<Boolean> expected = Optional.of(false);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
     
     
     

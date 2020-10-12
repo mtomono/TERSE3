@@ -21,6 +21,8 @@ import static json.JsonLex.IGNORED;
  * @author masao
  */
 public enum TokenType {
+    BRACKET,
+    UNBRACKET,
     BRACE,
     UNBRACE,
     SQUARE,

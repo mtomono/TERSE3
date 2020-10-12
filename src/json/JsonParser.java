@@ -17,14 +17,13 @@ package json;
 import collection.P;
 import collection.TList;
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 import static json.TokenType.*;
 import parser.ParseException;
 import parser.Parser;
-import parser.Parsers;
 
 /**
  *
@@ -52,6 +51,12 @@ public interface JsonParser extends Parser<String,TokenType,TokenType> {
         Parser<String,TokenType,TokenType> skipped = is(STRING).l().except(t->stripQuote(t.strip()).equals(targetKey)).tr().next(is(COLON)).next(value);
         return is(BRACE).next(skipped.next(is(COMMA).tor(is(UNBRACE).end())).many()).next(target);
     }
+    static <U> Parser<String,TokenType,Optional<U>> getO(String targetKey, BiFunction<String,TokenType,U> f) {
+        Parser<String,TokenType,TokenType> value =is(STRING,TRUE,FALSE,NULL,NUMBER);
+        Parser<String,TokenType,U> target = is(STRING).l().accept(t->stripQuote(t.strip()).equals(targetKey)).next(is(COLON)).next(value.l(strip(f)));
+        Parser<String,TokenType,TokenType> skipped = is(STRING).l().except(t->stripQuote(t.strip()).equals(targetKey)).tr().next(is(COLON)).next(value);
+        return is(BRACE).next(skipped.next(is(COMMA).tor(is(UNBRACE))).many()).next(target.opt(v->v));
+    }    
     static Parser<String,TokenType,Map<String,String>> getAll(Supplier<Map<String,String>> s) {
         return getAll(s,JsonParser::asString);
     }
