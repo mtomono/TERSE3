@@ -266,7 +266,6 @@ public class Range<T extends Comparable<? super T>> {
     public TList<Range<T>> negate(TList<Range<T>> punches) {
         return TList.set(i2l(negateIterator(punches)));
     }
-    
     /**
      * negate the cover.
      * @param <T>
@@ -276,7 +275,15 @@ public class Range<T extends Comparable<? super T>> {
     static public <T extends Comparable<? super T>> TList<Range<T>> negateCover(TList<Range<T>> punches) {
         return cover(punches).map(w->w.negate(punches)).orElse(TList.empty());
     }
-    
+    /**
+     * union of punches.
+     * @param <T>
+     * @param punches
+     * @return is in order without overlapping, thus can form RangeSet.
+     */
+    static public <T extends Comparable<? super T>> TList<Range<T>> union(TList<Range<T>> punches) {
+        return cover(punches).map(w->w.negate(w.negate(punches))).orElse(TList.empty());
+    }
     public static <T extends Comparable<? super T>> Optional<Range<T>> cover(TList<Range<T>> rl) {
         if (rl.isEmpty()) return Optional.empty();
         return Optional.of(new Range<>(rl.map(r->r.start).min((a,b)->a.compareTo(b)).get(),rl.map(r->r.end).max((a,b)->a.compareTo(b)).get()));

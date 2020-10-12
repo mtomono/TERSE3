@@ -274,7 +274,15 @@ public class RangeInt {
     static public TList<RangeInt> negateCover(TList<RangeInt> punches) {
         return cover(punches).map(w->w.negate(punches)).orElse(TList.empty());
     }
-    
+    /**
+     * union the punches.
+     * @param <T>
+     * @param punches
+     * @return is in order without overlapping, thus can form RangeSet.
+     */
+    static public TList<RangeInt> union(TList<RangeInt> punches) {
+        return cover(punches).map(w->w.negate(w.negate(punches))).orElse(TList.empty());
+    }
     public static Optional<RangeInt> cover(TList<RangeInt> rl) {
         if (rl.isEmpty()) return Optional.empty();
         return Optional.of(new RangeInt(ArrayInt.extract(rl,r->r.start).min(i->i),ArrayInt.extract(rl,r->r.start).max(i->i)));

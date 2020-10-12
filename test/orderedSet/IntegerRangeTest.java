@@ -876,4 +876,24 @@ public class IntegerRangeTest {
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
     }
+    @Test
+    public void testUnion() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Range<Integer>> tested = TList.sof(0,10, 11,18, 12,13, 13,15, 20,23).fold(2).map(l->new Range<>(l.get(0),l.get(1)));
+        TList<Range<Integer>> result = Range.union(tested);
+        TList<Range<Integer>> expected = TList.sof(0,10, 11,18, 20,23).fold(2).map(l->new Range<>(l.get(0),l.get(1)));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    @Test
+    public void testUnion2() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Range<Integer>> tested = TList.sof(0,10, 11,18, 12,13, 13,15, 20,28, 21,24, 25,26).fold(2).map(l->new Range<>(l.get(0),l.get(1)));
+        TList<Range<Integer>> result = Range.union(tested);
+        TList<Range<Integer>> expected = TList.sof(0,10, 11,18, 20,28).fold(2).map(l->new Range<>(l.get(0),l.get(1)));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
 }
