@@ -22,7 +22,6 @@ import iterator.AbstractBufferedIterator;
 import java.util.*;
 import static orderedSet.Default.order;
 import string.Message;
-import static test.OptionalTest.o;
 
 /**
  * 
@@ -248,6 +247,39 @@ public class RangeInt {
         return start*(1-rate)+end*rate;
     }
     
+    /**
+     * remove punches from this range.
+     * @param punches
+     * @return is in order without overlapping, thus can form RangeSet.
+     */
+    public Iterator<RangeInt> negateIterator(TList<RangeInt> punches) {
+        TList<RangeInt> sorted = punches.sortTo((a,b)->a.start-b.start).sfix();
+        return new NegateInt(sorted,this);
+    }
+    /**
+     * remove punches from this range.
+     * @param punches
+     * @return is in order without overlapping, thus can form RangeSet.
+     */
+    public TList<RangeInt> negate(TList<RangeInt> punches) {
+        return TList.set(i2l(negateIterator(punches)));
+    }
+    
+    /**
+     * negate the cover.
+     * @param <T>
+     * @param punches
+     * @return 
+     */
+    static public TList<RangeInt> negateCover(TList<RangeInt> punches) {
+        return cover(punches).map(w->w.negate(punches)).orElse(TList.empty());
+    }
+    
+    public static Optional<RangeInt> cover(TList<RangeInt> rl) {
+        if (rl.isEmpty()) return Optional.empty();
+        return Optional.of(new RangeInt(ArrayInt.extract(rl,r->r.start).min(i->i),ArrayInt.extract(rl,r->r.start).max(i->i)));
+    }
+
     static class NegateInt extends AbstractBufferedIterator<RangeInt> {
         Iterator<RangeInt> iter;
         Optional<RangeInt> rest;
@@ -275,20 +307,6 @@ public class RangeInt {
         }
     }
     
-    public TList<RangeInt> negate(TList<RangeInt> punches) {
-        TList<RangeInt> sorted = punches.sortTo((a,b)->a.start-b.start).sfix();
-        return TList.set(i2l(new NegateInt(sorted,this)));
-    }
-    
-    static public TList<RangeInt> negateCover(TList<RangeInt> punches) {
-        return cover(punches).map(w->w.negate(punches)).orElse(TList.empty());
-    }
-    
-    public static Optional<RangeInt> cover(TList<RangeInt> rl) {
-        if (rl.isEmpty()) return Optional.empty();
-        return Optional.of(new RangeInt(ArrayInt.extract(rl,r->r.start).min(i->i),ArrayInt.extract(rl,r->r.start).max(i->i)));
-    }
-
     @Override
     public String toString() {
         return Message.nl(start).c("<->").c(end).toString();

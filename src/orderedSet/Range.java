@@ -249,6 +249,39 @@ public class Range<T extends Comparable<? super T>> {
         return f.apply(start)*(1-rate)+f.apply(end)*rate;
     }
     
+    /**
+     * remove punches from this range.
+     * @param punches
+     * @return is in order without overlapping, thus can form RangeSet.
+     */
+    public Iterator<Range<T>> negateIterator(TList<Range<T>> punches) {
+        TList<Range<T>> sorted = punches.sortTo((a,b)->a.start.compareTo(b.start)).sfix();
+        return new Negate(sorted,this);
+    }
+    /**
+     * remove punches from this range.
+     * @param punches
+     * @return is in order without overlapping, thus can form RangeSet.
+     */
+    public TList<Range<T>> negate(TList<Range<T>> punches) {
+        return TList.set(i2l(negateIterator(punches)));
+    }
+    
+    /**
+     * negate the cover.
+     * @param <T>
+     * @param punches
+     * @return 
+     */
+    static public <T extends Comparable<? super T>> TList<Range<T>> negateCover(TList<Range<T>> punches) {
+        return cover(punches).map(w->w.negate(punches)).orElse(TList.empty());
+    }
+    
+    public static <T extends Comparable<? super T>> Optional<Range<T>> cover(TList<Range<T>> rl) {
+        if (rl.isEmpty()) return Optional.empty();
+        return Optional.of(new Range<>(rl.map(r->r.start).min((a,b)->a.compareTo(b)).get(),rl.map(r->r.end).max((a,b)->a.compareTo(b)).get()));
+    }
+
     static class Negate<T extends Comparable<? super T>> extends AbstractBufferedIterator<Range<T>> {
         Iterator<Range<T>> iter;
         Optional<Range<T>> rest;
@@ -276,20 +309,6 @@ public class Range<T extends Comparable<? super T>> {
         }
     }
     
-    public TList<Range<T>> negate(TList<Range<T>> punches) {
-        TList<Range<T>> sorted = punches.sortTo((a,b)->a.start.compareTo(b.start)).sfix();
-        return TList.set(i2l(new Negate(sorted,this)));
-    }
-    
-    static public <T extends Comparable<? super T>> TList<Range<T>> negateCover(TList<Range<T>> punches) {
-        return cover(punches).map(w->w.negate(punches)).orElse(TList.empty());
-    }
-    
-    public static <T extends Comparable<? super T>> Optional<Range<T>> cover(TList<Range<T>> rl) {
-        if (rl.isEmpty()) return Optional.empty();
-        return Optional.of(new Range<>(rl.map(r->r.start).min((a,b)->a.compareTo(b)).get(),rl.map(r->r.end).max((a,b)->a.compareTo(b)).get()));
-    }
-
     @Override
     public String toString() {
         return Message.nl(start).c("<->").c(end).toString();
