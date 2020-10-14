@@ -28,6 +28,13 @@ abstract public class AbstractBufferedIterator<T> implements Iterator<T> {
     T buffer;
     boolean has;
     abstract protected void findNext();
+    
+    public boolean has() {
+        return has;
+    }
+    public T peek() {
+        return buffer;
+    }
 
     public void nextFound(T buffered) {
         this.buffer = buffered;

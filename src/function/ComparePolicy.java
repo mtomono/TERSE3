@@ -23,11 +23,11 @@ import java.util.function.Function;
  * @author masao
  */
 public class ComparePolicy {
-    public static <T, S extends Comparable<S>> Comparator<T> inc(Function<T, S> func) {
+    public static <T, S extends Comparable<? super S>> Comparator<T> inc(Function<T, S> func) {
         return (a,b)->func.apply(a).compareTo(func.apply(b));
     } 
 
-    public static <T, S extends Comparable<S>> Comparator<T> dec(Function<T, S> func) {
+    public static <T, S extends Comparable<? super S>> Comparator<T> dec(Function<T, S> func) {
         return (a,b)->func.apply(b).compareTo(func.apply(a));
     } 
 }
