@@ -5,7 +5,6 @@
 package orderedSet;
 
 import collection.TList;
-import java.util.Optional;
 import static org.testng.Assert.assertEquals;
 import org.testng.annotations.Test;
 

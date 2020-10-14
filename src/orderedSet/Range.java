@@ -251,84 +251,31 @@ public class Range<T extends Comparable<? super T>> {
         return f.apply(start)*(1-rate)+f.apply(end)*rate;
     }
     
-    /**
-     * negate the cover.
-     * @param <T>
-     * @param punches
-     * @return 
-     */
-    static public <T extends Comparable<? super T>> TList<Range<T>> negateCover(TList<Range<T>> punches) {
-        return cover(punches).map(w->w.negate(punches)).orElse(TList.empty());
-    }
-    static public <T extends Comparable<? super T>> TList<Range<T>> sortToStart(TList<Range<T>> ranges) {
-        return ranges.sortTo(inc(r->r.start()));
-    }
-    /**
-     * remove punches from this range.
-     * @param punches
-     * @return is in order without overlapping, thus can form RangeSet.
-     */
-    public Iterator<Range<T>> negateIterator(TList<Range<T>> punches) {
-        return negateIteratorIfLucky(sortToStart(punches).iterator());
-    }
-    public Iterator<Range<T>> negateIteratorIfLucky(Iterator<Range<T>> sorted) {
-        return new Negate(sorted,this);
-    }
-    public TList<Range<T>> negate(TList<Range<T>> punches) {
-        return TList.set(i2l(negateIterator(punches)));
-    }
-    public TList<Range<T>> negateRef(TList<Range<T>> punches) {
-        return TList.set(i2l(new Negate(sortToStart(punches),this)));
-    }
-    /**
-     * union of punches.
-     * @param <T>
-     * @param punches
-     * @return is in order without overlapping, thus can form RangeSet.
-     */
-    static public <T extends Comparable<? super T>> Iterator<Range<T>> unionIterator(TList<Range<T>> punches) {
-        return cover(punches).map(w->w.unionIteratorIfLucky(sortToStart(punches).iterator())).orElse(TList.<Range<T>>empty().iterator());
-    }
-    public Iterator<Range<T>> unionIteratorIfLucky(Iterator<Range<T>> punches) {
-        return negateIteratorIfLucky(negateIteratorIfLucky(punches));
-    }
-    static public <T extends Comparable<? super T>> TList<Range<T>> union(TList<Range<T>> punches) {
-        return TList.set(i2l(unionIterator(punches)));
-    }
-    static public <T extends Comparable<? super T>> TList<Range<T>> unionRef(TList<Range<T>> punches) {
-        return cover(punches).map(w->w.negateRef(w.negateRef(punches))).orElse(TList.empty());
-    }
-    static public <T extends Comparable<? super T>> TList<Optional<Range<T>>> intersectSeq(TList<Range<T>> punches) {
-        if (punches.isEmpty()) return TList.empty();
-        return punches.accumFromStart(s->Optional.of(s),(o,x)->o.flatMap(r->r.intersect(x)));
-    }
-    static public <T extends Comparable<? super T>> Optional<Range<T>> intersect(TList<Range<T>> punches) {
-        if (punches.isEmpty()) return Optional.empty();
-        return intersectSeq(punches).last();
-    }
-    static public <T extends Comparable<? super T>> Iterator<Range<T>> intersectIterator(TList<Range<T>> a, TList<Range<T>> b) {
-        return cover(a.append(b)).map(w->w.intersectIteratorIfLucky(sortToStart(a).iterator(),sortToStart(b).iterator())).orElse(TList.<Range<T>>empty().iterator());
-    }
-    public Iterator<Range<T>> intersectIteratorIfLucky(Iterator<Range<T>> a,Iterator<Range<T>>b) {
-        return negateIteratorIfLucky(unionIteratorIfLucky(new MergeIterator<>(negateIteratorIfLucky(a),negateIteratorIfLucky(b),(Range<T> x,Range<T>y)->x.start().compareTo(y.start()))));
-    }
-    static public <T extends Comparable<? super T>> TList<Range<T>> intersect(TList<Range<T>> a, TList<Range<T>>b) {
-        return TList.set(i2l(intersectIterator(a,b)));
-    }
-    static public <T extends Comparable<? super T>> TList<Range<T>> intersectRef(TList<Range<T>> a, TList<Range<T>>b) {
-        return cover(a.append(b)).map(w->w.negateRef(unionRef(w.negateRef(a).append(w.negateRef(b))))).orElse(TList.empty());
-    }
-    static public <T extends Comparable<? super T>> boolean overlap(TList<Range<T>> a, TList<Range<T>> b) {
-        return cover(a.append(b)).map(w->w.overlapIfLucky(sortToStart(a).iterator(),sortToStart(b).iterator())).orElse(false);
-    }
-    public boolean overlapIfLucky(Iterator<Range<T>> a, Iterator<Range<T>> b) {
-        return intersectIteratorIfLucky(a,b).hasNext();
-    }
     public static <T extends Comparable<? super T>> Optional<Range<T>> cover(TList<Range<T>> rl) {
         if (rl.isEmpty()) return Optional.empty();
         return Optional.of(new Range<>(rl.map(r->r.start).min((a,b)->a.compareTo(b)).get(),rl.map(r->r.end).max((a,b)->a.compareTo(b)).get()));
     }
 
+    static public <T extends Comparable<? super T>> TList<Range<T>> sortToStart(TList<Range<T>> ranges) {
+        return ranges.sortTo(inc(r->r.start()));
+    }
+    /**
+     * remove punches from this range.
+     * @param sorted
+     * @return is in order without overlapping, thus can form RangeSet.
+     */
+    public Iterator<Range<T>> negateIteratorIfLucky(Iterator<Range<T>> sorted) {
+        return new Negate(sorted,this);
+    }
+    public TList<Range<T>> negateIfLucky(TList<Range<T>> sorted) {
+        return TList.set(i2l(negateIteratorIfLucky(sorted.iterator())));
+    }
+    public Iterator<Range<T>> negateIterator(TList<Range<T>> punches) {
+        return negateIteratorIfLucky(sortToStart(punches).iterator());
+    }
+    public TList<Range<T>> negate(TList<Range<T>> punches) {
+        return negateIfLucky(sortToStart(punches));
+    }
     static class Negate<T extends Comparable<? super T>> extends AbstractBufferedIterator<Range<T>> {
         Iterator<Range<T>> iter;
         Optional<Range<T>> rest;
@@ -360,7 +307,78 @@ public class Range<T extends Comparable<? super T>> {
             rest = Optional.empty();
         }
     }
-    
+    /**
+     * union of punches.
+     * @param punches
+     * @return is in order without overlapping, thus can form RangeSet.
+     */
+    public Iterator<Range<T>> unionIteratorIfLucky(Iterator<Range<T>> punches) {
+        return negateIteratorIfLucky(negateIteratorIfLucky(punches));
+    }
+    static public <T extends Comparable<? super T>> TList<Range<T>> unionIfLucky(TList<Range<T>> sorted) {
+        return TList.set(i2l(cover(sorted).map(w->w.unionIteratorIfLucky(sorted.iterator())).orElse(TList.<Range<T>>empty().iterator())));
+    }
+    static public <T extends Comparable<? super T>> Iterator<Range<T>> unionIterator(TList<Range<T>> punches) {
+        return cover(punches).map(w->w.unionIteratorIfLucky(sortToStart(punches).iterator())).orElse(TList.<Range<T>>empty().iterator());
+    }
+    static public <T extends Comparable<? super T>> TList<Range<T>> union(TList<Range<T>> punches) {
+        return unionIfLucky(sortToStart(punches));
+    }
+    /**
+     * unary intersect.
+     * @param <T>
+     * @param punches
+     * @return 
+     */
+    static public <T extends Comparable<? super T>> TList<Optional<Range<T>>> intersectSeq(TList<Range<T>> punches) {
+        if (punches.isEmpty()) return TList.empty();
+        return punches.accumFromStart(s->Optional.of(s),(o,x)->o.flatMap(r->r.intersect(x)));
+    }
+    static public <T extends Comparable<? super T>> Optional<Range<T>> intersect(TList<Range<T>> punches) {
+        if (punches.isEmpty()) return Optional.empty();
+        return intersectSeq(punches).last();
+    }
+    /**
+     * binary intersect.
+     * @param a
+     * @param b
+     * @return 
+     */
+    public Iterator<Range<T>> intersectIteratorIfLucky(Iterator<Range<T>> a,Iterator<Range<T>>b) {
+        return negateIteratorIfLucky(unionIteratorIfLucky(new MergeIterator<>(negateIteratorIfLucky(a),negateIteratorIfLucky(b),(Range<T> x,Range<T>y)->x.start().compareTo(y.start()))));
+    }
+    static public <T extends Comparable<? super T>> TList<Range<T>> intersectIfLucky(TList<Range<T>> aSorted, TList<Range<T>> bSorted) {
+        return TList.set(i2l(cover(aSorted.append(bSorted)).map(w->w.intersectIteratorIfLucky(aSorted.iterator(),bSorted.iterator())).orElse(TList.<Range<T>>empty().iterator())));
+    }
+    static public <T extends Comparable<? super T>> Iterator<Range<T>> intersectIterator(TList<Range<T>> a, TList<Range<T>> b) {
+        return cover(a.append(b)).map(w->w.intersectIteratorIfLucky(sortToStart(a).iterator(),sortToStart(b).iterator())).orElse(TList.<Range<T>>empty().iterator());
+    }
+    static public <T extends Comparable<? super T>> TList<Range<T>> intersect(TList<Range<T>> a, TList<Range<T>> b) {
+        return intersectIfLucky(sortToStart(a),sortToStart(b));
+    }
+    /**
+     * overlap. (binary, because there is no such thing like unaly overlap.)
+     * @param a
+     * @param b
+     * @return 
+     */
+    public boolean overlapIfLucky(Iterator<Range<T>> a, Iterator<Range<T>> b) {
+        return intersectIteratorIfLucky(a,b).hasNext();
+    }
+    static public <T extends Comparable<? super T>> boolean overlap(TList<Range<T>> a, TList<Range<T>> b) {
+        return cover(a.append(b)).map(w->w.overlapIfLucky(sortToStart(a).iterator(),sortToStart(b).iterator())).orElse(false);
+    }
+        
+    /**
+     * negate the cover.
+     * @param <T>
+     * @param punches
+     * @return 
+     */
+    static public <T extends Comparable<? super T>> TList<Range<T>> negateCover(TList<Range<T>> punches) {
+        return cover(punches).map(w->w.negate(punches)).orElse(TList.empty());
+    }
+
     @Override
     public String toString() {
         return Message.nl(start).c("<->").c(end).toString();
