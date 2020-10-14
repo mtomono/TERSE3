@@ -345,7 +345,7 @@ public class Range<T extends Comparable<? super T>> {
      * @return 
      */
     public Iterator<Range<T>> intersectIteratorIfLucky(Iterator<Range<T>> a,Iterator<Range<T>>b) {
-        return negateIteratorIfLucky(unionIteratorIfLucky(new MergeIterator<>(negateIteratorIfLucky(a),negateIteratorIfLucky(b),(Range<T> x,Range<T>y)->x.start().compareTo(y.start()))));
+        return negateIteratorIfLucky(unionIteratorIfLucky(new MergeIterator<>(negateIteratorIfLucky(a),negateIteratorIfLucky(b),inc(r->r.start()))));
     }
     static public <T extends Comparable<? super T>> TList<Range<T>> intersectIfLucky(TList<Range<T>> aSorted, TList<Range<T>> bSorted) {
         return TList.set(i2l(cover(aSorted.append(bSorted)).map(w->w.intersectIteratorIfLucky(aSorted.iterator(),bSorted.iterator())).orElse(TList.<Range<T>>empty().iterator())));
