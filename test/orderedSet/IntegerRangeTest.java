@@ -4,7 +4,10 @@
  */
 package orderedSet;
 
+import collection.ArrayInt;
+import static collection.ArrayInt.arrayInt;
 import collection.TList;
+import java.util.Optional;
 import static org.testng.Assert.assertEquals;
 import org.testng.annotations.Test;
 
@@ -918,4 +921,27 @@ public class IntegerRangeTest {
         assertEquals(result, expected);
     }
     
+    @Test
+    public void testIntersectPoints0() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Range<Integer>> tested0 = TList.sof(0,10, 11,12, 13,15, 20,28, 30,35, 37,40).fold(2).map(l->new Range<>(l.get(0),l.get(1)));
+        TList<Integer> tested1 = TList.sof(-10,-1,2,3,3,5,10,12,14,16,16,16);
+        TList<Optional<RangeInt>> result = Range.intersectPoints(tested0, tested1);
+        TList<Optional<RangeInt>> expected = TList.sof(Optional.of(new RangeInt(2,6)),Optional.empty(),Optional.of(new RangeInt(8,9)),Optional.empty(),Optional.empty(),Optional.empty());
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testIntersectPoints1() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Range<Integer>> tested0 = TList.sof(0,10, 11,12, 13,15).fold(2).map(l->new Range<>(l.get(0),l.get(1)));
+        TList<Integer> tested1 = TList.sof(-10,-1,2,3,3,5,10,12,14,14,14);
+        TList<Optional<RangeInt>> result = Range.intersectPoints(tested0, tested1);
+        TList<Optional<RangeInt>> expected = TList.sof(Optional.of(new RangeInt(2,6)),Optional.empty(),Optional.of(new RangeInt(8,11)));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
 }

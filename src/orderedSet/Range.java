@@ -15,10 +15,12 @@
 
 package orderedSet;
 
+import collection.ArrayInt;
 import collection.TList;
 import static collection.c.i2l;
 import static function.ComparePolicy.inc;
 import iterator.AbstractBufferedIterator;
+import iterator.BufferedIterator;
 import iterator.MergeIterator;
 import static java.lang.Math.abs;
 import java.util.*;
@@ -369,6 +371,24 @@ public class Range<T extends Comparable<? super T>> {
         return cover(a.append(b)).map(w->w.overlapIfLucky(sortToStart(a).iterator(),sortToStart(b).iterator())).orElse(false);
     }
         
+    static public <T extends Comparable<? super T>> TList<Optional<RangeInt>> intersectPoints(TList<Range<T>> category,TList<T> points) {
+        TList<Optional<RangeInt>> retval=TList.c();
+        BufferedIterator<Range<T>> citer=new BufferedIterator(category.iterator());
+        ArrayInt.BufferedIterator piter=new ArrayInt.BufferedIterator(ArrayInt.range(0, points.size()).iterator());
+        while (citer.hasNext()) {
+            citer.next();
+            if (!piter.hasNext()) {retval.add(Optional.empty());continue;}
+            while (citer.peek().isAbove(points.get(piter.peek()))&&piter.hasNext()) piter.nextInt();
+            if (!citer.peek().contains(points.get(piter.peek()))) {retval.add(Optional.empty());continue;}
+            int start=piter.peek();
+            int end=start+1;
+            while (citer.peek().contains(points.get(piter.peek())))
+                if (piter.hasNext()) end=piter.nextInt();
+                else {end++;break;}
+            retval.add(Optional.of(new RangeInt(start,end)));
+        }
+        return retval;
+    }
     /**
      * negate the cover.
      * @param <T>

@@ -368,21 +368,21 @@ public class RangeInt {
         return cover(a.append(b)).map(w->w.overlapIfLucky(sortToStart(a).iterator(),sortToStart(b).iterator())).orElse(false);
     }
     
-    static public TList<Optional<RangeInt>> categorize(TList<RangeInt> category,ArrayInt points) {
+    static public TList<Optional<RangeInt>> intersectPoints(TList<RangeInt> ranges,ArrayInt points) {
         TList<Optional<RangeInt>> retval=TList.c();
-        BufferedIterator<RangeInt> citer=new BufferedIterator(category.iterator());
+        BufferedIterator<RangeInt> citer=new BufferedIterator(ranges.iterator());
         ArrayInt.BufferedIterator piter=new ArrayInt.BufferedIterator(points.index().iterator());
         while (citer.hasNext()) {
             citer.next();
             if (!piter.hasNext()) {retval.add(Optional.empty());continue;}
             while (citer.peek().isAbove(points.get(piter.peek()))&&piter.hasNext()) piter.nextInt();
-            if (citer.peek().contains(points.get(piter.peek()))) {
-                int start=piter.peek();
-                int end=piter.hasNext()?piter.nextInt():piter.peek()+1;
-                while (citer.peek().contains(points.get(piter.peek()))) end=piter.hasNext()?piter.nextInt():piter.peek()+1;
-                retval.add(Optional.of(new RangeInt(start,end)));
-            } else 
-                retval.add(Optional.empty());
+            if (!citer.peek().contains(points.get(piter.peek()))) {retval.add(Optional.empty());continue;}
+            int start=piter.peek();
+            int end=start+1;
+            while (citer.peek().contains(points.get(piter.peek())))
+                if (piter.hasNext()) end=piter.nextInt();
+                else {end++;break;}
+            retval.add(Optional.of(new RangeInt(start,end)));
         }
         return retval;
     }

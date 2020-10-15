@@ -921,12 +921,24 @@ public class IntegerRangeIntTest {
     }
 
     @Test
-    public void testCategorize0() {
+    public void testIntersectPoints0() {
         System.out.println(test.TestUtils.methodName(0));
         TList<RangeInt> tested0 = TList.sof(0,10, 11,12, 13,15, 20,28, 30,35, 37,40).fold(2).map(l->new RangeInt(l.get(0),l.get(1)));
         ArrayInt tested1 = arrayInt(-10,-1,2,3,3,5,10,12,14,16,16,16);
-        TList<Optional<RangeInt>> result = RangeInt.categorize(tested0, tested1);
+        TList<Optional<RangeInt>> result = RangeInt.intersectPoints(tested0, tested1);
         TList<Optional<RangeInt>> expected = TList.sof(Optional.of(new RangeInt(2,6)),Optional.empty(),Optional.of(new RangeInt(8,9)),Optional.empty(),Optional.empty(),Optional.empty());
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testIntersectPoints1() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<RangeInt> tested0 = TList.sof(0,10, 11,12, 13,15).fold(2).map(l->new RangeInt(l.get(0),l.get(1)));
+        ArrayInt tested1 = arrayInt(-10,-1,2,3,3,5,10,12,14,14,14);
+        TList<Optional<RangeInt>> result = RangeInt.intersectPoints(tested0, tested1);
+        TList<Optional<RangeInt>> expected = TList.sof(Optional.of(new RangeInt(2,6)),Optional.empty(),Optional.of(new RangeInt(8,11)));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
