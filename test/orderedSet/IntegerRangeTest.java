@@ -907,7 +907,7 @@ public class IntegerRangeTest {
         assertEquals(result, expected);
     }
     @Test
-    public void testIntersect2() {
+    public void testBinaryIntersect0() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Range<Integer>> tested0 = TList.sof(0,10, 11,12, 13,15, 20,28).fold(2).map(l->new Range<>(l.get(0),l.get(1)));
         TList<Range<Integer>> tested1 = TList.sof(0,10,        13,18, 21,24, 25,30).fold(2).map(l->new Range<>(l.get(0),l.get(1)));
@@ -917,4 +917,5 @@ public class IntegerRangeTest {
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
     }
+    
 }

@@ -4,7 +4,10 @@
  */
 package orderedSet;
 
+import collection.ArrayInt;
+import static collection.ArrayInt.arrayInt;
 import collection.TList;
+import java.util.Optional;
 import static org.testng.Assert.assertEquals;
 import org.testng.annotations.Test;
 
@@ -912,6 +915,18 @@ public class IntegerRangeIntTest {
         TList<RangeInt> tested1 = TList.sof(0,10,        13,18, 21,24, 25,30).fold(2).map(l->new RangeInt(l.get(0),l.get(1)));
         TList<RangeInt> result = RangeInt.intersect(tested0,tested1);
         TList<RangeInt> expected = TList.sof(0,10, 13,15, 21,24, 25,28).fold(2).map(l->new RangeInt(l.get(0),l.get(1)));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testCategorize() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<RangeInt> tested0 = TList.sof(0,10, 11,12, 13,15, 20,28).fold(2).map(l->new RangeInt(l.get(0),l.get(1)));
+        ArrayInt tested1 = arrayInt(2,3,3,5,10,12,14,16);
+        TList<Optional<RangeInt>> result = RangeInt.categorize(tested0, tested1);
+        TList<Optional<RangeInt>> expected = TList.sof(Optional.of(new RangeInt(0,4)),Optional.empty(),Optional.of(new RangeInt(6,7)),Optional.empty());
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);

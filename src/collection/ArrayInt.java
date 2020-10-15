@@ -55,6 +55,9 @@ public interface ArrayInt {
     public int get(int i);
     public int set(int i, int v);
     public int length();
+    default boolean isEmpty() {
+        return length()==0;
+    }
     default int last() {
         return get(length()-1);
     }
@@ -633,10 +636,16 @@ public interface ArrayInt {
             return body.hasNext();
         }
     }
-    abstract public class AbstractBufferedWrap implements ArrayIntIterator {
+    static abstract public class AbstractBufferedWrap implements ArrayIntIterator {
         int buffer;
         boolean has;
         abstract protected void findNext();
+        public boolean has() {
+            return has;
+        }
+        public int peek() {
+            return buffer;
+        }
         public void nextFound(int buffered) {
             this.buffer = buffered;
             this.has = true;
@@ -658,6 +667,23 @@ public interface ArrayInt {
             has = false;
             return buffer;
         }
+    }
+    static public class BufferedIterator extends AbstractBufferedWrap {
+        ArrayIntIterator body;
+        public BufferedIterator(ArrayIntIterator body) {
+            this.body=body;
+        }
+        @Override
+        protected void findNext() {
+            if (body.hasNext())
+                nextFound(body.next());
+        }
+
+        @Override
+        public int maxSize() {
+            return body.maxSize();
+        }
+        
     }
     class FilterWrap extends AbstractBufferedWrap {
         ArrayIntIterator body;

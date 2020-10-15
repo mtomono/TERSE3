@@ -20,6 +20,7 @@ import collection.TList;
 import static collection.c.i2l;
 import static function.ComparePolicy.inc;
 import iterator.AbstractBufferedIterator;
+import iterator.BufferedIterator;
 import iterator.MergeIterator;
 import java.util.*;
 import static orderedSet.Default.order;
@@ -365,7 +366,38 @@ public class RangeInt {
     static public boolean overlap(TList<RangeInt> a, TList<RangeInt> b) {
         return cover(a.append(b)).map(w->w.overlapIfLucky(sortToStart(a).iterator(),sortToStart(b).iterator())).orElse(false);
     }
-        
+    
+    static public TList<Optional<RangeInt>> categorize(TList<RangeInt> category, ArrayInt points) {
+        if (category.isEmpty()) return TList.empty();
+        if (points.isEmpty()) return category.map(c->Optional.empty());
+        BufferedIterator<RangeInt> citer=new BufferedIterator(category.iterator());
+        ArrayInt.BufferedIterator piter=new ArrayInt.BufferedIterator(points.index().iterator());
+        citer.next();
+        piter.next();
+        TList<Optional<RangeInt>> retval=TList.c();
+        int start;
+        int end;
+        while (true) {
+            while (citer.peek().isBelow(points.get(piter.peek()))&&citer.hasNext()) {retval.add(Optional.empty());citer.next();}
+            while (citer.peek().isAbove(points.get(piter.peek()))&&piter.hasNext()) piter.next();
+            //if (!citer.peek().contains(points.get(piter.peek()))&&(citer.hasNext()||piter.hasNext())) continue;
+            if (citer.peek().contains(points.get(piter.peek()))) {
+                start=piter.peek();
+                end=piter.next();
+                while (citer.peek().contains(points.get(piter.peek()))) 
+                    if (piter.hasNext()) end=piter.next(); else end=piter.peek()+1;
+                retval.add(Optional.of(new RangeInt(start,end)));
+            } else {
+                retval.add(Optional.empty());
+            }
+            if (!piter.hasNext())
+                while (citer.hasNext()) {retval.add(Optional.empty());citer.next();}
+            if (!citer.hasNext())
+                return retval;
+            else
+                citer.next();
+        }
+    }
     /**
      * negate the cover.
      * @param punches
