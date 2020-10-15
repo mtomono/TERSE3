@@ -18,6 +18,7 @@ package orderedSet;
 import collection.ArrayInt;
 import collection.TList;
 import static collection.c.i2l;
+import debug.Te;
 import static function.ComparePolicy.inc;
 import iterator.AbstractBufferedIterator;
 import iterator.BufferedIterator;
@@ -367,37 +368,25 @@ public class RangeInt {
         return cover(a.append(b)).map(w->w.overlapIfLucky(sortToStart(a).iterator(),sortToStart(b).iterator())).orElse(false);
     }
     
-    static public TList<Optional<RangeInt>> categorize(TList<RangeInt> category, ArrayInt points) {
-        if (category.isEmpty()) return TList.empty();
-        if (points.isEmpty()) return category.map(c->Optional.empty());
+    static public TList<Optional<RangeInt>> categorize(TList<RangeInt> category,ArrayInt points) {
+        TList<Optional<RangeInt>> retval=TList.c();
         BufferedIterator<RangeInt> citer=new BufferedIterator(category.iterator());
         ArrayInt.BufferedIterator piter=new ArrayInt.BufferedIterator(points.index().iterator());
-        citer.next();
-        piter.next();
-        TList<Optional<RangeInt>> retval=TList.c();
-        int start;
-        int end;
-        while (true) {
-            while (citer.peek().isBelow(points.get(piter.peek()))&&citer.hasNext()) {retval.add(Optional.empty());citer.next();}
-            while (citer.peek().isAbove(points.get(piter.peek()))&&piter.hasNext()) piter.next();
-            //if (!citer.peek().contains(points.get(piter.peek()))&&(citer.hasNext()||piter.hasNext())) continue;
+        while (citer.hasNext()) {
+            citer.next();
+            if (!piter.hasNext()) {retval.add(Optional.empty());continue;}
+            while (citer.peek().isAbove(points.get(piter.peek()))&&piter.hasNext()) piter.nextInt();
             if (citer.peek().contains(points.get(piter.peek()))) {
-                start=piter.peek();
-                end=piter.next();
-                while (citer.peek().contains(points.get(piter.peek()))) 
-                    if (piter.hasNext()) end=piter.next(); else end=piter.peek()+1;
+                int start=piter.peek();
+                int end=piter.hasNext()?piter.nextInt():piter.peek()+1;
+                while (citer.peek().contains(points.get(piter.peek()))) end=piter.hasNext()?piter.nextInt():piter.peek()+1;
                 retval.add(Optional.of(new RangeInt(start,end)));
-            } else {
+            } else 
                 retval.add(Optional.empty());
-            }
-            if (!piter.hasNext())
-                while (citer.hasNext()) {retval.add(Optional.empty());citer.next();}
-            if (!citer.hasNext())
-                return retval;
-            else
-                citer.next();
         }
+        return retval;
     }
+
     /**
      * negate the cover.
      * @param punches

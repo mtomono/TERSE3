@@ -676,7 +676,7 @@ public interface ArrayInt {
         @Override
         protected void findNext() {
             if (body.hasNext())
-                nextFound(body.next());
+                nextFound(body.nextInt());
         }
 
         @Override
