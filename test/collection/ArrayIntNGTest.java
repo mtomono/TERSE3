@@ -6,7 +6,11 @@
 package collection;
 
 import collection.ArrayInt.ArrayIntIterator;
+import collection.ArrayInt.IntersectIterator;
+import collection.ArrayInt.MaskIterator;
+import collection.ArrayInt.MergeIterator;
 import static collection.ArrayInt.arrayInt;
+import static collection.c.i2l;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 
@@ -205,6 +209,77 @@ public class ArrayIntNGTest {
         System.out.println(test.TestUtils.methodName(0));
         TList<Integer> result = ArrayInt.range(0, 10).seek(1).asList();
         TList<Integer> expected = TList.range(1,10);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testMask0() {
+        System.out.println(test.TestUtils.methodName(0));
+        ArrayInt tested0=arrayInt(2,3,6,8,12,14,14,15,16,16,16,21);
+        ArrayInt tested1=arrayInt(0,4,8,12,16,20);
+        TList<Integer> result = new MaskIterator(tested0.iterator(),tested1.iterator()).asArray().asList();
+        TList<Integer> expected = TList.sof(2,3,6,14,14,15,21);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    
+    @Test
+    public void testMask1() {
+        System.out.println(test.TestUtils.methodName(0));
+        ArrayInt tested0=arrayInt(2,3,6,8,12,14,14,15,16,16,16,21);
+        ArrayInt tested1=arrayInt(0,4,8,12,16,20,22,23);
+        TList<Integer> result = new MaskIterator(tested0.iterator(),tested1.iterator()).asArray().asList();
+        TList<Integer> expected = TList.sof(2,3,6,14,14,15,21);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testMerge00() {
+        System.out.println(test.TestUtils.methodName(0));
+        ArrayInt tested0=arrayInt(0,5,6,9);
+        ArrayInt tested1=arrayInt(1,5,7,10);
+        TList<Integer> result = new MergeIterator(tested0.iterator(),tested1.iterator()).asArray().asList();
+        TList<Integer> expected = TList.sof(0,1,5,5,6,7,9,10);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testMerge01() {
+        System.out.println(test.TestUtils.methodName(0));
+        ArrayInt tested0=arrayInt(0,5,6,9,10,13);
+        ArrayInt tested1=arrayInt(1,5,7,10,14);
+        TList<Integer> result = new MergeIterator(tested0.iterator(),tested1.iterator()).asArray().asList();
+        TList<Integer> expected = TList.sof(0,1,5,5,6,7,9,10,10,13,14);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testIntersect0() {
+        System.out.println(test.TestUtils.methodName(0));
+        ArrayInt tested0=arrayInt(0,4,8,12,16,20);
+        ArrayInt tested1=arrayInt(2,3,6,8,12,14,14,15,16,16,16,21);
+        TList<Integer> result = new IntersectIterator(tested0.iterator(),tested1.iterator()).asArray().asList();
+        TList<Integer> expected = TList.sof(8,12,16);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    @Test
+    public void testIntersect1() {
+        System.out.println(test.TestUtils.methodName(0));
+        ArrayInt tested0=arrayInt(2,3,6,8,12,14,14,15,16,16,16,21);
+        ArrayInt tested1=arrayInt(0,4,8,12,16,20);
+        TList<Integer> result = new IntersectIterator(tested0.iterator(),tested1.iterator()).asArray().asList();
+        TList<Integer> expected = TList.sof(8,12,16);
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);

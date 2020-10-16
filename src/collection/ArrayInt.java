@@ -741,6 +741,10 @@ public interface ArrayInt {
     static public class IntersectIterator extends AbstractBufferedWrap {
         BufferedIterator left;
         BufferedIterator right;
+        public IntersectIterator(ArrayIntIterator left,ArrayIntIterator right) {
+            this.left=new BufferedIterator(left);
+            this.right=new BufferedIterator(right);
+        }
         @Override
         protected void findNext() {
             if (!left.hasNext()||!right.hasNext())

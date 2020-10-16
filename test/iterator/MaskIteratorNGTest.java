@@ -20,7 +20,7 @@ public class MaskIteratorNGTest {
     }
 
     @Test
-    public void testIntersect0() {
+    public void testMask0() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Integer> tested0=TList.sof(2,3,6,8,12,14,14,15,16,16,16,21);
         TList<Integer> tested1=TList.sof(0,4,8,12,16,20);
@@ -32,7 +32,7 @@ public class MaskIteratorNGTest {
     }
     
     @Test
-    public void testIntersect1() {
+    public void testMask1() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Integer> tested0=TList.sof(2,3,6,8,12,14,14,15,16,16,16,21);
         TList<Integer> tested1=TList.sof(0,4,8,12,16,20,22,23);
