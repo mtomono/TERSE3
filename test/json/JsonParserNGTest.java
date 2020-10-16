@@ -108,7 +108,7 @@ public class JsonParserNGTest {
         assertEquals(result, expected);
     }
     @Test
-    public void testParseJsonGetOFase() throws ParseException {
+    public void testParseJsonGetOFalse() throws ParseException {
         System.out.println(test.TestUtils.methodName(0));
         String src="{\"m0\":true , \"m1\":123.02, \"m2\":   \"bb\", \"m3\":false} ";
         JsonLex lexer=new JsonLex(src);
