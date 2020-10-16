@@ -421,3 +421,18 @@ public class Range<T extends Comparable<? super T>> {
     }
     
 }
+
+/**
+ * there is a big difference between union(TList<Range<T>>) and intersect(TList<Range<T>>, TList<Range<T>>).
+ * union doesn't care Ranges are divided into two or not. the result is the same.
+ * but intersect cares. one parameter intersect(TList<Range<T>>) has a different meaning.
+ * if one parameter intersect processes a list which is compatible with RangeSet, 
+ * which means any two pair of ranges in the list do not overlap, nothing remains.
+ * always the answer is empty. two parameter intersect(TList<Range<T>>,TList<Range<T>>) has a different meaning.
+ * in this calculation, intersect is not applied in each list of ranges. intersect here is relative between two 
+ * lists. in other way, each lists are intermittent range like one described by RangeSet though they do not have 
+ * to follow the strict rule of RangeSet, as this calculation will merge those ranges overlapping inside a list 
+ * of ranges.
+ * overlap(TList<Range<T>>,TList<Range<T>>) is quite similar to intersect(TList<Range<T>>,TList<Range<T>>).
+ * in case of overlap(), i don't find any need for one parameter overlap(TList<Range<T>>).
+ */
