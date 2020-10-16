@@ -31,4 +31,16 @@ public class MaskIteratorNGTest {
         assertEquals(result, expected);
     }
     
+    @Test
+    public void testIntersect1() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> tested0=TList.sof(2,3,6,8,12,14,14,15,16,16,16,21);
+        TList<Integer> tested1=TList.sof(0,4,8,12,16,20,22,23);
+        TList<Integer> result = TList.set(i2l(new MaskIterator<>(tested0.iterator(),tested1.iterator(),(a,b)->a-b)));
+        TList<Integer> expected = TList.sof(2,3,6,14,14,15,21);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    
 }

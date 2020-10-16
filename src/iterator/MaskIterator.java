@@ -24,7 +24,7 @@ import java.util.NoSuchElementException;
  * @author masao
  * @param <T>
  */
-public class MaskIterator<T> implements Iterator<T> {
+public class MaskIterator<T> extends AbstractBufferedIterator<T> {
     BufferedIterator<T> body;
     BufferedIterator<T> mask;
     Comparator<T> c;
@@ -36,23 +36,13 @@ public class MaskIterator<T> implements Iterator<T> {
     }
         
     @Override
-    public boolean hasNext() {
-        return body.hasNext();
-    }
-
-    @Override
-    public T next() {
-        if (!body.hasNext())
-            throw new NoSuchElementException();
+    public void findNext() {
         while (true) {
-            if (body.hasNext() && !mask.hasNext())
-                return body.next();
-            if (c.compare(body.peek(), mask.peek())<0)
-                return body.next();
-            if (c.compare(body.peek(), mask.peek())>0)
-                mask.next();
-            else if (c.compare(body.peek(), mask.peek())==0)
-                body.next();
+            if (!body.hasNext()) return;
+            if (!mask.hasNext()) {nextFound(body.next());return;}
+            if (c.compare(body.peek(), mask.peek())<0) {nextFound(body.next());return;}
+            if (c.compare(body.peek(), mask.peek())>0) mask.next();
+            else if (c.compare(body.peek(), mask.peek())==0) body.next();
         }
     }    
 }
