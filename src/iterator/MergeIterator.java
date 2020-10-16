@@ -28,7 +28,13 @@ public class MergeIterator<T> implements Iterator<T> {
     BufferedIterator<T> left;
     BufferedIterator<T> right;
     Comparator<T> c;
-        
+    
+    /**
+     * 
+     * @param left required to be sorted in order
+     * @param right required to be sorted in order
+     * @param c 
+     */
     public MergeIterator(Iterator<T> left, Iterator<T> right, Comparator<T> c) {
         this.left = new BufferedIterator(left);
         this.right = new BufferedIterator(right);

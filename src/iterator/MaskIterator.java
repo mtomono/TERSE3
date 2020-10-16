@@ -17,7 +17,6 @@ package iterator;
 
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 /**
  *
@@ -29,6 +28,12 @@ public class MaskIterator<T> extends AbstractBufferedIterator<T> {
     BufferedIterator<T> mask;
     Comparator<T> c;
         
+    /**
+     * 
+     * @param body required to be sorted in order
+     * @param mask required to be sorted in order
+     * @param c 
+     */
     public MaskIterator(Iterator<T> body, Iterator<T> mask, Comparator<T> c) {
         this.body = new BufferedIterator(body);
         this.mask = new BufferedIterator(mask);
