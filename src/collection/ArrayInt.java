@@ -7,7 +7,6 @@ package collection;
 
 import static collection.ArrayInt.ArrayIntIterator.concat;
 import static collection.ArrayInt.ArrayIntIterator.one;
-import debug.Te;
 import function.IntBiFunction;
 import function.IntBiPredicate;
 import static function.IntBiPredicate.gt;
@@ -682,6 +681,88 @@ public interface ArrayInt {
         @Override
         public int maxSize() {
             return body.maxSize();
+        }
+        
+    }
+    static public class MergeIterator implements ArrayIntIterator {
+        BufferedIterator left;
+        BufferedIterator right;
+        public MergeIterator(ArrayIntIterator left, ArrayIntIterator right) {
+            this.left=new BufferedIterator(left);
+            this.right=new BufferedIterator(right);
+        }
+        @Override
+        public int maxSize() {
+            return left.maxSize()+right.maxSize();
+        }
+
+        @Override
+        public int nextInt() {
+            if (!left.hasNext()&&!right.hasNext())
+                throw new NoSuchElementException();
+            if (!left.hasNext()&&right.hasNext())
+                return right.nextInt();
+            if (left.hasNext()&&!right.hasNext())
+                return left.nextInt();
+            if (left.peek()<right.peek())
+                return left.next();
+            else
+                return right.next();
+        }
+
+        @Override
+        public boolean hasNext() {
+            return left.hasNext()||right.hasNext();
+        }
+        
+    }
+    static public class MaskIterator extends AbstractBufferedWrap {
+        BufferedIterator body;
+        BufferedIterator mask;
+        public MaskIterator(ArrayIntIterator body, ArrayIntIterator mask) {
+            this.body=new BufferedIterator(body);
+            this.mask=new BufferedIterator(mask);
+        }
+        @Override
+        public int maxSize() {
+            return body.maxSize();
+        }
+        @Override
+        public void findNext() {
+            while (true) {
+                if (!body.hasNext()) return;
+                if (!mask.hasNext()) {nextFound(body.next());return;}
+                if (body.peek()<mask.peek()) {nextFound(body.next());return;}
+                if (body.peek()>mask.peek()) mask.next();
+                else if (body.peek()==mask.peek()) body.next();
+            }
+        }    
+    }
+    static public class IntersectIterator extends AbstractBufferedWrap {
+        BufferedIterator left;
+        BufferedIterator right;
+        @Override
+        protected void findNext() {
+            if (!left.hasNext()||!right.hasNext())
+                return;
+            left.next();right.next();
+            while(true) {
+                if (left.peek()<right.peek())
+                    if (!left.hasNext()) return;
+                    else left.next();
+                else if (left.peek()>right.peek())
+                    if (!right.hasNext()) return;
+                    else right.next();
+                else {
+                    nextFound(left.peek());
+                    return;
+                }
+            }
+        }
+
+        @Override
+        public int maxSize() {
+            return Integer.min(left.maxSize(),right.maxSize());
         }
         
     }
