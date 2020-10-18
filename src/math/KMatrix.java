@@ -140,12 +140,11 @@ public class KMatrix<K extends Decimal<K>> {
         b.body.pair(L, (bn,ln)->bn.sub(ln.seek(-1).dot(new KVector<>(retval,context))).div(ln.body.last())).forEach(v->retval.add(v));
         return new KVector<>(retval,context);
     }
+    public KMatrix<K> l2u() {
+        return new KMatrix<>(body.map(v->v.reverse()).reverse(),context);
+    }
     public KVector<K> backwardSubstitution(KVector<K> b) {
-        TList<K> retval= TList.c();
-        TList<KVector<K>> rows=rows();
-        TList<KVector<K>> L=Te.e(rows.index().map(i->rows.get(i).subVector(i,rows.size()).reverse()).reverse(),l->l.toWrappedString());
-        b.reverse().body.pair(L, (bn,ln)->bn.sub(ln.seek(-1).dot(new KVector<>(retval,context))).div(ln.body.last())).forEach(v->retval.add(v));
-        return new KVector<>(retval.reverse(),context);
+        return l2u().forwardSubstitution(b.reverse()).reverse();
     }
     public KMatrix<K> sfix() {
         return context.matrix(body.map(r->r.sfix()).sfix());
