@@ -421,4 +421,36 @@ public class KMatrixNGTest {
         System.out.println("lu      : " + result.stream().reduce((a,b)->a.mul(b)).get());
         assertEquals(result.stream().reduce((a,b)->a.mul(b)).get(),original);
     }
+    
+    @Test
+    public void testForwardSubstitution() {
+        System.out.println(test.TestUtils.methodName(0));
+        KMatrix<KRational> l = krb.matrix(new Integer[][]{
+                                                            {1,0,0,0},
+                                                            {2,1,0,0},
+                                                            {3,4,1,0},
+                                                            {-1,-3,0,1}
+                                                        },i->r(i));
+        KVector<KRational> result = l.forwardSubstitution(krb.vector(r(4),r(1),r(-3),r(4)));
+        KVector<KRational> expected = krb.vector(r(4),r(-7),r(13),r(-13));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result,expected);
+    }
+
+    @Test
+    public void testBackwardSubstitution() {
+        System.out.println(test.TestUtils.methodName(0));
+        KMatrix<KRational> l = krb.matrix(new Integer[][]{
+                                                            {1,1,0,3},
+                                                            {0,-1,-1,-5},
+                                                            {0,0,3,13},
+                                                            {0,0,0,-13}
+                                                        },i->r(i));
+        KVector<KRational> result = l.backwardSubstitution(krb.vector(r(4),r(-7),r(13),r(-13))).map(r->r.rednorm());
+        KVector<KRational> expected = krb.vector(r(-1),r(2),r(0),r(1));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result,expected);
+    }
 }

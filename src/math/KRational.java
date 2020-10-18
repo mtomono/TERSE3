@@ -43,7 +43,9 @@ public class KRational implements Decimal<KRational> {
         this.denominator=denominator;
     }
     
-    static public long gcd(long m, long n) {
+    static public long gcd(long mo, long no) {
+        long m=java.lang.Math.abs(mo);
+        long n=java.lang.Math.abs(no);
         if (m<n)
             return gcd(n,m);
         long r = m%n;

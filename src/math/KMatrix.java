@@ -16,6 +16,7 @@ package math;
 
 import collection.TList;
 import static collection.TransparentTranspose.transpose;
+import debug.Te;
 import static java.lang.Integer.min;
 import java.util.Objects;
 import java.util.function.Function;
@@ -131,6 +132,20 @@ public class KMatrix<K extends Decimal<K>> {
         TList<KVector<K>> eliminated =subMatrix(1,1,x,y).rows();
         lcolumn.body.pair(eliminated,(l,u)->u.subS(eliminator.scale(l))).forEach(r->{});
         return this;
+    }
+    public KVector<K> forwardSubstitution(KVector<K> b) {
+        TList<K> retval= TList.c();
+        TList<KVector<K>> rows=rows();
+        TList<KVector<K>> L=rows.index().map(i->rows.get(i).subVector(0, i+1));
+        b.body.pair(L, (bn,ln)->bn.sub(ln.seek(-1).dot(new KVector<>(retval,context))).div(ln.body.last())).forEach(v->retval.add(v));
+        return new KVector<>(retval,context);
+    }
+    public KVector<K> backwardSubstitution(KVector<K> b) {
+        TList<K> retval= TList.c();
+        TList<KVector<K>> rows=rows();
+        TList<KVector<K>> L=Te.e(rows.index().map(i->rows.get(i).subVector(i,rows.size()).reverse()).reverse(),l->l.toWrappedString());
+        b.reverse().body.pair(L, (bn,ln)->bn.sub(ln.seek(-1).dot(new KVector<>(retval,context))).div(ln.body.last())).forEach(v->retval.add(v));
+        return new KVector<>(retval.reverse(),context);
     }
     public KMatrix<K> sfix() {
         return context.matrix(body.map(r->r.sfix()).sfix());

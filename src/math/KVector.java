@@ -16,6 +16,7 @@ package math;
 
 import collection.TList;
 import java.util.Objects;
+import java.util.function.UnaryOperator;
 
 /**
  *
@@ -28,6 +29,18 @@ public class KVector<K extends Decimal<K>> {
     public KVector(TList<K> body, MathContext<K> context) {
         this.body=body;
         this.context=context;
+    }
+    public KVector<K> seek(int i) {
+        return new KVector<>(body.seek(i),context);
+    }
+    public KVector<K> subVector(int start,int end) {
+        return new KVector<>(body.subList(start,end),context);
+    }
+    public KVector<K> reverse() {
+        return new KVector<>(body.reverse(),context);
+    }
+    public KVector<K> map(UnaryOperator<K> f) {
+        return new KVector<>(body.map(f),context);
     }
     public KVector<K> scale(K scale) {
         return scaleR(scale);
