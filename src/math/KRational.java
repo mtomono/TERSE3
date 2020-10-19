@@ -32,6 +32,13 @@ public class KRational implements Decimal<KRational> {
     public static KRational r(int v) {
         return new KRational(v,1);
     }
+    public static KRational r(long v) {
+        return new KRational(v,1);
+    }
+    public static KRational r(String v) {
+        String[] n=v.split("/");
+        return n.length==1?r(Long.parseLong(v)):new KRational(Long.parseLong(n[0]),Long.parseLong(n[1]));
+    }
     public KRational(long numerator, long denominator) {
         assert denominator!=0 : "denominator cannot be zero";
         this.numerator = numerator;
@@ -100,7 +107,7 @@ public class KRational implements Decimal<KRational> {
     
     @Override
     public String toString() {
-        return ""+numerator+"/"+denominator;
+        return ""+numerator+(denominator==1?"":"/"+denominator);
     }
     
     @Override
