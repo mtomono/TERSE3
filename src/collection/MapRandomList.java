@@ -39,7 +39,7 @@ public class MapRandomList<S, T> extends AbstractList<T> implements RandomAccess
     }
     
     public MapRandomList(List<S> base, Function<S, T> map) {
-        this(base, map, e->{throw new RuntimeException("NoReach: "+ e);});
+        this(base, map, e->{throw new RuntimeException("tried to change a member of map result which is unchangeable: "+ e);});
     }
     
     @Override
