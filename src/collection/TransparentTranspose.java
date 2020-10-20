@@ -21,6 +21,7 @@ import java.util.AbstractList;
  * Transpose which is transparent in the way it can accept changes to it.
  * TList#transpose() depends on the mechanism of map. so the result of it cannot be changed.
  * it is quite inconvenient when you want to change a list of list in transposed way.
+ * this class is the one to deal with that situation.
  * @author masao
  */
 public class TransparentTranspose<T> extends AbstractList<TList<T>> {
