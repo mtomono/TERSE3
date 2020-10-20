@@ -42,14 +42,17 @@ public class MathContext<K extends Decimal<K>> {
     public KMatrix<K> matrix(Integer[][] matrix, Function<Integer,K> f) {
         return matrix(TList.sof(matrix).map(a->TList.sof(a).map(f).sfix()).sfix());
     }
-    public KMatrix<K> matrix(String[][] matrix,Function<String,K> f) {
-        return matrix(TList.sof(matrix).map(a->TList.sof(a).map(f).sfix()).sfix());
+    public KMatrix<K> matrix(String source,Function<String,K> f) {
+        return matrix(TList.sof(source.split(";")).map(r->TList.sof(r.split(",")).map(f).sfix()).sfix());
     }
     public KMatrix<K> matrix(TList<TList<K>> body) {
         return new KMatrix<>(body,this);
     }
     public KVector<K> vector(K... v) {
         return vector(TList.sof(v));
+    }
+    public KVector<K> vector(String v,Function<String,K> f) {
+        return vector(TList.sof(v.split(",")).map(f).sfix());
     }
     public KVector<K> vector(TList<K> v) {
         return new KVector<>(v,this);

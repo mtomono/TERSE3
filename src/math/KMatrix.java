@@ -15,7 +15,7 @@
 package math;
 
 import collection.TList;
-import static collection.TransparentTranspose.transpose;
+import collection.TransparentTranspose;
 import debug.Te;
 import static java.lang.Integer.min;
 import java.util.Objects;
@@ -48,7 +48,7 @@ public class KMatrix<K extends Decimal<K>> {
         return body.map(r->context.vector(r));
     }
     public TList<KVector<K>> columns() {
-        return transpose(body).map(r->context.vector(r));
+        return TransparentTranspose.transpose(body).map(r->context.vector(r)); //if you use body.transpose() instead of TransparentTranspose.transpose(), you will get some exceptions caused by trying to chnage a mapped list which doesn't have reverse map.
     }
     public KMatrix<K> subMatrix(int... fromTo) {
         int x0=fromTo[0];int y0=fromTo[1];  int x1=fromTo[2];int y1=fromTo[3];
@@ -94,6 +94,12 @@ public class KMatrix<K extends Decimal<K>> {
         TList<KVector<K>> columns=other.columns().sfix();
         return context.matrix(rows.map(r->columns.map(c->r.dot(c))));
     }
+    public KVector<K> mul(KVector<K> other) {
+        return new KVector<>(rows().map(r->r.dot(other)),context);
+    }
+    public KMatrix<K> transpose() {
+        return context.matrix(body.transposeT(l->l)).sfix();
+    }
     public KMatrix<K> fillLower(K v) {
         assertSquare();
         return context.matrix(TList.range(0,x).map(i->body.get(i).subList(i,x).startFrom(TList.nCopies(i,v))));
@@ -114,7 +120,23 @@ public class KMatrix<K extends Decimal<K>> {
         assertSquare();
         return TList.range(0,x).map(i->body.get(i).get(i));
     }
-    public TList<KMatrix<K>> lu() {
+    public KPivotMatrix<K> pivot() {
+        return new KPivotMatrix<>(body,context);
+    }
+    public class LU {
+        TList<KMatrix<K>> lu;
+        public LU(TList<KMatrix<K>> lu) {
+            this.lu=lu;
+        }
+        public KVector<K> solve(KVector<K> v) {
+            KVector<K> y=lu.get(0).forwardSubstitution(v);
+            return lu.get(1).backwardSubstitution(y);
+        }
+    }
+    public LU lu() {
+        return new LU(luMatrices());
+    }
+    public TList<KMatrix<K>> luMatrices() {
         assertSquare();
         KMatrix<K> doolittle=sfix().doolittle();
         return TList.sof(

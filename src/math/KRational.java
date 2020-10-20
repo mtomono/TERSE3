@@ -141,7 +141,7 @@ public class KRational implements Decimal<KRational> {
 
     @Override
     public KRational div(KRational value) {
-        return new KRational(numerator*value.denominator, denominator*value.numerator);
+        return new KRational(numerator*value.denominator, denominator*value.numerator).rednorm();
     }
 
     @Override
