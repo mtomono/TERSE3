@@ -48,6 +48,9 @@ public class MathContext<K extends Decimal<K>> {
     public KMatrix<K> matrix(TList<TList<K>> body) {
         return new KMatrix<>(body,this);
     }
+    public KMatrix<K> I(int n) {
+        return matrix(TList.range(0,n).map(i->TList.nCopies(n, zero()).sfix().cset(i, one())));
+    }
     public KVector<K> vector(K... v) {
         return vector(TList.sof(v));
     }

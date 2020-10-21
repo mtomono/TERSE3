@@ -155,6 +155,11 @@ public class KMatrix<K extends Decimal<K>> {
         lcolumn.body.pair(eliminated,(l,u)->u.subS(eliminator.scale(l))).forEach(r->{});
         return this;
     }
+    /**
+     * forward substitution for lower triangle matrix.
+     * @param b
+     * @return 
+     */
     public KVector<K> forwardSubstitution(KVector<K> b) {
         TList<K> retval= TList.c();
         TList<KVector<K>> rows=rows();
@@ -162,11 +167,25 @@ public class KMatrix<K extends Decimal<K>> {
         b.body.pair(L, (bn,ln)->bn.sub(ln.seek(-1).dot(new KVector<>(retval,context))).div(ln.body.last())).forEach(v->retval.add(v));
         return new KVector<>(retval,context);
     }
-    public KMatrix<K> l2u() {
+    public KMatrix<K> u2l() {
         return new KMatrix<>(body.map(v->v.reverse()).reverse(),context);
     }
+    /**
+     * backward substitution for upper triangle matrix.
+     * @param b
+     * @return 
+     */
     public KVector<K> backwardSubstitution(KVector<K> b) {
-        return l2u().forwardSubstitution(b.reverse()).reverse();
+        return u2l().forwardSubstitution(b.reverse()).reverse();
+    }
+    public KMatrix<K> invLower() {
+        return context.matrix(context.I(body.size()).columns().map(c->forwardSubstitution(c).body)).transpose();
+    }
+    public KMatrix<K> invUpper() {
+        return context.matrix(context.I(body.size()).columns().map(c->backwardSubstitution(c).body)).transpose();
+    }
+    public KMatrix<K> inv() {
+        return luMatrices().transform(lu->lu.get(1).invUpper().mul(lu.get(0).invLower()));
     }
     public KMatrix<K> sfix() {
         return context.matrix(body.map(r->r.sfix()).sfix());

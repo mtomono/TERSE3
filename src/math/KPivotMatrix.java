@@ -36,8 +36,11 @@ public class KPivotMatrix<K extends Decimal<K>> extends KMatrix<K> {
     public KMatrix<K> pinv() {
         return p().transpose();
     }
-    public class LUP extends KMatrix<K>.LU{
-        public LUP(TList<KMatrix<K>> lu) {
+    public KMatrix<K> inv() {
+        return super.inv().mul(p());
+    }
+    public class PLU extends KMatrix<K>.LU{
+        public PLU(TList<KMatrix<K>> lu) {
             super(lu);
         }
         /**
@@ -51,13 +54,13 @@ public class KPivotMatrix<K extends Decimal<K>> extends KMatrix<K> {
             return super.solve(porder(v));
         }
     }
-    public LUP lu() {
-        return new LUP(luMatrices());
+    public PLU lu() {
+        return new PLU(luMatrices());
     }
     public KMatrix<K> swap(int c) {
         if (body.size()<=1)
             return this;
-        int maxRow=body.index().max(i->body.get(i).get(c)).get();
+        int maxRow=body.index().max(i->body.get(i).get(c).abs()).get();
         body.swap(c,maxRow);
         order=order.swap(c, maxRow);
         return this;

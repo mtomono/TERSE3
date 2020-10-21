@@ -6,6 +6,7 @@
 package math;
 
 import collection.TList;
+import debug.Te;
 import static math.KBigDecimal.b;
 import static math.KRational.r;
 import static org.testng.Assert.*;
@@ -360,7 +361,7 @@ public class KMatrixNGTest {
     }
 
     @Test
-    public void testLuPivot() {
+    public void testLuPivot0() {
         System.out.println(test.TestUtils.methodName(0));
         KMatrix<KRational> original = krb.matrix(           "2,4,4,2;"
                                                           + "1,8,5,2;"
@@ -409,7 +410,7 @@ public class KMatrixNGTest {
         assertEquals(original.pinv().mul(result.stream().reduce((a,b)->a.mul(b)).get()),original);
     }
     @Test
-    public void testLuSolve() {
+    public void testLuSolve1() {
         System.out.println(test.TestUtils.methodName(0));
         KPivotMatrix<KRational> original = krb.matrix(      "1,2,7,6;"
                                                           + "2,4,4,2;"
@@ -422,7 +423,7 @@ public class KMatrixNGTest {
         assertEquals(result,expected);
     }
     @Test
-    public void testForwardSubstitution2() {
+    public void testForwardSubstitution1() {
         System.out.println(test.TestUtils.methodName(0));
         KMatrix<KRational> l = krb.matrix(
                                                             "1,0,0,0;"
@@ -436,7 +437,7 @@ public class KMatrixNGTest {
         assertEquals(result,expected);
     }
     @Test
-    public void testBackwardSubstitution2() {
+    public void testBackwardSubstitution1() {
         System.out.println(test.TestUtils.methodName(0));
         KMatrix<KRational> l = krb.matrix(                  "2,4,4,2;"
                                                           + "0,6,3,1;"
@@ -448,7 +449,42 @@ public class KMatrixNGTest {
         System.out.println("expected: " + expected);
         assertEquals(result,expected);
     }
-
+    @Test
+    public void testInvNoPivot() {
+        System.out.println(test.TestUtils.methodName(0));
+        KMatrix<KRational> l = krb.matrix(
+                                                            "2,4,4,2;"
+                                                          + "1,8,5,2;"
+                                                          + "1,2,7,6;"
+                                                          + "2,4,3,3",i->r(i));
+        KMatrix<KRational> result = l.pivot().inv().mapR(r->r.rednorm());
+        assertEquals(Te.e(result.mul(l).mapR(r->r.rednorm())),krb.I(4));
+        KMatrix<KRational> expected = krb.matrix("7/12,-1/3,-1/6,1/6;"
+                                                      + "-13/60,1/6,-1/15,1/6;"
+                                                      + "9/20,0,1/10,-1/2;"
+                                                      + "-11/20,0,1/10,1/2",i->r(i));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result,expected);
+    }
+    @Test
+    public void testInv() {
+        System.out.println(test.TestUtils.methodName(0));
+        KMatrix<KRational> l = krb.matrix(
+                                                            "1,2,7,6;"
+                                                          + "2,4,4,2;"
+                                                          + "1,8,5,2;"
+                                                          + "2,4,3,3",i->r(i));
+        KMatrix<KRational> result = l.pivot().inv().mapR(r->r.rednorm());
+        assertEquals(Te.e(result.mul(l).mapR(r->r.rednorm())),krb.I(4));
+        KMatrix<KRational> expected = krb.matrix("-1/6,7/12,-1/3,1/6;"
+                                                      + "-1/15,-13/60,1/6,1/6;"
+                                                      + "1/10,9/20,0,-1/2;"
+                                                      + "1/10,-11/20,0,1/2",i->r(i));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result,expected);
+    }
     @Test
     public void testLuPivot2() {
         System.out.println(test.TestUtils.methodName(0));
