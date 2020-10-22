@@ -11,6 +11,7 @@ import static math.KBigDecimal.b;
 import static math.KRational.r;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
+import test.PTe;
 
 /**
  *
@@ -53,7 +54,7 @@ public class KMatrixNGTest {
     public void testEliminate1235() {
         System.out.println(test.TestUtils.methodName(0));
         KMatrix<KBigDecimal> result = kbdb.matrix(          "1,2;"
-                                                          + "3,5",i->b(i)).doolittleStep();
+                                                          + "3,5",i->b(i)).doolittleSubMatrix();
         KMatrix<KBigDecimal> expected = kbdb.matrix(        "1,2;"
                                                           + "3,-1",i->b(i));
         System.out.println("result  : " + result);
@@ -65,7 +66,7 @@ public class KMatrixNGTest {
         System.out.println(test.TestUtils.methodName(0));
         KMatrix<KRational> result = krb.matrix(             "1,0,0;"
                                                           + "0,1,0;"
-                                                          + "0,0,1",i->r(i)).doolittleStep();
+                                                          + "0,0,1",i->r(i)).doolittleSubMatrix();
         KMatrix<KRational> expected = krb.matrix(           "1,0,0;"
                                                           + "0,1,0;"
                                                           + "0,0,1",i->r(i));
@@ -79,7 +80,7 @@ public class KMatrixNGTest {
         System.out.println(test.TestUtils.methodName(0));
         KMatrix<KRational> result = krb.matrix(             "1,2,1;"
                                                           + "2,5,3;"
-                                                          + "1,1,2",i->r(i)).doolittleStep();
+                                                          + "1,1,2",i->r(i)).doolittleSubMatrix();
         KMatrix<KRational> expected = krb.matrix(           "1,2,1;"
                                                           + "2,1,1;"
                                                           + "1,-1,1",i->r(i));
@@ -91,9 +92,10 @@ public class KMatrixNGTest {
     @Test
     public void testEliminate121253112e() {
         System.out.println(test.TestUtils.methodName(0));
-        KMatrix<KRational> result = krb.matrix(             "1,2,1;"
+        KMatrix<KRational> result = new LuDecompose<>(krb.matrix(
+                                                            "1,2,1;"
                                                           + "2,5,3;"
-                                                          + "1,1,2",i->r(i)).doolittle();
+                                                          + "1,1,2",i->r(i))).doolittleWholeMatrix().target;
         KMatrix<KRational> expected = krb.matrix(           "1,2,1;"
                                                           + "2,1,1;"
                                                           + "1,-1,2",i->r(i));
@@ -316,7 +318,7 @@ public class KMatrixNGTest {
         KMatrix<KRational> original = krb.matrix(           "1,2,1;"
                                                           + "2,5,3;"
                                                           + "1,1,2",i->r(i));
-        TList<KMatrix<KRational>> result = original.luMatrices();
+        TList<KMatrix<KRational>> result = original.luDecompose();
         TList<KMatrix<KRational>> expected = TList.sof(krb.matrix(
                                                             "1,0,0;"
                                                           + "2,1,0;"
@@ -367,7 +369,7 @@ public class KMatrixNGTest {
                                                           + "1,8,5,2;"
                                                           + "1,2,7,6;"
                                                           + "2,4,3,3",i->r(i));
-        TList<KMatrix<KRational>> result = original.luMatrices().map(m->m.mapR(r->r.rednorm()));
+        TList<KMatrix<KRational>> result = original.luDecompose().map(m->m.mapR(r->r.rednorm()));
         TList<KMatrix<KRational>> expected = TList.sof(krb.matrix(
                                                             "1,0,0,0;"
                                                           + "1/2,1,0,0;"
@@ -387,13 +389,18 @@ public class KMatrixNGTest {
     @Test
     public void testLuPivot1() {
         System.out.println(test.TestUtils.methodName(0));
-        KPivotMatrix<KRational> original = krb.matrix(      "1,2,7,6;"
+        KMatrix<KRational> original = krb.matrix(           "1,2,7,6;"
                                                           + "2,4,4,2;"
                                                           + "1,8,5,2;"
                                                           + "2,4,3,3;"
-                                                        ,i->r(i)).pivot();
-        TList<KMatrix<KRational>> result = original.luMatrices().map(m->m.mapR(r->r.rednorm()));
+                                                        ,i->r(i));
+        PLU<KRational> result = original.pluDecompose();
         TList<KMatrix<KRational>> expected = TList.sof(krb.matrix(
+                                                            "0,0,1,0;"
+                                                          + "1,0,0,0;"
+                                                          + "0,1,0,0;"
+                                                          + "0,0,0,1",i->r(i)),
+                                                        krb.matrix(
                                                             "1,0,0,0;"
                                                           + "1/2,1,0,0;"
                                                           + "1/2,0,1,0;"
@@ -406,17 +413,17 @@ public class KMatrixNGTest {
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result,expected);
-        System.out.println("lu      : " + original.pinv().mul(result.stream().reduce((a,b)->a.mul(b)).get()).mapR(r->r.rednorm()));
-        assertEquals(original.pinv().mul(result.stream().reduce((a,b)->a.mul(b)).get()),original);
+        System.out.println("lu      : " + result.restore().mapR(r->r.rednorm()));
+        assertEquals(result.restore(),original);
     }
     @Test
     public void testLuSolve1() {
         System.out.println(test.TestUtils.methodName(0));
-        KPivotMatrix<KRational> original = krb.matrix(      "1,2,7,6;"
+        PLU<KRational> original = krb.matrix(               "1,2,7,6;"
                                                           + "2,4,4,2;"
                                                           + "1,8,5,2;"
-                                                          + "2,4,3,3",i->r(i)).pivot();
-        KVector<KRational> result = original.lu().solve(krb.vector("6,2,12,5",i->r(i))).map(r->r.rednorm());
+                                                          + "2,4,3,3",i->r(i)).pluDecompose();
+        KVector<KRational> result = original.solve(krb.vector("6,2,12,5",i->r(i))).map(r->r.rednorm());
         KVector<KRational> expected=krb.vector("-3,2,-1,2",i->r(i));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
@@ -457,7 +464,7 @@ public class KMatrixNGTest {
                                                           + "1,8,5,2;"
                                                           + "1,2,7,6;"
                                                           + "2,4,3,3",i->r(i));
-        KMatrix<KRational> result = l.pivot().inv().mapR(r->r.rednorm());
+        KMatrix<KRational> result = l.luDecompose().inv().mapR(r->r.rednorm());
         assertEquals(Te.e(result.mul(l).mapR(r->r.rednorm())),krb.I(4));
         KMatrix<KRational> expected = krb.matrix("7/12,-1/3,-1/6,1/6;"
                                                       + "-13/60,1/6,-1/15,1/6;"
@@ -475,7 +482,7 @@ public class KMatrixNGTest {
                                                           + "2,4,4,2;"
                                                           + "1,8,5,2;"
                                                           + "2,4,3,3",i->r(i));
-        KMatrix<KRational> result = l.pivot().inv().mapR(r->r.rednorm());
+        KMatrix<KRational> result = l.pluDecompose().inv().mapR(r->r.rednorm());
         assertEquals(Te.e(result.mul(l).mapR(r->r.rednorm())),krb.I(4));
         KMatrix<KRational> expected = krb.matrix("-1/6,7/12,-1/3,1/6;"
                                                       + "-1/15,-13/60,1/6,1/6;"
@@ -492,7 +499,7 @@ public class KMatrixNGTest {
                                                           + "2,1,-1,1;"
                                                           + "3,-1,-1,2;"
                                                           + "-1,2,3,-1",i->r(i));
-        TList<KMatrix<KRational>> result = original.luMatrices().map(m->m.mapR(r->r.rednorm()));
+        TList<KMatrix<KRational>> result = original.luDecompose().map(m->m.mapR(r->r.rednorm()));
         TList<KMatrix<KRational>> expected = TList.sof(krb.matrix(
                                                             "1,0,0,0;"
                                                           + "2,1,0,0;"
@@ -516,7 +523,7 @@ public class KMatrixNGTest {
                                                           + "3,-1,-1,2;"
                                                           + "2,1,-1,1;"
                                                           + "-1,2,3,-1",i->r(i));
-        TList<KMatrix<KRational>> result = original.luMatrices().map(m->m.mapR(r->r.rednorm()));
+        TList<KMatrix<KRational>> result = original.luDecompose().map(m->m.mapR(r->r.rednorm()));
         TList<KMatrix<KRational>> expected = TList.sof(krb.matrix(
                                                             "1,0,0,0;"
                                                           + "3,1,0,0;"
@@ -548,5 +555,71 @@ public class KMatrixNGTest {
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result,expected);
+    }
+    
+    
+// from here are exception tests
+    
+    
+    @Test(expectedExceptions=PivotingMightBeRequiredException.class)
+    public void testLuFailsBecauseOfALackOfPivoting() {
+        System.out.println(test.TestUtils.methodName(0));
+        KMatrix<KRational> original = krb.matrix(      "1,2,7,6;"
+                                                          + "2,4,4,2;"
+                                                          + "1,8,5,2;"
+                                                          + "2,4,3,3;"
+                                                        ,i->r(i));
+        try {
+            TList<KMatrix<KRational>> result = original.luDecompose().map(m->m.mapR(r->r.rednorm()));
+        } catch (Exception e) {
+            PTe.e(e);
+            throw e;
+        }
+    }
+    
+    @Test(expectedExceptions=NonsingularMatrixException.class)
+    public void testLuFailsBecauseOfNonsingulality() {
+        System.out.println(test.TestUtils.methodName(0));
+        KMatrix<KRational> original = krb.matrix(           "1,2,2,1;"
+                                                          + "2,4,4,2;"
+                                                          + "1,8,5,2;"
+                                                          + "2,4,3,3;"
+                                                        ,i->r(i));
+        try {
+            KVector<KRational> result = original.pluDecompose().solve(krb.vector("6,2,12,5",i->r(i)));
+        } catch (Exception e) {
+            PTe.e(e);
+            throw e;
+        }
+    }
+
+    @Test(expectedExceptions=NonsingularMatrixException.class)
+    public void testLuPivot4() {
+        System.out.println(test.TestUtils.methodName(0));
+        KMatrix<KRational> original = krb.matrix(      "1,2,2,1;"
+                                                          + "2,4,4,2;"
+                                                          + "1,8,5,2;"
+                                                          + "2,4,3,3;",i->r(i));
+        TList<KMatrix<KRational>> result = original.pluDecompose().map(m->m.mapR(r->r.rednorm()));
+        TList<KMatrix<KRational>> expected = TList.sof(krb.matrix(
+                                                            "0,0,0,1;"
+                                                          + "1,0,0,0;"
+                                                          + "0,1,0,0;"
+                                                          + "0,0,1,0",i->r(i)),
+                                                        krb.matrix(
+                                                            "1,0,0,0;"
+                                                          + "1/2,1,0,0;"
+                                                          + "1,0,1,0;"
+                                                          + "1/2,0,0,1",i->r(i)),
+                                                       krb.matrix(
+                                                            "2,4,4,2;"
+                                                          + "0,6,3,1;"
+                                                          + "0,0,-1,1;"
+                                                          + "0,0,0,0",i->r(i)));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result,expected);
+        System.out.println("lu      : " + result.stream().reduce((a,b)->a.mul(b)).get().mapR(r->r.rednorm()));
+        assertEquals(result.stream().reduce((a,b)->a.mul(b)).get(),original);
     }
 }

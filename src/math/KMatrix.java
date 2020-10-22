@@ -14,9 +14,9 @@
  */
 package math;
 
+import collection.ArrayInt;
 import collection.TList;
 import collection.TransparentTranspose;
-import debug.Te;
 import static java.lang.Integer.min;
 import java.util.Objects;
 import java.util.function.Function;
@@ -27,10 +27,10 @@ import java.util.function.Function;
  * @param <K>
  */
 public class KMatrix<K extends Decimal<K>> {
-    MathContext<K> context;
-    TList<TList<K>> body;
-    int x;
-    int y;
+    final public MathContext<K> context;
+    final public TList<TList<K>> body;
+    final public int x;
+    final public int y;
     public KMatrix(TList<TList<K>> body, MathContext<K> context) {
         this.body=body;
         this.context=context;
@@ -53,6 +53,12 @@ public class KMatrix<K extends Decimal<K>> {
     public KMatrix<K> subMatrix(int... fromTo) {
         int x0=fromTo[0];int y0=fromTo[1];  int x1=fromTo[2];int y1=fromTo[3];
         return context.matrix(body.subList(y0,y1).map(r->r.subList(x0,x1)));
+    }
+    public KMatrix<K> subMatrixUR(int x0, int y0) {
+        return subMatrix(x0,y0,x,y);
+    }
+    public int minSize() {
+        return min(x,y);
     }
     public KMatrix<K> mapR(Function<K,K> f) {
         return context.matrix(body.map(r->r.map(f)));
@@ -120,35 +126,45 @@ public class KMatrix<K extends Decimal<K>> {
         assertSquare();
         return TList.range(0,x).map(i->body.get(i).get(i));
     }
-    public KPivotMatrix<K> pivot() {
-        return new KPivotMatrix<>(body,context);
+    
+    public boolean nonZeroDiagonal() {
+        return getDiagonal().stream().allMatch(d->!d.isZero());
     }
-    public class LU {
-        TList<KMatrix<K>> lu;
-        public LU(TList<KMatrix<K>> lu) {
-            this.lu=lu;
-        }
-        public KVector<K> solve(KVector<K> v) {
-            KVector<K> y=lu.get(0).forwardSubstitution(v);
-            return lu.get(1).backwardSubstitution(y);
-        }
+    
+    public LU<K> luDecompose() {
+        return new LuDecompose<>(this).decompose();
     }
-    public LU lu() {
-        return new LU(luMatrices());
+    public PLU<K> pluDecompose() {
+        return new PluDecompose<>(this).decompose();
     }
-    public TList<KMatrix<K>> luMatrices() {
-        assertSquare();
-        KMatrix<K> doolittle=sfix().doolittle();
-        return TList.sof(
-                doolittle.fillUpper(context.zero()).fillDiagonal(context.one()),
-                doolittle.fillLower(context.zero())
-        );
+    public KMatrix<K> I() {
+        return context.I(body.size());
     }
-    public KMatrix<K> doolittle() {
-        TList.range(0,min(x,y)-1).forEach(i->subMatrix(i,i,x,y).doolittleStep());
+    public KMatrix<K> pinv(TList<Integer> order) {
+        return context.matrix(I().body.pickUp(order));
+    }
+    public KMatrix<K> swap(int c, ArrayInt order) {
+        if (body.size()<=1)
+            return this;
+        int maxRow=TList.range(c,body.size()).max(i->body.get(i).get(c).abs()).get();
+        body.swap(c,maxRow);
+        if (body.get(c).get(c).isZero())
+            throw new NonsingularMatrixException("diagonal element was 0 even after pivoting, meaning this matrix is not singular: "+this+" : notified from KMatrix.swap()");
+        order.swap(c, maxRow);
         return this;
     }
-    public KMatrix<K> doolittleStep() {
+    public TList<KMatrix<K>> doolittleFormat() {
+        return TList.sof(doolittleLower(),doolittleUpper());
+    }
+    public KMatrix<K> doolittleLower() {
+        return fillUpper(context.zero()).fillDiagonal(context.one());
+    }
+    public KMatrix<K> doolittleUpper() {
+        return fillLower(context.zero());
+    }
+    public KMatrix<K> doolittleSubMatrix() {
+        if (body.get(0).get(0).isZero())
+            throw new PivotingMightBeRequiredException("lu decomposition encountered 0 diagonal element:"+ toString() +": notified from KMatrix.doolittleStep");
         KVector<K>        lcolumn    =subMatrix(0,1, 1,y).columns().get(0).invS(body.get(0).get(0));
         KVector<K>        eliminator =subMatrix(1,0, x,1).rows().get(0);
         TList<KVector<K>> eliminated =subMatrix(1,1,x,y).rows();
@@ -183,9 +199,6 @@ public class KMatrix<K extends Decimal<K>> {
     }
     public KMatrix<K> invUpper() {
         return context.matrix(context.I(body.size()).columns().map(c->backwardSubstitution(c).body)).transpose();
-    }
-    public KMatrix<K> inv() {
-        return luMatrices().transform(lu->lu.get(1).invUpper().mul(lu.get(0).invLower()));
     }
     public KMatrix<K> sfix() {
         return context.matrix(body.map(r->r.sfix()).sfix());
