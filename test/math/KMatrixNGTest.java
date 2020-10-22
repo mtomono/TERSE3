@@ -578,7 +578,7 @@ public class KMatrixNGTest {
     }
     
     @Test(expectedExceptions=NonsingularMatrixException.class)
-    public void testLuFailsBecauseOfNonsingulality() {
+    public void testLuFailsBecauseOfNonsingularity() {
         System.out.println(test.TestUtils.methodName(0));
         KMatrix<KRational> original = krb.matrix(           "1,2,2,1;"
                                                           + "2,4,4,2;"
@@ -593,6 +593,21 @@ public class KMatrixNGTest {
         }
     }
 
+    @Test(expectedExceptions=NonsingularMatrixException.class)
+    public void testLuFailsBecauseOfNonsingularityDuringDecomposiiton() {
+        System.out.println(test.TestUtils.methodName(0));
+        KMatrix<KRational> original = krb.matrix(      "1,2,2,1;"
+                                                          + "2,4,4,2;"
+                                                          + "3,6,6,3;"
+                                                          + "2,4,3,3;",i->r(i));
+        try {
+            TList<KMatrix<KRational>> result = original.pluDecompose().map(m->m.mapR(r->r.rednorm()));
+        } catch (Exception e) {
+            PTe.e(e);
+            throw e;
+        }
+    }
+    
     @Test(expectedExceptions=NonsingularMatrixException.class)
     public void testLuPivot4() {
         System.out.println(test.TestUtils.methodName(0));
@@ -621,5 +636,13 @@ public class KMatrixNGTest {
         assertEquals(result,expected);
         System.out.println("lu      : " + result.stream().reduce((a,b)->a.mul(b)).get().mapR(r->r.rednorm()));
         assertEquals(result.stream().reduce((a,b)->a.mul(b)).get(),original);
+        /**
+         * though the exception must be thrown from the line where pluDecompose() is executed, i intentionally 
+         * kept the code after that.
+         * in this specific case, the last line still can restore the original matrix.
+         * it's not practical to allow this case to succeed because the result is not usable as 
+         * an expected LU decomposition result (upper one is not even triangle).
+         * but the simple fact it restored caught my interest.
+         */
     }
 }

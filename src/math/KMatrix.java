@@ -149,7 +149,10 @@ public class KMatrix<K extends Decimal<K>> {
         int maxRow=TList.range(c,body.size()).max(i->body.get(i).get(c).abs()).get();
         body.swap(c,maxRow);
         if (body.get(c).get(c).isZero())
-            throw new NonsingularMatrixException("diagonal element was 0 even after pivoting, meaning this matrix is not singular: "+this+" : notified from KMatrix.swap()");
+            throw new NonsingularMatrixException("diagonal element was 0 even after pivoting, meaning this matrix is not singular : notified from KMatrix.swap()");
+            // keep this exception message simple, meaning not to include any variable, 
+            //because this exception will be used to detect nonsingular matrix and 
+            //in that case certain level of performance is needed for throwing this exception.
         order.swap(c, maxRow);
         return this;
     }

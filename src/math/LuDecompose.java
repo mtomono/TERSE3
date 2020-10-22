@@ -27,7 +27,10 @@ public class LuDecompose<K extends Decimal<K>> {
         target.assertSquare();
         doolittleWholeMatrix();
         if (!target.nonZeroDiagonal())
-            throw new NonsingularMatrixException("non zero element found in diagonal of doolittle result : "+target+" : noticed by LuDecompose.lu()");
+            throw new NonsingularMatrixException("non zero element found in diagonal of doolittle result : noticed by LuDecompose.lu()"); 
+            // keep this exception message simple, meaning not to include any variable, 
+            //because this exception will be used to detect nonsingular matrix and 
+            //in that case certain level of performance is needed for throwing this exception.
         return target.doolittleFormat();
     }
     public LuDecompose<K> doolittleWholeMatrix() {

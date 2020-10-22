@@ -24,16 +24,11 @@ public class LU<K extends Decimal<K>> extends TList<KMatrix<K>> {
         return last(0);
     }
     public KVector<K> solve(KVector<K> v) {
-        if (!isSingular())
-            throw new NonsingularMatrixException("the matrix is not a singular matrix:"+ u().toString() + ": notified from LU.solve()");
         KVector<K> y=l().forwardSubstitution(v);
         return u().backwardSubstitution(y);
     }
     public KMatrix<K> inv() {
         return u().invUpper().mul(l().invLower());
-    }
-    public boolean isSingular() {
-        return u().getDiagonal().stream().allMatch(d->!d.isZero());
     }
     public K det() {
         return u().getDiagonal().stream().reduce(u().context.one(), (a,b)->a.mul(b));
