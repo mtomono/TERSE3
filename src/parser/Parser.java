@@ -74,6 +74,12 @@ public interface Parser<S, T, U> {
         }
     }
     
+    /**
+     * or which does not need backtracking.
+     * 
+     * @param p
+     * @return 
+     */
     default Parser<S, T, U> or(Parser<S, T, U> p) {
         return s-> {
             Source<S, T> bak = s.clone();
@@ -106,7 +112,19 @@ public interface Parser<S, T, U> {
         };
     }
     
-    default Parser<S, T, U> tor(Parser<S, T, U> p) {
+    default Parser<S, T, U> tor(Parser<S,T,U> p) {
+        return s -> {
+            Source<S, T> bak = s.clone();
+            try {
+                return parse(s);
+            } catch (ParseException e) {
+                s.revert(bak);
+                return p.parse(s);
+            }
+        };
+    }
+    
+    default Parser<S, T, U> torAlternative(Parser<S, T, U> p) {
         return tr().or(p);
     }
     
@@ -225,6 +243,22 @@ public interface Parser<S, T, U> {
         };
     }
     
+    static public <S,T> Parser<S, T, T> is(T t) {
+        return Parser.<S,T>any().accept(x->x.equals(t));
+    }
+    
+    static public <S,T> Parser<S,T,T> is(T... ts) {
+        TList<T> l=TList.sof(ts);
+        return Parser.<S,T>any().accept(x->l.contains(x));
+    }
+    
+    static public <S,T> Parser<S, T, T> any() {
+        return s->{
+            T retval=s.peek();
+            return retval;
+        };
+    }
+        
     default Parser<S, T, U> accept(Predicate<U> p) {
         return s-> {
             U x = parse(s);
@@ -455,7 +489,22 @@ public interface Parser<S, T, U> {
         };
     }
     
-    public static  <S, T, U> Parser<S, T, U> tor(Parser<S, T, U>... ps) {
+    public static <S, T, U> Parser<S, T, U> tor(Parser<S, T, U>... ps) {
+        return s-> {
+            ParseException thrown = new ParseException("Or is empty.");
+            Source<S, T> bak = s.clone();
+            for (Parser<S, T, U> p : ps) {
+                try {
+                    return p.parse(s);
+                } catch (ParseException e) {
+                    s.revert(bak);
+                    thrown = e;
+                }
+            }
+            throw thrown;
+        };
+    }
+    public static  <S, T, U> Parser<S, T, U> torAlternative(Parser<S, T, U>... ps) {
         return or(Arrays.asList(ps).stream().map(p->p.tr()).collect(toList()).toArray(ps));
     }
 }

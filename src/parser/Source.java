@@ -57,8 +57,8 @@ public abstract class Source<S, T> {
         return hash;
     }
 
-    public void seek() {
-        pos++;
+    public void seek(int pos) {
+        this.pos=pos;
     }
     public void revert(Source<S, T> s) throws ParseException{
         if (!src.equals(s.src))

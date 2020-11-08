@@ -51,6 +51,14 @@ public interface JsonParser extends Parser<String,TokenType,TokenType> {
         Parser<String,TokenType,TokenType> skipped = is(STRING).l().except(t->stripQuote(t.strip()).equals(targetKey)).tr().next(is(COLON)).next(value);
         return is(BRACE).next(skipped.next(is(COMMA).tor(is(UNBRACE).end())).many()).next(target);
     }
+    /**
+     * alternative implimentation of get.
+     * 
+     * @param <U>
+     * @param targetKey
+     * @param f
+     * @return 
+     */
     static <U> Parser<String,TokenType,Optional<U>> getO(String targetKey, BiFunction<String,TokenType,U> f) {
         Parser<String,TokenType,TokenType> value =is(STRING,TRUE,FALSE,NULL,NUMBER);
         Parser<String,TokenType,U> target = is(STRING).l().accept(t->stripQuote(t.strip()).equals(targetKey)).next(is(COLON)).next(value.l(strip(f)));
@@ -144,6 +152,11 @@ public interface JsonParser extends Parser<String,TokenType,TokenType> {
     }
 
     // not used. only for explanation, this remains here.
+    /**
+     * i(gnore).
+     * skip the source to the position where a token starts which is not to be ignored.
+     * @return 
+     */
     public static Parser<String,TokenType,TokenType> i() {
         return s->{
             int tokenHead=s.pos;

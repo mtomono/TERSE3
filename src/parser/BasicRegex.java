@@ -25,4 +25,6 @@ public class BasicRegex {
     public static String integer="[+-]?\\d+";
     public static String decimal="[+-]?(?:\\d+\\.?\\d*|.\\d+)";
     public static String number="[+-]?(?:\\d+\\.?\\d*|.\\d+)(?:[eE][+-]?\\d+)?";
+    public static String camelHead="[^A-Z0-9]*";
+    public static String camelBump="[A-Z][^A-Z0-9]*";
 }
