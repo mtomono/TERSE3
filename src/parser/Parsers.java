@@ -19,7 +19,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import static parser.Parser.or;
 import static parser.Parser.reduce;
 import static parser.Parser.seq;
 import static parser.Parser.tor;

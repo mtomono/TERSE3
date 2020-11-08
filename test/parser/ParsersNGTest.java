@@ -9,7 +9,6 @@ import collection.P;
 import static org.testng.Assert.*;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import static parser.Parser.or;
 import static parser.Parser.reduce;
 import static parser.Parser.seq;
 import static parser.Parser.tor;

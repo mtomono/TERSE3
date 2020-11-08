@@ -75,26 +75,6 @@ public interface Parser<S, T, U> {
     }
     
     /**
-     * or which does not need backtracking.
-     * 
-     * @param p
-     * @return 
-     */
-    default Parser<S, T, U> or(Parser<S, T, U> p) {
-        return s-> {
-            int bak = s.pos;
-            try {
-                return parse(s);
-            } catch (ParseException e) {
-                if (s.pos!=bak) {
-                    throw e;
-                }
-                return p.parse(s);
-            }
-        };
-    }
-    
-    /**
      * make parser backtrackable.
      * when candidates of "or" has common part in beginning, or repetitive pattern
      * ends with failure, use this to make the parser backtrackable.
@@ -122,10 +102,6 @@ public interface Parser<S, T, U> {
                 return p.parse(s);
             }
         };
-    }
-    
-    default Parser<S, T, U> torAlternative(Parser<S, T, U> p) {
-        return tr().or(p);
     }
     
     default Parser<S, T, U> left(String e) {
@@ -455,24 +431,6 @@ public interface Parser<S, T, U> {
         };
     }
 
-    public static <S, T, U> Parser<S, T, U> or(Parser<S, T, U>... ps) {
-        return s-> {
-            ParseException thrown = new ParseException("Or is empty.");
-            for (Parser<S, T, U> p : ps) {
-                int bak = s.pos;
-                try {
-                    return p.parse(s);
-                } catch (ParseException e) {
-                    thrown = e;
-                    if (s.pos!=bak) {
-                        throw e;
-                    }
-                }
-            }
-            throw thrown;
-        };
-    }
-    
     public static <S, T, U> Parser<S, T, U> tor(Parser<S, T, U>... ps) {
         return s-> {
             ParseException thrown = new ParseException("Or is empty.");
@@ -487,8 +445,5 @@ public interface Parser<S, T, U> {
             }
             throw thrown;
         };
-    }
-    public static  <S, T, U> Parser<S, T, U> torAlternative(Parser<S, T, U>... ps) {
-        return or(Arrays.asList(ps).stream().map(p->p.tr()).collect(toList()).toArray(ps));
     }
 }
