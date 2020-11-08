@@ -16,9 +16,9 @@ import static test.TestUtils.methodName;
 public class JsonParserNGTest {
 
     public static class JsonParserFactory {
-        static final Parser<String, Character, String> boolValue = str("true").tor(str("false"));
+        static final Parser<String, Character, String> boolValue = str("true").or(str("false"));
         static final Parser<String, Character, String> nullValue = str("null");
-        static final Parser<String, Character, String> value = doubleQuote.tor(numberStr).tor(boolValue).tor(nullValue);
+        static final Parser<String, Character, String> value = doubleQuote.or(numberStr).or(boolValue).or(nullValue);
 
         static final Parser<String, Character, Character> garbage = anyChar.t().except(c->c=='"').tr().many();
         static final Parser<String, Character, Character> skipping = anyChar.t().except(c->c==',').many();
@@ -120,7 +120,7 @@ public class JsonParserNGTest {
     }
 
     @Test(expectedExceptions = parser.ParseException.class)
-    public void testExtractJsonValueWhenJsonIsNotContainsTarget() throws ParseException {
+    public void testExtractJsonValueWhenJsonDoesNotContainTarget() throws ParseException {
         System.out.println(methodName(0));
 
         final Parser<String, Character, String> extractor = JsonParserFactory.create("interest");

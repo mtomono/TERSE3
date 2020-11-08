@@ -19,9 +19,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import static parser.Parser.reduce;
 import static parser.Parser.seq;
-import static parser.Parser.tor;
+import static parser.Parser.or;
 
 /**
  *
@@ -131,15 +130,15 @@ public class Parsers {
     }
     
     public static final Parser<String, Character, String> integerStr = Parser.seq(chr('-').upto(1), digit.than(1)).l();
-    public static final Parser<String, Character, String> integerStrDelimited = Parser.seq(chr('-').upto(1), digit.tor(comma)).than(1).l();
+    public static final Parser<String, Character, String> integerStrDelimited = Parser.seq(chr('-').upto(1), digit.or(comma)).than(1).l();
     public static final Parser<String, Character, Integer> integer = integerStr.apply(s->Integer.parseInt(s));
     public static final Parser<String, Character, String> numberStr = Parser.seq(integerStr, seq(dot, digit.many()).many(0,1).l()).l();
     public static final Parser<String, Character, String> numberStrDelimited = Parser.seq(integerStrDelimited, seq(dot, digit.many()).many(0,1).l()).l();
     public static final Parser<String, Character, Double> number = numberStr.apply(s->Double.parseDouble(s));
-    public static final Parser<String, Character, String> spaces = space.tor(tab).tor(cr).many().l();
+    public static final Parser<String, Character, String> spaces = space.or(tab).or(cr).many().l();
     public static final Parser<String, Character, Character> octal = digit.t().accept(c->c<'8');
-    public static final Parser<String, Character, Character> hex = tor(digit, alpha.t().apply(c->Character.toLowerCase(c)).accept(c->'a'<=c&&c<='f'));
-    public static final Parser<String, Character, Character> esc = chr('\\').next(tor(
+    public static final Parser<String, Character, Character> hex = or(digit, alpha.t().apply(c->Character.toLowerCase(c)).accept(c->'a'<=c&&c<='f'));
+    public static final Parser<String, Character, Character> esc = chr('\\').next(or(
                             chr('t').apply(s->'\t'),
                             chr('n').apply(s->'\n'),
                             chr('\'').apply(s->'\''),
@@ -156,9 +155,9 @@ public class Parsers {
     public static final Parser<String, Character, Character> escNewLine = Parser.seq(chr('\\'), chr('n')).apply(s->'\n');
     public static final Parser<String, Character, Character> escQuote = Parser.seq(chr('\\'), chr('\'')).apply(s->'\'');
     public static final Parser<String, Character, Character> escDoubleQuote = Parser.seq(chr('\\'), chr('\"')).apply(s->'\"');
-    public static final Parser<String, Character, Character> escapes = tor(escBackSlash, escTab, escNewLine, escQuote, escDoubleQuote);
-    public static final Parser<String, Character, Character> charsInSingleQuote = tor(esc, anyChar.t().except(c->c==('\'')));
-    public static final Parser<String, Character, Character> charsInDoubleQuote = tor(esc, anyChar.t().except(c->c==('\"')));
+    public static final Parser<String, Character, Character> escapes = or(escBackSlash, escTab, escNewLine, escQuote, escDoubleQuote);
+    public static final Parser<String, Character, Character> charsInSingleQuote = or(esc, anyChar.t().except(c->c==('\'')));
+    public static final Parser<String, Character, Character> charsInDoubleQuote = or(esc, anyChar.t().except(c->c==('\"')));
     public static final Parser<String, Character, String> wholeDoubleQuote = chr('\"').next(charsInDoubleQuote.many()).prev(chr('\"')).l();
     public static final Parser<String, Character, String> wholeSingleQuote = chr('\'').next(charsInSingleQuote.many()).prev(chr('\'')).l();
     public static final Parser<String, Character, String> doubleQuote = chr('\"').next(charsInDoubleQuote.reduce(()->new StringBuilder(),(a,b)->a.append(b)).apply(sb->sb.toString())).prev(chr('\"'));
@@ -178,17 +177,17 @@ public class Parsers {
     };
 
     public static final Parser<String, Character, Double> term = 
-        factor.reduce(tor(
+        factor.reduce(or(
                 chr('*').next(factor.apply((u, v)->u*v)), 
                 chr('/').next(factor.apply((u, v)->u/v))
             ));
     
     public static final Parser<String, Character, Double> expr =
-        term.reduce(tor(
+        term.reduce(or(
                 chr('+').next(term.apply((u, v)->u+v)), 
                 chr('-').next(term.apply((u, v)->u-v))
             ));    
     
     public static final Parser<String, Character, Double> factor_ =
-            spaces.next(tor(chr('(').next(expr).prev(chr(')')), number)).prev(spaces);
+            spaces.next(or(chr('(').next(expr).prev(chr(')')), number)).prev(spaces);
 }

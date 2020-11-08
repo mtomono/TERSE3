@@ -92,7 +92,7 @@ public interface Parser<S, T, U> {
         };
     }
     
-    default Parser<S, T, U> tor(Parser<S,T,U> p) {
+    default Parser<S, T, U> or(Parser<S,T,U> p) {
         return s -> {
             int bak = s.pos;
             try {
@@ -105,7 +105,7 @@ public interface Parser<S, T, U> {
     }
     
     default Parser<S, T, U> left(String e) {
-        return tor(s->{
+        return or(s->{
             throw new ParseException(s.explain(e));
         });
     }
@@ -431,7 +431,7 @@ public interface Parser<S, T, U> {
         };
     }
 
-    public static <S, T, U> Parser<S, T, U> tor(Parser<S, T, U>... ps) {
+    public static <S, T, U> Parser<S, T, U> or(Parser<S, T, U>... ps) {
         return s-> {
             ParseException thrown = new ParseException("Or is empty.");
             int bak = s.pos;
