@@ -28,7 +28,7 @@ import static parser.Parsers.*;
 public class Interaction {
     List<Prompt> prompts;
     static final String prompt = ">";
-    static final Parser<String, Character, String> end = spaces.next(str("quit").or(str("exit").tr()).or(str("end").tr())).prev(spaces);
+    static final Parser<String, Character, String> end = spaces.next(str("quit").tor(str("exit")).tor(str("end"))).prev(spaces);
     Console console;
 
     public Interaction(List<Prompt> prompts) {

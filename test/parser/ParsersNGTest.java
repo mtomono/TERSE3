@@ -332,7 +332,7 @@ public class ParsersNGTest {
         StrSource s = new StrSource("a");
         String result = null;
         try {
-            result = letter.or(digit).l().parse(s);
+            result = letter.tor(digit).l().parse(s);
         } catch (ParseException e) {
             
         }
@@ -348,7 +348,7 @@ public class ParsersNGTest {
         StrSource s = new StrSource("1");
         String result = null;
         try {
-            result = letter.or(digit).l().parse(s);
+            result = letter.tor(digit).l().parse(s);
         } catch (ParseException e) {
             
         }
@@ -364,7 +364,7 @@ public class ParsersNGTest {
         StrSource s = new StrSource("!");
         String result = null;
         try {
-            result = letter.or(digit).l().parse(s);
+            result = letter.tor(digit).l().parse(s);
         } catch (ParseException e) {
             
         }
@@ -380,7 +380,7 @@ public class ParsersNGTest {
         StrSource s = new StrSource("abc123");
         String result = null;
         try {
-            result = letter.or(digit).many().l().parse(s);
+            result = letter.tor(digit).many().l().parse(s);
         } catch (ParseException e) {
             
         }
@@ -396,7 +396,7 @@ public class ParsersNGTest {
         StrSource s = new StrSource("123abc");
         String result = null;
         try {
-            result = letter.or(digit).many().l().parse(s);
+            result = letter.tor(digit).many().l().parse(s);
         } catch (ParseException e) {
             
         }
@@ -412,7 +412,7 @@ public class ParsersNGTest {
         StrSource s = new StrSource("abc!123");
         String result = null;
         try {
-            result = letter.or(digit).many().l().parse(s);
+            result = letter.tor(digit).many().l().parse(s);
         } catch (ParseException e) {
             
         }
@@ -431,7 +431,7 @@ public class ParsersNGTest {
         StrSource s = new StrSource("ab");
         String result = null;
         try {
-            result = seq(a, b).or(seq(c, b)).l().parse(s);
+            result = seq(a, b).tor(seq(c, b)).l().parse(s);
         } catch (ParseException e) {
             
         }
@@ -447,7 +447,7 @@ public class ParsersNGTest {
         StrSource s = new StrSource("cb");
         String result = null;
         try {
-            result = seq(a, b).or(seq(c, b)).l().parse(s);
+            result = seq(a, b).tor(seq(c, b)).l().parse(s);
         } catch (ParseException e) {
             
         }
@@ -463,7 +463,7 @@ public class ParsersNGTest {
         StrSource s = new StrSource("acb");
         String result = null;
         try {
-            result = seq(a, b).or(seq(c, b)).l().parse(s);
+            result = seq(a, b).tor(seq(c, b)).l().parse(s);
         } catch (ParseException e) {
             
         }
@@ -479,7 +479,7 @@ public class ParsersNGTest {
         StrSource s = new StrSource("ab");
         String result = null;
         try {
-            result = seq(a, b).or(seq(a, c)).l().parse(s);
+            result = seq(a, b).tor(seq(a, c)).l().parse(s);
         } catch (ParseException e) {
             
         }
@@ -495,11 +495,11 @@ public class ParsersNGTest {
         StrSource s = new StrSource("ac");
         String result = null;
         try {
-            result = seq(a, b).or(seq(a, c)).l().parse(s);
+            result = seq(a, b).tor(seq(a, c)).l().parse(s);
         } catch (ParseException e) {
             
         }
-        String expected = null;
+        String expected = "ac";
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
@@ -511,7 +511,7 @@ public class ParsersNGTest {
         StrSource s = new StrSource("ac");
         String result = null;
         try {
-            result = seq(a, b.or(c)).l().parse(s);
+            result = seq(a, b.tor(c)).l().parse(s);
         } catch (ParseException e) {
             
         }
@@ -527,7 +527,7 @@ public class ParsersNGTest {
         StrSource s = new StrSource("ab");
         String result = null;
         try {
-            result = seq(a, b.or(c)).l().parse(s);
+            result = seq(a, b.tor(c)).l().parse(s);
         } catch (ParseException e) {
             
         }
@@ -592,7 +592,7 @@ public class ParsersNGTest {
         StrSource s = new StrSource("ab");
         String result = null;
         try {
-            result = or(seq(a, b).tr(), seq(a, c).tr(), seq(a, a)).l().parse(s);
+            result = tor(seq(a, b), seq(a, c), seq(a, a)).l().parse(s);
         } catch (ParseException e) {
             
         }
@@ -608,7 +608,7 @@ public class ParsersNGTest {
         StrSource s = new StrSource("ac");
         String result = null;
         try {
-            result = or(seq(a, b).tr(), seq(a, c).tr(), seq(a, a)).l().parse(s);
+            result = tor(seq(a, b), seq(a, c), seq(a, a)).l().parse(s);
         } catch (ParseException e) {
             
         }
@@ -624,7 +624,7 @@ public class ParsersNGTest {
         StrSource s = new StrSource("aa");
         String result = null;
         try {
-            result = or(seq(a, b).tr(), seq(a, c).tr(), seq(a, a)).l().parse(s);
+            result = tor(seq(a, b), seq(a, c), seq(a, a)).l().parse(s);
         } catch (ParseException e) {
             
         }
@@ -640,7 +640,7 @@ public class ParsersNGTest {
         StrSource s = new StrSource("ba");
         String result = null;
         try {
-            result = or(seq(a, b).tr(), seq(a, c).tr(), seq(a, a)).l().parse(s);
+            result = tor(seq(a, b), seq(a, c), seq(a, a)).l().parse(s);
         } catch (ParseException e) {
             
         }
@@ -1117,7 +1117,7 @@ public class ParsersNGTest {
         System.out.println(methodName(0));
         Tested result = null;
         try {
-            result = number.and(or(chr('S').next(integer), chr('L').next(integer))).apply(p->new Tested(p.l(), p.r())).parse(s);
+            result = number.and(tor(chr('S').next(integer), chr('L').next(integer))).apply(p->new Tested(p.l(), p.r())).parse(s);
         } catch (ParseException e) {
             
         }

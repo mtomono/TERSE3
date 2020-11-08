@@ -129,7 +129,7 @@ public interface Parser<S, T, U> {
     }
     
     default Parser<S, T, U> left(String e) {
-        return or(s->{
+        return tor(s->{
             throw new ParseException(s.explain(e));
         });
     }
