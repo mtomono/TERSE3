@@ -82,11 +82,11 @@ public interface Parser<S, T, U> {
      */
     default Parser<S, T, U> or(Parser<S, T, U> p) {
         return s-> {
-            Source<S, T> bak = s.clone();
+            int bak = s.pos;
             try {
                 return parse(s);
             } catch (ParseException e) {
-                if (!s.equals(bak)) {
+                if (s.pos!=bak) {
                     throw e;
                 }
                 return p.parse(s);
@@ -459,12 +459,12 @@ public interface Parser<S, T, U> {
         return s-> {
             ParseException thrown = new ParseException("Or is empty.");
             for (Parser<S, T, U> p : ps) {
-                Source<S, T> bak = s.clone();
+                int bak = s.pos;
                 try {
                     return p.parse(s);
                 } catch (ParseException e) {
                     thrown = e;
-                    if (!s.equals(bak)) {
+                    if (s.pos!=bak) {
                         throw e;
                     }
                 }
