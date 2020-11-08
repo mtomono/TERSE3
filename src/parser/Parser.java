@@ -374,11 +374,11 @@ public interface Parser<S, T, U> {
         return rep(min).and(many(),(a,b)->null);
     }
     
-    default <V> Parser<S,T,V> upto(int max, Function<TList<U>,V> f) {
+    default <V> Parser<S,T,V> lessThan(int max, Function<TList<U>,V> f) {
         return s-> {
             TList<U> retval=TList.c();
             try {
-                for (int i=0; i<max; i++) {
+                for (int i=0; i<max-1; i++) {
                     retval.add(parse(s));
                 }
             } catch (ParseException e) {
@@ -386,10 +386,10 @@ public interface Parser<S, T, U> {
             return f.apply(retval);
         };
     }
-    default <V> Parser<S,T,V> upto(int max) {
+    default <V> Parser<S,T,V> lessThan(int max) {
         return s-> {
             try {
-                for (int i=0; i<max; i++) {
+                for (int i=0; i<max-1; i++) {
                     parse(s);
                 }
             } catch (ParseException e) {
@@ -408,10 +408,10 @@ public interface Parser<S, T, U> {
         };
     }
     default <V> Parser<S,T,V> many(int min,int max,Function<TList<U>,V> f) {
-        return rep(min,l->l).and(upto(max-min,l->l),(a,b)->f.apply(a.append(b)));
+        return rep(min,l->l).and(Parser.this.lessThan(max-min,l->l),(a,b)->f.apply(a.append(b)));
     }
     default <V> Parser<S,T,V> many(int min,int max) {
-        return rep(min).and(upto(max-min),(a,b)->null);
+        return rep(min).and(lessThan(max-min),(a,b)->null);
     }
     
     public static <S, T, U, V> Parser<S, T, V> seq(Function<TList<U>,V> f,Parser<S, T, U>... args) {

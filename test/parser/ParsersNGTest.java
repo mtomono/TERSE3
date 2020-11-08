@@ -719,7 +719,7 @@ public class ParsersNGTest {
         StrSource s = new StrSource("a");
         String result = null;
         try {
-            result = a.upto(2).l().parse(s);
+            result = a.lessThan(2).l().parse(s);
         } catch (ParseException e) {
             
         }
@@ -735,7 +735,7 @@ public class ParsersNGTest {
         StrSource s = new StrSource("aa");
         String result = null;
         try {
-            result = a.upto(2).l().parse(s);
+            result = a.lessThan(3).l().parse(s);
         } catch (ParseException e) {
             
         }
@@ -751,7 +751,7 @@ public class ParsersNGTest {
         StrSource s = new StrSource("aaa");
         String result = null;
         try {
-            result = a.upto(2).l().parse(s);
+            result = a.lessThan(3).l().parse(s);
         } catch (ParseException e) {
             
         }
@@ -783,7 +783,7 @@ public class ParsersNGTest {
         StrSource s = new StrSource("a");
         String result = null;
         try {
-            result = a.upto(1).l().parse(s);
+            result = a.lessThan(2).l().parse(s);
         } catch (ParseException e) {
             
         }
@@ -879,7 +879,7 @@ public class ParsersNGTest {
         StrSource s = new StrSource("aaaa");
         String result = null;
         try {
-            result = a.many(2,4).l().parse(s);
+            result = a.many(2,5).l().parse(s);
         } catch (ParseException e) {
             
         }
@@ -895,7 +895,7 @@ public class ParsersNGTest {
         StrSource s = new StrSource("aaaaa");
         String result = null;
         try {
-            result = a.many(2,4).l().parse(s);
+            result = a.many(2,5).l().parse(s);
         } catch (ParseException e) {
             
         }

@@ -129,11 +129,11 @@ public class Parsers {
         return Parsers.notL(x->x.equals(s));
     }
     
-    public static final Parser<String, Character, String> integerStr = Parser.seq(chr('-').upto(1), digit.noLessThan(1)).l();
-    public static final Parser<String, Character, String> integerStrDelimited = Parser.seq(chr('-').upto(1), digit.or(comma)).noLessThan(1).l();
+    public static final Parser<String, Character, String> integerStr = Parser.seq(chr('-').lessThan(2), digit.noLessThan(1)).l();
+    public static final Parser<String, Character, String> integerStrDelimited = Parser.seq(chr('-').lessThan(2), digit.or(comma)).noLessThan(1).l();
     public static final Parser<String, Character, Integer> integer = integerStr.apply(s->Integer.parseInt(s));
-    public static final Parser<String, Character, String> numberStr = Parser.seq(integerStr, seq(dot, digit.many()).many(0,1).l()).l();
-    public static final Parser<String, Character, String> numberStrDelimited = Parser.seq(integerStrDelimited, seq(dot, digit.many()).many(0,1).l()).l();
+    public static final Parser<String, Character, String> numberStr = Parser.seq(integerStr, seq(dot, digit.many()).many(0,2).l()).l();
+    public static final Parser<String, Character, String> numberStrDelimited = Parser.seq(integerStrDelimited, seq(dot, digit.many()).many(0,2).l()).l();
     public static final Parser<String, Character, Double> number = numberStr.apply(s->Double.parseDouble(s));
     public static final Parser<String, Character, String> spaces = space.or(tab).or(cr).many().l();
     public static final Parser<String, Character, Character> octal = digit.t().accept(c->c<'8');
