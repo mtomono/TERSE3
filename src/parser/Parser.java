@@ -367,10 +367,10 @@ public interface Parser<S, T, U> {
         };
     }
 
-    default <V> Parser<S,T,V> than(int min, Function<TList<U>,V> f) {
+    default <V> Parser<S,T,V> noLessThan(int min, Function<TList<U>,V> f) {
         return rep(min,l->l).and(many(l->l),(a,b)->f.apply(a.append(b)));
     }
-    default <V> Parser<S,T,V> than(int min) {
+    default <V> Parser<S,T,V> noLessThan(int min) {
         return rep(min).and(many(),(a,b)->null);
     }
     

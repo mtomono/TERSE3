@@ -129,8 +129,8 @@ public class Parsers {
         return Parsers.notL(x->x.equals(s));
     }
     
-    public static final Parser<String, Character, String> integerStr = Parser.seq(chr('-').upto(1), digit.than(1)).l();
-    public static final Parser<String, Character, String> integerStrDelimited = Parser.seq(chr('-').upto(1), digit.or(comma)).than(1).l();
+    public static final Parser<String, Character, String> integerStr = Parser.seq(chr('-').upto(1), digit.noLessThan(1)).l();
+    public static final Parser<String, Character, String> integerStrDelimited = Parser.seq(chr('-').upto(1), digit.or(comma)).noLessThan(1).l();
     public static final Parser<String, Character, Integer> integer = integerStr.apply(s->Integer.parseInt(s));
     public static final Parser<String, Character, String> numberStr = Parser.seq(integerStr, seq(dot, digit.many()).many(0,1).l()).l();
     public static final Parser<String, Character, String> numberStrDelimited = Parser.seq(integerStrDelimited, seq(dot, digit.many()).many(0,1).l()).l();

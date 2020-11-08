@@ -767,7 +767,7 @@ public class ParsersNGTest {
         StrSource s = new StrSource("a");
         String result = null;
         try {
-            result = a.than(2).l().parse(s);
+            result = a.noLessThan(2).l().parse(s);
         } catch (ParseException e) {
             
         }
@@ -799,7 +799,7 @@ public class ParsersNGTest {
         StrSource s = new StrSource("aa");
         String result = null;
         try {
-            result = a.than(2).l().parse(s);
+            result = a.noLessThan(2).l().parse(s);
         } catch (ParseException e) {
             
         }
@@ -815,7 +815,7 @@ public class ParsersNGTest {
         StrSource s = new StrSource("aaa");
         String result = null;
         try {
-            result = a.than(2).l().parse(s);
+            result = a.noLessThan(2).l().parse(s);
         } catch (ParseException e) {
             
         }
