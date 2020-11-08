@@ -102,11 +102,11 @@ public interface Parser<S, T, U> {
      */
     default Parser<S, T, U> tr() {
         return s -> {
-            Source<S, T> bak = s.clone();
+            int bak=s.pos;
             try {
                 return parse(s);
             } catch (ParseException e) {
-                s.revert(bak);
+                s.seek(bak);
                 throw e;
             }
         };
@@ -114,11 +114,11 @@ public interface Parser<S, T, U> {
     
     default Parser<S, T, U> tor(Parser<S,T,U> p) {
         return s -> {
-            Source<S, T> bak = s.clone();
+            int bak = s.pos;
             try {
                 return parse(s);
             } catch (ParseException e) {
-                s.revert(bak);
+                s.seek(bak);
                 return p.parse(s);
             }
         };
@@ -235,30 +235,14 @@ public interface Parser<S, T, U> {
      */
     default <V> Parser<S, T, P<U, V>> dual(Parser<S, T, V> p) {
         return s->{
-            Source<S, T> bak = s.clone();
+            int bak = s.pos;
             U l = parse(s);
-            s.revert(bak);
+            s.seek(bak);
             V r = p.parse(s);
             return P.p(l, r);
         };
     }
-    
-    static public <S,T> Parser<S, T, T> is(T t) {
-        return Parser.<S,T>any().accept(x->x.equals(t));
-    }
-    
-    static public <S,T> Parser<S,T,T> is(T... ts) {
-        TList<T> l=TList.sof(ts);
-        return Parser.<S,T>any().accept(x->l.contains(x));
-    }
-    
-    static public <S,T> Parser<S, T, T> any() {
-        return s->{
-            T retval=s.peek();
-            return retval;
-        };
-    }
-        
+           
     default Parser<S, T, U> accept(Predicate<U> p) {
         return s-> {
             U x = parse(s);
@@ -492,12 +476,12 @@ public interface Parser<S, T, U> {
     public static <S, T, U> Parser<S, T, U> tor(Parser<S, T, U>... ps) {
         return s-> {
             ParseException thrown = new ParseException("Or is empty.");
-            Source<S, T> bak = s.clone();
+            int bak = s.pos;
             for (Parser<S, T, U> p : ps) {
                 try {
                     return p.parse(s);
                 } catch (ParseException e) {
-                    s.revert(bak);
+                    s.seek(bak);
                     thrown = e;
                 }
             }

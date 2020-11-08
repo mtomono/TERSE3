@@ -60,11 +60,6 @@ public abstract class Source<S, T> {
     public void seek(int pos) {
         this.pos=pos;
     }
-    public void revert(Source<S, T> s) throws ParseException{
-        if (!src.equals(s.src))
-            throw new ParseException("Tried to revert to a different source.");
-        pos = s.pos;
-    }
 
     public String explain(String e) {
         return "["+pos+"]"+e;
