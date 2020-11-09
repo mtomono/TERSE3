@@ -20,7 +20,7 @@ public class JsonParserNGTest {
         static final Parser<String, Character, String> nullValue = str("null");
         static final Parser<String, Character, String> value = doubleQuote.or(numberStr).or(boolValue).or(nullValue);
 
-        static final Parser<String, Character, Character> garbage = anyChar.t().except(c->c=='"').tr().many();
+        static final Parser<String, Character, Character> garbage = anyChar.t().except(c->c=='"').many();
         static final Parser<String, Character, Character> skipping = anyChar.t().except(c->c==',').many();
         static final Parser<String, Character, Character> nameSeparator = s(chr(':'));
 
@@ -31,7 +31,7 @@ public class JsonParserNGTest {
                             .next(s(value.apply(f)));
 
             final Parser<String, Character, String> skipMember =
-                    doubleQuote.except(s->s.equals(targetKey)).tr()
+                    doubleQuote.except(s->s.equals(targetKey))
                             .prev(nameSeparator
                                     .next(skipping)
                                     .next(garbage));

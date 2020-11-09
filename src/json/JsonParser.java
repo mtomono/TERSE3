@@ -48,7 +48,7 @@ public interface JsonParser extends Parser<String,TokenType,TokenType> {
     static <U> Parser<String,TokenType,U> get(String targetKey, BiFunction<String,TokenType,U> f) {
         Parser<String,TokenType,TokenType> value =is(STRING,TRUE,FALSE,NULL,NUMBER);
         Parser<String,TokenType,U> target = is(STRING).l().accept(t->stripQuote(t.strip()).equals(targetKey)).next(is(COLON)).next(value.l(strip(f)));
-        Parser<String,TokenType,TokenType> skipped = is(STRING).l().except(t->stripQuote(t.strip()).equals(targetKey)).tr().next(is(COLON)).next(value);
+        Parser<String,TokenType,TokenType> skipped = is(STRING).l().except(t->stripQuote(t.strip()).equals(targetKey)).next(is(COLON)).next(value);
         return is(BRACE).next(skipped.next(is(COMMA).or(is(UNBRACE).end())).many()).next(target);
     }
     /**

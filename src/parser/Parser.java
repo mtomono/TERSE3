@@ -347,7 +347,7 @@ public interface Parser<S, T, U> {
             TList<U> retval=TList.c();
             try {
                 for (;;) {
-                    retval.add(parse(s));
+                    retval.add(tr().parse(s));
                 }
             } catch (ParseException e) {
             }
@@ -359,7 +359,7 @@ public interface Parser<S, T, U> {
         return s-> {
             try {
                 for (;;) {
-                    parse(s);
+                    tr().parse(s);
                 }
             } catch (ParseException e) {
             }
@@ -379,7 +379,7 @@ public interface Parser<S, T, U> {
             TList<U> retval=TList.c();
             try {
                 for (int i=0; i<max-1; i++) {
-                    retval.add(parse(s));
+                    retval.add(tr().parse(s));
                 }
             } catch (ParseException e) {
             }
@@ -390,7 +390,7 @@ public interface Parser<S, T, U> {
         return s-> {
             try {
                 for (int i=0; i<max-1; i++) {
-                    parse(s);
+                    tr().parse(s);
                 }
             } catch (ParseException e) {
             }

@@ -117,10 +117,10 @@ public class Parsers {
     }
 
     public static <S,T> Parser<S,T,T> not(Predicate<T> p) {
-        return Parsers.<S,T>any().t().except(p).tr().many();
+        return Parsers.<S,T>any().t().except(p).many();
     }
     public static <S,T> Parser<S,T,S> notL(Predicate<S> p) {
-        return Parsers.<S,T>any().l().except(p).tr().many();
+        return Parsers.<S,T>any().l().except(p).many();
     }
     public static <S,T> Parser<S,T,T> not(T c) {
         return Parsers.not(x->x.equals(c));
