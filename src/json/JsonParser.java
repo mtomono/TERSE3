@@ -62,7 +62,7 @@ public interface JsonParser extends Parser<String,TokenType,TokenType> {
     static <U> Parser<String,TokenType,Optional<U>> getO(String targetKey, BiFunction<String,TokenType,U> f) {
         Parser<String,TokenType,TokenType> value =is(STRING,TRUE,FALSE,NULL,NUMBER);
         Parser<String,TokenType,U> target = is(STRING).l().accept(t->stripQuote(t.strip()).equals(targetKey)).next(is(COLON)).next(value.l(strip(f)));
-        Parser<String,TokenType,TokenType> skipped = is(STRING).l().except(t->stripQuote(t.strip()).equals(targetKey)).tr().next(is(COLON)).next(value);
+        Parser<String,TokenType,TokenType> skipped = is(STRING).l().except(t->stripQuote(t.strip()).equals(targetKey)).next(is(COLON)).next(value);
         return is(BRACE).next(skipped.next(is(COMMA).or(is(UNBRACE))).many()).next(target.opt(v->v));
     }    
     static Parser<String,TokenType,Map<String,String>> getAll(Supplier<Map<String,String>> s) {
@@ -70,7 +70,7 @@ public interface JsonParser extends Parser<String,TokenType,TokenType> {
     }
     static <U>Parser<String,TokenType,Map<String,U>> getAll(Supplier<Map<String,U>> s,BiFunction<String,TokenType,U> f) {
         Parser<String,TokenType,TokenType> value =is(STRING,TRUE,FALSE,NULL,NUMBER);
-        Parser<String,TokenType,P<String,U>> property = is(STRING).l().apply(t->stripQuote(t)).tr().prev(is(COLON)).and(value.l(f));
+        Parser<String,TokenType,P<String,U>> property = is(STRING).l().apply(t->stripQuote(t)).prev(is(COLON)).and(value.l(f));
         return is(BRACE).next(property.prev(is(COMMA).or(is(UNBRACE))).reduce(s,(a,b)->{a.put(b.l(),b.r());return a;}));
     }
     static Parser<String,TokenType,TList<P<String,String>>> getAllList() {
@@ -78,7 +78,7 @@ public interface JsonParser extends Parser<String,TokenType,TokenType> {
     }
     static <U>Parser<String,TokenType,TList<P<String,U>>> getAllList(BiFunction<String,TokenType,U> f) {
         Parser<String,TokenType,TokenType> value =is(STRING,TRUE,FALSE,NULL,NUMBER);
-        Parser<String,TokenType,P<String,U>> property = is(STRING).l().apply(t->stripQuote(t)).tr().prev(is(COLON)).and(value.l(f));
+        Parser<String,TokenType,P<String,U>> property = is(STRING).l().apply(t->stripQuote(t)).prev(is(COLON)).and(value.l(f));
         return is(BRACE).next(property.prev(is(COMMA).or(is(UNBRACE))).many(p->p));
     }
 
