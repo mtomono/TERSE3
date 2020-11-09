@@ -35,19 +35,10 @@ public class CamelLex extends LexBase<TokenType> {
     static Pattern camelBump = Pattern.compile(BasicRegex.camelBump);
     static Pattern integer = Pattern.compile(BasicRegex.integer);
     Matcher matcher;
-    public CamelLex(String src,int pos) {
-        super(src,pos);
+    public CamelLex(String src) {
+        super(src);
         this.matcher=camelHead.matcher(src);
     }
-    public CamelLex(String src) {
-        this(src,0);
-    }
-    @Override
-    public Source<String, TokenType> clone() {
-        CamelLex retval=new CamelLex(src,pos);
-        return retval;
-    }
-
     public TokenType nextToken() {
         char at=src.charAt(pos);
         if ('0'<=at&&at<='9') {

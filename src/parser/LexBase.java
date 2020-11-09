@@ -23,12 +23,9 @@ import java.util.NoSuchElementException;
  */
 public abstract class LexBase<TOKEN> extends Source<String,TOKEN> implements Iterator<TOKEN> {
     abstract public TOKEN nextToken();
-    public LexBase(String src,int pos) {
-        super(src);
-        this.pos=pos;
-    }
+
     public LexBase(String src) {
-        this(src,0);
+        super(src);
     }
 
     @Override

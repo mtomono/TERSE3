@@ -29,13 +29,6 @@ public class ListSource<T> extends Source<List<T>, T> {
     }
     
     @Override
-    public ListSource clone() {
-        ListSource<T> ret = new ListSource<>(src);
-        ret.pos = pos;
-        return ret;
-    }
-    
-    @Override
     public final T peek() throws ParseException {
         if (pos >= src.size())
             throw new ParseException("unexpectedly reached end of text.");

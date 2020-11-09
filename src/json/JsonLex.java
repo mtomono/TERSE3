@@ -43,20 +43,12 @@ public class JsonLex extends Source<String,TokenType> implements Iterator<TokenT
     static Pattern colonp=Pattern.compile(":"+trailingSpaces);
     Matcher matcher;
     final public Iterator<TokenType> ignored;
-    public JsonLex(String src,int pos) {
+    public JsonLex(String src) {
         super(src);
-        this.pos=pos;
         this.matcher=spaces.matcher(src);
         this.ignored=new SelectIterator<>(this,t->!t.ignored);
     }
-    public JsonLex(String src) {
-        this(src,0);
-    }
-    @Override
-    public Source<String, TokenType> clone() {
-        JsonLex retval=new JsonLex(src,pos);
-        return retval;
-    }
+
     @Override
     public TokenType peek() throws ParseException {
         try {

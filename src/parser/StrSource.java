@@ -26,13 +26,6 @@ public class StrSource extends Source<String, Character> {
     }
     
     @Override
-    public StrSource clone() {
-        StrSource ret = new StrSource(src);
-        ret.pos = pos;
-        return ret;
-    }
-    
-    @Override
     public final Character peek() throws ParseException {
         if (pos>=src.length())
             throw new ParseException("unexpectedly reached end of text.");
