@@ -249,7 +249,7 @@ public interface Parser<S, T, U> {
     
     default <V> V reduceBase(Source<S, T> s, V start, BiFunction<V, U, V> f) {
         try {
-            return reduceBase(s, f.apply(start, parse(s)), f);
+            return reduceBase(s, f.apply(start, tr().parse(s)), f);
         } catch (ParseException e) {
             return start;
         }
@@ -271,14 +271,10 @@ public interface Parser<S, T, U> {
     
     public static <S, T, U> U reduce(Source<S, T> s, U start, Parser<S, T, Function<U, U>> p) {
         try {
-            return reduce(s, p.parse(s).apply(start), p);
+            return reduce(s, p.tr().parse(s).apply(start), p);
         } catch (ParseException e) {
             return start;
         }
-    }
-    
-    default <V, W> Parser<S, T, W> relay(Parser<S, T, V> p, BiFunction<U, V, W> f) {
-        return s-> f.apply(parse(s), p.parse(s));
     }
     
     /**
@@ -322,7 +318,7 @@ public interface Parser<S, T, U> {
         return s-> {
             return f.apply(parse(s), p.parse(s));
         };
-    }
+    }    
     
     default <V> Parser<S, T, V> rep(int n, Function<TList<U>,V> f) {
         return s-> {

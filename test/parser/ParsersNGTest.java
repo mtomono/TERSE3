@@ -999,7 +999,7 @@ public class ParsersNGTest {
         System.out.println(methodName(0));
         String result = null;
         try {
-            result = digit.many().l().relay(letter.many().l(), (u, v)->v+u).parse(s);
+            result = digit.many().l().and(letter.many().l(), (u, v)->v+u).parse(s);
         } catch (ParseException e) {
             
         }
