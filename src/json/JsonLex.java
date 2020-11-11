@@ -21,14 +21,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import parser.BasicRegex;
 import parser.ParseException;
-import parser.Source;
 import static json.TokenType.*;
+import parser.LexBase;
 
 /**
  *
  * @author masao
  */
-public class JsonLex extends Source<String,TokenType> implements Iterator<TokenType> {
+public class JsonLex extends LexBase<TokenType> implements Iterator<TokenType> {
     final static boolean IGNORED=true;
 
     static Pattern spaces = Pattern.compile(BasicRegex.spaces);
@@ -52,41 +52,7 @@ public class JsonLex extends Source<String,TokenType> implements Iterator<TokenT
         ready=false;
         buffer=null;
     }
-    
-    public TokenType fore() throws ParseException {
-        try {
-            buffer=this.next();
-            ready=true;
-            return buffer;
-        } catch (NoSuchElementException e) {
-            throw new ParseException("reached end of source");
-        }
-    }
-
-    @Override
-    public TokenType peek() throws ParseException {
-        try {
-            return ready?buffer:fore();
-        } catch (NoSuchElementException e) {
-            throw new ParseException("reached end of source");
-        }
-    }
-    @Override
-    public String sub(int... sec) {
-        return src.substring(sec[0],sec[1]);
-    }
-    @Override
-    public boolean hasNext() {
-        return pos<src.length();
-    }
-    @Override
-    public TokenType next() {
-        if (!hasNext())
-            throw new NoSuchElementException("reached end of src");
-        TokenType retval=nextToken();
-        return retval;
-    }
-    
+        
     public TokenType nextToken() {
         char at=src.charAt(pos);
         switch(at) {
