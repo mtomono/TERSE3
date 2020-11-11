@@ -186,6 +186,7 @@ public interface Parser<S, T, U> {
     
     default Parser<S,T,U> end() {
         return s->{
+            parse(s);
             throw new ParseCompleteException();
         };
     }
