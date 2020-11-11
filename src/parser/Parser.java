@@ -38,6 +38,9 @@ import static java.util.stream.Collectors.toList;
 public interface Parser<S, T, U> {
     U parse(Source<S, T> s) throws ParseException;
     
+    public static <S,T> Parser<S,T,T> any() {
+        return s->s.peek();
+    }
     /**
      * parse without exception
      * @param s

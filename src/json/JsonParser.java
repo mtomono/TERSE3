@@ -33,8 +33,8 @@ public interface JsonParser extends Parser<String,TokenType,TokenType> {
     public static Parser<String,TokenType,TokenType> is(TokenType... types) {
         TList<TokenType> typeList=TList.sof(types);
         return s->{
-            TokenType retval=s.peek();
-            for (;retval.ignored;retval=s.peek());
+            TokenType retval=s.fore();
+            for (;retval.ignored;retval=s.fore());
             if (!typeList.contains(retval))
                 throw new ParseException(s.explain("Reached unexpected item :"+retval));
             return retval;

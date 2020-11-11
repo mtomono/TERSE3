@@ -25,6 +25,12 @@ public class StrSource extends Source<String, Character> {
         super(s);
     }
     
+    public Character fore() throws ParseException {
+        Character retval= peek();
+        pos++;
+        return retval;
+    }
+    
     @Override
     public final Character peek() throws ParseException {
         if (pos>=src.length())

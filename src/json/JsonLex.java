@@ -43,16 +43,30 @@ public class JsonLex extends Source<String,TokenType> implements Iterator<TokenT
     static Pattern colonp=Pattern.compile(":"+trailingSpaces);
     Matcher matcher;
     final public Iterator<TokenType> ignored;
+    boolean ready;
+    TokenType buffer;
     public JsonLex(String src) {
         super(src);
         this.matcher=spaces.matcher(src);
         this.ignored=new SelectIterator<>(this,t->!t.ignored);
+        ready=false;
+        buffer=null;
+    }
+    
+    public TokenType fore() throws ParseException {
+        try {
+            buffer=this.next();
+            ready=true;
+            return buffer;
+        } catch (NoSuchElementException e) {
+            throw new ParseException("reached end of source");
+        }
     }
 
     @Override
     public TokenType peek() throws ParseException {
         try {
-            return this.next();
+            return ready?buffer:fore();
         } catch (NoSuchElementException e) {
             throw new ParseException("reached end of source");
         }

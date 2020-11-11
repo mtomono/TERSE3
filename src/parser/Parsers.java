@@ -38,9 +38,8 @@ public class Parsers {
     
     public static final <S, T> Parser<S, T, T> satisfy(Predicate<T> f) {
         return s-> {
-            if (!f.test(s.peek()))
+            if (!f.test(s.fore()))
                 throw new ParseException(s.explain("Reached unexpected item"));
-            s.pos++;
             return null;
         };
     }

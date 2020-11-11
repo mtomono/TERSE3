@@ -26,6 +26,7 @@ import java.util.Objects;
 public abstract class Source<S, T> {
     public int pos;
     public S src;
+    abstract public T fore() throws ParseException;
     abstract public T peek() throws ParseException;
     abstract public S sub(int... sec);
 

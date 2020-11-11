@@ -29,6 +29,13 @@ public class ListSource<T> extends Source<List<T>, T> {
     }
     
     @Override
+    public final T fore() throws ParseException {
+        T retval=peek();
+        pos++;
+        return retval;
+    }
+
+    @Override
     public final T peek() throws ParseException {
         if (pos >= src.size())
             throw new ParseException("unexpectedly reached end of text.");

@@ -23,15 +23,30 @@ import java.util.NoSuchElementException;
  */
 public abstract class LexBase<TOKEN> extends Source<String,TOKEN> implements Iterator<TOKEN> {
     abstract public TOKEN nextToken();
-
+    boolean ready;
+    TOKEN buffer;
+    
     public LexBase(String src) {
         super(src);
+        ready=false;
+        buffer=null;
+    }
+
+    @Override
+    public TOKEN fore() throws ParseException {
+        try {
+            buffer=this.next();
+            ready=true;
+            return buffer;
+        } catch (NoSuchElementException e) {
+            throw new ParseException("reached end of source");
+        }
     }
 
     @Override
     public TOKEN peek() throws ParseException {
         try {
-            return this.next();
+            return ready?buffer:fore();
         } catch (NoSuchElementException e) {
             throw new ParseException("reached end of source");
         }
