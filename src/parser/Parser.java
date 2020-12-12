@@ -19,13 +19,11 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import collection.P;
 import collection.TList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import static java.util.stream.Collectors.toList;
 
 /**
  *
@@ -41,6 +39,7 @@ public interface Parser<S, T, U> {
     public static <S,T> Parser<S,T,T> any() {
         return s->s.peek();
     }
+    
     /**
      * parse without exception
      * @param s
