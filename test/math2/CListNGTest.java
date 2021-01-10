@@ -20,6 +20,13 @@ public class CListNGTest {
 
     @Test
     public void testAverage() {
+        System.out.println(test.TestUtils.methodName(0));
+        C.Builder<Double> b=C.b(new DoubleOp());
+        C<Double> result = new CList<>(TList.sofi(10,11,12,13,4).map(i->(double)i),b).average(i->i);
+        C<Double> expected = b.b(10);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
     }
 
     @Test
