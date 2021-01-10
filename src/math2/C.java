@@ -14,6 +14,7 @@
  */
 package math2;
 
+import debug.Te;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -24,7 +25,7 @@ import java.math.RoundingMode;
  * @author masao
  * @param <K>
  */
-public class C<K extends Number> {
+public class C<K> {
     static public C.Builder<Integer> i=C.b(new IntegerOp());
     static public C.Builder<Long> l=C.b(new LongOp());
     static public C.Builder<Double> d=C.b(new DoubleOp());
@@ -33,10 +34,10 @@ public class C<K extends Number> {
     static public C.Builder<BigDecimal> bd(int scale, RoundingMode r) {
         return C.b(new BigDecimalOpRounded(scale,r));
     }
-    public static <K extends Number> Builder<K> b(Op<K> op) {
+    public static <K> Builder<K> b(Op<K> op) {
         return new Builder<>(op);
     }
-    static public class Builder<K extends Number> {
+    static public class Builder<K> {
         public final Op<K> op;
         public Builder(Op<K> op) {
             this.op=op;

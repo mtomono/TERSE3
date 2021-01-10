@@ -19,7 +19,7 @@ package math2;
  * @author masao
  * @param <K>
  */
-public interface Op<K extends Number> {
+public interface Op<K> {
     public default int add(int v0, int v1) {
         return v0+v1;
     }
