@@ -14,6 +14,9 @@
  */
 package math2;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 /**
  * Calculation Context.
  * this class intends to allow fluent calculation with number classes like BigDecimal or 
@@ -22,6 +25,14 @@ package math2;
  * @param <K>
  */
 public class C<K extends Number> {
+    static public C.Builder<Integer> i=C.b(new IntegerOp());
+    static public C.Builder<Long> l=C.b(new LongOp());
+    static public C.Builder<Double> d=C.b(new DoubleOp());
+    static public C.Builder<Rational> r=C.b(new RationalOp());
+    static public C.Builder<BigDecimal> bd=C.b(new BigDecimalOp());
+    static public C.Builder<BigDecimal> bd(int scale, RoundingMode r) {
+        return C.b(new BigDecimalOpRounded(scale,r));
+    }
     public static <K extends Number> Builder<K> b(Op<K> op) {
         return new Builder<>(op);
     }
