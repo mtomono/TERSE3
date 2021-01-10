@@ -58,6 +58,7 @@ public class IteratorCache<T> extends AbstractList<T> {
      * @return 
      */
     @Override
+    @Deprecated
     public int size() {
         while (body.hasNext())
             cache.add(body.next());
