@@ -15,6 +15,7 @@
 package math2;
 
 import collection.TList;
+import debug.Te;
 import java.util.function.Function;
 
 /**
@@ -44,11 +45,12 @@ public class CList<T,K extends Number> {
     }
     
     public TList<C<K>> add(Function<T,K> f) {
-        return body.map(f.andThen(v->b.b(v))).accum(b.zero(), (a,b)->a.add(b));
+        Te.e(b.op);
+        return body.map(f.andThen(v->b.b(v))).accumFromStart((a,b)->a.add(b));
     }
 
     public TList<C<K>> mul(Function<T,K> f) {
-        return body.map(f.andThen(v->b.b(v))).accum(b.one(), (a,b)->a.mul(b));
+        return body.map(f.andThen(v->b.b(v))).accumFromStart((a,b)->a.mul(b));
     }
     public TList<T> toT() {
         return body;

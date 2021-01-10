@@ -52,7 +52,7 @@ public class C<K extends Number> {
             return new C<>(op,op.one());
         }
         public C<K> zero() {
-            return new C<>(op,op.one());
+            return new C<>(op,op.zero());
         }
     }
     
