@@ -28,6 +28,7 @@ import java.math.RoundingMode;
 public class C<K> {
     static public C.Builder<Integer> i=C.b(new IntegerOp());
     static public C.Builder<Long> l=C.b(new LongOp());
+    static public C.Builder<Float> f=C.b(new FloatOp());
     static public C.Builder<Double> d=C.b(new DoubleOp());
     static public C.Builder<Rational> r=C.b(new RationalOp());
     static public C.Builder<BigDecimal> bd=C.b(new BigDecimalOp());
