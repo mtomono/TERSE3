@@ -39,6 +39,10 @@ public class Rational extends Number implements Comparable<Rational> {
     public final long numerator;
     public final long denominator;
     
+    static public Rational parseRational(String s) {
+        String[] n=s.split("/");
+        return n.length==1?new Rational(Long.parseLong(s),1):new Rational(Long.parseLong(n[0]),Long.parseLong(n[1]));
+    }
     public Rational(long numerator, long denominator) {
         assert denominator!=0 : "denominator cannot be zero";
         this.numerator = numerator;

@@ -42,8 +42,7 @@ public class RationalOp implements Op<Rational> {
 
     @Override
     public Rational b(String v) {
-        String[] n=v.split("/");
-        return n.length==1?b(Long.parseLong(v)):new Rational(Long.parseLong(n[0]),Long.parseLong(n[1]));
+        return Rational.parseRational(v);
     }
     
     public Rational b(Number n) {
