@@ -45,6 +45,12 @@ public class BigDecimalOp implements Op<BigDecimal>{
     public BigDecimal b(String v) {
         return new BigDecimal(v);
     }
+    
+    public BigDecimal b(Number n) {
+        if (n instanceof BigDecimal)
+            return (BigDecimal)n;
+        return BigDecimal.valueOf(n.doubleValue());
+    }
 
     @Override
     public BigDecimal add(BigDecimal v0, BigDecimal v1) {

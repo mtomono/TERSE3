@@ -14,9 +14,9 @@
  */
 package math2;
 
-import debug.Te;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.function.Predicate;
 
 /**
  * Calculation Context.
@@ -43,68 +43,75 @@ public class C<K> {
         public Builder(Op<K> op) {
             this.op=op;
         }
+        
         public C<K> b(K v) {
-            return new C<>(op,v);
+            return new C<>(this,v);
         }
         public C<K> b(int v) {
-            return new C<>(op,op.b(v));
+            return b(op.b(v));
         }
         public C<K> b(long v) {
-            return new C<>(op,op.b(v));
+            return b(op.b(v));
         }
         public C<K> b(float v) {
-            return new C<>(op,op.b(v));
+            return b(op.b(v));
         }
         public C<K> b(double v) {
-            return new C<>(op,op.b(v));
+            return b(op.b(v));
         }
         public C<K> b(String v) {
-            return new C<>(op,op.b(v));
+            return b(op.b(v));
+        }
+        public C<K> b(Number n) {
+            return b(op.b(n));
         }
         public C<K> one() {
-            return new C<>(op,op.one());
+            return b(op.one());
         }
         public C<K> zero() {
-            return new C<>(op,op.zero());
+            return b(op.zero());
         }
     }
     
-    public final Op<K> op;
+    public final Builder<K> b;
     public final K v;
 
-    public C(Op<K> op, K v) {
-        this.op=op;
+    public C(Builder<K> b, K v) {
+        this.b=b;
         this.v=v;
     }
     public C<K> v(K v) {
-        return new C<>(op,v);
+        return b.b(v);
     }
     public K get() {
         return v;
     }
     public C<K> add(C<K> v) {
-        return v.v(op.add(this.v, v.v));
+        return v.v(b.op.add(this.v, v.v));
     }
     public C<K> sub(C<K> v) {
-        return v.v(op.sub(this.v, v.v));
+        return v.v(b.op.sub(this.v, v.v));
     }
     public C<K> mul(C<K> v) {
-        return v.v(op.mul(this.v, v.v));
+        return v.v(b.op.mul(this.v, v.v));
     }
     public C<K> div(C<K> v) {
-        return v.v(op.div(this.v,v.v));
+        return v.v(b.op.div(this.v,v.v));
+    }
+    public C<K> inv() {
+        return one().div(this);
     }
     public C<K> negate() {
-        return v(op.negate(v));
+        return v(b.op.negate(v));
     }
     public C<K> abs() {
-        return v(op.abs(v));
+        return v(b.op.abs(v));
     }
     public C<K> one() {
-        return v(op.one());
+        return v(b.op.one());
     }
     public C<K> zero() {
-        return v(op.zero());
+        return v(b.op.zero());
     }
     @Override
     public String toString() {

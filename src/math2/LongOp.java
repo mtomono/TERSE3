@@ -46,6 +46,10 @@ public class LongOp implements Op<Long> {
     public Long b(String v) {
         return Long.valueOf(v);
     }
+    
+    public Long b(Number n) {
+        return n.longValue();
+    }
 
     @Override
     public Long add(Long v0, Long v1) {

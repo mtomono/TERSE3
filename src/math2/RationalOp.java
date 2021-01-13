@@ -45,6 +45,16 @@ public class RationalOp implements Op<Rational> {
         String[] n=v.split("/");
         return n.length==1?b(Long.parseLong(v)):new Rational(Long.parseLong(n[0]),Long.parseLong(n[1]));
     }
+    
+    public Rational b(Number n) {
+        if (n instanceof Rational)
+            return (Rational)n;
+        if (n instanceof Integer)
+            return b(n.intValue());
+        if (n instanceof Long)
+            return b(n.longValue());
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
     @Override
     public Rational add(Rational v0, Rational v1) {

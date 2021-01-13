@@ -43,6 +43,10 @@ public class FloatOp implements Op<Float> {
     public Float b(String v) {
         return Float.valueOf(v);
     }
+    
+    public Float b(Number n) {
+        return n.floatValue();
+    }
 
     @Override
     public Float add(Float v0, Float v1) {

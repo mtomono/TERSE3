@@ -43,6 +43,10 @@ public class DoubleOp implements Op<Double> {
     public Double b(String v) {
         return Double.valueOf(v);
     }
+    
+    public Double b(Number n) {
+        return n.doubleValue();
+    }
 
     @Override
     public Double add(Double v0, Double v1) {

@@ -44,6 +44,10 @@ public class IntegerOp implements Op<Integer> {
     public Integer b(String v) {
         return Integer.valueOf(v);
     }
+    
+    public Integer b(Number n) {
+        return n.intValue();
+    }
 
     @Override
     public Integer add(Integer v0, Integer v1) {
