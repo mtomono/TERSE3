@@ -14,6 +14,8 @@
  */
 package math2;
 
+import java.math.BigDecimal;
+
 /**
  *
  * @author masao
@@ -45,7 +47,13 @@ public class IntegerOp implements Op<Integer> {
         return Integer.valueOf(v);
     }
     
-    public Integer b(Number n) {
+    @Override
+    public Integer b(BigDecimal n) {
+        return n.intValue();
+    }
+
+    @Override
+    public Integer b(Rational n) {
         return n.intValue();
     }
 

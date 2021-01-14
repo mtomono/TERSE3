@@ -14,6 +14,8 @@
  */
 package math2;
 
+import java.math.BigDecimal;
+
 /**
  * Operations for Double.
  * @author masao
@@ -44,7 +46,13 @@ public class DoubleOp implements Op<Double> {
         return Double.valueOf(v);
     }
     
-    public Double b(Number n) {
+    @Override
+    public Double b(BigDecimal n) {
+        return n.doubleValue();
+    }
+
+    @Override
+    public Double b(Rational n) {
         return n.doubleValue();
     }
 

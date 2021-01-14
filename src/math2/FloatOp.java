@@ -14,6 +14,8 @@
  */
 package math2;
 
+import java.math.BigDecimal;
+
 /**
  * Operations for Double.
  * @author masao
@@ -44,9 +46,16 @@ public class FloatOp implements Op<Float> {
         return Float.valueOf(v);
     }
     
-    public Float b(Number n) {
+    @Override
+    public Float b(BigDecimal n) {
         return n.floatValue();
     }
+
+    @Override
+    public Float b(Rational n) {
+        return n.floatValue();
+    }
+
 
     @Override
     public Float add(Float v0, Float v1) {

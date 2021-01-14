@@ -62,7 +62,10 @@ public class C<K> {
         public C<K> b(String v) {
             return b(op.b(v));
         }
-        public C<K> b(Number n) {
+        public C<K> b(BigDecimal n) {
+            return b(op.b(n));
+        }
+        public C<K> b(Rational n) {
             return b(op.b(n));
         }
         public C<K> one() {

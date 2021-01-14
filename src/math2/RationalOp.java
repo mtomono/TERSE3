@@ -14,6 +14,8 @@
  */
 package math2;
 
+import java.math.BigDecimal;
+
 /**
  * Operations for Rational.
  * @author masao
@@ -45,15 +47,16 @@ public class RationalOp implements Op<Rational> {
         return Rational.parseRational(v);
     }
     
-    public Rational b(Number n) {
-        if (n instanceof Rational)
-            return (Rational)n;
-        if (n instanceof Integer)
-            return b(n.intValue());
-        if (n instanceof Long)
-            return b(n.longValue());
+    @Override
+    public Rational b(BigDecimal n) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public Rational b(Rational n) {
+        return n;
+    }
+
 
     @Override
     public Rational add(Rational v0, Rational v1) {

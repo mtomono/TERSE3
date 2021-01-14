@@ -15,6 +15,7 @@
 package math2;
 
 import debug.Te;
+import java.math.BigDecimal;
 
 /**
  *
@@ -47,7 +48,13 @@ public class LongOp implements Op<Long> {
         return Long.valueOf(v);
     }
     
-    public Long b(Number n) {
+    @Override
+    public Long b(BigDecimal n) {
+        return n.longValue();
+    }
+
+    @Override
+    public Long b(Rational n) {
         return n.longValue();
     }
 

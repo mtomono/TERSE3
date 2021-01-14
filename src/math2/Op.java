@@ -14,6 +14,8 @@
  */
 package math2;
 
+import java.math.BigDecimal;
+
 /**
  * Operations over Number class.
  * @author masao
@@ -73,7 +75,8 @@ public interface Op<K> {
     public K b(float v);
     public K b(double v);
     public K b(String v);
-    public K b(Number n);
+    public K b(BigDecimal n);
+    public K b(Rational n);
     public K add(K v0, K v1);
     public K sub(K v0, K v1);
     public K mul(K v0, K v1);
