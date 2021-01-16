@@ -1,7 +1,16 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ Copyright 2017, 2018, 2019, 2020, 2021 Masao Tomono
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.
  */
 package math2;
 
@@ -9,19 +18,20 @@ import collection.TList;
 
 /**
  * ContinuedFractionExpansion.
+ * convenient entrance is Rational.valueof(target, threshold).
  * @author masao
  * @param <K>
  */
 public class CFE<K extends Number&Comparable<K>> {
-    TList<Integer> intPart;
-    TList<ContinuedFraction> fraction;
-    static ContinuedFraction cf(long n, long d) {
-        return new ContinuedFraction(n,d);
-    }
+    private TList<Integer> intPart;
+    private TList<ContinuedFraction> fraction;
     public CFE() {
         fraction=TList.of(cf(1,0));
         intPart=TList.c();
     }
+        static ContinuedFraction cf(long n, long d) {
+            return new ContinuedFraction(n,d);
+        }
     public ContinuedFraction next(int ck) {
         intPart.add(ck);
         if (fraction.size()==1) {

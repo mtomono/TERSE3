@@ -34,12 +34,16 @@ public class RationalOp implements Op<Rational> {
 
     @Override
     public Rational b(float v) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported.");
+        //Rational cannot be built from decimal directly. translate decimal to Rational first by Rational.valueof(target,threshold).
+        //and then, call b(Rational).
     }
 
     @Override
     public Rational b(double v) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported.");
+        //Rational cannot be built from decimal directly. translate decimal to Rational first by Rational.valueof(target,threshold).
+        //and then, call b(Rational).
     }
 
     @Override
@@ -49,9 +53,11 @@ public class RationalOp implements Op<Rational> {
     
     @Override
     public Rational b(BigDecimal n) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported.");
+        //Rational cannot be built from decimal directly. translate decimal to Rational first by Rational.valueof(target,threshold).
+        //and then, call b(Rational).
     }
-
+    
     @Override
     public Rational b(Rational n) {
         return n;
