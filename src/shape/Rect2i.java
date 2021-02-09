@@ -24,7 +24,9 @@ import static shape.ShapeUtil.p2i;
  * rectangle in 2d integer, of which sides are parallel to axis.
  * contains points on sides.
  * @author masao
+ * @deprecated 
  */
+@Deprecated
 public class Rect2i {
     final public TPoint2i one;
     final public TPoint2i two;
