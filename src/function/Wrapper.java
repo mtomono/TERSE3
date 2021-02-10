@@ -15,6 +15,11 @@ public interface Wrapper<B, W extends Wrapper<B,W>> {
     B body();
     W self();
     W wrap(B body);
+    /**
+     * manipulate the body.
+     * @param f
+     * @return 
+     */
     default W m(Function<B,B> f) {
         return wrap(f.apply(body()));
     }
