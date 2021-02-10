@@ -15,44 +15,107 @@
 package math2;
 
 import collection.TList;
-import debug.Te;
 import java.util.function.Function;
 
 /**
- *
+ * 
  * @author masao
- * @param <T>
  * @param <K>
  */
-public class CList<T,K extends Number> {
-    C.Builder<K> b;
-    TList<T> body;
-    public CList(TList<T> body, C.Builder<K> context) {
+public class CList<K> {
+    public final C.Builder<K> b;
+    public final TList<K> body;
+    public CList(C.Builder<K> context, TList<K> body) {
         this.body=body;
         this.b=context;
     }
+    static public <K> CList<K> c(C.Builder<K> context, K... v) {
+        return new CList<>(context,TList.sof(v));
+    }
+    public CList<K> revert(TList<C<K>> body) {
+        return new CList<>(b, body.map(c->c.v));
+    }
     
-    public C<K> average(Function<T,K> f) {
-        return sigma(f).div(b.b(body.size()));
+    public C<K> average() {
+        return sigma().div(b.b(body.size()));
+    }
+    
+    public TList<C<K>> toC() {
+        return body.map(v->b.b(v));
     }
 
-    public C<K> sigma(Function<T,K> f) {
-        return body.stream().map(f.andThen(v->b.b(v))).reduce(b.zero(),(a,b)->a.add(b));
+    public C<K> sigma() {
+        return toC().stream().reduce(b.zero(),(a,b)->a.add(b));
     }
     
-    public C<K> pai(Function<T,K> f) {
-        return body.stream().map(f.andThen(v->b.b(v))).reduce(b.one(),(a,b)->a.mul(b));
+    public C<K> pai() {
+        return toC().stream().reduce(b.one(),(a,b)->a.mul(b));
     }
     
-    public TList<C<K>> add(Function<T,K> f) {
-        Te.e(b.op);
-        return body.map(f.andThen(v->b.b(v))).accumFromStart((a,b)->a.add(b));
+    public CList<K> add(CList<K> o) {
+        return o.revert(toC().pair(o.toC(), (a,b)->a.add(b)));
+    }
+    public CList<K> add(TList<K> o) {
+        return add(new CList<>(b, o));
+    }
+        
+    public CList<K> sub(CList<K> o) {
+        return o.revert(toC().pair(o.toC(), (a,b)->a.sub(b)));
+    }
+    public CList<K> sub(TList<K> o) {
+        return sub(new CList<>(b, o));
+    }
+        
+    public CList<K> mul(CList<K> o) {
+        return o.revert(toC().pair(o.toC(), (a,b)->a.mul(b)));
+    }
+    public CList<K> mul(TList<K> o) {
+        return mul(new CList<>(b, o));
+    }
+        
+    public CList<K> div(CList<K> o) {
+        return o.revert(toC().pair(o.toC(), (a,b)->a.div(b)));
+    }
+    public CList<K> div(TList<K> o) {
+        return div(new CList<>(b, o));
+    }
+    
+    public C<K> dot(CList<K> o) {
+        return mul(o).sigma();
+    }
+    public C<K> dot(TList<K> o) {
+        return dot(new CList<>(b, o));
+    }
+        
+    public CList<K> add() {
+        return revert(toC().accumFromStart((a,b)->a.add(b)));
     }
 
-    public TList<C<K>> mul(Function<T,K> f) {
-        return body.map(f.andThen(v->b.b(v))).accumFromStart((a,b)->a.mul(b));
+    public CList<K> mul() {
+        return revert(toC().accumFromStart((a,b)->a.mul(b)));
     }
-    public TList<T> toT() {
-        return body;
+    
+    public CList<K> m(Function<TList<K>,TList<K>> f) {
+        return new CList<>(b, body.transform(f));
+    }
+    
+    public <L> L transform(Function<CList<K>,L> f) {
+        return f.apply(this);
+    }
+    
+    @Override
+    public boolean equals(Object e) {
+        if (e == null) {
+            return false;
+        }
+        if (!(e instanceof CList)) {
+            return false;
+        }
+        CList t = (CList) e;
+        return body.equals(t.body);
+    }
+    
+    public String toString() {
+        return body.toString();
     }
 }
