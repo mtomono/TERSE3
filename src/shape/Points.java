@@ -8,6 +8,7 @@ package shape;
 import collection.TList;
 import java.awt.Rectangle;
 import java.util.Optional;
+import java.util.function.Function;
 import math2.C;
 import math2.CList;
 
@@ -50,6 +51,9 @@ public class Points<K extends Comparable<K>> {
     }
     public Optional<Points<K>> rect() {
         return min().flatMap(min->max().map(max->new Points<>(TList.sof(min,max))));
+    }
+    public <L> L transform(Function<Points<K>,L> f) {
+        return f.apply(this);
     }
     @Override
     public boolean equals(Object e) {
