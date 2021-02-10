@@ -39,7 +39,7 @@ import java.util.function.ToDoubleFunction;
  * @author masao
  * @param <T>
  */
-public class TOptionalList<T> extends TListWrapper<Optional<T>> {
+public class TOptionalList<T> extends ListWrapper<Optional<T>> {
     TList<Optional<T>> bodyx;
 
     static public <T> TOptionalList<T> set(List<Optional<T>> body) {

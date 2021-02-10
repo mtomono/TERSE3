@@ -15,16 +15,17 @@
 package math2;
 
 import collection.TList;
-import java.util.function.Function;
+import collection.TListWrapper;
+import function.Transformable;
 
 /**
  * 
  * @author masao
  * @param <K>
  */
-public class CList<K> {
+public class CList<K> implements TListWrapper<K,CList<K>>,Transformable<CList<K>>{
     public final C.Builder<K> b;
-    public final TList<K> body;
+    final TList<K> body;
     public CList(C.Builder<K> context, TList<K> body) {
         this.body=body;
         this.b=context;
@@ -32,11 +33,17 @@ public class CList<K> {
     static public <K> CList<K> c(C.Builder<K> context, K... v) {
         return new CList<>(context,TList.sof(v));
     }
-    public CList<K> revert(TList<C<K>> body) {
-        return new CList<>(b, body.map(c->c.v));
+    @Override
+    public TList<K> body() {
+        return body;
     }
-    public K get(int i) {
-        return body.get(i);
+    @Override
+    public CList<K> wrap(TList<K> body) {
+        return new CList<>(b,body);
+    }
+    @Override
+    public CList<K> self() {
+        return this;
     }
     public C<K> average() {
         return sigma().div(b.b(body.size()));
@@ -44,6 +51,9 @@ public class CList<K> {
     
     public TList<C<K>> toC() {
         return body.map(v->b.b(v));
+    }
+    public CList<K> fromC(TList<C<K>> body) {
+        return wrap(body.map(c->c.v));
     }
 
     public C<K> sigma() {
@@ -55,28 +65,28 @@ public class CList<K> {
     }
     
     public CList<K> add(CList<K> o) {
-        return o.revert(toC().pair(o.toC(), (a,b)->a.add(b)));
+        return o.fromC(toC().pair(o.toC(), (a,b)->a.add(b)));
     }
     public CList<K> add(TList<K> o) {
         return add(new CList<>(b, o));
     }
         
     public CList<K> sub(CList<K> o) {
-        return o.revert(toC().pair(o.toC(), (a,b)->a.sub(b)));
+        return o.fromC(toC().pair(o.toC(), (a,b)->a.sub(b)));
     }
     public CList<K> sub(TList<K> o) {
         return sub(new CList<>(b, o));
     }
         
     public CList<K> mul(CList<K> o) {
-        return o.revert(toC().pair(o.toC(), (a,b)->a.mul(b)));
+        return o.fromC(toC().pair(o.toC(), (a,b)->a.mul(b)));
     }
     public CList<K> mul(TList<K> o) {
         return mul(new CList<>(b, o));
     }
         
     public CList<K> div(CList<K> o) {
-        return o.revert(toC().pair(o.toC(), (a,b)->a.div(b)));
+        return o.fromC(toC().pair(o.toC(), (a,b)->a.div(b)));
     }
     public CList<K> div(TList<K> o) {
         return div(new CList<>(b, o));
@@ -90,19 +100,11 @@ public class CList<K> {
     }
         
     public CList<K> add() {
-        return revert(toC().accumFromStart((a,b)->a.add(b)));
+        return fromC(toC().accumFromStart((a,b)->a.add(b)));
     }
 
     public CList<K> mul() {
-        return revert(toC().accumFromStart((a,b)->a.mul(b)));
-    }
-    
-    public CList<K> m(Function<TList<K>,TList<K>> f) {
-        return new CList<>(b, body.transform(f));
-    }
-    
-    public <L> L transform(Function<CList<K>,L> f) {
-        return f.apply(this);
+        return fromC(toC().accumFromStart((a,b)->a.mul(b)));
     }
     
     @Override
@@ -117,6 +119,7 @@ public class CList<K> {
         return body.equals(t.body);
     }
     
+    @Override
     public String toString() {
         return body.toString();
     }

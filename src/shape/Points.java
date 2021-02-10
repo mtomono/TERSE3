@@ -6,9 +6,10 @@
 package shape;
 
 import collection.TList;
+import collection.TListWrapper;
+import function.Transformable;
 import java.awt.Rectangle;
 import java.util.Optional;
-import java.util.function.Function;
 import math2.C;
 import math2.CList;
 
@@ -17,8 +18,8 @@ import math2.CList;
  * @author masao
  * @param <K>
  */
-public class Points<K extends Comparable<K>> {
-    TList<CList<K>> body;
+public class Points<K extends Comparable<K>> implements TListWrapper<CList<K>,Points<K>>,Transformable<Points<K>>{
+    final TList<CList<K>> body;
     public Points(TList<CList<K>> body) {
         this.body=body;
     }
@@ -31,8 +32,17 @@ public class Points<K extends Comparable<K>> {
     static public Points<Integer> rectangle(Rectangle r) {
         return rectangle(TList.sof(r.x,r.y).toC(v->v, C.i),TList.sof(r.width,r.height).toC(v->v, C.i));
     }
-    public CList<K> get(int i) {
-        return body.get(i);
+    @Override
+    public Points<K> self() {
+        return this;
+    }
+    @Override
+    public TList<CList<K>> body() {
+        return body;
+    }
+    @Override
+    public Points<K> wrap(TList<CList<K>> body) {
+        return new Points<>(body);
     }
     public static <K extends Comparable<K>> Points<K> merge(TList<Points<K>> ps) {
         return new Points<>(ps.flatMapc(p->p.body));
@@ -44,16 +54,13 @@ public class Points<K extends Comparable<K>> {
         return new Points(body.diff((a,b)->b.sub(a)));
     }
     public Optional<CList<K>> min() {
-        return body.getOpt(0).map(x->new CList<>(x.b, body.transposeT(c->c.body).map(l->l.minval(v->v).get())));
+        return body.getOpt(0).map(x->new CList<>(x.b, body.transposeT(c->c.body()).map(l->l.minval(v->v).get())));
     }
     public Optional<CList<K>> max() {
-        return body.getOpt(0).map(x->new CList<>(x.b, body.transposeT(c->c.body).map(l->l.maxval(v->v).get())));
+        return body.getOpt(0).map(x->new CList<>(x.b, body.transposeT(c->c.body()).map(l->l.maxval(v->v).get())));
     }
     public Optional<Points<K>> rect() {
         return min().flatMap(min->max().map(max->new Points<>(TList.sof(min,max))));
-    }
-    public <L> L transform(Function<Points<K>,L> f) {
-        return f.apply(this);
     }
     @Override
     public boolean equals(Object e) {
@@ -66,6 +73,7 @@ public class Points<K extends Comparable<K>> {
         Points t = (Points) e;
         return body.equals(t.body);
     }
+    @Override
     public String toString() {
         return body.toString();
     }

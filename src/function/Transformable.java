@@ -3,16 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package collection;
+package function;
 
-import function.Wrapper;
+import java.util.function.Function;
 
 /**
  *
  * @author masao
  */
-public interface TListWrapper<V,W extends TListWrapper<V,W>> extends Wrapper<TList<V>,W> {
-    default V get(int i) {
-        return body().get(i);
+public interface Transformable<K> {
+    public K self();
+    public default <L> L transform(Function<K,L> f) {
+        return f.apply(self());
     }
 }
