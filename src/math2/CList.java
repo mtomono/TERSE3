@@ -35,7 +35,9 @@ public class CList<K> {
     public CList<K> revert(TList<C<K>> body) {
         return new CList<>(b, body.map(c->c.v));
     }
-    
+    public K get(int i) {
+        return body.get(i);
+    }
     public C<K> average() {
         return sigma().div(b.b(body.size()));
     }
