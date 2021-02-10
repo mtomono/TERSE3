@@ -5,6 +5,7 @@
  */
 package shape;
 
+import java.awt.Rectangle;
 import math2.C;
 import math2.CList;
 import static org.testng.Assert.*;
@@ -20,19 +21,14 @@ public class PointsNGTest {
     }
 
     @Test
-    public void testRectangle_CList_CList() {
-    }
-
-    @Test
     public void testRectangle_Rectangle() {
-    }
-
-    @Test
-    public void testMerge_TList() {
-    }
-
-    @Test
-    public void testMerge_Points() {
+        System.out.println(test.TestUtils.methodName(0));
+        Rectangle r=new Rectangle(-2,-1,4,2);
+        Points<Integer> result = Points.rectangle(r);
+        Points<Integer> expected = Points.c(C.i,2,-2,-1,2,1);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
     }
 
     @Test
