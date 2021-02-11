@@ -22,33 +22,38 @@ import static java.lang.Math.round;
  * @author masao
  */
 public class KDouble implements Decimal<KDouble> {
-    public final double body;
+    public final double v;
     
     static public final KDouble ZERO = new KDouble(0);
     static public final KDouble ONE = new KDouble(0);
-    
+    static public KDouble b(double value) {
+        return new KDouble(value);
+    }
+    static public KDouble b(String value) {
+        return b(Double.parseDouble(value));
+    }
     public KDouble(double body) {
-        this.body = body;
+        this.v = body;
     }
 
     @Override
     public KDouble add(KDouble value) {
-        return new KDouble(body+value.body);
+        return new KDouble(v+value.v);
     }
 
     @Override
     public KDouble sub(KDouble value) {
-        return new KDouble(body-value.body);
+        return new KDouble(v-value.v);
     }
 
     @Override
     public KDouble mul(KDouble value) {
-        return new KDouble(body*value.body);
+        return new KDouble(v*value.v);
     }
 
     @Override
     public KDouble div(KDouble value) {
-        return new KDouble(body/value.body);
+        return new KDouble(v/value.v);
     }
 
     @Override
@@ -63,12 +68,12 @@ public class KDouble implements Decimal<KDouble> {
 
     @Override
     public KDouble negate() {
-        return new KDouble(-body);
+        return new KDouble(-v);
     }
 
     @Override
     public KDouble abs() {
-        return new KDouble(Math.abs(body));
+        return new KDouble(Math.abs(v));
     }
 
     @Override
@@ -93,21 +98,21 @@ public class KDouble implements Decimal<KDouble> {
     
     @Override
     public boolean isInteger() {
-        return round(body)==body;
+        return round(v)==v;
     }
     
     @Override
     public int intPart() {
-        return (int)floor(body);
+        return (int)floor(v);
     }
 
     @Override
     public long longPart() {
-        return (long)floor(body);
+        return (long)floor(v);
     }
         @Override
     public int compareTo(KDouble o) {
-        return Double.compare(body, o.body);
+        return Double.compare(v, o.v);
     }
     @Override
     public boolean equals(Object e) {
@@ -118,17 +123,17 @@ public class KDouble implements Decimal<KDouble> {
             return false;
         }
         KDouble t = (KDouble) e;
-        return body==t.body;
+        return v==t.v;
     }
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 29 * hash + (int) (Double.doubleToLongBits(this.body) ^ (Double.doubleToLongBits(this.body) >>> 32));
+        hash = 29 * hash + (int) (Double.doubleToLongBits(this.v) ^ (Double.doubleToLongBits(this.v) >>> 32));
         return hash;
     }
     
     @Override
     public String toString() {
-        return Double.toString(body);
+        return Double.toString(v);
     }
 }

@@ -33,13 +33,15 @@ import math.Decimal;
 import math.KList;
 import orderedSet.Range;
 import math.MathContext;
+import math2.C;
+import math2.CList;
 
 /**
  *
  * @author masao
  * @param <T>
  */
-public class TList<T> extends TListWrapper<T> implements Monitorable {
+public class TList<T> extends ListWrapper<T> implements Monitorable {
     
     public TList(List<T> body) {
         super(body);
@@ -728,59 +730,22 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
     }
     
 //-----------Calculating
-    
+    public <K> CList<K> toC(Function<T,K> f, C.Builder<K> builder) {
+        return new CList<>(builder, this.map(f));
+    }
     public <K extends Decimal<K>> KList<T,K> toK(MathContext<K> context) {
         return new KList<>(this,context);
     }
-    public BigDecimal averageBD(Function<T,BigDecimal> f) {
-        return sumBD(f).divide(new BigDecimal(size()));
+    public Double averageD(Function<T,Double> f) {
+        return toC(f,C.d).average().get();
     }
-    /**
-     * map each item to double value and take average of them.
-     * @param f
-     * @return 
-     */
-    public double averageD(ToDoubleFunction<T> f) {
-        return stream().mapToDouble(f).average().orElse(0);
-    }
-
-    /**
-     * map each item to long value and take average of them.
-     * @param f
-     * @return 
-     */
-    public double averageL(ToLongFunction<T> f) {
-        return stream().mapToLong(f).average().orElse(0);
-    }
-
-    /**
-     * map each item to int value and take average of them.
-     * @param f
-     * @return 
-     */
-    public double averageI(ToIntFunction<T> f) {
-        return stream().mapToInt(f).average().orElse(0);
-    }
-    
-    public BigDecimal sumBD(Function<T,BigDecimal> f) {
-        return stream().map(f).reduce(BigDecimal.ZERO,(a,b)->a.add(b));
-    }
-    /**
+     /**
      * map each item to double value and take sum of them.
      * @param f
      * @return 
      */
     public double sumD(ToDoubleFunction<T> f) {
         return stream().mapToDouble(f).sum();
-    }
-    
-    /**
-     * map each item to long value and take average of them.
-     * @param f
-     * @return 
-     */
-    public long sumL(ToLongFunction<T> f) {
-        return stream().mapToLong(f).sum();
     }
     
     /**
@@ -795,26 +760,6 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
     public double averageSampleD(ToDoubleFunction<T> f) {
         return stream().mapToDouble(f).sum()/(size()-1);
     }
-
-    /**
-     * map each item to long value and take average of them.
-     * @param f
-     * @return 
-     */
-    public double averageSampleL(ToLongFunction<T> f) {
-        return (double)stream().mapToLong(f).sum()/(size()-1);
-    }
-
-    /**
-     * map each item to int value and take average of them.
-     * @param f
-     * @return 
-     */
-    public double averageSampleI(ToIntFunction<T> f) {
-        return (double)stream().mapToInt(f).sum()/(size()-1);
-    }
-
-    
     
 //---------- Filtering
     /**
@@ -1016,7 +961,11 @@ public class TList<T> extends TListWrapper<T> implements Monitorable {
     public TList<TList<T>> endings() {
         return range(0, size()).map(start->subList(start, size()));
     }
-    
+    /**
+     * list made of subList of a list of fixed length;
+     * @param length
+     * @return 
+     */
     public TList<TList<T>> subLists(int length) {
         return range(0,size()-length).map(i->subList(i,i+length));
     }

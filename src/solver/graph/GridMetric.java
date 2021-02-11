@@ -7,6 +7,7 @@ package solver.graph;
 
 import collection.TList;
 import java.util.List;
+import math2.C;
 
 /**
  *
@@ -20,10 +21,10 @@ public interface GridMetric extends Metric<List<Double>> {
         return (f,t)->m.measure(f,t);
     }
     public static GridMetric l2() {
-        return (f,t)->Math.sqrt(TList.set(t).pair(f,(x,y)->x-y).map(d->d*d).sumD(i->i));
+        return (f,t)->Math.sqrt(TList.set(t).pair(f,(x,y)->x-y).toC(d->d*d,C.d).sigma().get());
     }
     public static GridMetric l1() {
-        return (f,t)->TList.set(t).pair(f,(x,y)->Math.abs(x-y)).sumD(i->i);
+        return (f,t)->TList.set(t).pair(f,(x,y)->Math.abs(x-y)).toC(i->i,C.d).sigma().get();
     }
     default Metric<List<Integer>> i() {
         return morph(l->TList.set(l).map(i->(double)i));

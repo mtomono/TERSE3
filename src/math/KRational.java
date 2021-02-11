@@ -187,7 +187,7 @@ public class KRational implements Decimal<KRational> {
             return false;
         }
         KRational t = (KRational) e;
-        return reduce().toList().equals(t.reduce().toList());
+        return rednorm().toList().equals(t.rednorm().toList());
     }
 
     @Override

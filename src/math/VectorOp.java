@@ -20,6 +20,7 @@ import static java.lang.Integer.signum;
 import static java.lang.Math.abs;
 import java.util.List;
 import java.util.function.BinaryOperator;
+import math2.C;
 
 /**
  *
@@ -52,19 +53,19 @@ public class VectorOp {
         return op(a,b,(x,y)->x-y).map(x->abs(x)).sumI(i->i);
     }
     static public double manhattanLengthD(List<Double>a,List<Double>b) {
-        return op(a,b,(x,y)->x-y).map(x->abs(x)).sumD(i->i);
+        return op(a,b,(x,y)->x-y).map(x->abs(x)).toC(i->i,C.d).sigma().get();
     }
     
     static public int squareSumI(List<Integer> a) {
-        return TList.set(a).sumI(x->x*x);
+        return TList.set(a).toC(x->x*x,C.i).sigma().get();
     }
     
     static public double squareSumD(List<Double> a) {
-        return TList.set(a).sumD(x->x*x);
+        return TList.set(a).toC(x->x*x,C.d).sigma().get();
     }
     
     static public double dot(List<? extends Number>a, List<? extends Number> b) {
-        return TList.set(a).pair(b, (x,y)->x.doubleValue()*y.doubleValue()).sumD(d->d);
+        return TList.set(a).pair(b, (x,y)->x.doubleValue()*y.doubleValue()).toC(d->d,C.d).sigma().get();
     }
     
     static public List<Integer> round(List<Double> point) {
