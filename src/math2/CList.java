@@ -48,7 +48,9 @@ public class CList<K> implements TListWrapper<K,CList<K>>,Transformable<CList<K>
     public C<K> average() {
         return sigma().div(b.b(body.size()));
     }
-    
+    public C<K> sampleAverage() {
+        return sigma().div(b.b(body.size()-1));
+    }
     public TList<C<K>> toC() {
         return body.map(v->b.b(v));
     }

@@ -25,7 +25,6 @@ import iterator.RotateListIterator;
 import iterator.TIterator;
 import iterator.TListIterator;
 import static java.lang.Math.abs;
-import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collector;
@@ -735,13 +734,6 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
     }
     public <K extends Decimal<K>> KList<T,K> toK(MathContext<K> context) {
         return new KList<>(this,context);
-    }
-    public Double averageD(Function<T,Double> f) {
-        return toC(f,C.d).average().get();
-    }
-    
-    public double averageSampleD(ToDoubleFunction<T> f) {
-        return stream().mapToDouble(f).sum()/(size()-1);
     }
     
 //---------- Filtering

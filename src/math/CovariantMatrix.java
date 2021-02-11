@@ -18,6 +18,7 @@ package math;
 import static collection.PrimitiveArrayWrap.unwrapD;
 import collection.TList;
 import javax.vecmath.Matrix3d;
+import math2.C;
 import shape.TMatrix3d;
 
 /**
@@ -27,9 +28,9 @@ import shape.TMatrix3d;
 public class CovariantMatrix {
     
     public double covariant(TList<Double> x, TList<Double> y) {
-        double ax = x.averageD(d->d);
-        double ay = x==y?ax:y.averageD(d->d);
-        return x.pair(y, (tx,ty)->(tx-ax)*(ty-ay)).averageD(d->d);
+        double ax = x.toC(d->d,C.d).average().get();
+        double ay = x==y?ax:y.toC(d->d,C.d).average().get();
+        return x.pair(y, (tx,ty)->(tx-ax)*(ty-ay)).toC(d->d,C.d).average().get();
     }
     
     public TMatrix3d matrix3d(TList<TList<Double>> a) {

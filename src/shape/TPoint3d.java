@@ -24,6 +24,7 @@ import javax.vecmath.Matrix3d;
 import javax.vecmath.Point3d;
 import javax.vecmath.Tuple3d;
 import javax.vecmath.Vector3d;
+import math2.C;
 import static shape.ShapeUtil.point3;
 
 /**
@@ -199,7 +200,7 @@ public class TPoint3d extends Point3d implements List<Double> {
     }
 
     static public TPoint3d average(TList<? extends Tuple3d> ps) {
-        return new TPoint3d(ps.averageD(p->p.x), ps.averageD(p->p.y), ps.averageD(p->p.z));
+        return new TPoint3d(ps.toC(p->p.x,C.d).average().get(), ps.toC(p->p.y,C.d).average().get(), ps.toC(p->p.z,C.d).average().get());
     }
     
     public String toCsv() {

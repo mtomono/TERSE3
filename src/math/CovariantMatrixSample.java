@@ -16,6 +16,7 @@
 package math;
 
 import collection.TList;
+import math2.C;
 
 /**
  *
@@ -25,8 +26,8 @@ public class CovariantMatrixSample extends CovariantMatrix{
     
     @Override
     public double covariant(TList<Double> x, TList<Double> y) {
-        double ax = x.averageD(d->d);
-        double ay = x==y?ax:y.averageD(d->d);
-        return x.pair(y, (tx,ty)->(tx-ax)*(ty-ay)).averageSampleD(d->d);
+        double ax = x.toC(d->d,C.d).average().get();
+        double ay = x==y?ax:y.toC(d->d,C.d).average().get();
+        return x.pair(y, (tx,ty)->(tx-ax)*(ty-ay)).toC(d->d,C.d).sampleAverage().get();
     }
 }

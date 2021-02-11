@@ -21,6 +21,7 @@ import static collection.c.a2l;
 import java.util.*;
 import java.util.function.Consumer;
 import javax.vecmath.*;
+import math2.C;
 import static shape.ShapeUtil.point2;
 
 /**
@@ -184,7 +185,7 @@ public class TPoint2d extends Point2d implements List<Double> {
     }
     
     static public TPoint2d average(TList<? extends Tuple2d> ps) {
-        return new TPoint2d(ps.averageD(p->p.x), ps.averageD(p->p.y));
+        return new TPoint2d(ps.toC(p->p.x,C.d).average().get(), ps.toC(p->p.y,C.d).average().get());
     }
     
     public String toCsv() {
