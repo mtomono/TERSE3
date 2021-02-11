@@ -17,8 +17,8 @@ package fluctuation;
 
 import collection.P;
 import collection.TList;
-import math.Decimal;
-import math.MathContext;
+import math2.C;
+import math2.CList;
 import orderedSet.Range;
 
 /**
@@ -26,23 +26,23 @@ import orderedSet.Range;
  * @author masao
  * @param <K>
  */
-public class Builder<K extends Decimal<K>> {
-    MathContext<K> context;
-    protected Builder(MathContext<K> context) {
+public class Builder<K extends Comparable<K>> {
+    C.Builder<K> context;
+    protected Builder(C.Builder<K> context) {
         this.context=context;
     }
     public abstract class Building {
         TList<Long> time() {
             return entries().map(p->p.l());
         }
-        TList<K> q() {
-            return entries().map(p->p.r());
+        CList<K> q() {
+            return new CList<>(context,entries().map(p->p.r()));
         }
-        TList<P<Long,K>> entries() {
-            return time().pair(q());
+        TList<P<Long,C<K>>> entries() {
+            return time().pair(q().body());
         }
-        TList<P<Range<Long>,K>> accumulates() {
-            return time().diff((a,b)->new Range<>(a,b)).pair(q().accumFromStart(s->s,(a,b)->a.add(b)));
+        TList<P<Range<Long>,C<K>>> accumulates() {
+            return time().diff((a,b)->new Range<>(a,b)).pair(q().body().accumFromStart(s->s,(a,b)->a.add(b)));
         }
         Fluctuation<K> build() {
             return new Fluctuation<>(time(),q(),entries(),accumulates(),Builder.this);
@@ -54,14 +54,14 @@ public class Builder<K extends Decimal<K>> {
             return accumulates().flatMapc(p->TList.sof(p.l().start,p.l().end));
         }
         @Override
-        TList<K> q() {
-            return accumulates().flatMapc(p->TList.sof(p.r(),p.r().negate()));
+        CList<K> q() {
+            return new CList<K>(context,accumulates().flatMapc(p->TList.sof(p.r(),p.r().negate())));
         }
     }
     public class TqBuilding extends Building {
         TList<Long> time;
-        TList<K> q;
-        TqBuilding(TList<Long> time, TList<K> q) {
+        CList<K> q;
+        TqBuilding(TList<Long> time, CList<K> q) {
             this.time=time;
             this.q=q;
         }
@@ -70,56 +70,56 @@ public class Builder<K extends Decimal<K>> {
             return time;
         }
         @Override
-        TList<K> q() {
+        CList<K> q() {
             return q;
         }
     }
     public class EntriesBuilding extends Building {
-        TList<P<Long,K>> entries;
-        EntriesBuilding(TList<P<Long,K>> entries) {
+        TList<P<Long,C<K>>> entries;
+        EntriesBuilding(TList<P<Long,C<K>>> entries) {
             this.entries=entries;
         }
         @Override
-        TList<P<Long,K>> entries() {
+        TList<P<Long,C<K>>> entries() {
             return entries;
         }
     }
     public class AccumulatesBuilding extends BuildingR {
-        TList<P<Range<Long>,K>> accumulates;
-        AccumulatesBuilding(TList<P<Range<Long>,K>> accumulates) {
+        TList<P<Range<Long>,C<K>>> accumulates;
+        AccumulatesBuilding(TList<P<Range<Long>,C<K>>> accumulates) {
             this.accumulates=accumulates;
         }
         @Override
-        TList<P<Range<Long>,K>> accumulates() {
+        TList<P<Range<Long>,C<K>>> accumulates() {
             return accumulates;
         }
     }
-    public Fluctuation<K> tq(TList<Long> time, TList<K> q) {
+    public Fluctuation<K> tq(TList<Long> time, CList<K> q) {
         return new TqBuilding(time,q).build();
     }
-    public Fluctuation<K> entries(TList<P<Long,K>> entries) {
+    public Fluctuation<K> entries(TList<P<Long,C<K>>> entries) {
         return new EntriesBuilding(entries).build();
     }
-    public Fluctuation<K> accumulates(TList<P<Range<Long>,K>> accumulates) {
+    public Fluctuation<K> accumulates(TList<P<Range<Long>,C<K>>> accumulates) {
         return new AccumulatesBuilding(accumulates).build();
     }
     public Fluctuation<K> empty() {
-        return new Fluctuation<>(TList.empty(),TList.empty(),TList.empty(),TList.empty(),this);
+        return new Fluctuation<>(TList.empty(),CList.c(context,TList.empty()),TList.empty(),TList.empty(),this);
     }
     
     public EntryBuilder entries() {
         return new EntryBuilder();
     }
-    public ExtentBuilder accumulates() {
-        return new ExtentBuilder();
+    public AccumulateBuilder accumulates() {
+        return new AccumulateBuilder();
     }
     
     public class EntryBuilder {
-        TList<P<Long,K>> body;
+        TList<P<Long,C<K>>> body;
         public EntryBuilder() {
             this.body=TList.c();
         }
-        public EntryBuilder a(long at, K q) {
+        public EntryBuilder a(long at, C<K> q) {
             body.add(P.p(at, q));
             return this;
         }
@@ -128,12 +128,12 @@ public class Builder<K extends Decimal<K>> {
         }
     }
     
-    public class ExtentBuilder {
-        TList<P<Range<Long>,K>> body;
-        public ExtentBuilder() {
+    public class AccumulateBuilder {
+        TList<P<Range<Long>,C<K>>> body;
+        public AccumulateBuilder() {
             this.body=TList.c();
         }
-        public ExtentBuilder a(long from, long to, K q) {
+        public AccumulateBuilder a(long from, long to, C<K> q) {
             body.add(P.p(new Range<>(from,to),q));
             return this;
         }

@@ -22,7 +22,8 @@ import function.Holder;
 import java.util.Objects;
 import java.util.function.Function;
 import math.Decimal;
-import math.MathContext;
+import math2.C;
+import math2.CList;
 import orderedSet.Range;
 import static orderedSet.RangeUtil.widthL;
 
@@ -31,21 +32,20 @@ import static orderedSet.RangeUtil.widthL;
  * @author masao
  * @param <K>
  */
-public class Fluctuation<K extends Decimal<K>> {
+public class Fluctuation<K extends Comparable<K>> {
     final public Builder<K> builder;
+    final public C.Builder<K> b;
     final public Tq tq;
     final public Entries entries;
     final public Accumulates accumulates;
     
-    static public <K extends Decimal<K>> Builder<K> builder(Class<K> context) {
-        return builder(new MathContext<>(context));
-    }
-    static public <K extends Decimal<K>> Builder<K> builder(MathContext<K> context) {
+    static public <K extends Comparable<K>> Builder<K> builder(C.Builder<K> context) {
         return new Builder<>(context);
     }
         
-    protected Fluctuation(TList<Long> time, TList<K> q, TList<P<Long,K>> entries, TList<P<Range<Long>,K>> accumulates, Builder<K> builder) {
+    protected Fluctuation(TList<Long> time, CList<K> q, TList<P<Long,C<K>>> entries, TList<P<Range<Long>,C<K>>> accumulates, Builder<K> builder) {
         this.builder=builder;
+        this.b=builder.context;
         this.tq=new Tq(time,q);
         this.entries=new Entries(entries);
         this.accumulates=new Accumulates(accumulates);
@@ -53,7 +53,7 @@ public class Fluctuation<K extends Decimal<K>> {
         public Fluctuation<K> normalize() {
         return entries.ordered().entries.simplify();
     }
-    public Fluctuation<K> scale(K scale) {
+    public Fluctuation<K> scale(C<K> scale) {
         return tq.scale(scale);
     }
     public Fluctuation<K> negate() {
@@ -68,13 +68,13 @@ public class Fluctuation<K extends Decimal<K>> {
     public Fluctuation<K> cut(Range<Long> range) {
         return accumulates.cut(range);
     }
-    public Fluctuation<K> round(Function<Fluctuation<K>,K> f) {
+    public Fluctuation<K> round(Function<Fluctuation<K>,C<K>> f) {
         return accumulates.round(f);
     }
     public boolean sufficient() {
         return accumulates.nonnegative();
     }
-    public TList<Fluctuation<K>> unchattering(K limit) {
+    public TList<Fluctuation<K>> unchattering(C<K> limit) {
         return accumulates.unchattering(tq.noticeableChanges(limit));
     }
     public Fluctuation<K> accumulate() {
@@ -83,39 +83,39 @@ public class Fluctuation<K extends Decimal<K>> {
     
     public class Tq {
         final public TList<Long> time;
-        final public TList<K> q;
-        public Tq(TList<Long> time, TList<K> q) {
+        final public CList<K> q;
+        public Tq(TList<Long> time, CList<K> q) {
             this.time=time;
             this.q=q;
         }
-        public Fluctuation<K> scale(K scale) {
-            return builder.tq(time, q.map(x->x.mul(scale)));
+        public Fluctuation<K> scale(C<K> scale) {
+            return builder.tq(time, q.scale(scale));
         }
         public Fluctuation<K> negate() {
-            return builder.tq(time, q.map(x->x.negate()));
+            return builder.tq(time, q.negate());
         }
         public Range<Long> cover() {
             assert !time.isEmpty():"time is empty";
             return new Range<>(time.minval(t->t).get(),time.maxval(t->t).get());
         }
         public Fluctuation<K> diff() {
-            return builder.tq(time.seek(1),q.diff((a,b)->b.sub(a)));
+            return builder.tq(time.seek(1),q.m(l->l.diff((a,b)->b.sub(a))));
         }
-        public P<Range<Long>,K> enclosure() {
+        public P<Range<Long>,C<K>> enclosure() {
             return P.p(new Range<>(time.get(0),time.last()),q.get(0));
         }
         public boolean nonnegative() {
-            return q.forAll(x->!x.belowZero());
+            return q.body().forAll(x->x.get().compareTo(builder.context.zero().get())>=0);
         }
-        public TList<Boolean> noticeableChanges(K limit) {
-            Holder<K> h=new Holder<>(builder.context.zero());
-            return q.iterator().map(x->h.set(h.get().add(x)).abs().gt(limit)).tee(t->h.set(t?builder.context.zero():h.get())).asList();
+        public TList<Boolean> noticeableChanges(C<K> limit) {
+            Holder<C<K>> h=new Holder<>(builder.context.zero());
+            return q.body().iterator().map(x->h.set(h.get().add(x)).abs().get().compareTo(limit.get())>0).tee(t->h.set(t?builder.context.zero():h.get())).asList();
         }
     }
 
     public class Entries {
-        final public TList<P<Long,K>> body;
-        public Entries(TList<P<Long,K>> entries) {
+        final public TList<P<Long,C<K>>> body;
+        public Entries(TList<P<Long,C<K>>> entries) {
             this.body=entries;
         }
         public Fluctuation<K> add(Fluctuation<K> other) {
@@ -129,15 +129,15 @@ public class Fluctuation<K extends Decimal<K>> {
         }
         public Fluctuation<K> unify() {
             return builder.entries(body.diffChunk((a,b)->!a.l().equals(b.l())).filter(l->!l.isEmpty())
-                    .map(l->P.p(l.get(0).l(), l.toK(builder.context).sigma(p->p.r()))));
+                    .map(l->P.p(l.get(0).l(), l.map(p->p.r()).stream().reduce((a,b)->a.add(b)).get())));
         }
         public Fluctuation<K> nonzero() {
-            return builder.entries(body.filter(p->!p.r().isZero()));
+            return builder.entries(body.filter(p->!p.r().equals(builder.context.zero())));
         }
-        public Fluctuation<K> enclose(P<Range<Long>,K> enclosure) {
+        public Fluctuation<K> enclose(P<Range<Long>,C<K>> enclosure) {
             return enclose(enclosure.l(),enclosure.r());
         }
-        public Fluctuation<K> enclose(Range<Long> range, K opening) {
+        public Fluctuation<K> enclose(Range<Long> range, C<K> opening) {
             return builder.entries(body.filter(p->range.contains(p.l())).startFrom(P.p(range.start,opening)).append(P.p(range.end,builder.context.zero())));
         }
         public Fluctuation<K> unenclose() {
@@ -146,12 +146,12 @@ public class Fluctuation<K extends Decimal<K>> {
     }
     
     public class Accumulates {
-        TList<P<Range<Long>,K>> body;
-        public Accumulates(TList<P<Range<Long>,K>> body) {
+        TList<P<Range<Long>,C<K>>> body;
+        public Accumulates(TList<P<Range<Long>,C<K>>> body) {
             this.body=body;
         }
-        public K dot(Fluctuation<K> target) {
-            return body.cross(target.accumulates.body, (a,b)->a.r().mul(b.r()).mul(a.l().intersect(b.l()).map(t->widthL(t)).orElse(0L))).stream().reduce(builder.context.zero(), (a,b)->a.add(b));
+        public C<K> dot(Fluctuation<K> target) {
+            return body.cross(target.accumulates.body, (a,b)->a.r().mul(b.r()).mul(a.l().intersect(b.l()).map(t->builder.context.b(widthL(t))).orElse(builder.context.zero()))).stream().reduce(builder.context.zero(), (a,b)->a.add(b));
         }
         public Fluctuation<K> accumulate() {
             return builder.entries(body.map(x->P.p(x.l().start, x.r())));
@@ -165,42 +165,42 @@ public class Fluctuation<K extends Decimal<K>> {
          * find an Fluctuations fits in the other Fluctuations.
          * @return 
          */
-        public K amount() {
-            return amounts().toK(builder.context).sigma(k->k);
+        public C<K> amount() {
+            return amounts().stream().reduce((a,b)->a.add(b)).orElse(builder.context.zero());
         }
-        public TList<K> amounts() {
-            return body.map(p->p.r().mul(widthL(p.l())));
+        public TList<C<K>> amounts() {
+            return body.map(p->p.r().mul(builder.context.b(widthL(p.l()))));
         }
         public Fluctuation<K> cut(Range<Long> range) {
             return builder.accumulates(body.optionalMap(p->range.intersect(p.l()).map(i->P.p(i,p.r()))).normalize());
         }
         public boolean nonnegative() {
-            return body.forAll(x->!x.r().belowZero());
+            return body.forAll(x->x.r().get().compareTo(builder.context.zero().get())>=0);
         }
         public Fluctuation<K> nonzero() {
-            return builder.accumulates(body.filter(p->!p.r().isZero()));
+            return builder.accumulates(body.filter(p->p.r().get().compareTo(builder.context.zero().get())!=0));
         }
         TList<Fluctuation<K>> unchattering(TList<Boolean> noticeable) {
             return body.pair(noticeable).reverseChunk(p->p.r()).map(l->builder.accumulates(l.map(p->p.l())));
         }
-        public Fluctuation<K> round(Function<Fluctuation<K>,K> f) {
+        public Fluctuation<K> round(Function<Fluctuation<K>,C<K>> f) {
             if (body.isEmpty()) return builder.empty();
             return builder.accumulates(TList.wrap(P.p(tq.cover(), f.apply(Fluctuation.this))));
         }
     }
 
-    static public <K extends Decimal<K>> Function<Fluctuation<K>, K> max() {
-        return e->e.accumulates.body.maxval(p->p.r()).get();
+    static public <K extends Comparable<K>> Function<Fluctuation<K>, C<K>> max() {
+        return e->e.accumulates.body.map(p->p.r()).max(p->p.get()).get();
     }
-    static public <K extends Decimal<K>> Function<Fluctuation<K>, K> min() {
-        return e->e.accumulates.body.minval(p->p.r()).get();
+    static public <K extends Comparable<K>> Function<Fluctuation<K>, C<K>> min() {
+        return e->e.accumulates.body.map(p->p.r()).min(p->p.get()).get();
     }
-    static public <K extends Decimal<K>> Function<Fluctuation<K>, K> average() {
-        return e->e.accumulates.amount().div(widthL(e.tq.cover()));
+    static public <K extends Decimal<K>> Function<Fluctuation<K>, C<K>> average() {
+        return e->e.accumulates.amount().div(e.builder.context.b(widthL(e.tq.cover())));
     }
     
     public boolean epsilonEquals(Fluctuation<K> other, K e) {
-        return tq.time.equals(other.tq.time)&&tq.q.pair(other.tq.q,(a,b)->a.sub(b).abs().lt(e)).forAll(x->x);
+        return tq.time.equals(other.tq.time)&&tq.q.body().pair(other.tq.q.body(),(a,b)->a.sub(b).abs().get().compareTo(e)<0).forAll(x->x);
     }
     
     @Override

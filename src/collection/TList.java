@@ -730,7 +730,7 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
     
 //-----------Calculating
     public <K> CList<K> toC(Function<T,K> f, C.Builder<K> builder) {
-        return new CList<>(builder, this.map(f));
+        return CList.c(builder, this.map(f));
     }
     public <K extends Decimal<K>> KList<T,K> toK(MathContext<K> context) {
         return new KList<>(this,context);

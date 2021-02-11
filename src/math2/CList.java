@@ -17,28 +17,32 @@ package math2;
 import collection.TList;
 import collection.TListWrapper;
 import function.Transformable;
+import java.util.function.Function;
 
 /**
  * 
  * @author masao
  * @param <K>
  */
-public class CList<K> implements TListWrapper<K,CList<K>>,Transformable<CList<K>>{
+public class CList<K> implements TListWrapper<C<K>,CList<K>>,Transformable<CList<K>>{
     public final C.Builder<K> b;
-    final TList<K> body;
-    public CList(C.Builder<K> context, TList<K> body) {
+    final TList<C<K>> body;
+    public CList(C.Builder<K> context, TList<C<K>> body) {
         this.body=body;
         this.b=context;
     }
+    static public <K> CList<K> c(C.Builder<K> context, TList<K> vs) {
+        return new CList<>(context, vs.map(v->context.b(v)));
+    }
     static public <K> CList<K> c(C.Builder<K> context, K... v) {
-        return new CList<>(context,TList.sof(v));
+        return c(context,TList.sof(v));
     }
     @Override
-    public TList<K> body() {
+    public TList<C<K>> body() {
         return body;
     }
     @Override
-    public CList<K> wrap(TList<K> body) {
+    public CList<K> wrap(TList<C<K>> body) {
         return new CList<>(b,body);
     }
     @Override
@@ -51,69 +55,69 @@ public class CList<K> implements TListWrapper<K,CList<K>>,Transformable<CList<K>
     public C<K> sampleAverage() {
         return sigma().div(b.b(body.size()-1));
     }
-    public TList<C<K>> toC() {
-        return body.map(v->b.b(v));
-    }
-    public CList<K> fromC(TList<C<K>> body) {
-        return wrap(body.map(c->c.v));
-    }
 
     public C<K> sigma() {
-        return toC().stream().reduce(b.zero(),(a,b)->a.add(b));
+        return body.stream().reduce(b.zero(),(a,b)->a.add(b));
     }
     
     public C<K> pai() {
-        return toC().stream().reduce(b.one(),(a,b)->a.mul(b));
+        return body.stream().reduce(b.one(),(a,b)->a.mul(b));
     }
     
-    public CList<K> scalar(C<K> s) {
-        return fromC(toC().map(v->v.mul(s)));
+    public CList<K> scale(C<K> s) {
+        return wrap(body.map(v->v.mul(s)));
     }
-    public CList<K> scalar(K s) {
-        return scalar(b.b(s));
+    public CList<K> scale(K s) {
+        return scale(b.b(s));
+    }
+    public CList<K> negate() {
+        return wrap(body.map(v->v.negate()));
+    }
+    public CList<K> abs() {
+        return wrap(body.map(v->v.abs()));
     }
     
     public CList<K> add(CList<K> o) {
-        return o.fromC(toC().pair(o.toC(), (a,b)->a.add(b)));
+        return o.wrap(body.pair(o.body, (a,b)->a.add(b)));
     }
     public CList<K> add(TList<K> o) {
-        return add(new CList<>(b, o));
+        return add(c(b,o));
     }
         
     public CList<K> sub(CList<K> o) {
-        return o.fromC(toC().pair(o.toC(), (a,b)->a.sub(b)));
+        return o.wrap(body.pair(o.body, (a,b)->a.sub(b)));
     }
     public CList<K> sub(TList<K> o) {
-        return sub(new CList<>(b, o));
+        return sub(c(b,o));
     }
         
     public CList<K> mul(CList<K> o) {
-        return o.fromC(toC().pair(o.toC(), (a,b)->a.mul(b)));
+        return o.wrap(body.pair(o.body, (a,b)->a.mul(b)));
     }
     public CList<K> mul(TList<K> o) {
-        return mul(new CList<>(b, o));
+        return mul(c(b,o));
     }
         
     public CList<K> div(CList<K> o) {
-        return o.fromC(toC().pair(o.toC(), (a,b)->a.div(b)));
+        return o.wrap(body.pair(o.body, (a,b)->a.div(b)));
     }
     public CList<K> div(TList<K> o) {
-        return div(new CList<>(b, o));
+        return div(c(b,o));
     }
     
     public C<K> dot(CList<K> o) {
         return mul(o).sigma();
     }
     public C<K> dot(TList<K> o) {
-        return dot(new CList<>(b, o));
+        return dot(c(b,o));
     }
         
     public CList<K> add() {
-        return fromC(toC().accumFromStart((a,b)->a.add(b)));
+        return wrap(body.accumFromStart((a,b)->a.add(b)));
     }
 
     public CList<K> mul() {
-        return fromC(toC().accumFromStart((a,b)->a.mul(b)));
+        return wrap(body.accumFromStart((a,b)->a.mul(b)));
     }
     
     @Override

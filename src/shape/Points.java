@@ -54,10 +54,10 @@ public class Points<K extends Comparable<K>> implements TListWrapper<CList<K>,Po
         return new Points(body.diff((a,b)->b.sub(a)));
     }
     public Optional<CList<K>> min() {
-        return body.getOpt(0).map(x->new CList<>(x.b, body.transposeT(c->c.body()).map(l->l.minval(v->v).get())));
+        return body.getOpt(0).map(x->new CList<>(x.b, body.transposeT(c->c.body()).map(l->l.min(v->v.get()).get())));
     }
     public Optional<CList<K>> max() {
-        return body.getOpt(0).map(x->new CList<>(x.b, body.transposeT(c->c.body()).map(l->l.maxval(v->v).get())));
+        return body.getOpt(0).map(x->new CList<>(x.b, body.transposeT(c->c.body()).map(l->l.max(v->v.get()).get())));
     }
     public Optional<Points<K>> rect() {
         return min().flatMap(min->max().map(max->new Points<>(TList.sof(min,max))));
