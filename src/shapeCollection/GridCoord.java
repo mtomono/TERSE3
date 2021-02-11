@@ -19,6 +19,7 @@ import collection.TList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import math2.C;
 
 /**
  *
@@ -137,7 +138,7 @@ public class GridCoord {
     }
     
     public int rindex(List<Integer> raddress) {
-        return baseSize().pair(raddress, (a,b)->a*b).sumI(i->i);
+        return baseSize().pair(raddress, (a,b)->a*b).toC(i->i,C.i).sigma().get();
     }
     
     public TList<Integer> address(int index) {

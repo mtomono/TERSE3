@@ -21,6 +21,7 @@ import static java.lang.Math.abs;
 import java.util.AbstractList;
 import java.util.Collections;
 import java.util.List;
+import math2.C;
 import orderedSet.Range;
 
 /**
@@ -101,6 +102,6 @@ public class GridConcatList<T> extends AbstractList<T> {
 
     @Override
     public int size() {
-        return grids.sumI(g->g.axis.size());
+        return grids.toC(g->g.axis.size(),C.i).sigma().get();
     }
 }

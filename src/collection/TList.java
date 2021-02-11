@@ -739,23 +739,6 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
     public Double averageD(Function<T,Double> f) {
         return toC(f,C.d).average().get();
     }
-     /**
-     * map each item to double value and take sum of them.
-     * @param f
-     * @return 
-     */
-    public double sumD(ToDoubleFunction<T> f) {
-        return stream().mapToDouble(f).sum();
-    }
-    
-    /**
-     * map each item to int value and take average of them.
-     * @param f
-     * @return 
-     */
-    public int sumI(ToIntFunction<T> f) {
-        return stream().mapToInt(f).sum();
-    }
     
     public double averageSampleD(ToDoubleFunction<T> f) {
         return stream().mapToDouble(f).sum()/(size()-1);

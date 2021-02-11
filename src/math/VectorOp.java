@@ -50,7 +50,7 @@ public class VectorOp {
         return TList.set(a).map(x->x*scale);
     }
     static public int manhattanLengthI(List<Integer>a,List<Integer>b) {
-        return op(a,b,(x,y)->x-y).map(x->abs(x)).sumI(i->i);
+        return op(a,b,(x,y)->x-y).map(x->abs(x)).toC(i->i,C.i).sigma().get();
     }
     static public double manhattanLengthD(List<Double>a,List<Double>b) {
         return op(a,b,(x,y)->x-y).map(x->abs(x)).toC(i->i,C.d).sigma().get();
