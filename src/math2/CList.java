@@ -66,6 +66,13 @@ public class CList<K> implements TListWrapper<K,CList<K>>,Transformable<CList<K>
         return toC().stream().reduce(b.one(),(a,b)->a.mul(b));
     }
     
+    public CList<K> scalar(C<K> s) {
+        return fromC(toC().map(v->v.mul(s)));
+    }
+    public CList<K> scalar(K s) {
+        return scalar(b.b(s));
+    }
+    
     public CList<K> add(CList<K> o) {
         return o.fromC(toC().pair(o.toC(), (a,b)->a.add(b)));
     }
