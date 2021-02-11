@@ -34,7 +34,7 @@ import static orderedSet.RangeUtil.widthL;
  */
 public class Fluctuation<K extends Comparable<K>> {
     final public Builder<K> builder;
-    final public C.Builder<K> b;
+    final public C.Builder<K> bb;
     final public Tq tq;
     final public Entries entries;
     final public Accumulates accumulates;
@@ -45,12 +45,15 @@ public class Fluctuation<K extends Comparable<K>> {
         
     protected Fluctuation(TList<Long> time, CList<K> q, TList<P<Long,C<K>>> entries, TList<P<Range<Long>,C<K>>> accumulates, Builder<K> builder) {
         this.builder=builder;
-        this.b=builder.context;
+        this.bb=builder.context;
         this.tq=new Tq(time,q);
         this.entries=new Entries(entries);
         this.accumulates=new Accumulates(accumulates);
     }
-        public Fluctuation<K> normalize() {
+    public C<K> zero() {
+        return builder.context.zero();
+    }
+    public Fluctuation<K> normalize() {
         return entries.ordered().entries.simplify();
     }
     public Fluctuation<K> scale(C<K> scale) {
@@ -105,11 +108,11 @@ public class Fluctuation<K extends Comparable<K>> {
             return P.p(new Range<>(time.get(0),time.last()),q.get(0));
         }
         public boolean nonnegative() {
-            return q.body().forAll(x->x.get().compareTo(builder.context.zero().get())>=0);
+            return q.body().forAll(x->x.get().compareTo(zero().get())>=0);
         }
         public TList<Boolean> noticeableChanges(C<K> limit) {
-            Holder<C<K>> h=new Holder<>(builder.context.zero());
-            return q.body().iterator().map(x->h.set(h.get().add(x)).abs().get().compareTo(limit.get())>0).tee(t->h.set(t?builder.context.zero():h.get())).asList();
+            Holder<C<K>> h=new Holder<>(zero());
+            return q.body().iterator().map(x->h.set(h.get().add(x)).abs().get().compareTo(limit.get())>0).tee(t->h.set(t?zero():h.get())).asList();
         }
     }
 
@@ -132,13 +135,13 @@ public class Fluctuation<K extends Comparable<K>> {
                     .map(l->P.p(l.get(0).l(), l.map(p->p.r()).stream().reduce((a,b)->a.add(b)).get())));
         }
         public Fluctuation<K> nonzero() {
-            return builder.entries(body.filter(p->!p.r().equals(builder.context.zero())));
+            return builder.entries(body.filter(p->p.r().get().compareTo(zero().get())!=0));
         }
         public Fluctuation<K> enclose(P<Range<Long>,C<K>> enclosure) {
             return enclose(enclosure.l(),enclosure.r());
         }
         public Fluctuation<K> enclose(Range<Long> range, C<K> opening) {
-            return builder.entries(body.filter(p->range.contains(p.l())).startFrom(P.p(range.start,opening)).append(P.p(range.end,builder.context.zero())));
+            return builder.entries(body.filter(p->range.contains(p.l())).startFrom(P.p(range.start,opening)).append(P.p(range.end,zero())));
         }
         public Fluctuation<K> unenclose() {
             return builder.entries(body.seek(1).seek(-1));
@@ -151,7 +154,7 @@ public class Fluctuation<K extends Comparable<K>> {
             this.body=body;
         }
         public C<K> dot(Fluctuation<K> target) {
-            return body.cross(target.accumulates.body, (a,b)->a.r().mul(b.r()).mul(a.l().intersect(b.l()).map(t->builder.context.b(widthL(t))).orElse(builder.context.zero()))).stream().reduce(builder.context.zero(), (a,b)->a.add(b));
+            return body.cross(target.accumulates.body, (a,b)->a.l().intersect(b.l()).map(t->bb.b(widthL(t)).mul(a.r()).mul(b.r()))).optionalMap(o->o).normalize().stream().reduce(zero(),(a,b)->a.add(b));
         }
         public Fluctuation<K> accumulate() {
             return builder.entries(body.map(x->P.p(x.l().start, x.r())));
@@ -166,19 +169,19 @@ public class Fluctuation<K extends Comparable<K>> {
          * @return 
          */
         public C<K> amount() {
-            return amounts().stream().reduce((a,b)->a.add(b)).orElse(builder.context.zero());
+            return amounts().stream().reduce((a,b)->a.add(b)).orElse(zero());
         }
         public TList<C<K>> amounts() {
-            return body.map(p->p.r().mul(builder.context.b(widthL(p.l()))));
+            return body.map(p->p.r().mul(bb.b(widthL(p.l()))));
         }
         public Fluctuation<K> cut(Range<Long> range) {
             return builder.accumulates(body.optionalMap(p->range.intersect(p.l()).map(i->P.p(i,p.r()))).normalize());
         }
         public boolean nonnegative() {
-            return body.forAll(x->x.r().get().compareTo(builder.context.zero().get())>=0);
+            return body.forAll(x->x.r().get().compareTo(zero().get())>=0);
         }
         public Fluctuation<K> nonzero() {
-            return builder.accumulates(body.filter(p->p.r().get().compareTo(builder.context.zero().get())!=0));
+            return builder.accumulates(body.filter(p->p.r().get().compareTo(zero().get())!=0));
         }
         TList<Fluctuation<K>> unchattering(TList<Boolean> noticeable) {
             return body.pair(noticeable).reverseChunk(p->p.r()).map(l->builder.accumulates(l.map(p->p.l())));
@@ -196,7 +199,7 @@ public class Fluctuation<K extends Comparable<K>> {
         return e->e.accumulates.body.map(p->p.r()).min(p->p.get()).get();
     }
     static public <K extends Decimal<K>> Function<Fluctuation<K>, C<K>> average() {
-        return e->e.accumulates.amount().div(e.builder.context.b(widthL(e.tq.cover())));
+        return e->e.accumulates.amount().div(e.bb.b(widthL(e.tq.cover())));
     }
     
     public boolean epsilonEquals(Fluctuation<K> other, K e) {
