@@ -15,6 +15,7 @@ import function.Holder;
 import iterator.TListIterator;
 import java.util.*;
 import static java.util.Comparator.naturalOrder;
+import math2.C;
 import orderedSet.Range;
 import static org.testng.Assert.*;
 import org.testng.annotations.BeforeClass;
@@ -1491,30 +1492,22 @@ public class TListNGTest {
 
     @Test
     public void testInsertAt_int_TList() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> result = TList.range(0,3).insertAt(1, TList.sofi(5,6));
+        TList<Integer> expected = TList.sofi(0,5,6,1,2);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
     }
 
     @Test
     public void testInsertAt_int_GenericType() {
-    }
-
-    @Test
-    public void testSfix() {
-    }
-
-    @Test
-    public void testFixDebug_int() {
-    }
-
-    @Test
-    public void testFixDebug_0args() {
-    }
-
-    @Test
-    public void testTeep_String() {
-    }
-
-    @Test
-    public void testTeep_0args() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> result = TList.range(0,3).insertAt(1, 5);
+        TList<Integer> expected = TList.sofi(0,5,1,2);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
     }
 
     @Test
@@ -1523,44 +1516,102 @@ public class TListNGTest {
 
     @Test
     public void testRange_int_int() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> result = TList.range(0,3);
+        TList<Integer> expected = TList.sofi(0,1,2);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
     }
 
     @Test
     public void testRangeSym() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> result = TList.rangeSym(0,3);
+        TList<Integer> expected = TList.sofi(0,1,2,3);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
     }
 
     @Test
     public void testRange_Range() {
-    }
-
-    @Test
-    public void testSet_List() {
-    }
-
-    @Test
-    public void testSet_Collection() {
-    }
-
-    @Test
-    public void testSof() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> result = TList.range(new Range<>(0,3));
+        TList<Integer> expected = TList.sofi(0,1,2);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
     }
 
     @Test
     public void testIsAscending() {
+        System.out.println(test.TestUtils.methodName(0));
+        boolean result = TList.sof(0,2,4).isAscending((a,b)->a.compareTo(b));
+        boolean expected = true;
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testIsAscending_false() {
+        System.out.println(test.TestUtils.methodName(0));
+        boolean result = TList.sof(0,2,2,4).isAscending((a,b)->a.compareTo(b));
+        boolean expected = false;
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
     }
 
     @Test
     public void testIsDescending() {
+        System.out.println(test.TestUtils.methodName(0));
+        boolean result = TList.sof(4,2,0).isDescending((a,b)->a.compareTo(b));
+        boolean expected = true;
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
     }
 
     @Test
     public void testIsAscendingOrEqual() {
+        System.out.println(test.TestUtils.methodName(0));
+        boolean result = TList.sof(0,2,2,4).isAscendingOrEqual((a,b)->a.compareTo(b));
+        boolean expected = true;
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
     }
 
     @Test
     public void testIsDescendingOrEqual() {
+        System.out.println(test.TestUtils.methodName(0));
+        boolean result = TList.sof(4,2,2,0).isDescendingOrEqual((a,b)->a.compareTo(b));
+        boolean expected = true;
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
     }
 
+    @Test
+    public void testIsFlat() {
+        System.out.println(test.TestUtils.methodName(0));
+        boolean result = TList.sof(C.bd.b("0.0"),C.bd.b("0"),C.bd.b("0.000000")).map(c->c.get()).isFlat((a,b)->a.compareTo(b));
+        boolean expected = true;
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    @Test
+    public void testIsFlat_false() {
+        System.out.println(test.TestUtils.methodName(0));
+        boolean result = TList.sof(C.bd.b("0.0"),C.bd.b("0.1")).map(c->c.get()).isFlat((a,b)->a.compareTo(b));
+        boolean expected = false;
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
     @Test
     public void testMapc() {
     }
@@ -1571,50 +1622,6 @@ public class TListNGTest {
 
     @Test
     public void testTransposeT() {
-    }
-
-    @Test
-    public void testHeap() {
-    }
-
-    @Test
-    public void testHeapFromStart_Function_BiFunction() {
-    }
-
-    @Test
-    public void testPreheap_Function_BiFunction() {
-    }
-
-    @Test
-    public void testHeapFromStart_BiFunction() {
-    }
-
-    @Test
-    public void testPreheap_BiFunction() {
-    }
-
-    @Test
-    public void testAverageD() {
-    }
-
-    @Test
-    public void testAverageL() {
-    }
-
-    @Test
-    public void testAverageI() {
-    }
-
-    @Test
-    public void testSumD() {
-    }
-
-    @Test
-    public void testSumL() {
-    }
-
-    @Test
-    public void testSumI() {
     }
 
     @Test
