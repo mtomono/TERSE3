@@ -17,6 +17,7 @@ package fluctuation;
 
 import collection.P;
 import collection.TList;
+import function.CompareUtil;
 import math2.C;
 import math2.CList;
 import orderedSet.Range;
@@ -28,8 +29,10 @@ import orderedSet.Range;
  */
 public class Builder<K extends Comparable<K>> {
     C.Builder<K> context;
+    CompareUtil.map<C<K>,K> compare;
     protected Builder(C.Builder<K> context) {
         this.context=context;
+        this.compare=CompareUtil.map(c->c.get());
     }
     public abstract class Building {
         TList<Long> time() {

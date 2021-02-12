@@ -17,7 +17,6 @@ package math2;
 import collection.TList;
 import collection.TListWrapper;
 import function.Transformable;
-import java.util.function.Function;
 
 /**
  * 

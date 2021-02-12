@@ -515,6 +515,14 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
         return diff((a,b)->comp.compare(a,b)).filter(d->d<0).isEmpty();
     }
     
+    public boolean isFlat(Comparator<T> comp) {
+        return diff((a,b)->comp.compare(a,b)).filter(d->d!=0).isEmpty();
+    }
+    
+    public boolean isNoFlat(Comparator<T> comp) {
+        return diff((a,b)->comp.compare(a,b)).filter(d->d==0).isEmpty();
+    }
+    
     /**
      * check whether a predicate applies to all the elements in the list.
      * @param pred

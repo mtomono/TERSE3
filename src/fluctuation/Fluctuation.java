@@ -18,6 +18,7 @@ package fluctuation;
 import collection.P;
 import collection.TList;
 import static function.ComparePolicy.inc;
+import function.CompareUtil;
 import function.Holder;
 import java.util.Objects;
 import java.util.function.Function;
@@ -34,7 +35,6 @@ import static orderedSet.RangeUtil.widthL;
  */
 public class Fluctuation<K extends Comparable<K>> {
     final public Builder<K> builder;
-    final public C.Builder<K> bb;
     final public Tq tq;
     final public Entries entries;
     final public Accumulates accumulates;
@@ -45,13 +45,18 @@ public class Fluctuation<K extends Comparable<K>> {
         
     protected Fluctuation(TList<Long> time, CList<K> q, TList<P<Long,C<K>>> entries, TList<P<Range<Long>,C<K>>> accumulates, Builder<K> builder) {
         this.builder=builder;
-        this.bb=builder.context;
         this.tq=new Tq(time,q);
         this.entries=new Entries(entries);
         this.accumulates=new Accumulates(accumulates);
     }
     public C<K> zero() {
         return builder.context.zero();
+    }
+    public C.Builder<K> b() {
+        return builder.context;
+    }
+    public CompareUtil.map<C<K>,K> c() {
+        return builder.compare;
     }
     public Fluctuation<K> normalize() {
         return entries.ordered().entries.simplify();
@@ -108,11 +113,11 @@ public class Fluctuation<K extends Comparable<K>> {
             return P.p(new Range<>(time.get(0),time.last()),q.get(0));
         }
         public boolean nonnegative() {
-            return q.body().forAll(x->x.get().compareTo(zero().get())>=0);
+            return q.body().forAll(x->c().ge(x,zero()));
         }
         public TList<Boolean> noticeableChanges(C<K> limit) {
             Holder<C<K>> h=new Holder<>(zero());
-            return q.body().iterator().map(x->h.set(h.get().add(x)).abs().get().compareTo(limit.get())>0).tee(t->h.set(t?zero():h.get())).asList();
+            return q.body().iterator().map(x->c().gt(h.set(h.get().add(x)).abs(),limit)).tee(t->h.set(t?zero():h.get())).asList();
         }
     }
 
@@ -135,7 +140,7 @@ public class Fluctuation<K extends Comparable<K>> {
                     .map(l->P.p(l.get(0).l(), l.map(p->p.r()).stream().reduce((a,b)->a.add(b)).get())));
         }
         public Fluctuation<K> nonzero() {
-            return builder.entries(body.filter(p->p.r().get().compareTo(zero().get())!=0));
+            return builder.entries(body.filter(p->c().ne(p.r(),zero())));
         }
         public Fluctuation<K> enclose(P<Range<Long>,C<K>> enclosure) {
             return enclose(enclosure.l(),enclosure.r());
@@ -154,7 +159,10 @@ public class Fluctuation<K extends Comparable<K>> {
             this.body=body;
         }
         public C<K> dot(Fluctuation<K> target) {
-            return body.cross(target.accumulates.body, (a,b)->a.l().intersect(b.l()).map(t->bb.b(widthL(t)).mul(a.r()).mul(b.r()))).optionalMap(o->o).normalize().stream().reduce(zero(),(a,b)->a.add(b));
+            return body.cross(target.accumulates.body, 
+                    (a,b)->a.l().intersect(b.l()).map(t->b().b(widthL(t)).mul(a.r()).mul(b.r())))
+                        .optionalMap(o->o).normalize()
+                        .stream().reduce(zero(),(a,b)->a.add(b));
         }
         public Fluctuation<K> accumulate() {
             return builder.entries(body.map(x->P.p(x.l().start, x.r())));
@@ -172,16 +180,16 @@ public class Fluctuation<K extends Comparable<K>> {
             return amounts().stream().reduce((a,b)->a.add(b)).orElse(zero());
         }
         public TList<C<K>> amounts() {
-            return body.map(p->p.r().mul(bb.b(widthL(p.l()))));
+            return body.map(p->p.r().mul(b().b(widthL(p.l()))));
         }
         public Fluctuation<K> cut(Range<Long> range) {
             return builder.accumulates(body.optionalMap(p->range.intersect(p.l()).map(i->P.p(i,p.r()))).normalize());
         }
         public boolean nonnegative() {
-            return body.forAll(x->x.r().get().compareTo(zero().get())>=0);
+            return body.forAll(x->c().ge(x.r(),zero()));
         }
         public Fluctuation<K> nonzero() {
-            return builder.accumulates(body.filter(p->p.r().get().compareTo(zero().get())!=0));
+            return builder.accumulates(body.filter(p->c().ne(p.r(),zero())));
         }
         TList<Fluctuation<K>> unchattering(TList<Boolean> noticeable) {
             return body.pair(noticeable).reverseChunk(p->p.r()).map(l->builder.accumulates(l.map(p->p.l())));
@@ -199,11 +207,11 @@ public class Fluctuation<K extends Comparable<K>> {
         return e->e.accumulates.body.map(p->p.r()).min(p->p.get()).get();
     }
     static public <K extends Decimal<K>> Function<Fluctuation<K>, C<K>> average() {
-        return e->e.accumulates.amount().div(e.bb.b(widthL(e.tq.cover())));
+        return e->e.accumulates.amount().div(e.b().b(widthL(e.tq.cover())));
     }
     
-    public boolean epsilonEquals(Fluctuation<K> other, K e) {
-        return tq.time.equals(other.tq.time)&&tq.q.body().pair(other.tq.q.body(),(a,b)->a.sub(b).abs().get().compareTo(e)<0).forAll(x->x);
+    public boolean epsilonEquals(Fluctuation<K> other, C<K> e) {
+        return tq.time.equals(other.tq.time)&&tq.q.body().pair(other.tq.q.body(),(a,b)->a.sub(b).abs()).forAll(x->c().lt(x,e));
     }
     
     @Override
