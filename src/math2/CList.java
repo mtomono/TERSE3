@@ -108,6 +108,14 @@ public class CList<K> implements TListWrapper<C<K>,CList<K>>,Transformable<CList
         return o.wrap(body.pair(o.body, (a,b)->a.interpolate(rate,b,orate)));
     }
     
+    public CList<K> interpolate1(C<K> rate, CList<K> o) {
+        return interpolate(rate,o, b.one().sub(rate));
+    }
+    
+    public CList<K> interpolate100(C<K> rate, CList<K> o) {
+        return interpolate(rate,o, b.b(100).sub(rate));
+    }
+    
     public C<K> dot(CList<K> o) {
         return mul(o).sigma();
     }
