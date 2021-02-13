@@ -32,7 +32,7 @@ public class Builder<K extends Comparable<K>> {
     CompareUtil.map<C<K>,K> compare;
     protected Builder(C.Builder<K> context) {
         this.context=context;
-        this.compare=CompareUtil.map(c->c.get());
+        this.compare=CompareUtil.map(c->c.body());
     }
     public abstract class Building {
         TList<Long> time() {

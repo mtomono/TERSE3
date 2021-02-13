@@ -68,4 +68,13 @@ public class CNGTest {
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
     }
+    @Test
+    public void testInterpolate() {
+        System.out.println(test.TestUtils.methodName(0));
+        C<Integer> result = C.i.b(100).interpolate(C.i.b(57), C.i.b(200), C.i.b(43));
+        C<Integer> expected = C.i.b(157);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
 }

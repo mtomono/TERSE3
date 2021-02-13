@@ -28,9 +28,9 @@ import shape.TMatrix3d;
 public class CovariantMatrix {
     
     public double covariant(TList<Double> x, TList<Double> y) {
-        double ax = x.toC(d->d,C.d).average().get();
-        double ay = x==y?ax:y.toC(d->d,C.d).average().get();
-        return x.pair(y, (tx,ty)->(tx-ax)*(ty-ay)).toC(d->d,C.d).average().get();
+        double ax = x.toC(d->d,C.d).average().body();
+        double ay = x==y?ax:y.toC(d->d,C.d).average().body();
+        return x.pair(y, (tx,ty)->(tx-ax)*(ty-ay)).toC(d->d,C.d).average().body();
     }
     
     public TMatrix3d matrix3d(TList<TList<Double>> a) {

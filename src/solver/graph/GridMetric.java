@@ -21,10 +21,10 @@ public interface GridMetric extends Metric<List<Double>> {
         return (f,t)->m.measure(f,t);
     }
     public static GridMetric l2() {
-        return (f,t)->Math.sqrt(TList.set(t).pair(f,(x,y)->x-y).toC(d->d*d,C.d).sigma().get());
+        return (f,t)->Math.sqrt(TList.set(t).pair(f,(x,y)->x-y).toC(d->d*d,C.d).sigma().body());
     }
     public static GridMetric l1() {
-        return (f,t)->TList.set(t).pair(f,(x,y)->Math.abs(x-y)).toC(i->i,C.d).sigma().get();
+        return (f,t)->TList.set(t).pair(f,(x,y)->Math.abs(x-y)).toC(i->i,C.d).sigma().body();
     }
     default Metric<List<Integer>> i() {
         return morph(l->TList.set(l).map(i->(double)i));

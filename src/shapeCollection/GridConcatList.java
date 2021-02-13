@@ -102,6 +102,6 @@ public class GridConcatList<T> extends AbstractList<T> {
 
     @Override
     public int size() {
-        return grids.toC(g->g.axis.size(),C.i).sigma().get();
+        return grids.toC(g->g.axis.size(),C.i).sigma().body();
     }
 }

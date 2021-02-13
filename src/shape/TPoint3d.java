@@ -200,7 +200,7 @@ public class TPoint3d extends Point3d implements List<Double> {
     }
 
     static public TPoint3d average(TList<? extends Tuple3d> ps) {
-        return new TPoint3d(ps.toC(p->p.x,C.d).average().get(), ps.toC(p->p.y,C.d).average().get(), ps.toC(p->p.z,C.d).average().get());
+        return new TPoint3d(ps.toC(p->p.x,C.d).average().body(), ps.toC(p->p.y,C.d).average().body(), ps.toC(p->p.z,C.d).average().body());
     }
     
     public String toCsv() {

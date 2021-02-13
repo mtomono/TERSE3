@@ -138,7 +138,7 @@ public class GridCoord {
     }
     
     public int rindex(List<Integer> raddress) {
-        return baseSize().pair(raddress, (a,b)->a*b).toC(i->i,C.i).sigma().get();
+        return baseSize().pair(raddress, (a,b)->a*b).toC(i->i,C.i).sigma().body();
     }
     
     public TList<Integer> address(int index) {

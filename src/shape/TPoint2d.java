@@ -185,7 +185,7 @@ public class TPoint2d extends Point2d implements List<Double> {
     }
     
     static public TPoint2d average(TList<? extends Tuple2d> ps) {
-        return new TPoint2d(ps.toC(p->p.x,C.d).average().get(), ps.toC(p->p.y,C.d).average().get());
+        return new TPoint2d(ps.toC(p->p.x,C.d).average().body(), ps.toC(p->p.y,C.d).average().body());
     }
     
     public String toCsv() {

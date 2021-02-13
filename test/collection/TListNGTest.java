@@ -1597,7 +1597,7 @@ public class TListNGTest {
     @Test
     public void testIsFlat() {
         System.out.println(test.TestUtils.methodName(0));
-        boolean result = TList.sof(C.bd.b("0.0"),C.bd.b("0"),C.bd.b("0.000000")).map(c->c.get()).isFlat((a,b)->a.compareTo(b));
+        boolean result = TList.sof(C.bd.b("0.0"),C.bd.b("0"),C.bd.b("0.000000")).map(c->c.body()).isFlat((a,b)->a.compareTo(b));
         boolean expected = true;
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
@@ -1606,7 +1606,7 @@ public class TListNGTest {
     @Test
     public void testIsFlat_false() {
         System.out.println(test.TestUtils.methodName(0));
-        boolean result = TList.sof(C.bd.b("0.0"),C.bd.b("0.1")).map(c->c.get()).isFlat((a,b)->a.compareTo(b));
+        boolean result = TList.sof(C.bd.b("0.0"),C.bd.b("0.1")).map(c->c.body()).isFlat((a,b)->a.compareTo(b));
         boolean expected = false;
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);

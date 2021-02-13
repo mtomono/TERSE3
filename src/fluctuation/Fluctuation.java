@@ -201,10 +201,10 @@ public class Fluctuation<K extends Comparable<K>> {
     }
 
     static public <K extends Comparable<K>> Function<Fluctuation<K>, C<K>> max() {
-        return e->e.accumulates.body.map(p->p.r()).max(p->p.get()).get();
+        return e->e.accumulates.body.map(p->p.r()).max(p->p.body()).get();
     }
     static public <K extends Comparable<K>> Function<Fluctuation<K>, C<K>> min() {
-        return e->e.accumulates.body.map(p->p.r()).min(p->p.get()).get();
+        return e->e.accumulates.body.map(p->p.r()).min(p->p.body()).get();
     }
     static public <K extends Decimal<K>> Function<Fluctuation<K>, C<K>> average() {
         return e->e.accumulates.amount().div(e.b().b(widthL(e.tq.cover())));

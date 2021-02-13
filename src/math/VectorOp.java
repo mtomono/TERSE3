@@ -50,22 +50,22 @@ public class VectorOp {
         return TList.set(a).map(x->x*scale);
     }
     static public int manhattanLengthI(List<Integer>a,List<Integer>b) {
-        return op(a,b,(x,y)->x-y).map(x->abs(x)).toC(i->i,C.i).sigma().get();
+        return op(a,b,(x,y)->x-y).map(x->abs(x)).toC(i->i,C.i).sigma().body();
     }
     static public double manhattanLengthD(List<Double>a,List<Double>b) {
-        return op(a,b,(x,y)->x-y).map(x->abs(x)).toC(i->i,C.d).sigma().get();
+        return op(a,b,(x,y)->x-y).map(x->abs(x)).toC(i->i,C.d).sigma().body();
     }
     
     static public int squareSumI(List<Integer> a) {
-        return TList.set(a).toC(x->x*x,C.i).sigma().get();
+        return TList.set(a).toC(x->x*x,C.i).sigma().body();
     }
     
     static public double squareSumD(List<Double> a) {
-        return TList.set(a).toC(x->x*x,C.d).sigma().get();
+        return TList.set(a).toC(x->x*x,C.d).sigma().body();
     }
     
     static public double dot(List<? extends Number>a, List<? extends Number> b) {
-        return TList.set(a).pair(b, (x,y)->x.doubleValue()*y.doubleValue()).toC(d->d,C.d).sigma().get();
+        return TList.set(a).pair(b, (x,y)->x.doubleValue()*y.doubleValue()).toC(d->d,C.d).sigma().body();
     }
     
     static public List<Integer> round(List<Double> point) {

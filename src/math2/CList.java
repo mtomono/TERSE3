@@ -31,7 +31,7 @@ public class CList<K> implements TListWrapper<C<K>,CList<K>>,Transformable<CList
         this.b=context;
     }
     static public <K> CList<K> c(C.Builder<K> context, TList<K> vs) {
-        return new CList<>(context, vs.map(v->context.b(v)));
+        return new CList<>(context, vs.map(v->context.c(v)));
     }
     static public <K> CList<K> c(C.Builder<K> context, K... v) {
         return c(context,TList.sof(v));
@@ -67,7 +67,7 @@ public class CList<K> implements TListWrapper<C<K>,CList<K>>,Transformable<CList
         return wrap(body.map(v->v.mul(s)));
     }
     public CList<K> scale(K s) {
-        return scale(b.b(s));
+        return scale(b.c(s));
     }
     public CList<K> negate() {
         return wrap(body.map(v->v.negate()));
@@ -102,6 +102,10 @@ public class CList<K> implements TListWrapper<C<K>,CList<K>>,Transformable<CList
     }
     public CList<K> div(TList<K> o) {
         return div(c(b,o));
+    }
+    
+    public CList<K> interpolate(C<K> rate, CList<K> o, C<K> orate) {
+        return o.wrap(body.pair(o.body, (a,b)->a.interpolate(rate,b,orate)));
     }
     
     public C<K> dot(CList<K> o) {
