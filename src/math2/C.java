@@ -116,6 +116,12 @@ public class C<K> implements Wrapper<K,C<K>> {
     public C<K> interpolate(C<K> rate, C<K>o, C<K>orate) {
         return mul(orate).add(o.mul(rate)).div(rate.add(orate));
     }
+    public C<K> interpolate1(C<K> rate, C<K>o) {
+        return interpolate(rate,o,one().sub(rate));
+    }
+    public C<K> interpolate100(C<K> rate, C<K>o) {
+        return interpolate(rate,o,b.b(100).sub(rate));
+    }
     public C<K> abs() {
         return wrap(b.op.abs(v));
     }
