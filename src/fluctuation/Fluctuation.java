@@ -22,7 +22,6 @@ import function.CompareUtil;
 import function.Holder;
 import java.util.Objects;
 import java.util.function.Function;
-import math.Decimal;
 import math2.C;
 import math2.CList;
 import orderedSet.Range;
@@ -206,7 +205,7 @@ public class Fluctuation<K extends Comparable<K>> {
     static public <K extends Comparable<K>> Function<Fluctuation<K>, C<K>> min() {
         return e->e.accumulates.body.map(p->p.r()).min(p->p.body()).get();
     }
-    static public <K extends Decimal<K>> Function<Fluctuation<K>, C<K>> average() {
+    static public <K extends Comparable<K>> Function<Fluctuation<K>, C<K>> average() {
         return e->e.accumulates.amount().div(e.b().b(widthL(e.tq.cover())));
     }
     
