@@ -69,6 +69,9 @@ public class CList<K> implements TListWrapper<C<K>,CList<K>>,Transformable<CList
     public CList<K> scale(K s) {
         return scale(b.c(s));
     }
+    public CList<K> inv() {
+        return wrap(body.map(v->v.inv()));
+    }
     public CList<K> negate() {
         return wrap(body.map(v->v.negate()));
     }

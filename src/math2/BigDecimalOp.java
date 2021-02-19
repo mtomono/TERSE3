@@ -46,10 +46,12 @@ public class BigDecimalOp implements Op<BigDecimal>{
         return new BigDecimal(v);
     }
     
+    @Override
     public BigDecimal b(Rational n) {
         return BigDecimal.valueOf(n.doubleValue());
     }
     
+    @Override
     public BigDecimal b(BigDecimal v) {
         return v;
     }
