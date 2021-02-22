@@ -105,6 +105,40 @@ public class KMatrixNGTest {
     }
 
     @Test
+    public void testEliminate2442185212762433() {
+        System.out.println(test.TestUtils.methodName(0));
+        KMatrix<KRational> result = krb.matrix(
+                                                            "2,4,4,2;"
+                                                          + "1,8,5,2;"
+                                                          + "1,2,7,6;"
+                                                          + "2,4,3,3",i->r(i)).doolittleSubMatrix().mapR(r->r.reduce());
+        KMatrix<KRational> expected = krb.matrix(           "2,4,4,2;"
+                                                          + "1/2,6,3,1;"
+                                                          + "1/2,0,5,5;"
+                                                          + "1,0,-1,1",i->r(i));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result,expected);
+    }
+
+    @Test
+    public void testEliminate2442185212762433e() {
+        System.out.println(test.TestUtils.methodName(0));
+        KMatrix<KRational> result = new LuDecompose<>(krb.matrix(
+                                                            "2,4,4,2;"
+                                                          + "1,8,5,2;"
+                                                          + "1,2,7,6;"
+                                                          + "2,4,3,3",i->r(i))).doolittleWholeMatrix().target.mapR(r->r.reduce());
+        KMatrix<KRational> expected = krb.matrix(           "2,4,4,2;"
+                                                          + "1/2,6,3,1;"
+                                                          + "1/2,0,5,5;"
+                                                          + "1,0,-1/5,2",i->r(i));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result,expected);
+    }
+
+    @Test
     public void testScaleR() {
         System.out.println(test.TestUtils.methodName(0));
         KMatrix<KRational> result = krb.matrix(             "1,0,0;"

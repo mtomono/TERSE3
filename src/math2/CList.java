@@ -17,6 +17,7 @@ package math2;
 import collection.TList;
 import collection.TListWrapper;
 import function.Transformable;
+import java.util.function.Function;
 
 /**
  * 
@@ -46,6 +47,10 @@ public class CList<K> implements TListWrapper<C<K>,CList<K>>,Transformable<CList
     }
     @Override
     public CList<K> self() {
+        return this;
+    }
+    public CList<K> reset(Function<CList<K>,CList<K>> f) {
+        body.reset(f.apply(this).body());
         return this;
     }
     public C<K> average() {
