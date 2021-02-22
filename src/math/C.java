@@ -22,6 +22,8 @@ import java.math.RoundingMode;
  * Calculation Context.
  * this class intends to allow fluent calculation with number classes like BigDecimal or 
  * Rational.
+ * to allow this class to extend to handle complex number, it is not a good idea to make it comparable or 
+ * subclass of Number.
  * @author masao
  * @param <K>
  */

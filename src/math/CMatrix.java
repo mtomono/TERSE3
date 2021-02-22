@@ -18,7 +18,6 @@ import collection.ArrayInt;
 import collection.TList;
 import collection.TListWrapper;
 import collection.TransparentTranspose;
-import debug.Te;
 import static java.lang.Integer.min;
 import java.util.Objects;
 import java.util.function.Function;

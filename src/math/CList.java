@@ -17,7 +17,6 @@ package math;
 import collection.TList;
 import collection.TListWrapper;
 import function.Transformable;
-import java.util.function.Function;
 
 /**
  * 
@@ -49,10 +48,6 @@ public class CList<K> implements TListWrapper<C<K>,CList<K>>,Transformable<CList
     public CList<K> self() {
         return this;
     }
-    public CList<K> reset(Function<CList<K>,CList<K>> f) {
-        body.reset(f.apply(this).body());
-        return this;
-    }
     public C<K> average() {
         return sigma().div(b.b(body.size()));
     }
@@ -68,6 +63,21 @@ public class CList<K> implements TListWrapper<C<K>,CList<K>>,Transformable<CList
         return body.stream().reduce(b.one(),(a,b)->a.mul(b));
     }
     
+    public CList<K> add() {
+        return wrap(body.accumFromStart((a,b)->a.add(b)));
+    }
+
+    public CList<K> mul() {
+        return wrap(body.accumFromStart((a,b)->a.mul(b)));
+    }
+    
+    public C<K> dot(CList<K> o) {
+        return mul(o).sigma();
+    }
+    public C<K> dot(TList<K> o) {
+        return dot(c(b,o));
+    }
+        
     public CList<K> scale(C<K> s) {
         return wrap(body.map(v->v.mul(s)));
     }
@@ -122,21 +132,6 @@ public class CList<K> implements TListWrapper<C<K>,CList<K>>,Transformable<CList
     
     public CList<K> interpolate100(C<K> rate, CList<K> o) {
         return interpolate(rate,o, b.b(100).sub(rate));
-    }
-    
-    public C<K> dot(CList<K> o) {
-        return mul(o).sigma();
-    }
-    public C<K> dot(TList<K> o) {
-        return dot(c(b,o));
-    }
-        
-    public CList<K> add() {
-        return wrap(body.accumFromStart((a,b)->a.add(b)));
-    }
-
-    public CList<K> mul() {
-        return wrap(body.accumFromStart((a,b)->a.mul(b)));
     }
     
     @Override
