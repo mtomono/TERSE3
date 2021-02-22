@@ -16,7 +16,6 @@ package math;
 
 import collection.TList;
 import function.CompareUtil;
-import java.util.function.Function;
 
 /**
  *
