@@ -22,8 +22,8 @@ import function.CompareUtil;
 import function.Holder;
 import java.util.Objects;
 import java.util.function.Function;
-import math2.C;
-import math2.CList;
+import math.C;
+import math.CList;
 import orderedSet.Range;
 import static orderedSet.RangeUtil.widthL;
 

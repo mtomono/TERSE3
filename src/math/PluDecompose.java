@@ -7,17 +7,15 @@ package math;
 
 import collection.ArrayInt;
 import collection.TList;
-import debug.Te;
-import static java.lang.Integer.min;
 
 /**
  *
  * @author masao
  * @param <K>
  */
-public class PluDecompose<K extends Decimal<K>> extends LuDecompose<K> {
+public class PluDecompose<K extends Comparable<K>> extends LuDecompose<K> {
     final ArrayInt order;
-    public PluDecompose(KMatrix<K> target) {
+    public PluDecompose(CMatrix<K> target) {
         super(target);
         order=ArrayInt.range(0, target.body.size()).fix();
     }
@@ -25,10 +23,10 @@ public class PluDecompose<K extends Decimal<K>> extends LuDecompose<K> {
     public PLU<K> decompose() {
         return new PLU<>(doolittle().startFrom(p()),order);
     }
-    public KMatrix<K> pinv() {
+    public CMatrix<K> pinv() {
         return target.pinv(order.asList());
     }
-    public KMatrix<K> p() {
+    public CMatrix<K> p() {
         return pinv().transpose();
     }
     @Override

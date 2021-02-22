@@ -20,7 +20,6 @@ import static java.lang.Integer.signum;
 import static java.lang.Math.abs;
 import java.util.List;
 import java.util.function.BinaryOperator;
-import math2.C;
 
 /**
  *

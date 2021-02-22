@@ -3,8 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package math2;
+package math;
 
+import math.RationalOp;
+import math.BigDecimalOp;
+import math.IntegerOp;
+import math.C;
+import math.Rational;
+import math.LongOp;
+import math.DoubleOp;
 import java.math.BigDecimal;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;

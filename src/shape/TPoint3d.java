@@ -24,7 +24,7 @@ import javax.vecmath.Matrix3d;
 import javax.vecmath.Point3d;
 import javax.vecmath.Tuple3d;
 import javax.vecmath.Vector3d;
-import math2.C;
+import math.C;
 import static shape.ShapeUtil.point3;
 
 /**

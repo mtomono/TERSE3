@@ -18,7 +18,6 @@ package math;
 import static collection.PrimitiveArrayWrap.unwrapD;
 import collection.TList;
 import javax.vecmath.Matrix3d;
-import math2.C;
 import shape.TMatrix3d;
 
 /**

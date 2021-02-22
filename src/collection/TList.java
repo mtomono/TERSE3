@@ -28,12 +28,9 @@ import static java.lang.Math.abs;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collector;
-import math.Decimal;
-import math.KList;
 import orderedSet.Range;
-import math.MathContext;
-import math2.C;
-import math2.CList;
+import math.C;
+import math.CList;
 
 /**
  *
@@ -739,9 +736,6 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
 //-----------Calculating
     public <K> CList<K> toC(Function<T,K> f, C.Builder<K> builder) {
         return CList.c(builder, this.map(f));
-    }
-    public <K extends Decimal<K>> KList<T,K> toK(MathContext<K> context) {
-        return new KList<>(this,context);
     }
     
 //---------- Filtering

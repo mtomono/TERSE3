@@ -16,7 +16,6 @@
 package math;
 
 import collection.TList;
-import math2.C;
 
 /**
  *

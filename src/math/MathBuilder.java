@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package math2;
+package math;
 
 import collection.TList;
 import function.CompareUtil;

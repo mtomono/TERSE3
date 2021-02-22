@@ -3,8 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package math2;
+package math;
 
+import math.LuDecompose;
+import math.PLU;
+import math.NonsingularMatrixException;
+import math.PivotingMightBeRequiredException;
+import math.CMatrix;
+import math.CList;
+import math.MathBuilder;
+import math.C;
+import math.Rational;
 import collection.TList;
 import debug.Te;
 import java.math.BigDecimal;

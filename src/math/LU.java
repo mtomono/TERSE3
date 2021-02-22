@@ -13,27 +13,27 @@ import java.util.List;
  * @author masao
  * @param <K>
  */
-public class LU<K extends Decimal<K>> extends TList<KMatrix<K>> {
-    public LU(List<KMatrix<K>> body) {
+public class LU<K extends Comparable<K>> extends TList<CMatrix<K>> {
+    public LU(List<CMatrix<K>> body) {
         super(body);
     }
-    public KMatrix<K> l() {
+    public CMatrix<K> l() {
         return last(1);
     }
-    public KMatrix<K> u() {
+    public CMatrix<K> u() {
         return last(0);
     }
-    public KVector<K> solve(KVector<K> v) {
-        KVector<K> y=l().forwardSubstitution(v);
+    public CList<K> solve(CList<K> v) {
+        CList<K> y=l().forwardSubstitution(v);
         return u().backwardSubstitution(y);
     }
-    public KMatrix<K> inv() {
+    public CMatrix<K> inv() {
         return u().invUpper().mul(l().invLower());
     }
-    public K det() {
-        return u().getDiagonal().stream().reduce(u().context.one(), (a,b)->a.mul(b));
+    public C<K> det() {
+        return u().getDiagonal().stream().reduce(u().b.context.one(), (a,b)->a.mul(b));
     }
-    public KMatrix<K> restore() {
+    public CMatrix<K> restore() {
         return stream().reduce((a,b)->a.mul(b)).get();
     }
 }

@@ -12,90 +12,88 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.
  */
-package math2;
+package math;
 
-import debug.Te;
 import java.math.BigDecimal;
 
 /**
- *
+ * Operations for Double.
  * @author masao
  */
-public class LongOp implements Op<Long> {
-
+public class FloatOp implements Op<Float> {
     @Override
-    public Long b(int v) {
-        return (long)v;
+    public Float b(int v) {
+        return Float.valueOf(v);
     }
 
     @Override
-    public Long b(long v) {
+    public Float b(long v) {
+        return Float.valueOf(v);
+    }
+
+    @Override
+    public Float b(float v) {
         return v;
     }
 
     @Override
-    public Long b(float v) {
-        return (long)v;
+    public Float b(double v) {
+        return (float)v;
     }
 
     @Override
-    public Long b(double v) {
-        return (long)v;
-    }
-
-    @Override
-    public Long b(String v) {
-        return Long.valueOf(v);
+    public Float b(String v) {
+        return Float.valueOf(v);
     }
     
     @Override
-    public Long b(BigDecimal n) {
-        return n.longValue();
+    public Float b(BigDecimal n) {
+        return n.floatValue();
     }
 
     @Override
-    public Long b(Rational n) {
-        return n.longValue();
+    public Float b(Rational n) {
+        return n.floatValue();
     }
 
+
     @Override
-    public Long add(Long v0, Long v1) {
+    public Float add(Float v0, Float v1) {
         return v0+v1;
     }
 
     @Override
-    public Long sub(Long v0, Long v1) {
+    public Float sub(Float v0, Float v1) {
         return v0-v1;
     }
 
     @Override
-    public Long mul(Long v0, Long v1) {
+    public Float mul(Float v0, Float v1) {
         return v0*v1;
     }
 
     @Override
-    public Long div(Long v0, Long v1) {
+    public Float div(Float v0, Float v1) {
         return v0/v1;
     }
 
     @Override
-    public Long negate(Long v0) {
+    public Float negate(Float v0) {
         return -v0;
     }
 
     @Override
-    public Long abs(Long v0) {
+    public Float abs(Float v0) {
         return Math.abs(v0);
     }
 
     @Override
-    public Long zero() {
-        return 0L;
+    public Float zero() {
+        return Float.valueOf(0);
     }
 
     @Override
-    public Long one() {
-        return 1L;
+    public Float one() {
+        return Float.valueOf(1);
     }
-    
 }

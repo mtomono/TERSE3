@@ -6,13 +6,12 @@
 package solver.lp;
 
 import collection.TList;
-import math.Decimal;
 
 /**
  *
  * @author masao
  */
-public class StandardForm<K extends Decimal> {
+public class StandardForm<K> {
     TList<K> objectiveFunction; //minimize this.
     TList<TList<K>> constraintsLeft;
     TList<K> constraintsRight;

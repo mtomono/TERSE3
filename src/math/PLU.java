@@ -13,19 +13,19 @@ import java.util.List;
  * @author masao
  * @param <K>
  */
-public class PLU<K extends Decimal<K>> extends LU<K> {
+public class PLU<K extends Comparable<K>> extends LU<K> {
     ArrayInt order;
-    public PLU(List<KMatrix<K>> body, ArrayInt order) {
+    public PLU(List<CMatrix<K>> body, ArrayInt order) {
         super(body);
         this.order=order;
     }
-    public KVector<K> porder(KVector<K> v) {
-        return l().context.vector(v.body.pickUp(order.asList()));
+    public CList<K> porder(CList<K> v) {
+        return v.wrap(v.body.pickUp(order.asList()));
     } 
-    public KMatrix<K> p() {
+    public CMatrix<K> p() {
         return get(0);
     }
-    public KMatrix<K> pinv() {
+    public CMatrix<K> pinv() {
         return p().transpose();
     }
     /**
@@ -35,10 +35,10 @@ public class PLU<K extends Decimal<K>> extends LU<K> {
      * @param v
      * @return 
      */
-    public KVector<K> solve(KVector<K> v) {
+    public CList<K> solve(CList<K> v) {
         return super.solve(porder(v));
     }
-    public KMatrix<K> inv() {
+    public CMatrix<K> inv() {
         return super.inv().mul(pinv());
     }
 }

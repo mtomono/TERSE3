@@ -21,7 +21,7 @@ import static java.lang.Math.abs;
 import java.util.AbstractList;
 import java.util.Collections;
 import java.util.List;
-import math2.C;
+import math.C;
 import orderedSet.Range;
 
 /**

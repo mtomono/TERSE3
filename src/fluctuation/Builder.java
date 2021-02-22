@@ -18,8 +18,8 @@ package fluctuation;
 import collection.P;
 import collection.TList;
 import function.CompareUtil;
-import math2.C;
-import math2.CList;
+import math.C;
+import math.CList;
 import orderedSet.Range;
 
 /**

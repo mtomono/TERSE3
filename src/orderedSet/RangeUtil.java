@@ -22,7 +22,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import static java.util.stream.Collectors.toList;
-import static math.KBigDecimal.b;
+import math.C;
 
 /**
  *
@@ -150,7 +150,7 @@ public class RangeUtil {
     }
     
     static public BigDecimal widthBD(Range<BigDecimal> range) {
-        return b(range.end()).sub(range.start()).v;
+        return C.bd.op.sub(range.end(),range.start());
     }
     
     static public <T extends Comparable<T>> Range<T> inEitherWay(T one, T two) {

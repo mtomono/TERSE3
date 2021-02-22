@@ -21,7 +21,7 @@ import static collection.c.a2l;
 import java.util.*;
 import java.util.function.Consumer;
 import javax.vecmath.*;
-import math2.C;
+import math.C;
 import static shape.ShapeUtil.point2;
 
 /**

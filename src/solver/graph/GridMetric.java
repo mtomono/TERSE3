@@ -7,7 +7,7 @@ package solver.graph;
 
 import collection.TList;
 import java.util.List;
-import math2.C;
+import math.C;
 
 /**
  *

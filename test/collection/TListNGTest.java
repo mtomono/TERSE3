@@ -15,7 +15,7 @@ import function.Holder;
 import iterator.TListIterator;
 import java.util.*;
 import static java.util.Comparator.naturalOrder;
-import math2.C;
+import math.C;
 import orderedSet.Range;
 import static org.testng.Assert.*;
 import org.testng.annotations.BeforeClass;

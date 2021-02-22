@@ -1,5 +1,5 @@
 /*
- Copyright 2017, 2018 Masao Tomono
+ Copyright 2017, 2018, 2019, 2020, 2021 Masao Tomono
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -14,16 +14,23 @@
  */
 package math;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 /**
- *
+ * Operations for BigDecimal.
+ * which does rounding at a certain scale when divided.
  * @author masao
- * @param <K>
  */
-public interface Field<K extends Field<K>> {
-    public K add(K value);
-    public K sub(K value);
-    public K mul(K value);
-    public K div(K value);
-    public K zero();
-    public K one();
+public class BigDecimalOpRounded extends BigDecimalOp{
+    final public int scale;
+    final public RoundingMode round;
+    public BigDecimalOpRounded(int scale, RoundingMode round) {
+        this.scale=scale;
+        this.round=round;
+    }
+    @Override
+    public BigDecimal div(BigDecimal v0, BigDecimal v1) {
+        return v0.divide(v1,scale,round);
+    }
 }

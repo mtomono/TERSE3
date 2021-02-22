@@ -10,8 +10,8 @@ import collection.TListWrapper;
 import function.Transformable;
 import java.awt.Rectangle;
 import java.util.Optional;
-import math2.C;
-import math2.CList;
+import math.C;
+import math.CList;
 
 /**
  *

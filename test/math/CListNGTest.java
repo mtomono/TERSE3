@@ -3,8 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package math2;
+package math;
 
+import math.IntegerOp;
+import math.CList;
+import math.C;
+import math.LongOp;
+import math.DoubleOp;
 import collection.TList;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;

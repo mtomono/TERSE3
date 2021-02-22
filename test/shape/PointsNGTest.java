@@ -6,8 +6,8 @@
 package shape;
 
 import java.awt.Rectangle;
-import math2.C;
-import math2.CList;
+import math.C;
+import math.CList;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 

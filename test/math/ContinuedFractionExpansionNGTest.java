@@ -3,8 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package math2;
+package math;
 
+import math.C;
+import math.Rational;
+import math.CFE;
 import collection.TList;
 import static java.lang.Math.sqrt;
 import static org.testng.Assert.assertEquals;

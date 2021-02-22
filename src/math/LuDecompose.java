@@ -6,16 +6,15 @@
 package math;
 
 import collection.TList;
-import static java.lang.Integer.min;
 
 /**
  *
  * @author masao
  * @param <K>
  */
-public class LuDecompose<K extends Decimal<K>> {
-    final KMatrix<K> target;
-    public LuDecompose(KMatrix<K> target) {
+public class LuDecompose<K extends Comparable<K>> {
+    final CMatrix<K> target;
+    public LuDecompose(CMatrix<K> target) {
         this.target=target.sfix();
     }
 
@@ -23,7 +22,7 @@ public class LuDecompose<K extends Decimal<K>> {
         LU<K> retval=new LU<>(doolittle());
         return retval;
     }
-    public TList<KMatrix<K>> doolittle() {
+    public TList<CMatrix<K>> doolittle() {
         target.assertSquare();
         doolittleWholeMatrix();
         if (!target.nonZeroDiagonal())
