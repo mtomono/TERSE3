@@ -19,51 +19,51 @@ import java.math.RoundingMode;
 import java.util.function.Function;
 
 /**
- * Comparable Calculation Context
+ * Comparable Calculation Context which is made of Number
  * @author masao
  * @param <K>
  */
-public class C2<K extends Comparable<K>> implements Context<K,C2<K>>,ToComparableContext<C2<K>,K> {
-    static public C2.Builder<Integer> i=new Builder<>(new IntegerOp());
-    static public C2.Builder<Long> l=new Builder<>(new LongOp());
-    static public C2.Builder<Float> f=new Builder<>(new FloatOp());
-    static public C2.Builder<Double> d=new Builder<>(new DoubleOp());
-    static public C2.Builder<Rational> r=new Builder<>(new RationalOp());
-    static public C2.Builder<BigDecimal> bd=new Builder<>(new BigDecimalOp());
-    static public C2.Builder<BigDecimal> bd(int scale, RoundingMode r) {
+public class C2N<K extends Number&Comparable<K>> implements Context<K, C2N<K>>, ToComparableContext<C2N<K>, K> {
+    static public C2N.Builder<Integer> i=new Builder<>(new IntegerOp());
+    static public C2N.Builder<Long> l=new Builder<>(new LongOp());
+    static public C2N.Builder<Float> f=new Builder<>(new FloatOp());
+    static public C2N.Builder<Double> d=new Builder<>(new DoubleOp());
+    static public C2N.Builder<Rational> r=new Builder<>(new RationalOp());
+    static public C2N.Builder<BigDecimal> bd=new Builder<>(new BigDecimalOp());
+    static public C2N.Builder<BigDecimal> bd(int scale, RoundingMode r) {
         return new Builder<>(new BigDecimalOpRounded(scale,r));
     }
-    static public class Builder<K extends Comparable<K>> implements ContextBuilder<K,C2<K>> {
+    static public class Builder<K extends Number&Comparable<K>> implements ContextBuilder<K,C2N<K>> {
         final Op<K> body;
-        final Function<C2<K>,K> toComparable=x->x.body();
+        final Function<C2N<K>,K> toComparable=x->x.body();
         Builder(Op<K> body) {
             this.body=body;
         }
         @Override
-        public C2<K> c(K v) {
-            return new C2(this,v);
+        public C2N<K> c(K v) {
+            return new C2N(this,v);
         }
         @Override
         public Op<K> body() {
             return body;
         }
         @Override
-        public ContextBuilder<K, C2<K>> self() {
+        public ContextBuilder<K, C2N<K>> self() {
             return this;
         }
         @Override
-        public ContextBuilder<K, C2<K>> wrap(Op<K> body) {
+        public ContextBuilder<K, C2N<K>> wrap(Op<K> body) {
             return new Builder<>(body);
         }
     }
     final Builder<K> builder;
     final K body;
-    public C2(Builder<K> builder,K body) {
+    public C2N(Builder<K> builder,K body) {
         this.builder=builder;
         this.body=body;
     }
     @Override
-    public ContextBuilder<K, C2<K>> b() {
+    public ContextBuilder<K, C2N<K>> b() {
         return builder;
     }
     @Override
@@ -71,14 +71,26 @@ public class C2<K extends Comparable<K>> implements Context<K,C2<K>>,ToComparabl
         return body;
     }
     @Override
-    public C2<K> self() {
+    public C2N<K> self() {
         return this;
     }
-    public Function<C2<K>,K> toComparable() {
+    public Function<C2N<K>,K> toComparable() {
         return builder.toComparable;
     }
     public boolean isZero() {
         return eq(zero());
+    }
+    public boolean isInteger() {
+        return self().eq(intValue());
+    }
+    public boolean isLong() {
+        return self().eq(longValue());
+    }
+    public C2N<K> intValue() {
+        return b().b(body().intValue());
+    }
+    public C2N<K> longValue() {
+        return b().b(body().longValue());
     }
     @Override
     public String toString() {
@@ -89,10 +101,10 @@ public class C2<K extends Comparable<K>> implements Context<K,C2<K>>,ToComparabl
         if (e == null) {
             return false;
         }
-        if (!(e instanceof C2)) {
+        if (!(e instanceof C2N)) {
             return false;
         }
-        C2 t = (C2) e;
+        C2N t = (C2N) e;
         return body().equals(t.body());
     }
 }
