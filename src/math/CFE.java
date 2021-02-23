@@ -29,7 +29,7 @@ public class CFE<K extends Number&Comparable<K>> {
         fraction=TList.of(cf(1,0));
         intPart=TList.c();
     }
-        static ContinuedFraction cf(long n, long d) {
+    static ContinuedFraction cf(long n, long d) {
             return new ContinuedFraction(n,d);
         }
     public ContinuedFraction next(int ck) {
@@ -42,13 +42,14 @@ public class CFE<K extends Number&Comparable<K>> {
         fraction.add(retval);
         return retval;
     }
-    public CFE<K> exec(C<K> target,K threshold) {
-        C.Builder<K> b=target.b;
-        C<K> rest=target;
+    public CFE<K> exec(C2<K> target,K threshold) {
+        ContextBuilder<K,C2<K>> b=target.b();
+        C2<K> thresholdb=b.c(threshold);
+        C2<K> rest=target;
         while (true) {
-            next(rest.v.intValue());
-            C<K> decimal=rest.sub(rest.b.b(intPart.last()));
-            if (target.sub(b.b(fraction.last().rationalValue())).abs().v.compareTo(threshold)<0)
+            next(rest.body().intValue());
+            C2<K> decimal=rest.sub(b.b(intPart.last()));
+            if (thresholdb.gt(target.sub(b.b(fraction.last().rationalValue())).abs()))
                 return this;
             rest=decimal.inv();
         }

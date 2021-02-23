@@ -44,7 +44,7 @@ public class Rational extends Number implements Comparable<Rational> {
         return n.length==1?new Rational(Long.parseLong(s),1):new Rational(Long.parseLong(n[0]),Long.parseLong(n[1]));
     }
     
-    static public <K extends Number&Comparable<K>> Rational valueOf(C<K> target, K threshold) {
+    static public <K extends Number&Comparable<K>> Rational valueOf(C2<K> target, K threshold) {
         return new CFE<K>().exec(target, threshold).fraction().last();
     }
 

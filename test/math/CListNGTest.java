@@ -5,11 +5,6 @@
  */
 package math;
 
-import math.IntegerOp;
-import math.CList;
-import math.C;
-import math.LongOp;
-import math.DoubleOp;
 import collection.TList;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;

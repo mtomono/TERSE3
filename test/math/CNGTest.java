@@ -5,13 +5,6 @@
  */
 package math;
 
-import math.RationalOp;
-import math.BigDecimalOp;
-import math.IntegerOp;
-import math.C;
-import math.Rational;
-import math.LongOp;
-import math.DoubleOp;
 import java.math.BigDecimal;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
