@@ -18,15 +18,15 @@ import math.CList;
  * @author masao
  * @param <K>
  */
-public class Points<K extends Comparable<K>> implements TListWrapper<CList<K>,Points<K>>,Transformable<Points<K>>{
-    final TList<CList<K>> body;
-    public Points(TList<CList<K>> body) {
+public class Points<K extends Comparable<K>> implements TListWrapper<CList<K,C<K>>,Points<K>>,Transformable<Points<K>>{
+    final TList<CList<K,C<K>>> body;
+    public Points(TList<CList<K,C<K>>> body) {
         this.body=body;
     }
     static public <K extends Comparable<K>> Points<K> c(C.Builder<K> b, int dimension, K... v) {
         return new Points<>(TList.sof(v).fold(dimension).map(l->l.toC(t->t,b)));
     }
-    static public <K extends Comparable<K>> Points<K> rectangle(CList<K> lo, CList<K> size) {
+    static public <K extends Comparable<K>> Points<K> rectangle(CList<K,C<K>> lo, CList<K,C<K>> size) {
         return new Points<>(TList.sof(lo,lo.add(size)));
     }
     static public Points<Integer> rectangle(Rectangle r) {
@@ -37,11 +37,11 @@ public class Points<K extends Comparable<K>> implements TListWrapper<CList<K>,Po
         return this;
     }
     @Override
-    public TList<CList<K>> body() {
+    public TList<CList<K,C<K>>> body() {
         return body;
     }
     @Override
-    public Points<K> wrap(TList<CList<K>> body) {
+    public Points<K> wrap(TList<CList<K,C<K>>> body) {
         return new Points<>(body);
     }
     public static <K extends Comparable<K>> Points<K> merge(TList<Points<K>> ps) {
@@ -53,10 +53,10 @@ public class Points<K extends Comparable<K>> implements TListWrapper<CList<K>,Po
     public Points<K> diff() {
         return new Points(body.diff((a,b)->b.sub(a)));
     }
-    public Optional<CList<K>> min() {
+    public Optional<CList<K,C<K>>> min() {
         return body.getOpt(0).map(x->new CList<>(x.b, body.transposeT(c->c.body()).map(l->l.min(v->v.body()).get())));
     }
-    public Optional<CList<K>> max() {
+    public Optional<CList<K,C<K>>> max() {
         return body.getOpt(0).map(x->new CList<>(x.b, body.transposeT(c->c.body()).map(l->l.max(v->v.body()).get())));
     }
     public Optional<Points<K>> rect() {

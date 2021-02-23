@@ -23,114 +23,114 @@ import function.Transformable;
  * @author masao
  * @param <K>
  */
-public class CList<K> implements TListWrapper<C<K>,CList<K>>,Transformable<CList<K>>{
-    public final C.Builder<K> b;
-    final TList<C<K>> body;
-    public CList(C.Builder<K> context, TList<C<K>> body) {
+public class CList<K, T extends Context<K,T>> implements TListWrapper<T,CList<K,T>>,Transformable<CList<K,T>>{
+    public final ContextBuilder<K,T> b;
+    final TList<T> body;
+    public CList(ContextBuilder<K,T> context, TList<T> body) {
         this.body=body;
         this.b=context;
     }
-    static public <K> CList<K> c(C.Builder<K> context, TList<K> vs) {
+    static public <K, T extends Context<K,T>> CList<K,T> c(ContextBuilder<K,T> context, TList<K> vs) {
         return new CList<>(context, vs.map(v->context.c(v)));
     }
-    static public <K> CList<K> c(C.Builder<K> context, K... v) {
+    static public <K, T extends Context<K,T>> CList<K,T> c(ContextBuilder<K,T> context, K... v) {
         return c(context,TList.sof(v));
     }
     @Override
-    public TList<C<K>> body() {
+    public TList<T> body() {
         return body;
     }
     @Override
-    public CList<K> wrap(TList<C<K>> body) {
+    public CList<K,T> wrap(TList<T> body) {
         return new CList<>(b,body);
     }
     @Override
-    public CList<K> self() {
+    public CList<K,T> self() {
         return this;
     }
-    public C<K> average() {
+    public T average() {
         return sigma().div(b.b(body.size()));
     }
-    public C<K> sampleAverage() {
+    public T sampleAverage() {
         return sigma().div(b.b(body.size()-1));
     }
 
-    public C<K> sigma() {
+    public T sigma() {
         return body.stream().reduce(b.zero(),(a,b)->a.add(b));
     }
     
-    public C<K> pai() {
+    public T pai() {
         return body.stream().reduce(b.one(),(a,b)->a.mul(b));
     }
     
-    public CList<K> add() {
+    public CList<K,T> add() {
         return wrap(body.accumFromStart((a,b)->a.add(b)));
     }
 
-    public CList<K> mul() {
+    public CList<K,T> mul() {
         return wrap(body.accumFromStart((a,b)->a.mul(b)));
     }
     
-    public C<K> dot(CList<K> o) {
+    public T dot(CList<K,T> o) {
         return mul(o).sigma();
     }
-    public C<K> dot(TList<K> o) {
+    public T dot(TList<K> o) {
         return dot(c(b,o));
     }
         
-    public CList<K> scale(C<K> s) {
+    public CList<K,T> scale(T s) {
         return wrap(body.map(v->v.mul(s)));
     }
-    public CList<K> scale(K s) {
+    public CList<K,T> scale(K s) {
         return scale(b.c(s));
     }
-    public CList<K> inv() {
+    public CList<K,T> inv() {
         return wrap(body.map(v->v.inv()));
     }
-    public CList<K> negate() {
+    public CList<K,T> negate() {
         return wrap(body.map(v->v.negate()));
     }
-    public CList<K> abs() {
+    public CList<K,T> abs() {
         return wrap(body.map(v->v.abs()));
     }
     
-    public CList<K> add(CList<K> o) {
+    public CList<K,T> add(CList<K,T> o) {
         return o.wrap(body.pair(o.body, (a,b)->a.add(b)));
     }
-    public CList<K> add(TList<K> o) {
+    public CList<K,T> add(TList<K> o) {
         return add(c(b,o));
     }
         
-    public CList<K> sub(CList<K> o) {
+    public CList<K,T> sub(CList<K,T> o) {
         return o.wrap(body.pair(o.body, (a,b)->a.sub(b)));
     }
-    public CList<K> sub(TList<K> o) {
+    public CList<K,T> sub(TList<K> o) {
         return sub(c(b,o));
     }
         
-    public CList<K> mul(CList<K> o) {
+    public CList<K,T> mul(CList<K,T> o) {
         return o.wrap(body.pair(o.body, (a,b)->a.mul(b)));
     }
-    public CList<K> mul(TList<K> o) {
+    public CList<K,T> mul(TList<K> o) {
         return mul(c(b,o));
     }
         
-    public CList<K> div(CList<K> o) {
+    public CList<K,T> div(CList<K,T> o) {
         return o.wrap(body.pair(o.body, (a,b)->a.div(b)));
     }
-    public CList<K> div(TList<K> o) {
+    public CList<K,T> div(TList<K> o) {
         return div(c(b,o));
     }
     
-    public CList<K> interpolate(C<K> rate, CList<K> o, C<K> orate) {
+    public CList<K,T> interpolate(T rate, CList<K,T> o, T orate) {
         return o.wrap(body.pair(o.body, (a,b)->a.interpolate(rate,b,orate)));
     }
     
-    public CList<K> interpolate1(C<K> rate, CList<K> o) {
+    public CList<K,T> interpolate1(T rate, CList<K,T> o) {
         return interpolate(rate,o, b.one().sub(rate));
     }
     
-    public CList<K> interpolate100(C<K> rate, CList<K> o) {
+    public CList<K,T> interpolate100(T rate, CList<K,T> o) {
         return interpolate(rate,o, b.b(100).sub(rate));
     }
     

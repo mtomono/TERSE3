@@ -34,8 +34,8 @@ public class PointsNGTest {
     @Test
     public void testDiff() {
         System.out.println(test.TestUtils.methodName(0));
-        CList<Integer> result = Points.c(C.i, 2, -2, -1, 2, 1).diff().get(0);
-        CList<Integer> expected = CList.c(C.i,4,2);
+        CList<Integer,C<Integer>> result = Points.c(C.i, 2, -2, -1, 2, 1).diff().get(0);
+        CList<Integer,C<Integer>> expected = CList.c(C.i,4,2);
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
@@ -44,8 +44,8 @@ public class PointsNGTest {
     @Test
     public void testMin() {
         System.out.println(test.TestUtils.methodName(0));
-        CList<Integer> result = Points.c(C.i, 2, -2, 1, 2, -1).min().get();
-        CList<Integer> expected = CList.c(C.i,-2,-1);
+        CList<Integer,C<Integer>> result = Points.c(C.i, 2, -2, 1, 2, -1).min().get();
+        CList<Integer,C<Integer>> expected = CList.c(C.i,-2,-1);
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
@@ -54,8 +54,8 @@ public class PointsNGTest {
     @Test
     public void testMax() {
         System.out.println(test.TestUtils.methodName(0));
-        CList<Integer> result = Points.c(C.i, 2, -2, 1, 2, -1).max().get();
-        CList<Integer> expected = CList.c(C.i,2,1);
+        CList<Integer,C<Integer>> result = Points.c(C.i, 2, -2, 1, 2, -1).max().get();
+        CList<Integer,C<Integer>> expected = CList.c(C.i,2,1);
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);

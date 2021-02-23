@@ -5,15 +5,6 @@
  */
 package math;
 
-import math.LuDecompose;
-import math.PLU;
-import math.NonsingularMatrixException;
-import math.PivotingMightBeRequiredException;
-import math.CMatrix;
-import math.CList;
-import math.MathBuilder;
-import math.C;
-import math.Rational;
 import collection.TList;
 import debug.Te;
 import java.math.BigDecimal;
@@ -26,8 +17,8 @@ import test.PTe;
  * @author masao
  */
 public class CMatrixNGTest {
-    MathBuilder<BigDecimal> kbdb=new MathBuilder<>(C.bd);
-    MathBuilder<Rational> krb=new MathBuilder<>(C.r);
+    MathBuilder<BigDecimal> kbdb=new MathBuilder<>(C2.bd);
+    MathBuilder<Rational> krb=new MathBuilder<>(C2.r);
     public CMatrixNGTest() {
     }
     
@@ -50,7 +41,7 @@ public class CMatrixNGTest {
         CMatrix<Rational> result = krb.m(             "1,0,0;"
                                                     + "0,1,0;"
                                                     + "0,0,1").subMatrix(1,1,3,3);
-        result.body.get(0).reset(TList.sof(C.r.b(2),C.r.b(2)));
+        result.body.get(0).reset(TList.sof(C2.r.b(2),C2.r.b(2)));
         CMatrix<Rational> expected = krb.m(           "2,2;"
                                                     + "0,1");
         System.out.println("result  : " + result);
@@ -150,7 +141,7 @@ public class CMatrixNGTest {
         System.out.println(test.TestUtils.methodName(0));
         CMatrix<Rational> result = krb.m(                   "1,0,0;"
                                                           + "0,1,0;"
-                                                          + "0,0,1").scale(C.r.b(2));
+                                                          + "0,0,1").scale(C2.r.b(2));
         CMatrix<Rational> expected = krb.m(                 "2,0,0;"
                                                           + "0,2,0;"
                                                           + "0,0,2");
@@ -164,7 +155,7 @@ public class CMatrixNGTest {
         System.out.println(test.TestUtils.methodName(0));
         CMatrix<Rational> result = krb.m(                   "2,0,0;"
                                                           + "0,2,0;"
-                                                          + "0,0,2").scale(C.r.b(2).inv());
+                                                          + "0,0,2").scale(C2.r.b(2).inv());
         CMatrix<Rational> expected = krb.m(                 "1,0,0;"
                                                           + "0,1,0;"
                                                           + "0,0,1");
@@ -178,7 +169,7 @@ public class CMatrixNGTest {
         System.out.println(test.TestUtils.methodName(0));
         CMatrix<Rational> result = krb.m(                   "2,0,0;"
                                                           + "0,2,0;"
-                                                          + "0,0,2").scale(C.r.b(2).inv()).map(c->c.m(r->r.reduce()));
+                                                          + "0,0,2").scale(C2.r.b(2).inv()).map(c->c.m(r->r.reduce()));
         CMatrix<Rational> expected = krb.m(                 "1,0,0;"
                                                           + "0,1,0;"
                                                           + "0,0,1");
@@ -243,7 +234,7 @@ public class CMatrixNGTest {
         System.out.println(test.TestUtils.methodName(0));
         CMatrix<Rational> result = krb.m(                   "1,1,1;"
                                                           + "1,1,1;"
-                                                          + "1,1,1").fillLower(C.r.b(0));
+                                                          + "1,1,1").fillLower(C2.r.b(0));
         CMatrix<Rational> expected = krb.m(                 "1,1,1;"
                                                           + "0,1,1;"
                                                           + "0,0,1");
@@ -257,7 +248,7 @@ public class CMatrixNGTest {
         System.out.println(test.TestUtils.methodName(0));
         CMatrix<Rational> result = krb.m(                   "1,1,1;"
                                                           + "1,1,1;"
-                                                          + "1,1,1").fillUpper(C.r.b(0));
+                                                          + "1,1,1").fillUpper(C2.r.b(0));
         CMatrix<Rational> expected = krb.m(                 "1,0,0;"
                                                           + "1,1,0;"
                                                           + "1,1,1");
@@ -271,7 +262,7 @@ public class CMatrixNGTest {
         System.out.println(test.TestUtils.methodName(0));
         CMatrix<Rational> result = krb.m(                   "1,1,1;"
                                                           + "1,1,1;"
-                                                          + "1,1,1").fillDiagonal(TList.sof(0,0,0).map(i->C.r.b(i)));
+                                                          + "1,1,1").fillDiagonal(TList.sof(0,0,0).map(i->C2.r.b(i)));
         CMatrix<Rational> expected = krb.m(                 "0,1,1;"
                                                           + "1,0,1;"
                                                           + "1,1,0");
@@ -283,10 +274,10 @@ public class CMatrixNGTest {
     @Test
     public void testGetDiagonal() {
         System.out.println(test.TestUtils.methodName(0));
-        TList<C<Rational>> result = krb.m(                  "1,2,1;"
+        TList<C2<Rational>> result = krb.m(                  "1,2,1;"
                                                           + "2,5,3;"
                                                           + "1,1,2").getDiagonal();
-        TList<C<Rational>> expected = TList.sof(1,5,2).map(i->C.r.b(i));
+        TList<C2<Rational>> expected = TList.sof(1,5,2).map(i->C2.r.b(i));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result,expected);
@@ -320,8 +311,8 @@ public class CMatrixNGTest {
                                                           + "2,1,0,0;"
                                                           + "3,4,1,0;"
                                                           + "-1,-3,0,1");
-        CList<Rational> result = l.forwardSubstitution(krb.l("4,1,-3,4"));
-        CList<Rational> expected = krb.l("4,-7,13,-13");
+        CList<Rational,C2<Rational>> result = l.forwardSubstitution(krb.l("4,1,-3,4"));
+        CList<Rational,C2<Rational>> expected = krb.l("4,-7,13,-13");
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result,expected);
@@ -334,8 +325,8 @@ public class CMatrixNGTest {
                                                           + "0,-1,-1,-5;"
                                                           + "0,0,3,13;"
                                                           + "0,0,0,-13");
-        CList<Rational> result = l.backwardSubstitution(krb.l("4,-7,13,-13")).m(ll->ll.map(c->c.m(r->r.rednorm())));
-        CList<Rational> expected = krb.l("-1,2,0,1");
+        CList<Rational,C2<Rational>> result = l.backwardSubstitution(krb.l("4,-7,13,-13")).m(ll->ll.map(c->c.m(r->r.rednorm())));
+        CList<Rational,C2<Rational>> expected = krb.l("-1,2,0,1");
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result,expected);
@@ -397,8 +388,8 @@ public class CMatrixNGTest {
                                                           + "2,4,4,2;"
                                                           + "1,8,5,2;"
                                                           + "2,4,3,3").pluDecompose();
-        CList<Rational> result = original.solve(krb.l("6,2,12,5")).m(l->l.map(c->c.m(r->r.rednorm())));
-        CList<Rational> expected=krb.l("-3,2,-1,2");
+        CList<Rational,C2<Rational>> result = original.solve(krb.l("6,2,12,5")).m(l->l.map(c->c.m(r->r.rednorm())));
+        CList<Rational,C2<Rational>> expected=krb.l("-3,2,-1,2");
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result,expected);
@@ -410,8 +401,8 @@ public class CMatrixNGTest {
                                                           + "1/2,1,0,0;"
                                                           + "1/2,0,1,0;"
                                                           + "1,0,-1/5,1");
-        CList<Rational> result = l.forwardSubstitution(krb.l("2,12,6,5")).m(ll->ll.map(c->c.m(r->r.rednorm())));
-        CList<Rational> expected = krb.l("2,11,5,4");
+        CList<Rational,C2<Rational>> result = l.forwardSubstitution(krb.l("2,12,6,5")).m(ll->ll.map(c->c.m(r->r.rednorm())));
+        CList<Rational,C2<Rational>> expected = krb.l("2,11,5,4");
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result,expected);
@@ -423,8 +414,8 @@ public class CMatrixNGTest {
                                                           + "0,6,3,1;"
                                                           + "0,0,5,5;"
                                                           + "0,0,0,2");
-        CList<Rational> result = l.backwardSubstitution(krb.l("2,11,5,4")).m(ll->ll.map(c->c.m(r->r.rednorm())));
-        CList<Rational> expected = krb.l("-3,2,-1,2");
+        CList<Rational,C2<Rational>> result = l.backwardSubstitution(krb.l("2,11,5,4")).m(ll->ll.map(c->c.m(r->r.rednorm())));
+        CList<Rational,C2<Rational>> expected = krb.l("-3,2,-1,2");
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result,expected);
@@ -553,7 +544,7 @@ public class CMatrixNGTest {
                                                           + "2,4,3,3;"
                                                         );
         try {
-            CList<Rational> result = original.pluDecompose().solve(krb.l("6,2,12,5"));
+            CList<Rational,C2<Rational>> result = original.pluDecompose().solve(krb.l("6,2,12,5"));
         } catch (Exception e) {
             PTe.e(e);
             throw e;

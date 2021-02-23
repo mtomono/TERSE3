@@ -15,7 +15,6 @@
 package math;
 
 import collection.TList;
-import function.CompareUtil;
 
 /**
  *
@@ -23,15 +22,13 @@ import function.CompareUtil;
  * @param <K>
  */
 public class MathBuilder<K extends Comparable<K>> {
-    C.Builder<K> context;
-    CompareUtil.map<C<K>, K> compare;
+    C2.Builder<K> context;
 
-    protected MathBuilder(C.Builder<K> context) {
+    protected MathBuilder(C2.Builder<K> context) {
         this.context = context;
-        this.compare = CompareUtil.map((c) -> c.body());
     }
 
-    public CMatrix<K> m(TList<TList<C<K>>> body) {
+    public CMatrix<K> m(TList<TList<C2<K>>> body) {
         return new CMatrix<>(this, body);
     }
 
@@ -47,13 +44,13 @@ public class MathBuilder<K extends Comparable<K>> {
         return new CMatrix<>(this,TList.range(0,n).map(i->TList.nCopies(n, context.zero()).sfix().cset(i, context.one())));
     }
 
-    public CList<K> l(K... v) {
+    public CList<K,C2<K>> l(K... v) {
         return TList.sof(v).toC(x->x,context);
     }
-    public CList<K> l(String v) {
+    public CList<K,C2<K>> l(String v) {
         return MathBuilder.this.l(TList.sof(v.split(",")).map(s->context.b(s)).sfix());
     }
-    public CList<K> l(TList<C<K>> v) {
+    public CList<K,C2<K>> l(TList<C2<K>> v) {
         return new CList<>(context,v);
     }
 }

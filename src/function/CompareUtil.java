@@ -1,7 +1,16 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ Copyright 2017, 2018, 2019, 2020, 2021 Masao Tomono
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.
  */
 package function;
 
@@ -39,28 +48,13 @@ public class CompareUtil {
     static public <S,T extends Comparable<T>> map<S,T> map(Function<S,T> f) {
         return new map(f);
     }
-    static public class map<S,T extends Comparable<T>> {
+    static public class map<S,T extends Comparable<T>> implements ToComparable<S,T> {
         Function<S,T> f;
         map(Function<S,T> f) {
             this.f=f;
         }
-        public boolean eq(S a, S b) {
-            return CompareUtil.eq(f.apply(a),f.apply(b));
-        }
-        public boolean ne(S a, S b) {
-            return CompareUtil.ne(f.apply(a),f.apply(b));
-        }
-        public boolean gt(S a, S b) {
-            return CompareUtil.gt(f.apply(a),f.apply(b));
-        }
-        public boolean ge(S a, S b) {
-            return CompareUtil.ge(f.apply(a),f.apply(b));
-        }
-        public boolean lt(S a, S b) {
-            return CompareUtil.lt(f.apply(a),f.apply(b));
-        }
-        public boolean le(S a, S b) {
-            return CompareUtil.le(f.apply(a),f.apply(b));
+        public Function<S,T> toComparable() {
+            return f;
         }
     }
 }

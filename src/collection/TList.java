@@ -29,8 +29,9 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collector;
 import orderedSet.Range;
-import math.C;
 import math.CList;
+import math.Context;
+import math.ContextBuilder;
 
 /**
  *
@@ -734,7 +735,7 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
     }
     
 //-----------Calculating
-    public <K> CList<K> toC(Function<T,K> f, C.Builder<K> builder) {
+    public <K,C extends Context<K,C>> CList<K,C> toC(Function<T,K> f, ContextBuilder<K,C> builder) {
         return CList.c(builder, this.map(f));
     }
     

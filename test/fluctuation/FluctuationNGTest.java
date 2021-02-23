@@ -7,6 +7,7 @@ package fluctuation;
 
 import java.math.BigDecimal;
 import math.C;
+import math.C2;
 import orderedSet.Range;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
@@ -19,14 +20,14 @@ public class FluctuationNGTest {
     fluctuation.Builder<BigDecimal> builder;
     
     public FluctuationNGTest() {
-        this.builder=Fluctuation.builder(C.bd);
+        this.builder=Fluctuation.builder(C2.bd);
     }
     
-    C<BigDecimal> b(int n) {
+    C2<BigDecimal> b(int n) {
         return builder.context.b(n);
     }
 
-    C<BigDecimal> b(String n) {
+    C2<BigDecimal> b(String n) {
         return builder.context.b(n);
     }
 
@@ -132,8 +133,8 @@ public class FluctuationNGTest {
         System.out.println(test.TestUtils.methodName(0));
         Fluctuation<BigDecimal> tested0 = builder.accumulates().a(-1,1,b(1)).a(3,7,b(1)).a(5,10,b(1)).a(4,8,b(1)).a(9,14,b(1)).a(11,13,b(1)).build();
         Fluctuation<BigDecimal> tested1 = builder.accumulates().a(3,6,b(1)).build();
-        C<BigDecimal> result = tested0.accumulates.dot(tested1);
-        C<BigDecimal> expected = b(6);
+        C2<BigDecimal> result = tested0.accumulates.dot(tested1);
+        C2<BigDecimal> expected = b(6);
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);

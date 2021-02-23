@@ -19,7 +19,7 @@ public class PLU<K extends Comparable<K>> extends LU<K> {
         super(body);
         this.order=order;
     }
-    public CList<K> porder(CList<K> v) {
+    public CList<K,C2<K>> porder(CList<K,C2<K>> v) {
         return v.wrap(v.body.pickUp(order.asList()));
     } 
     public CMatrix<K> p() {
@@ -35,7 +35,7 @@ public class PLU<K extends Comparable<K>> extends LU<K> {
      * @param v
      * @return 
      */
-    public CList<K> solve(CList<K> v) {
+    public CList<K,C2<K>> solve(CList<K,C2<K>> v) {
         return super.solve(porder(v));
     }
     public CMatrix<K> inv() {

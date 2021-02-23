@@ -23,14 +23,14 @@ public class LU<K extends Comparable<K>> extends TList<CMatrix<K>> {
     public CMatrix<K> u() {
         return last(0);
     }
-    public CList<K> solve(CList<K> v) {
-        CList<K> y=l().forwardSubstitution(v);
+    public CList<K,C2<K>> solve(CList<K,C2<K>> v) {
+        CList<K,C2<K>> y=l().forwardSubstitution(v);
         return u().backwardSubstitution(y);
     }
     public CMatrix<K> inv() {
         return u().invUpper().mul(l().invLower());
     }
-    public C<K> det() {
+    public C2<K> det() {
         return u().getDiagonal().stream().reduce(u().b.context.one(), (a,b)->a.mul(b));
     }
     public CMatrix<K> restore() {

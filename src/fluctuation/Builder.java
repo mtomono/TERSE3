@@ -17,8 +17,7 @@ package fluctuation;
 
 import collection.P;
 import collection.TList;
-import function.CompareUtil;
-import math.C;
+import math.C2;
 import math.CList;
 import orderedSet.Range;
 
@@ -28,23 +27,21 @@ import orderedSet.Range;
  * @param <K>
  */
 public class Builder<K extends Comparable<K>> {
-    C.Builder<K> context;
-    CompareUtil.map<C<K>,K> compare;
-    protected Builder(C.Builder<K> context) {
+    C2.Builder<K> context;
+    protected Builder(C2.Builder<K> context) {
         this.context=context;
-        this.compare=CompareUtil.map(c->c.body());
     }
     public abstract class Building {
         TList<Long> time() {
             return entries().map(p->p.l());
         }
-        CList<K> q() {
+        CList<K,C2<K>> q() {
             return new CList<>(context,entries().map(p->p.r()));
         }
-        TList<P<Long,C<K>>> entries() {
+        TList<P<Long,C2<K>>> entries() {
             return time().pair(q().body());
         }
-        TList<P<Range<Long>,C<K>>> accumulates() {
+        TList<P<Range<Long>,C2<K>>> accumulates() {
             return time().diff((a,b)->new Range<>(a,b)).pair(q().body().accumFromStart(s->s,(a,b)->a.add(b)));
         }
         Fluctuation<K> build() {
@@ -57,14 +54,14 @@ public class Builder<K extends Comparable<K>> {
             return accumulates().flatMapc(p->TList.sof(p.l().start,p.l().end));
         }
         @Override
-        CList<K> q() {
-            return new CList<K>(context,accumulates().flatMapc(p->TList.sof(p.r(),p.r().negate())));
+        CList<K,C2<K>> q() {
+            return new CList<K,C2<K>>(context,accumulates().flatMapc(p->TList.sof(p.r(),p.r().negate())));
         }
     }
     public class TqBuilding extends Building {
         TList<Long> time;
-        CList<K> q;
-        TqBuilding(TList<Long> time, CList<K> q) {
+        CList<K,C2<K>> q;
+        TqBuilding(TList<Long> time, CList<K,C2<K>> q) {
             this.time=time;
             this.q=q;
         }
@@ -73,37 +70,37 @@ public class Builder<K extends Comparable<K>> {
             return time;
         }
         @Override
-        CList<K> q() {
+        CList<K,C2<K>> q() {
             return q;
         }
     }
     public class EntriesBuilding extends Building {
-        TList<P<Long,C<K>>> entries;
-        EntriesBuilding(TList<P<Long,C<K>>> entries) {
+        TList<P<Long,C2<K>>> entries;
+        EntriesBuilding(TList<P<Long,C2<K>>> entries) {
             this.entries=entries;
         }
         @Override
-        TList<P<Long,C<K>>> entries() {
+        TList<P<Long,C2<K>>> entries() {
             return entries;
         }
     }
     public class AccumulatesBuilding extends BuildingR {
-        TList<P<Range<Long>,C<K>>> accumulates;
-        AccumulatesBuilding(TList<P<Range<Long>,C<K>>> accumulates) {
+        TList<P<Range<Long>,C2<K>>> accumulates;
+        AccumulatesBuilding(TList<P<Range<Long>,C2<K>>> accumulates) {
             this.accumulates=accumulates;
         }
         @Override
-        TList<P<Range<Long>,C<K>>> accumulates() {
+        TList<P<Range<Long>,C2<K>>> accumulates() {
             return accumulates;
         }
     }
-    public Fluctuation<K> tq(TList<Long> time, CList<K> q) {
+    public Fluctuation<K> tq(TList<Long> time, CList<K,C2<K>> q) {
         return new TqBuilding(time,q).build();
     }
-    public Fluctuation<K> entries(TList<P<Long,C<K>>> entries) {
+    public Fluctuation<K> entries(TList<P<Long,C2<K>>> entries) {
         return new EntriesBuilding(entries).build();
     }
-    public Fluctuation<K> accumulates(TList<P<Range<Long>,C<K>>> accumulates) {
+    public Fluctuation<K> accumulates(TList<P<Range<Long>,C2<K>>> accumulates) {
         return new AccumulatesBuilding(accumulates).build();
     }
     public Fluctuation<K> empty() {
@@ -118,11 +115,11 @@ public class Builder<K extends Comparable<K>> {
     }
     
     public class EntryBuilder {
-        TList<P<Long,C<K>>> body;
+        TList<P<Long,C2<K>>> body;
         public EntryBuilder() {
             this.body=TList.c();
         }
-        public EntryBuilder a(long at, C<K> q) {
+        public EntryBuilder a(long at, C2<K> q) {
             body.add(P.p(at, q));
             return this;
         }
@@ -132,11 +129,11 @@ public class Builder<K extends Comparable<K>> {
     }
     
     public class AccumulateBuilder {
-        TList<P<Range<Long>,C<K>>> body;
+        TList<P<Range<Long>,C2<K>>> body;
         public AccumulateBuilder() {
             this.body=TList.c();
         }
-        public AccumulateBuilder a(long from, long to, C<K> q) {
+        public AccumulateBuilder a(long from, long to, C2<K> q) {
             body.add(P.p(new Range<>(from,to),q));
             return this;
         }
