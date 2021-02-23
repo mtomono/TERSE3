@@ -29,7 +29,7 @@ public class MathBuilder<K extends Comparable<K>> {
     }
 
     public CMatrix<K> m(TList<TList<C2<K>>> body) {
-        return new CMatrix<>(this, body);
+        return new CMatrix<>(context, body);
     }
 
     public CMatrix<K> m(Integer[][] matrix) {
@@ -41,7 +41,7 @@ public class MathBuilder<K extends Comparable<K>> {
     }
     
     public CMatrix<K> I(int n) {
-        return new CMatrix<>(this,TList.range(0,n).map(i->TList.nCopies(n, context.zero()).sfix().cset(i, context.one())));
+        return CMatrix.<K>I(context,n);
     }
 
     public CList<K,C2<K>> l(K... v) {

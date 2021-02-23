@@ -60,8 +60,8 @@ public class C<K> implements Context<K,C<K>>,Wrapper<K,C<K>> {
             return new C<>(this,v);
         }
     }
-    public final Builder<K> b;
-    public final K v;
+    final Builder<K> b;
+    final K v;
     public C(Builder<K> b, K v) {
         this.b=b;
         this.v=v;

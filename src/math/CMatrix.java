@@ -29,13 +29,13 @@ import java.util.function.Function;
  * @param <K>
  */
 public class CMatrix<K extends Comparable<K>> implements TListWrapper<TList<C2<K>>,CMatrix<K>>{
-    final public MathBuilder<K> b;
+    final public ContextBuilder<K,C2<K>> bb;
     final public TList<TList<C2<K>>> body;
     final public int x;
     final public int y;
-    public CMatrix(MathBuilder<K> b, TList<TList<C2<K>>> body) {
+    public CMatrix(ContextBuilder<K,C2<K>> bb, TList<TList<C2<K>>> body) {
         this.body=body;
-        this.b=b;
+        this.bb=bb;
         assert body.map(r->r.size()).isUniform() : "all the raws have to have the same size";
         this.x=body.isEmpty()?0:body.get(0).size();
         this.y=body.size();
@@ -46,7 +46,7 @@ public class CMatrix<K extends Comparable<K>> implements TListWrapper<TList<C2<K
     }
     @Override
     public CMatrix<K> wrap(TList<TList<C2<K>>> body) {
-        return new CMatrix<>(b,body);
+        return new CMatrix<>(bb,body);
     }
     @Override
     public CMatrix<K> self() {
@@ -59,10 +59,10 @@ public class CMatrix<K extends Comparable<K>> implements TListWrapper<TList<C2<K
         assert isSquare() : "this method is incompatible for a matrix that is not square";
     }
     public TList<CList<K,C2<K>>> rows() {
-        return body.map(r->new CList<>(b.context, r));
+        return body.map(r->new CList<>(bb, r));
     }
     public TList<CList<K,C2<K>>> columns() {
-        return TransparentTranspose.transpose(body).map(r->new CList<>(b.context,r)); //if you use body.transpose() instead of TransparentTranspose.transpose(), you will get some exceptions caused by trying to chnage a mapped list which doesn't have reverse map.
+        return TransparentTranspose.transpose(body).map(r->new CList<>(bb,r)); //if you use body.transpose() instead of TransparentTranspose.transpose(), you will get some exceptions caused by trying to chnage a mapped list which doesn't have reverse map.
     }
     public CMatrix<K> subMatrix(int... fromTo) {
         int x0=fromTo[0];int y0=fromTo[1];  int x1=fromTo[2];int y1=fromTo[3];
@@ -92,7 +92,7 @@ public class CMatrix<K extends Comparable<K>> implements TListWrapper<TList<C2<K
         return wrap(rows.map(r->columns.map(c->r.dot(c))));
     }
     public CList<K,C2<K>> mul(CList<K,C2<K>> other) {
-        return new CList<>(b.context,rows().map(r->r.dot(other)));
+        return new CList<>(bb,rows().map(r->r.dot(other)));
     }
     public CMatrix<K> transpose() {
         return wrap(body.transposeT(l->l)).sfix();
@@ -128,9 +128,12 @@ public class CMatrix<K extends Comparable<K>> implements TListWrapper<TList<C2<K
     public PLU<K> pluDecompose() {
         return new PluDecompose<>(this).decompose();
     }
+    static public <K extends Comparable<K>> CMatrix<K> I(ContextBuilder<K,C2<K>> bb,int n) {
+        return new CMatrix<>(bb,TList.range(0,n).map(i->TList.nCopies(n, bb.zero()).sfix().cset(i, bb.one())));
+    }
     public CMatrix<K> i() {
         assertSquare();
-        return b.I(x);
+        return I(bb,x);
     }
     public CMatrix<K> pinv(TList<Integer> order) {
         return wrap(i().body.pickUp(order));
@@ -152,10 +155,10 @@ public class CMatrix<K extends Comparable<K>> implements TListWrapper<TList<C2<K
         return TList.sof(doolittleLower(),doolittleUpper());
     }
     public CMatrix<K> doolittleLower() {
-        return fillUpper(b.context.zero()).fillDiagonal(b.context.one());
+        return fillUpper(bb.zero()).fillDiagonal(bb.one());
     }
     public CMatrix<K> doolittleUpper() {
-        return fillLower(b.context.zero());
+        return fillLower(bb.zero());
     }
     public CMatrix<K> doolittleSubMatrix() {
         if (body.get(0).get(0).isZero())
@@ -171,12 +174,12 @@ public class CMatrix<K extends Comparable<K>> implements TListWrapper<TList<C2<K
      * @param bb
      * @return 
      */
-    public CList<K,C2<K>> forwardSubstitution(CList<K,C2<K>> bb) {
+    public CList<K,C2<K>> forwardSubstitution(CList<K,C2<K>> b) {
         TList<C2<K>> retval= TList.c();
         TList<CList<K,C2<K>>> rows=rows();
         TList<CList<K,C2<K>>> L=rows.index().map(i->rows.get(i).m(l->l.subList(0, i+1)));
-        bb.body.pair(L, (bn,ln)->bn.sub(ln.m(l->l.seek(-1)).dot(new CList<>(b.context,retval))).div(ln.body.last())).forEach(v->retval.add(v));
-        return new CList<>(b.context,retval);
+        b.body().pair(L, (bn,ln)->bn.sub(ln.m(l->l.seek(-1)).dot(new CList<>(bb,retval))).div(ln.body().last())).forEach(v->retval.add(v));
+        return new CList<>(bb,retval);
     }
     public CMatrix<K> u2l() {
         return wrap(body.map(v->v.reverse()).reverse());

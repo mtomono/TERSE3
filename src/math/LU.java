@@ -31,7 +31,7 @@ public class LU<K extends Comparable<K>> extends TList<CMatrix<K>> {
         return u().invUpper().mul(l().invLower());
     }
     public C2<K> det() {
-        return u().getDiagonal().stream().reduce(u().b.context.one(), (a,b)->a.mul(b));
+        return u().getDiagonal().stream().reduce(u().bb.one(), (a,b)->a.mul(b));
     }
     public CMatrix<K> restore() {
         return stream().reduce((a,b)->a.mul(b)).get();
