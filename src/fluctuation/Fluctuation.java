@@ -24,7 +24,6 @@ import java.util.function.Function;
 import math.C2;
 import math.CList;
 import orderedSet.Range;
-import static orderedSet.RangeUtil.widthL;
 
 /**
  *
@@ -155,7 +154,7 @@ public class Fluctuation<K extends Comparable<K>> {
         }
         public C2<K> dot(Fluctuation<K> target) {
             return body.cross(target.accumulates.body, 
-                    (a,b)->a.l().intersect(b.l()).map(t->b().b(widthL(t)).mul(a.r()).mul(b.r())))
+                    (a,b)->a.l().intersect(b.l()).map(t->t.width(v->b().b(v)).mul(a.r()).mul(b.r())))
                         .optionalMap(o->o).normalize()
                         .stream().reduce(zero(),(a,b)->a.add(b));
         }
@@ -175,7 +174,7 @@ public class Fluctuation<K extends Comparable<K>> {
             return amounts().stream().reduce((a,b)->a.add(b)).orElse(zero());
         }
         public TList<C2<K>> amounts() {
-            return body.map(p->p.r().mul(b().b(widthL(p.l()))));
+            return body.map(p->p.r().mul(p.l().width(t->b().b(t))));
         }
         public Fluctuation<K> cut(Range<Long> range) {
             return builder.accumulates(body.optionalMap(p->range.intersect(p.l()).map(i->P.p(i,p.r()))).normalize());
@@ -202,7 +201,7 @@ public class Fluctuation<K extends Comparable<K>> {
         return e->e.accumulates.body.map(p->p.r()).min(p->p.body()).get();
     }
     static public <K extends Comparable<K>> Function<Fluctuation<K>, C2<K>> average() {
-        return e->e.accumulates.amount().div(e.b().b(widthL(e.tq.cover())));
+        return e->e.accumulates.amount().div(e.tq.cover().width(t->e.b().b(t)));
     }
     
     public boolean epsilonEquals(Fluctuation<K> other, C2<K> e) {

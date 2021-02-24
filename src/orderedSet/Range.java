@@ -22,6 +22,7 @@ import static function.ComparePolicy.inc;
 import iterator.AbstractBufferedIterator;
 import iterator.BufferedIterator;
 import iterator.MergeIterator;
+import iterator.TIterator;
 import java.util.*;
 import java.util.function.Function;
 import math.Context;
@@ -412,6 +413,17 @@ public class Range<T extends Comparable<? super T>> {
         return end;
     }
     
+    static public <T extends Comparable<T>> Range<T> inEitherWay(T one, T two) {
+        return one.compareTo(two)<0?new Range<>(one,two):new Range<>(two,one);
+
+    }
+    static public <T extends Comparable<T>> Optional<Range<T>> intersectMany(List<Range<T>> rs) {
+        TIterator<Optional<Range<T>>> iter = TList.set(rs).accumFromStart(a->Optional.of(a),(a,b)->a.flatMap(r->r.intersect(b))).iterator().until(r->r.isEmpty());
+        if (!iter.hasNext())
+            return Optional.empty();
+        return iter.last();
+    }
+    
     /**
      * quantifying range.
      * series of methods which can be used to calculate a quantity from range.
@@ -435,6 +447,9 @@ public class Range<T extends Comparable<? super T>> {
         return f.apply(start).interpolate100(fore, f.apply(end));
     }
     
+    public <K extends Comparable<K>,C extends Context<K,C>> Range<K> shift(Function<T,C> f, C s) {
+        return new Range<>(f.apply(start).add(s).body(),f.apply(end).add(s).body());
+    }
 }
 
 /**

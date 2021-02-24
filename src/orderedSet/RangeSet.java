@@ -22,6 +22,9 @@ import static iterator.Iterators.toStream;
 import static java.util.stream.Collectors.toList;
 import static collection.TList.concat;
 import static function.ComparePolicy.inc;
+import java.util.function.Function;
+import java.util.stream.Stream;
+import math.Context;
 import string.Message;
 
 /**
@@ -245,6 +248,18 @@ public class RangeSet<T extends Comparable<? super T>> extends AbstractList<Rang
         if (elements.isEmpty())
             return false;
         return cover().get().contains(point);
+    }
+    
+    public <K extends Comparable<K>,C extends Context<K,C>> RangeSet<K> shift(Function<T,C> f, C s) {
+        return new RangeSet<K>(elements.stream().map(r->r.shift(f,s)).collect(toList()));
+    }
+
+    public static <T extends Comparable<T>> RangeSet<T> intersectMany(List<RangeSet<T>> many) {
+        return many.stream().reduce((a,b)->a.intersect(b)).orElse(RangeSet.empty());
+    }
+    
+    public static <T extends Comparable<T>> RangeSet<T> unionMany(List<RangeSet<T>> many) {
+        return many.stream().reduce(RangeSet.empty(), (a,b)->a.union(b));
     }
     
     @Override
