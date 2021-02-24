@@ -23,7 +23,7 @@ import java.util.function.Function;
  * @author masao
  * @param <K>
  */
-public class C2N<K extends Number&Comparable<K>> implements Context<K, C2N<K>>, ToComparableContext<C2N<K>, K> {
+public class C2N<K extends Number&Comparable<K>> implements Context<K, C2N<K>>,ComparableContext<C2N<K>>,Comparable<C2N<K>> {
     static public C2N.Builder<Integer> i=new Builder<>(new IntegerOp());
     static public C2N.Builder<Long> l=new Builder<>(new LongOp());
     static public C2N.Builder<Float> f=new Builder<>(new FloatOp());
@@ -91,6 +91,10 @@ public class C2N<K extends Number&Comparable<K>> implements Context<K, C2N<K>>, 
     }
     public C2N<K> longValue() {
         return b().b(body().longValue());
+    }
+    @Override
+    public int compareTo(C2N<K> o) {
+        return body().compareTo(o.body());
     }
     @Override
     public String toString() {

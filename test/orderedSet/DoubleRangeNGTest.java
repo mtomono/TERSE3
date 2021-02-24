@@ -5,6 +5,8 @@
  */
 package orderedSet;
 
+import math.C;
+import math.C2;
 import static org.testng.Assert.*;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -25,8 +27,17 @@ public class DoubleRangeNGTest {
     @Test
     public void testInterpolate() {
         System.out.println(test.TestUtils.methodName(0));
-        double result = new Range<Double>(0.0,10.0).interpolate(d->d,0.5);
-        double expected = 5.0;
+        C<Double> result = new Range<>(0.0,10.0).interpolate1(d->C.d.b(d),C.d.b(0.5));
+        C<Double> expected = C.d.b(5.0);
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result, expected);
+    }
+    @Test
+    public void testInterpolate1() {
+        System.out.println(test.TestUtils.methodName(0));
+        C2<Double> result = new Range<>(C2.d.b(0.0),C2.d.b(10.0)).interpolate1(d->d,C2.d.b(0.5));
+        C2<Double> expected = C2.d.b(5.0);
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
         assertEquals(result, expected);
@@ -35,8 +46,8 @@ public class DoubleRangeNGTest {
     @Test
     public void testInterpolate2() {
         System.out.println(test.TestUtils.methodName(0));
-        double result = new Range<Double>(0.0,10.0).interpolate(d->d,0.2);
-        double expected = 2.0;
+        C<Double> result = new Range<>(0.0,10.0).interpolate(d->C.d.b(d),C.d.b(0.2),C.d.b(0.8));
+        C<Double> expected = C.d.b(2.0);
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
         assertEquals(result, expected);
@@ -45,8 +56,8 @@ public class DoubleRangeNGTest {
     @Test
     public void testWidth() {
         System.out.println(test.TestUtils.methodName(0));
-        double result = new Range<Double>(0.0,10.0).width(d->d);
-        double expected = 10.0;
+        C<Double> result = new Range<>(0.0,10.0).width(d->C.d.b(d));
+        C<Double> expected = C.d.b(10.0);
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
         assertEquals(result, expected);

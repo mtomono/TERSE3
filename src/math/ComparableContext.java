@@ -5,32 +5,31 @@
  */
 package math;
 
-import function.ToComparable;
+import function.CompareUtil;
 
 /**
  *
  * @author masao
  * @param <S>
- * @param <T>
  */
-public interface ToComparableContext<S, T extends Comparable<T>> extends ToComparable<S,T> {
+public interface ComparableContext<S extends Comparable<S>> {
     S self();
     default boolean eq(S v) {
-        return eq(self(),v);
+        return CompareUtil.eq(self(),v);
     }
     default boolean ne(S v) {
-        return ne(self(),v);
+        return CompareUtil.ne(self(),v);
     }
     default boolean gt(S v) {
-        return gt(self(),v);
+        return CompareUtil.gt(self(),v);
     }
     default boolean ge(S v) {
-        return ge(self(),v);
+        return CompareUtil.ge(self(),v);
     }
     default boolean lt(S v) {
-        return lt(self(),v);
+        return CompareUtil.lt(self(),v);
     }
     default boolean le(S v) {
-        return le(self(),v);
+        return CompareUtil.le(self(),v);
     }
 }

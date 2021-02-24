@@ -45,16 +45,4 @@ public class CompareUtil {
     static public <T extends Comparable<T>> boolean le(T a,T b) {
         return a.compareTo(b)<=0;
     }
-    static public <S,T extends Comparable<T>> map<S,T> map(Function<S,T> f) {
-        return new map(f);
-    }
-    static public class map<S,T extends Comparable<T>> implements ToComparable<S,T> {
-        Function<S,T> f;
-        map(Function<S,T> f) {
-            this.f=f;
-        }
-        public Function<S,T> toComparable() {
-            return f;
-        }
-    }
 }

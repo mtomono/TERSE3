@@ -18,7 +18,6 @@ package orderedSet;
 import collection.ArrayInt;
 import collection.TList;
 import static collection.c.i2l;
-import debug.Te;
 import static function.ComparePolicy.inc;
 import iterator.AbstractBufferedIterator;
 import iterator.BufferedIterator;
@@ -30,7 +29,6 @@ import string.Message;
 /**
  * 
  * @author mtomono
- * @param <T>
  */
 public class RangeInt {
     public final int start;

@@ -22,9 +22,9 @@ import static function.ComparePolicy.inc;
 import iterator.AbstractBufferedIterator;
 import iterator.BufferedIterator;
 import iterator.MergeIterator;
-import static java.lang.Math.abs;
 import java.util.*;
 import java.util.function.Function;
+import math.Context;
 import string.Message;
 
 /**
@@ -245,14 +245,6 @@ public class Range<T extends Comparable<? super T>> {
         return another.getUpper(end);
     }
     
-    public double width(Function<T,Double> f) {
-        return abs(f.apply(end)-f.apply(start));
-    }
-    
-    public double interpolate(Function<T,Double> f, double rate) {
-        return f.apply(start)*(1-rate)+f.apply(end)*rate;
-    }
-    
     public static <T extends Comparable<? super T>> Optional<Range<T>> cover(TList<Range<T>> rl) {
         if (rl.isEmpty()) return Optional.empty();
         return Optional.of(new Range<>(rl.map(r->r.start).min((a,b)->a.compareTo(b)).get(),rl.map(r->r.end).max((a,b)->a.compareTo(b)).get()));
@@ -418,6 +410,29 @@ public class Range<T extends Comparable<? super T>> {
     
     public T end() {
         return end;
+    }
+    
+    /**
+     * quantifying range.
+     * series of methods which can be used to calculate a quantity from range.
+     * they assume that something forming range can be translated as a point in
+     * certain number.
+     */
+    
+    public <K,C extends Context<K,C>> C width(Function<T,C> f) {
+        return f.apply(end).sub(f.apply(start));
+    }
+    
+    public <K,C extends Context<K,C>> C interpolate(Function<T,C> f, C fore,C back) {
+        return f.apply(start).interpolate(fore, f.apply(end), back);
+    }
+    
+    public <K,C extends Context<K,C>> C interpolate1(Function<T,C> f, C fore) {
+        return f.apply(start).interpolate1(fore, f.apply(end));
+    }
+    
+    public <K,C extends Context<K,C>> C interpolate100(Function<T,C> f, C fore) {
+        return f.apply(start).interpolate100(fore, f.apply(end));
     }
     
 }
