@@ -415,8 +415,8 @@ public class Range<T extends Comparable<? super T>> {
     
     static public <T extends Comparable<T>> Range<T> inEitherWay(T one, T two) {
         return one.compareTo(two)<0?new Range<>(one,two):new Range<>(two,one);
-
     }
+    
     static public <T extends Comparable<T>> Optional<Range<T>> intersectMany(List<Range<T>> rs) {
         TIterator<Optional<Range<T>>> iter = TList.set(rs).accumFromStart(a->Optional.of(a),(a,b)->a.flatMap(r->r.intersect(b))).iterator().until(r->r.isEmpty());
         if (!iter.hasNext())
