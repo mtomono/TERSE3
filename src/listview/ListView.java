@@ -36,7 +36,7 @@ public class ListView<T> {
     }
     
     public Range<Integer> range() {
-        return new Range<>(start, start+body.size());
+        return Range.create(start, start+body.size());
     }
     
     public T get(int index) {

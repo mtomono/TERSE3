@@ -41,7 +41,7 @@ public class NegateRangeIterator<T extends Comparable<? super T>> extends Abstra
     
     class demarcation<S extends Comparable<? super S>> extends Range<S> {
         public demarcation(S point) {
-            super(point, point);
+            super(point, point, new NaturalOrder<>());
         }
     };
             
@@ -55,7 +55,7 @@ public class NegateRangeIterator<T extends Comparable<? super T>> extends Abstra
         while (base.hasNext()) {
             base.next();
             if (!((base.now() instanceof demarcation || base.pre(-1) instanceof demarcation) && base.pre(-1).end().equals(base.now().start()))) {
-                nextFound(new Range(base.pre(-1).end(), base.now().start()));
+                nextFound(Range.create(base.pre(-1).end(), base.now().start()));
                 break;
             }
         }

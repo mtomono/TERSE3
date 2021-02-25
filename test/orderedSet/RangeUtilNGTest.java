@@ -24,9 +24,9 @@ public class RangeUtilNGTest {
     @Test
     public void testIntersectR() {
         System.out.println(test.TestUtils.methodName(0));
-        TList<Range<Integer>> tested = TList.sof(0,10, 1,11, 0,11).fold(2).map(l->new Range<>(l.get(0),l.get(1)));
+        TList<Range<Integer>> tested = TList.sof(0,10, 1,11, 0,11).fold(2).map(l->Range.create(l.get(0),l.get(1)));
         Optional<Range<Integer>> result = intersectMany(tested);
-        Optional<Range<Integer>> expected = Optional.of(new Range(1,10));
+        Optional<Range<Integer>> expected = Optional.of(Range.create(1,10));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
@@ -35,7 +35,7 @@ public class RangeUtilNGTest {
     @Test
     public void testIntersectREmpty() {
         System.out.println(test.TestUtils.methodName(0));
-        TList<Range<Integer>> tested = TList.sof(0,10, 10,12, 0,11).fold(2).map(l->new Range<>(l.get(0),l.get(1)));
+        TList<Range<Integer>> tested = TList.sof(0,10, 10,12, 0,11).fold(2).map(l->Range.create(l.get(0),l.get(1)));
         Optional<Range<Integer>> result = intersectMany(tested);
         Optional<Range<Integer>> expected = Optional.empty();
         System.out.println("result  : " + result);
@@ -58,7 +58,7 @@ public class RangeUtilNGTest {
     public void testInEitherWay() {
         System.out.println(test.TestUtils.methodName(0));
         Range<Integer> result = inEitherWay(0,1);
-        Range<Integer> expected = new Range<>(0,1);
+        Range<Integer> expected = Range.create(0,1);
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
@@ -68,7 +68,7 @@ public class RangeUtilNGTest {
     public void testInEitherWayR() {
         System.out.println(test.TestUtils.methodName(0));
         Range<Integer> result = inEitherWay(1,0);
-        Range<Integer> expected = new Range<>(0,1);
+        Range<Integer> expected = Range.create(0,1);
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);

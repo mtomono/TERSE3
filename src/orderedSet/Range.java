@@ -35,6 +35,10 @@ import string.Message;
  * @param <T>
  */
 public class Range<T extends Comparable<? super T>> {
+
+    public static <T extends Comparable<? super T>> Range<T> create(T start, T end) {
+        return new Range<T>(start, end);
+    }
     public final T start;
     public final T end;
     public final Order<T> order;
@@ -70,7 +74,7 @@ public class Range<T extends Comparable<? super T>> {
         this.order = order;
     }
     
-    public Range(T start, T end) {
+    private Range(T start, T end) {
         this(start, end, new NaturalOrder<>());
     }
     

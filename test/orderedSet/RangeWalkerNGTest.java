@@ -26,7 +26,7 @@ public class RangeWalkerNGTest {
     }
 
     private static <S extends Comparable<S>> Range<S> _b(S from, S to) {
-        return new Range<>(from, to);
+        return Range.create(from, to);
     }
     
     @Test

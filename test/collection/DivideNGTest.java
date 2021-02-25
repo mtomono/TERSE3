@@ -34,7 +34,7 @@ public class DivideNGTest {
     }
         
     Range<Integer> r(int from, int to) {
-        return new Range<>(from, to);
+        return Range.create(from, to);
     }
 
     @Test

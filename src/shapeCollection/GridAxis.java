@@ -38,7 +38,7 @@ public class GridAxis {
     public GridAxis(int from, int to) {
         this.from = from;
         this.to = to;
-        this.vr = new Range<>(min(from,to),max(from,to)+1);
+        this.vr = Range.create(min(from,to),max(from,to)+1);
         this.togo = to - from;
         this.size = abs(togo)+1;
         this.sigTogo = signum(togo);

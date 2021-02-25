@@ -53,8 +53,8 @@ public class Grid<T> implements Cloneable {
         this.to = to;
         this.x = TList.rangeSym(from.x, to.x);
         this.y = TList.rangeSym(from.y, to.y);
-        this.xr = new Range<>(min(from.x, to.x), max(from.x, to.x)+1);
-        this.yr = new Range<>(min(from.y, to.y), max(from.y, to.y)+1);
+        this.xr = Range.create(min(from.x, to.x), max(from.x, to.x)+1);
+        this.yr = Range.create(min(from.y, to.y), max(from.y, to.y)+1);
         this.togo = from.to(to);
         this.sigTogo = new TPoint2i(signum(togo.x), signum(togo.y));
         this.space = y.map(n->x.map(m->f.apply(m,n)).sfix()).sfix();

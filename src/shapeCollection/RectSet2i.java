@@ -33,8 +33,8 @@ public class RectSet2i implements Set<TPoint2i> {
     Range<Integer> y;
     
     public RectSet2i(TPoint2i a, TPoint2i b) {
-        this.x = new Range<>(min(a.x,b.x),max(a.x,b.x)+1);
-        this.y = new Range<>(min(a.y,b.y),max(a.y,b.y)+1);
+        this.x = Range.create(min(a.x,b.x),max(a.x,b.x)+1);
+        this.y = Range.create(min(a.y,b.y),max(a.y,b.y)+1);
     }
 
     @Override

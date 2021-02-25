@@ -42,7 +42,7 @@ public class Builder<K extends Comparable<K>> {
             return time().pair(q().body());
         }
         TList<P<Range<Long>,C2<K>>> accumulates() {
-            return time().diff((a,b)->new Range<>(a,b)).pair(q().body().accumFromStart(s->s,(a,b)->a.add(b)));
+            return time().diff((a,b)->Range.create(a,b)).pair(q().body().accumFromStart(s->s,(a,b)->a.add(b)));
         }
         Fluctuation<K> build() {
             return new Fluctuation<>(time(),q(),entries(),accumulates(),Builder.this);
@@ -134,7 +134,7 @@ public class Builder<K extends Comparable<K>> {
             this.body=TList.c();
         }
         public AccumulateBuilder a(long from, long to, C2<K> q) {
-            body.add(P.p(new Range<>(from,to),q));
+            body.add(P.p(Range.create(from,to),q));
             return this;
         }
         public Fluctuation<K> build() {

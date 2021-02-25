@@ -58,7 +58,7 @@ public class SegmentTree<T>  {
     }
     
     public T get(Range<Integer> r) {
-        return get(r, new Range<>(0,body.size()), 0);
+        return get(r, Range.create(0,body.size()), 0);
     }
     
     private static <T> Integer center(Range<Integer> s) {
@@ -68,8 +68,8 @@ public class SegmentTree<T>  {
     private T get(Range<Integer> r, Range<Integer> s, int k) {
         if (!r.overlaps(s)) return e;
         if (r.contains(s)) return whole.get(k);
-        T vl = get(r, new Range<>(s.start(),center(s)), 2*k+1);
-        T vr = get(r, new Range<>(center(s),s.end()), 2*k+2);
+        T vl = get(r, Range.create(s.start(),center(s)), 2*k+1);
+        T vr = get(r, Range.create(center(s),s.end()), 2*k+2);
         return bo.apply(vl, vr);
     }
 }

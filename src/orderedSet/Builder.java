@@ -24,6 +24,6 @@ public class Builder<T extends Comparable<T>> {
         this.order=order;
     }
     public Range<T> r(T from, T to) {
-        return new Range<>(from,to);
+        return Range.create(from, to);
     }
 }

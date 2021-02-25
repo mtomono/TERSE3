@@ -188,7 +188,7 @@ public class Rect2d {
     }
     
     public Range<Double> range(TPoint2d p) {
-        return new Range<>(distance(p), farthest(p));
+        return Range.create(distance(p), farthest(p));
     }
     
     public Optional<Dir> touchesEdge(TPoint2d p) {

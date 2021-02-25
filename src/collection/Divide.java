@@ -54,7 +54,7 @@ public interface Divide<T> {
     }
     
     static public TList<TList<Range<Integer>>> ranges(int target, TList<TList<Integer>> divides) {
-        return divides.map(l->TList.wrap(0).append(l).append(TList.wrap(target)).diff((a,b)->new Range<>(a,b)));
+        return divides.map(l->TList.wrap(0).append(l).append(TList.wrap(target)).diff((a,b)->Range.create(a,b)));
     }
     
     static public TList<TList<Integer>> width(int target, TList<TList<Integer>> divides) {

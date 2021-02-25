@@ -81,7 +81,7 @@ public class CoverRangeIterator<T extends Number & Comparable<T>> extends Abstra
                 break;
             end = (T)ceil(one);
         }
-        nextFound(new Range<>(start, end));
+        nextFound(Range.create(start, end));
         if (one != null) {
             start = floor(one);
             end = (T)add.o(start, unit);

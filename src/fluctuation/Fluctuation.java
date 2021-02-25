@@ -98,13 +98,13 @@ public class Fluctuation<K extends Comparable<K>> {
         }
         public Range<Long> cover() {
             assert !time.isEmpty():"time is empty";
-            return new Range<>(time.minval(t->t).get(),time.maxval(t->t).get());
+            return Range.create(time.minval(t->t).get(),time.maxval(t->t).get());
         }
         public Fluctuation<K> diff() {
             return builder.tq(time.seek(1),q.m(l->l.diff((a,b)->b.sub(a))));
         }
         public P<Range<Long>,C2<K>> enclosure() {
-            return P.p(new Range<>(time.get(0),time.last()),q.get(0));
+            return P.p(Range.create(time.get(0),time.last()),q.get(0));
         }
         public boolean nonnegative() {
             return q.body().forAll(x->x.isZero());
