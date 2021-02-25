@@ -37,7 +37,7 @@ import string.Message;
 public class Range<T extends Comparable<? super T>> {
 
     public static <T extends Comparable<? super T>> Range<T> create(T start, T end) {
-        return new Range<T>(start, end);
+        return new Range<>(start, end, new NaturalOrder<>());
     }
     public final T start;
     public final T end;
@@ -72,10 +72,6 @@ public class Range<T extends Comparable<? super T>> {
         this.start = start;
         this.end = end;
         this.order = order;
-    }
-    
-    private Range(T start, T end) {
-        this(start, end, new NaturalOrder<>());
     }
     
     static public <T extends Comparable<? super T>> List<Range<T>> c(Order<T> order, T... range) {
@@ -252,7 +248,8 @@ public class Range<T extends Comparable<? super T>> {
     
     public static <T extends Comparable<? super T>> Optional<Range<T>> cover(TList<Range<T>> rl) {
         if (rl.isEmpty()) return Optional.empty();
-        return Optional.of(new Range<>(rl.map(r->r.start).min((a,b)->a.compareTo(b)).get(),rl.map(r->r.end).max((a,b)->a.compareTo(b)).get()));
+        Order<T> order=rl.get(0).order;
+        return Optional.of(new Range<>(rl.map(r->r.start).min((a,b)->a.compareTo(b)).get(),rl.map(r->r.end).max((a,b)->a.compareTo(b)).get(),order));
     }
 
     static public <T extends Comparable<? super T>> TList<Range<T>> sortToStart(TList<Range<T>> ranges) {
@@ -418,7 +415,8 @@ public class Range<T extends Comparable<? super T>> {
     }
     
     static public <T extends Comparable<? super T>> Range<T> inEitherWay(T one, T two) {
-        return one.compareTo(two)<0?new Range<>(one,two):new Range<>(two,one);
+        Order<T> order=new NaturalOrder<>();
+        return order.lt(one,two)?new Range<>(one,two,order):new Range<>(two,one,order);
     }
     
     static public <T extends Comparable<? super T>> Optional<Range<T>> intersectMany(List<Range<T>> rs) {
@@ -452,7 +450,7 @@ public class Range<T extends Comparable<? super T>> {
     }
     
     public <K extends Comparable<? super K>,C extends Context<K,C>> Range<K> shift(Function<T,C> f, C s) {
-        return new Range<>(f.apply(start).add(s).body(),f.apply(end).add(s).body());
+        return new Range<>(f.apply(start).add(s).body(),f.apply(end).add(s).body(),new NaturalOrder<>());
     }
 }
 
