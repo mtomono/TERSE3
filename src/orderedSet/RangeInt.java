@@ -23,7 +23,7 @@ import iterator.AbstractBufferedIterator;
 import iterator.BufferedIterator;
 import iterator.MergeIterator;
 import java.util.*;
-import static orderedSet.Default.order;
+import static arithmetic.NaturalOrder.order;
 import string.Message;
 
 /**
