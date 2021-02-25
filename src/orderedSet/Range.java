@@ -19,6 +19,7 @@ import collection.ArrayInt;
 import collection.TList;
 import static collection.c.i2l;
 import static function.ComparePolicy.inc;
+import function.Order;
 import iterator.AbstractBufferedIterator;
 import iterator.BufferedIterator;
 import iterator.MergeIterator;
@@ -36,7 +37,7 @@ import string.Message;
 public class Range<T extends Comparable<? super T>> {
     public final T start;
     public final T end;
-    public final Order<? super T> order;
+    public final Order<T> order;
     
     @Override
     public boolean equals(Object o) {
@@ -54,7 +55,6 @@ public class Range<T extends Comparable<? super T>> {
         int hash = 7;
         hash = 29 * hash + Objects.hashCode(this.start);
         hash = 29 * hash + Objects.hashCode(this.end);
-        hash = 29 * hash + Objects.hashCode(this.order);
         return hash;
     }
     
@@ -63,7 +63,7 @@ public class Range<T extends Comparable<? super T>> {
         return new Range<>(start, end, order);
     }
     
-    public Range(T start, T end, Order<? super T> order) {
+    public Range(T start, T end, Order<T> order) {
         assert order.le(start, end) : "start=" + start + ":end = " + end;
         this.start = start;
         this.end = end;
@@ -71,10 +71,10 @@ public class Range<T extends Comparable<? super T>> {
     }
     
     public Range(T start, T end) {
-        this(start, end, Default.order);
+        this(start, end, new NaturalOrder<>());
     }
     
-    static public <T extends Comparable<? super T>> List<Range<T>> c(Order<? super T> order, T... range) {
+    static public <T extends Comparable<? super T>> List<Range<T>> c(Order<T> order, T... range) {
         if (range.length == 0) {
             return Collections.<Range<T>>emptyList();
         } else if (range.length % 2 != 0) {
@@ -88,7 +88,7 @@ public class Range<T extends Comparable<? super T>> {
         }
     }
 
-    static public <T extends Comparable<? super T>> List<Range<T>> c(Order<? super T> order, List<T> range) {
+    static public <T extends Comparable<? super T>> List<Range<T>> c(Order<T> order, List<T> range) {
         if (range.isEmpty()) {
             return Collections.<Range<T>>emptyList();
         } else if (range.size() % 2 != 0) {
@@ -413,11 +413,11 @@ public class Range<T extends Comparable<? super T>> {
         return end;
     }
     
-    static public <T extends Comparable<T>> Range<T> inEitherWay(T one, T two) {
+    static public <T extends Comparable<? super T>> Range<T> inEitherWay(T one, T two) {
         return one.compareTo(two)<0?new Range<>(one,two):new Range<>(two,one);
     }
     
-    static public <T extends Comparable<T>> Optional<Range<T>> intersectMany(List<Range<T>> rs) {
+    static public <T extends Comparable<? super T>> Optional<Range<T>> intersectMany(List<Range<T>> rs) {
         TIterator<Optional<Range<T>>> iter = TList.set(rs).accumFromStart(a->Optional.of(a),(a,b)->a.flatMap(r->r.intersect(b))).iterator().until(r->r.isEmpty());
         if (!iter.hasNext())
             return Optional.empty();
@@ -447,7 +447,7 @@ public class Range<T extends Comparable<? super T>> {
         return f.apply(start).interpolate100(fore, f.apply(end));
     }
     
-    public <K extends Comparable<K>,C extends Context<K,C>> Range<K> shift(Function<T,C> f, C s) {
+    public <K extends Comparable<? super K>,C extends Context<K,C>> Range<K> shift(Function<T,C> f, C s) {
         return new Range<>(f.apply(start).add(s).body(),f.apply(end).add(s).body());
     }
 }

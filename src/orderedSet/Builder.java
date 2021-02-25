@@ -5,11 +5,25 @@
  */
 package orderedSet;
 
+import function.Order;
+
 /**
  *
  * @author masao
+ * @param <T>
  */
 public class Builder<T extends Comparable<T>> {
-    Order<T> order;
-    
+    static public <T extends Comparable<T>> Builder<T> b() {
+        return new Builder<>(new NaturalOrder<T>());
+    }
+    static public <T extends Comparable<T>> Builder<T> b(Order<T> order) {
+        return new Builder<>(order);
+    }
+    final Order<T> order;
+    public Builder(Order<T> order) {
+        this.order=order;
+    }
+    public Range<T> r(T from, T to) {
+        return new Range<>(from,to);
+    }
 }

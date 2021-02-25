@@ -15,20 +15,12 @@
 
 package orderedSet;
 
+import function.Order;
+
 /**
  *
  * @author mtomono
  * @param <T>
  */
-public class NaturalOrder<T extends Comparable<T>> extends Order<T> {
-
-    @Override public boolean eq(T      c1, T      c2) { return c1.compareTo(c2) == 0; }
-    @Override public boolean eq(double c1, double c2) { return c1 == c2; }
-    @Override public boolean eq(long   c1, long   c2) { return c1 == c2; }
-    @Override public boolean eq(int    c1, int    c2) { return c1 == c2; }
-
-    @Override public boolean lt(T      c1, T      c2) { return c1.compareTo(c2) < 0; }
-    @Override public boolean lt(double c1, double c2) { return c1 < c2; }
-    @Override public boolean lt(long   c1, long   c2) { return c1 < c2; }
-    @Override public boolean lt(int    c1, int    c2) { return c1 < c2; }
+public class NaturalOrder<T extends Comparable<? super T>> implements Order<T> {
 }

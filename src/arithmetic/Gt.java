@@ -15,7 +15,7 @@
 
 package arithmetic;
 
-import static orderedSet.Default.order;
+import static arithmetic.NaturalOrder.order;
 
 /**
  *

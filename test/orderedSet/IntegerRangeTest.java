@@ -4,9 +4,8 @@
  */
 package orderedSet;
 
-import collection.ArrayInt;
-import static collection.ArrayInt.arrayInt;
 import collection.TList;
+import function.Order;
 import java.util.Optional;
 import static org.testng.Assert.assertEquals;
 import org.testng.annotations.Test;

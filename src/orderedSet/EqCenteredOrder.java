@@ -15,14 +15,17 @@
 
 package orderedSet;
 
+import function.Order;
+
 /**
  *
  * @author mtomono
  * @param <T>
  */
-abstract public class EqCenteredOrder<T extends Comparable<T>> extends Order<T> {
-    @Override public boolean lt(T      c1, T      c2) { return (!eq(c1, c2)) && c1.compareTo(c2) < 0; }
-    @Override public boolean lt(double c1, double c2) { return (!eq(c1, c2)) && c1 < c2; }
-    @Override public boolean lt(long   c1, long   c2) { return (!eq(c1, c2)) && c1 < c2; }
-    @Override public boolean lt(int    c1, int    c2) { return (!eq(c1, c2)) && c1 < c2; }
+abstract public class EqCenteredOrder<T extends Comparable<T>> implements Order<T> {
+    public boolean lt(T      c1, T      c2) { return (!eq(c1, c2)) && c1.compareTo(c2) < 0; }
+    public boolean ne(T      c1, T      c2) { return !eq(c1, c2); }
+    public boolean gt(T      c1, T      c2) { return  lt(c2, c1); }
+    public boolean ge(T      c1, T      c2) { return !lt(c1, c2); }
+    public boolean le(T      c1, T      c2) { return !gt(c1, c2); }
 }

@@ -36,8 +36,4 @@ public class ErroredOrder<T extends Comparable<T>> extends EqCenteredOrder<T> {
             return c1.compareTo(c2) == 0;
         }
     }
-
-    @Override public boolean eq(double c1, double c2) { return abs(c1 - c2) < eps; }
-    @Override public boolean eq(long   c1, long   c2) { return abs(c1 - c2) < eps; }
-    @Override public boolean eq(int    c1, int    c2) { return abs(c1 - c2) < eps; }
 }

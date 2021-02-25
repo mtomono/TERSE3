@@ -14,7 +14,7 @@
  */
 
 package arithmetic;
-import static orderedSet.Default.*;
+import static arithmetic.NaturalOrder.order;
 /**
  *
  * @author mtomono

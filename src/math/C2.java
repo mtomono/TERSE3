@@ -24,7 +24,7 @@ import java.util.function.Function;
  * @author masao
  * @param <K>
  */
-public class C2<K extends Comparable<K>> implements WrapperOfComparable<K,C2<K>>,ContextComparable<K,C2<K>> {
+public class C2<K extends Comparable<? super K>> implements WrapperOfComparable<K,C2<K>>,ContextComparable<K,C2<K>> {
     static public C2.Builder<Integer> i=new Builder<>(new IntegerOp());
     static public C2.Builder<Long> l=new Builder<>(new LongOp());
     static public C2.Builder<Float> f=new Builder<>(new FloatOp());
@@ -34,7 +34,7 @@ public class C2<K extends Comparable<K>> implements WrapperOfComparable<K,C2<K>>
     static public C2.Builder<BigDecimal> bd(int scale, RoundingMode r) {
         return new Builder<>(new BigDecimalOpRounded(scale,r));
     }
-    static public class Builder<K extends Comparable<K>> implements ContextBuilder<K,C2<K>> {
+    static public class Builder<K extends Comparable<? super K>> implements ContextBuilder<K,C2<K>> {
         final Op<K> body;
         final Function<C2<K>,K> toComparable=x->x.body();
         Builder(Op<K> body) {

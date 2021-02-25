@@ -17,26 +17,15 @@ package function;
 /**
  *
  * @author masao
- * @param <S>
+ * @param <T>
  */
-public interface ChainedCompare<S extends Comparable<? super S>> {
-    S self();
-    default boolean eq(S v) {
-        return CompareUtil.eq(self(),v);
-    }
-    default boolean ne(S v) {
-        return CompareUtil.ne(self(),v);
-    }
-    default boolean gt(S v) {
-        return CompareUtil.gt(self(),v);
-    }
-    default boolean ge(S v) {
-        return CompareUtil.ge(self(),v);
-    }
-    default boolean lt(S v) {
-        return CompareUtil.lt(self(),v);
-    }
-    default boolean le(S v) {
-        return CompareUtil.le(self(),v);
-    }
+public interface Order<T extends Comparable<? super T>> {
+    default T min(T a, T b) { return CompareUtil.min(a, b); }
+    default T max(T a, T b) { return CompareUtil.max(a, b); }
+    default boolean eq(T a, T b) { return CompareUtil.eq(a, b); }
+    default boolean ne(T a, T b) { return CompareUtil.ne(a, b); }
+    default boolean lt(T a, T b) { return CompareUtil.lt(a, b); }
+    default boolean le(T a, T b) { return CompareUtil.le(a, b); }
+    default boolean gt(T a, T b) { return CompareUtil.gt(a, b); }
+    default boolean ge(T a, T b) { return CompareUtil.ge(a, b); }
 }

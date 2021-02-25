@@ -14,7 +14,6 @@
  */
 package math;
 
-import function.ChainedCompare;
 import function.WrapperOfComparable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -25,7 +24,7 @@ import java.util.function.Function;
  * @author masao
  * @param <K>
  */
-public class C2N<K extends Number&Comparable<K>> implements WrapperOfComparable<K,C2N<K>>,ContextComparable<K, C2N<K>>,ContextNumber<K,C2N<K>> {
+public class C2N<K extends Number&Comparable<? super K>> implements WrapperOfComparable<K,C2N<K>>,ContextComparable<K, C2N<K>>,ContextNumber<K,C2N<K>> {
     static public C2N.Builder<Integer> i=new Builder<>(new IntegerOp());
     static public C2N.Builder<Long> l=new Builder<>(new LongOp());
     static public C2N.Builder<Float> f=new Builder<>(new FloatOp());
@@ -35,7 +34,7 @@ public class C2N<K extends Number&Comparable<K>> implements WrapperOfComparable<
     static public C2N.Builder<BigDecimal> bd(int scale, RoundingMode r) {
         return new Builder<>(new BigDecimalOpRounded(scale,r));
     }
-    static public class Builder<K extends Number&Comparable<K>> implements ContextBuilder<K,C2N<K>> {
+    static public class Builder<K extends Number&Comparable<? super K>> implements ContextBuilder<K,C2N<K>> {
         final Op<K> body;
         final Function<C2N<K>,K> toComparable=x->x.body();
         Builder(Op<K> body) {

@@ -14,35 +14,33 @@
  */
 package function;
 
-import java.util.function.Function;
-
 /**
  *
  * @author masao
  */
-public class CompareUtil {
-    static public <T extends Comparable<T>> T min(T a, T b) {
+public interface CompareUtil {
+    static public <T extends Comparable<? super T>> T min(T a, T b) {
         return a.compareTo(b)<0?a:b;
     }
-    static public <T extends Comparable<T>> T max(T a, T b) {
+    static public <T extends Comparable<? super T>> T max(T a, T b) {
         return a.compareTo(b)>0?a:b;
     }
-    static public <T extends Comparable<T>> boolean eq(T a, T b) {
+    static public <T extends Comparable<? super T>> boolean eq(T a, T b) {
         return a.compareTo(b)==0;
     }
-    static public <T extends Comparable<T>> boolean ne(T a, T b) {
+    static public <T extends Comparable<? super T>> boolean ne(T a, T b) {
         return a.compareTo(b)!=0;
     }
-    static public <T extends Comparable<T>> boolean gt(T a, T b) {
+    static public <T extends Comparable<? super T>> boolean gt(T a, T b) {
         return a.compareTo(b)>0;
     }
-    static public <T extends Comparable<T>> boolean ge(T a,T b) {
+    static public <T extends Comparable<? super T>> boolean ge(T a,T b) {
         return a.compareTo(b)>=0;
     }
-    static public <T extends Comparable<T>> boolean lt(T a, T b) {
+    static public <T extends Comparable<? super T>> boolean lt(T a, T b) {
         return a.compareTo(b)<0;
     }
-    static public <T extends Comparable<T>> boolean le(T a,T b) {
+    static public <T extends Comparable<? super T>> boolean le(T a,T b) {
         return a.compareTo(b)<=0;
     }
 }
