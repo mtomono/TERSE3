@@ -14,6 +14,7 @@
  */
 package math;
 
+import function.WrapperOfComparable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.function.Function;
@@ -23,7 +24,7 @@ import java.util.function.Function;
  * @author masao
  * @param <K>
  */
-public class C2<K extends Comparable<K>> implements Context<K,C2<K>>,ComparableContext<C2<K>>,Comparable<C2<K>> {
+public class C2<K extends Comparable<K>> implements WrapperOfComparable<K,C2<K>>,ContextComparable<K,C2<K>> {
     static public C2.Builder<Integer> i=new Builder<>(new IntegerOp());
     static public C2.Builder<Long> l=new Builder<>(new LongOp());
     static public C2.Builder<Float> f=new Builder<>(new FloatOp());
@@ -73,13 +74,6 @@ public class C2<K extends Comparable<K>> implements Context<K,C2<K>>,ComparableC
     @Override
     public C2<K> self() {
         return this;
-    }
-    public boolean isZero() {
-        return eq(zero());
-    }
-    @Override
-    public int compareTo(C2<K> o) {
-        return body().compareTo(o.body());
     }
     @Override
     public String toString() {

@@ -3,16 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package math;
-
-import function.CompareUtil;
+package function;
 
 /**
  *
  * @author masao
  * @param <S>
  */
-public interface ComparableContext<S extends Comparable<S>> {
+public interface ChainedCompare<S extends Comparable<S>> {
     S self();
     default boolean eq(S v) {
         return CompareUtil.eq(self(),v);

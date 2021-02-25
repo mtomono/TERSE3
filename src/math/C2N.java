@@ -14,6 +14,8 @@
  */
 package math;
 
+import function.ChainedCompare;
+import function.WrapperOfComparable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.function.Function;
@@ -23,7 +25,7 @@ import java.util.function.Function;
  * @author masao
  * @param <K>
  */
-public class C2N<K extends Number&Comparable<K>> implements Context<K, C2N<K>>,ComparableContext<C2N<K>>,Comparable<C2N<K>> {
+public class C2N<K extends Number&Comparable<K>> implements WrapperOfComparable<K,C2N<K>>,ContextComparable<K, C2N<K>>,ContextNumber<K,C2N<K>> {
     static public C2N.Builder<Integer> i=new Builder<>(new IntegerOp());
     static public C2N.Builder<Long> l=new Builder<>(new LongOp());
     static public C2N.Builder<Float> f=new Builder<>(new FloatOp());
@@ -73,28 +75,6 @@ public class C2N<K extends Number&Comparable<K>> implements Context<K, C2N<K>>,C
     @Override
     public C2N<K> self() {
         return this;
-    }
-    public Function<C2N<K>,K> toComparable() {
-        return builder.toComparable;
-    }
-    public boolean isZero() {
-        return eq(zero());
-    }
-    public boolean isInteger() {
-        return self().eq(intValue());
-    }
-    public boolean isLong() {
-        return self().eq(longValue());
-    }
-    public C2N<K> intValue() {
-        return b().b(body().intValue());
-    }
-    public C2N<K> longValue() {
-        return b().b(body().longValue());
-    }
-    @Override
-    public int compareTo(C2N<K> o) {
-        return body().compareTo(o.body());
     }
     @Override
     public String toString() {

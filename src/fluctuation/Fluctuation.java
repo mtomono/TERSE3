@@ -180,7 +180,7 @@ public class Fluctuation<K extends Comparable<K>> {
             return builder.accumulates(body.optionalMap(p->range.intersect(p.l()).map(i->P.p(i,p.r()))).normalize());
         }
         public boolean nonnegative() {
-            return body.forAll(x->x.r().ge(zero()));
+            return body.forAll(x->x.r().geZero());
         }
         public Fluctuation<K> nonzero() {
             return builder.accumulates(body.filter(p->!p.r().isZero()));
