@@ -13,6 +13,9 @@ import function.Order;
  * @param <T>
  */
 public class Builder<T extends Comparable<T>> {
+    public static Builder<Integer> intRange = b();
+    public static Builder<Long> longRange = b();
+    public static Builder<Double> doubleRange= b();
     static public <T extends Comparable<T>> Builder<T> b() {
         return new Builder<>(new NaturalOrder<T>());
     }

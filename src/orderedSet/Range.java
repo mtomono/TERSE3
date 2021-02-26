@@ -37,6 +37,9 @@ import string.Message;
 public class Range<T extends Comparable<? super T>> {
 
     public static <T extends Comparable<? super T>> Range<T> create(T start, T end) {
+        return createi(start,end);
+    }
+    public static <T extends Comparable<? super T>> Range<T> createi(T start, T end) {
         return new Range<>(start, end, new NaturalOrder<>());
     }
     public final T start;
