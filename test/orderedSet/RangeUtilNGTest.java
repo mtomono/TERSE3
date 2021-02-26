@@ -57,7 +57,7 @@ public class RangeUtilNGTest {
     @Test
     public void testInEitherWay() {
         System.out.println(test.TestUtils.methodName(0));
-        Range<Integer> result = inEitherWay(0,1);
+        Range<Integer> result = inEitherWay(0,1, new NaturalOrder<>());
         Range<Integer> expected = Range.create(0,1);
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
@@ -67,7 +67,7 @@ public class RangeUtilNGTest {
     @Test
     public void testInEitherWayR() {
         System.out.println(test.TestUtils.methodName(0));
-        Range<Integer> result = inEitherWay(1,0);
+        Range<Integer> result = inEitherWay(1,0, new NaturalOrder<>());
         Range<Integer> expected = Range.create(0,1);
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);

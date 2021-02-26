@@ -34,6 +34,10 @@ import string.Message;
  * @param <T>
  */
 public class RangeSet<T extends Comparable<? super T>> extends AbstractList<Range<T>> {
+
+    public static <T extends Comparable<? super T>> RangeSet<T> create(T... range) {
+        return new RangeSet<>(new NaturalOrder<>(),range);
+    }
     List<Range<T>> elements;
     
     @Override
@@ -109,7 +113,7 @@ public class RangeSet<T extends Comparable<? super T>> extends AbstractList<Rang
         this(Range.<T>c(order, range));
     }
     
-    public RangeSet(T... range) {
+    private RangeSet(T... range) {
         this(new NaturalOrder<>(), range);
     }
     

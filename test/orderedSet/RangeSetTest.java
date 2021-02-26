@@ -40,7 +40,7 @@ public class RangeSetTest {
     @Test
     public void testContains__point() {
         methodNamePrint();
-        RangeSet<Integer> tested = new RangeSet<>(10, 15, 25, 45);
+        RangeSet<Integer> tested = RangeSet.create(10, 15, 25, 45);
         assertFalse(tested.contains(-1));
         assertFalse(tested.contains(0));
         assertFalse(tested.contains(5));
@@ -61,7 +61,7 @@ public class RangeSetTest {
     
     @Test
     public void testContains__points() {
-        RangeSet<Integer> tested = new RangeSet<>(10, 15, 25, 45);
+        RangeSet<Integer> tested = RangeSet.create(10, 15, 25, 45);
         assertTrue(tested.containsPoints(c.a2l(10, 13, 27, 44)));
         assertFalse(tested.containsPoints(c.a2l(9, 13, 27)));
         assertFalse(tested.containsPoints(c.a2l(10, 20, 44)));
@@ -70,41 +70,41 @@ public class RangeSetTest {
     
     @Test
     public void testContains__points_lastOneIsOut() {
-        RangeSet<Integer> tested = new RangeSet<>(10, 15, 25, 45);
+        RangeSet<Integer> tested = RangeSet.create(10, 15, 25, 45);
         assertFalse(tested.containsPoints(c.a2l(10, 13, 55)));
     }
     
     @Test
     public void testContains__range() {
-        RangeSet<Integer> tested = new RangeSet<>(10, 15, 25, 45);
-        assertTrue(tested.contains(new RangeSet<>(11, 13)));
-        assertTrue(tested.contains(new RangeSet<>(27, 30)));
-        assertFalse(tested.contains(new RangeSet<>(7, 8)));
-        assertFalse(tested.contains(new RangeSet<>(17, 20)));
-        assertFalse(tested.contains(new RangeSet<>(15, 25)));
-        assertFalse(tested.contains(new RangeSet<>(55, 58)));
-        assertFalse(tested.contains(new RangeSet<>(45, 50)));
-        assertFalse(tested.contains(new RangeSet<>(13, 28)));
-        assertFalse(tested.contains(new RangeSet<>(8, 13)));
-        assertFalse(tested.contains(new RangeSet<>(8, 17)));
-        assertFalse(tested.contains(new RangeSet<>(13, 17)));
-        assertFalse(tested.contains(new RangeSet<>(23, 30)));
-        assertFalse(tested.contains(new RangeSet<>(23, 50)));
-        assertFalse(tested.contains(new RangeSet<>(30, 50)));
-        assertTrue(tested.contains(new RangeSet<>(10, 11, 12, 13, 25, 26, 27, 28, 29, 30)));
-        assertFalse(tested.contains(new RangeSet<>(9, 11, 12, 13, 25, 26, 27, 28, 29, 30)));
-        assertFalse(tested.contains(new RangeSet<>(10, 11, 12, 16, 25, 26, 27, 28, 29, 30)));
-        assertFalse(tested.contains(new RangeSet<>(10, 11, 12, 13, 24, 26, 27, 28, 29, 46)));
-        assertTrue(tested.contains(new RangeSet<>(10, 15, 25, 45)));
-        assertFalse(tested.contains(new RangeSet<>(9, 15, 25, 45)));
-        assertFalse(tested.contains(new RangeSet<>(10, 16, 25, 45)));
-        assertFalse(tested.contains(new RangeSet<>(10, 15, 24, 45)));
-        assertFalse(tested.contains(new RangeSet<>(10, 15, 25, 46)));
+        RangeSet<Integer> tested = RangeSet.create(10, 15, 25, 45);
+        assertTrue(tested.contains(RangeSet.create(11, 13)));
+        assertTrue(tested.contains(RangeSet.create(27, 30)));
+        assertFalse(tested.contains(RangeSet.create(7, 8)));
+        assertFalse(tested.contains(RangeSet.create(17, 20)));
+        assertFalse(tested.contains(RangeSet.create(15, 25)));
+        assertFalse(tested.contains(RangeSet.create(55, 58)));
+        assertFalse(tested.contains(RangeSet.create(45, 50)));
+        assertFalse(tested.contains(RangeSet.create(13, 28)));
+        assertFalse(tested.contains(RangeSet.create(8, 13)));
+        assertFalse(tested.contains(RangeSet.create(8, 17)));
+        assertFalse(tested.contains(RangeSet.create(13, 17)));
+        assertFalse(tested.contains(RangeSet.create(23, 30)));
+        assertFalse(tested.contains(RangeSet.create(23, 50)));
+        assertFalse(tested.contains(RangeSet.create(30, 50)));
+        assertTrue(tested.contains(RangeSet.create(10, 11, 12, 13, 25, 26, 27, 28, 29, 30)));
+        assertFalse(tested.contains(RangeSet.create(9, 11, 12, 13, 25, 26, 27, 28, 29, 30)));
+        assertFalse(tested.contains(RangeSet.create(10, 11, 12, 16, 25, 26, 27, 28, 29, 30)));
+        assertFalse(tested.contains(RangeSet.create(10, 11, 12, 13, 24, 26, 27, 28, 29, 46)));
+        assertTrue(tested.contains(RangeSet.create(10, 15, 25, 45)));
+        assertFalse(tested.contains(RangeSet.create(9, 15, 25, 45)));
+        assertFalse(tested.contains(RangeSet.create(10, 16, 25, 45)));
+        assertFalse(tested.contains(RangeSet.create(10, 15, 24, 45)));
+        assertFalse(tested.contains(RangeSet.create(10, 15, 25, 46)));
     }
     
     @Test
     public void testOverlaps__points() {
-        RangeSet<Integer> tested = new RangeSet<>(10, 15, 25, 45);
+        RangeSet<Integer> tested = RangeSet.create(10, 15, 25, 45);
         assertTrue(tested.overlapsPoints(c.a2l(10, 13, 27, 44)));
         assertTrue(tested.overlapsPoints(c.a2l(9, 13, 27)));
         assertTrue(tested.overlapsPoints(c.a2l(10, 20, 44)));
@@ -120,74 +120,74 @@ public class RangeSetTest {
     
     @Test
     public void testOverlaps__range() {
-        RangeSet<Integer> tested = new RangeSet<>(10, 15, 25, 45);
-        assertFalse(tested.overlaps(new RangeSet<>(7, 8)));
-        assertFalse(tested.overlaps(new RangeSet<>(17, 20)));
-        assertFalse(tested.overlaps(new RangeSet<>(15, 25)));
-        assertFalse(tested.overlaps(new RangeSet<>(55, 58)));
-        assertFalse(tested.overlaps(new RangeSet<>(45, 50)));
-        assertTrue(tested.overlaps(new RangeSet<>(8, 13)));
-        assertTrue(tested.overlaps(new RangeSet<>(8, 17)));
-        assertTrue(tested.overlaps(new RangeSet<>(13, 17)));
-        assertTrue(tested.overlaps(new RangeSet<>(13, 28)));
-        assertTrue(tested.overlaps(new RangeSet<>(23, 30)));
-        assertTrue(tested.overlaps(new RangeSet<>(23, 50)));
-        assertTrue(tested.overlaps(new RangeSet<>(30, 50)));
-        assertTrue(tested.overlaps(new RangeSet<>(10, 11, 12, 13, 25, 26, 27, 28, 29, 30)));
-        assertTrue(tested.overlaps(new RangeSet<>(9, 11, 12, 13, 25, 26, 27, 28, 29, 30)));
-        assertTrue(tested.overlaps(new RangeSet<>(10, 11, 12, 16, 25, 26, 27, 28, 29, 30)));
-        assertTrue(tested.overlaps(new RangeSet<>(10, 11, 12, 13, 24, 26, 27, 28, 29, 46)));
-        assertTrue(tested.overlaps(new RangeSet<>(10, 15, 25, 45)));
-        assertTrue(tested.overlaps(new RangeSet<>(9, 15, 25, 45)));
-        assertTrue(tested.overlaps(new RangeSet<>(12, 16, 25, 45)));
-        assertTrue(tested.overlaps(new RangeSet<>(12, 15, 24, 45)));
-        assertTrue(tested.overlaps(new RangeSet<>(12, 15, 25, 46)));
+        RangeSet<Integer> tested = RangeSet.create(10, 15, 25, 45);
+        assertFalse(tested.overlaps(RangeSet.create(7, 8)));
+        assertFalse(tested.overlaps(RangeSet.create(17, 20)));
+        assertFalse(tested.overlaps(RangeSet.create(15, 25)));
+        assertFalse(tested.overlaps(RangeSet.create(55, 58)));
+        assertFalse(tested.overlaps(RangeSet.create(45, 50)));
+        assertTrue(tested.overlaps(RangeSet.create(8, 13)));
+        assertTrue(tested.overlaps(RangeSet.create(8, 17)));
+        assertTrue(tested.overlaps(RangeSet.create(13, 17)));
+        assertTrue(tested.overlaps(RangeSet.create(13, 28)));
+        assertTrue(tested.overlaps(RangeSet.create(23, 30)));
+        assertTrue(tested.overlaps(RangeSet.create(23, 50)));
+        assertTrue(tested.overlaps(RangeSet.create(30, 50)));
+        assertTrue(tested.overlaps(RangeSet.create(10, 11, 12, 13, 25, 26, 27, 28, 29, 30)));
+        assertTrue(tested.overlaps(RangeSet.create(9, 11, 12, 13, 25, 26, 27, 28, 29, 30)));
+        assertTrue(tested.overlaps(RangeSet.create(10, 11, 12, 16, 25, 26, 27, 28, 29, 30)));
+        assertTrue(tested.overlaps(RangeSet.create(10, 11, 12, 13, 24, 26, 27, 28, 29, 46)));
+        assertTrue(tested.overlaps(RangeSet.create(10, 15, 25, 45)));
+        assertTrue(tested.overlaps(RangeSet.create(9, 15, 25, 45)));
+        assertTrue(tested.overlaps(RangeSet.create(12, 16, 25, 45)));
+        assertTrue(tested.overlaps(RangeSet.create(12, 15, 24, 45)));
+        assertTrue(tested.overlaps(RangeSet.create(12, 15, 25, 46)));
     }
     
     @Test
     public void testTouch__range() {
-        RangeSet<Integer> tested = new RangeSet<>(10, 15, 25, 45);
-        assertTrue(tested.touch(new RangeSet<>(7, 8)).isEmpty());
-        assertTrue(tested.touch(new RangeSet<>(17, 20)).isEmpty());
-        assertTrue(tested.touch(new RangeSet<>(15, 25)).isEmpty());
-        assertTrue(tested.touch(new RangeSet<>(55, 58)).isEmpty());
-        assertTrue(tested.touch(new RangeSet<>(45, 50)).isEmpty());
-        assertEquals(tested.touch(new RangeSet<>(8, 13)), new RangeSet<>(10, 15));
-        assertEquals(tested.touch(new RangeSet<>(8, 17)), new RangeSet<>(10, 15));
-        assertEquals(tested.touch(new RangeSet<>(13, 17)), new RangeSet<>(10, 15));
-        assertEquals(tested.touch(new RangeSet<>(13, 28)), new RangeSet<>(10, 15, 25, 45));
-        assertEquals(tested.touch(new RangeSet<>(23, 30)), new RangeSet<>(25, 45));
-        assertEquals(tested.touch(new RangeSet<>(23, 50)), new RangeSet<>(25, 45));
-        assertEquals(tested.touch(new RangeSet<>(30, 50)), new RangeSet<>(25, 45));
-        assertEquals(tested.touch(new RangeSet<>(10, 11, 12, 13, 25, 26, 27, 28, 29, 30)), new RangeSet<>(10, 15, 25, 45));
-        assertEquals(tested.touch(new RangeSet<>(9, 11, 12, 13, 25, 26, 27, 28, 29, 30)), new RangeSet<>(10, 15, 25, 45));
-        assertEquals(tested.touch(new RangeSet<>(10, 11, 12, 16, 25, 26, 27, 28, 29, 30)), new RangeSet<>(10, 15, 25, 45));
-        assertEquals(tested.touch(new RangeSet<>(10, 11, 12, 13, 24, 26, 27, 28, 29, 46)), new RangeSet<>(10, 15, 25, 45));
-        assertEquals(tested.touch(new RangeSet<>(10, 15, 25, 45)), new RangeSet<>(10, 15, 25, 45));
-        assertEquals(tested.touch(new RangeSet<>(9, 15, 25, 45)), new RangeSet<>(10, 15, 25, 45));
-        assertEquals(tested.touch(new RangeSet<>(12, 16, 25, 45)), new RangeSet<>(10, 15, 25, 45));
-        assertEquals(tested.touch(new RangeSet<>(12, 15, 24, 45)), new RangeSet<>(10, 15, 25, 45));
-        assertEquals(tested.touch(new RangeSet<>(12, 15, 25, 46)), new RangeSet<>(10, 15, 25, 45));
+        RangeSet<Integer> tested = RangeSet.create(10, 15, 25, 45);
+        assertTrue(tested.touch(RangeSet.create(7, 8)).isEmpty());
+        assertTrue(tested.touch(RangeSet.create(17, 20)).isEmpty());
+        assertTrue(tested.touch(RangeSet.create(15, 25)).isEmpty());
+        assertTrue(tested.touch(RangeSet.create(55, 58)).isEmpty());
+        assertTrue(tested.touch(RangeSet.create(45, 50)).isEmpty());
+        assertEquals(tested.touch(RangeSet.create(8, 13)), RangeSet.create(10, 15));
+        assertEquals(tested.touch(RangeSet.create(8, 17)), RangeSet.create(10, 15));
+        assertEquals(tested.touch(RangeSet.create(13, 17)), RangeSet.create(10, 15));
+        assertEquals(tested.touch(RangeSet.create(13, 28)), RangeSet.create(10, 15, 25, 45));
+        assertEquals(tested.touch(RangeSet.create(23, 30)), RangeSet.create(25, 45));
+        assertEquals(tested.touch(RangeSet.create(23, 50)), RangeSet.create(25, 45));
+        assertEquals(tested.touch(RangeSet.create(30, 50)), RangeSet.create(25, 45));
+        assertEquals(tested.touch(RangeSet.create(10, 11, 12, 13, 25, 26, 27, 28, 29, 30)), RangeSet.create(10, 15, 25, 45));
+        assertEquals(tested.touch(RangeSet.create(9, 11, 12, 13, 25, 26, 27, 28, 29, 30)), RangeSet.create(10, 15, 25, 45));
+        assertEquals(tested.touch(RangeSet.create(10, 11, 12, 16, 25, 26, 27, 28, 29, 30)), RangeSet.create(10, 15, 25, 45));
+        assertEquals(tested.touch(RangeSet.create(10, 11, 12, 13, 24, 26, 27, 28, 29, 46)), RangeSet.create(10, 15, 25, 45));
+        assertEquals(tested.touch(RangeSet.create(10, 15, 25, 45)), RangeSet.create(10, 15, 25, 45));
+        assertEquals(tested.touch(RangeSet.create(9, 15, 25, 45)), RangeSet.create(10, 15, 25, 45));
+        assertEquals(tested.touch(RangeSet.create(12, 16, 25, 45)), RangeSet.create(10, 15, 25, 45));
+        assertEquals(tested.touch(RangeSet.create(12, 15, 24, 45)), RangeSet.create(10, 15, 25, 45));
+        assertEquals(tested.touch(RangeSet.create(12, 15, 25, 46)), RangeSet.create(10, 15, 25, 45));
     }
     public void testIntersect__basic() {
-        assertTrue(new RangeSet<>(10, 15).intersect(new RangeSet<>(15, 17)).isEmpty());
-        assertTrue(new RangeSet<>(15, 17).intersect(new RangeSet<>(10, 15)).isEmpty());
-        assertTrue(new RangeSet<>(10, 15).intersect(new RangeSet<>(17, 18)).isEmpty());
-        assertTrue(new RangeSet<>(17, 18).intersect(new RangeSet<>(10, 15)).isEmpty());
-        assertEquals(Range.create(13, 15), new RangeSet<>(10, 15).intersect(new RangeSet<>(13, 17)).toFragments().get(0));
-        assertEquals(Range.create(13, 15), new RangeSet<>(13, 17).intersect(new RangeSet<>(10, 15)).toFragments().get(0));
-        assertEquals(Range.create(13, 15), new RangeSet<>(13, 15).intersect(new RangeSet<>(10, 17)).toFragments().get(0));
-        assertEquals(Range.create(13, 15), new RangeSet<>(10, 17).intersect(new RangeSet<>(13, 15)).toFragments().get(0));
+        assertTrue(RangeSet.create(10, 15).intersect(RangeSet.create(15, 17)).isEmpty());
+        assertTrue(RangeSet.create(15, 17).intersect(RangeSet.create(10, 15)).isEmpty());
+        assertTrue(RangeSet.create(10, 15).intersect(RangeSet.create(17, 18)).isEmpty());
+        assertTrue(RangeSet.create(17, 18).intersect(RangeSet.create(10, 15)).isEmpty());
+        assertEquals(Range.create(13, 15), RangeSet.create(10, 15).intersect(RangeSet.create(13, 17)).toFragments().get(0));
+        assertEquals(Range.create(13, 15), RangeSet.create(13, 17).intersect(RangeSet.create(10, 15)).toFragments().get(0));
+        assertEquals(Range.create(13, 15), RangeSet.create(13, 15).intersect(RangeSet.create(10, 17)).toFragments().get(0));
+        assertEquals(Range.create(13, 15), RangeSet.create(10, 17).intersect(RangeSet.create(13, 15)).toFragments().get(0));
     }
     
     @Test
     public void testIntersect__nn1() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
-        .intersect(new RangeSet<>(
+        .intersect(RangeSet.create(
        4,    6,    8,   10,      13,         17,   19,   21,               27,   29,   31,   33))
 //    ======      ======         ============      ======                  ======      ======
         .toFragments();
@@ -202,10 +202,10 @@ public class RangeSetTest {
     public void testIntersect__nn2() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
-        .intersect(new RangeSet<>(
+        .intersect(RangeSet.create(
  1,                                                                                                      37))
 //=======================================================================================================
         .toFragments();
@@ -222,10 +222,10 @@ public class RangeSetTest {
     public void testIntersect__nn3() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
-        .intersect(new RangeSet<>(
+        .intersect(RangeSet.create(
     2,                                                                                                36   ))
 // ===================================================================================================   
         .toFragments();
@@ -242,10 +242,10 @@ public class RangeSetTest {
     public void testIntersect__nn4() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
-        .intersect(new RangeSet<>(
+        .intersect(RangeSet.create(
        3,                                                                                          35      ))
 //    =============================================================================================      
         .toFragments();
@@ -262,10 +262,10 @@ public class RangeSetTest {
     public void testIntersect__nn5() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
-        .intersect(new RangeSet<>(
+        .intersect(RangeSet.create(
                            11,                                    24                                       ))
 //                         =======================================                                       
         .toFragments();
@@ -278,10 +278,10 @@ public class RangeSetTest {
     public void testIntersect__nn6() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
-        .intersect(new RangeSet<>(
+        .intersect(RangeSet.create(
                                        15,            20                                                   ))
 //                                     ===============                                                   
         .toFragments();
@@ -294,10 +294,10 @@ public class RangeSetTest {
     public void testIntersect__nn7() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
                                  13,                           23                                             )
 //                               ==============================                                                   
-        .intersect(new RangeSet<>(
+        .intersect(RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
         ).toFragments();
@@ -310,10 +310,10 @@ public class RangeSetTest {
     public void testIntersect__nn8() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
                                     14,                     22                                             )
 //                                  ========================                                                   
-        .intersect(new RangeSet<>(
+        .intersect(RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
         ).toFragments();
@@ -326,10 +326,10 @@ public class RangeSetTest {
     public void testIntersect__overlap1() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
                                  13,         17,18,         22,   24,   26                  )
 //                               ============   ============      ======                  
-        .intersect(new RangeSet<>(
+        .intersect(RangeSet.create(
                            11,      14,   16,      19,   21,         25                  )
 //                         =========      =========      ============                   
         ).toFragments();
@@ -345,10 +345,10 @@ public class RangeSetTest {
     public void testIntersect__overlap2() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
                                                 18,         22,   24,   26                  )
 //                                              ============      ======                  
-        .intersect(new RangeSet<>(
+        .intersect(RangeSet.create(
                                              17,   19,   21,         25                  )
 //                                           ======      ============                   
         ).toFragments();
@@ -362,10 +362,10 @@ public class RangeSetTest {
     public void testIntersect__overlap3() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
                                  13,         17,18,         22                              )
 //                               ============   ============                              
-        .intersect(new RangeSet<>(
+        .intersect(RangeSet.create(
                                           16,      19,   21,         25                  )
 //                                        =========      ============                   
         ).toFragments();
@@ -379,10 +379,10 @@ public class RangeSetTest {
     public void testIntersect__overlap4() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
                                  13,         17,                  24,   26                  )
 //                               ============                     ======                  
-        .intersect(new RangeSet<>(
+        .intersect(RangeSet.create(
                                           16,      19,   21,         25                  )
 //                                        =========      ============                   
         ).toFragments();
@@ -395,10 +395,10 @@ public class RangeSetTest {
     public void testIntersect__overlap5() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
                                  13,         17,18,         22                              )
 //                               ============   ============                              
-        .intersect(new RangeSet<>(
+        .intersect(RangeSet.create(
                            11,      14,                  21,         25                  )
 //                         =========                     ============                   
         ).toFragments();
@@ -409,39 +409,39 @@ public class RangeSetTest {
 
     @Test
     public void testNegate() {
-        assertEquals(Range.create(15, 17), new RangeSet<>(10, 15).negate(Range.create(15, 17)).toFragments().get(0));
-        assertEquals(Range.create(15, 17), new RangeSet<>(10, 15, 18, 19).negate(Range.create(15, 17)).toFragments().get(0));
-        assertEquals(Range.create(10, 15), new RangeSet<>(15, 17).negate(Range.create(10, 15)).toFragments().get(0));
-        assertEquals(Range.create(17, 18), new RangeSet<>(10, 15).negate(Range.create(17, 18)).toFragments().get(0));
-        assertEquals(Range.create(10, 15), new RangeSet<>(17, 18).negate(Range.create(10, 15)).toFragments().get(0));
-        assertEquals(Range.create(15, 17), new RangeSet<>(10, 15).negate(Range.create(13, 17)).toFragments().get(0));
-        assertEquals(Range.create(10, 13), new RangeSet<>(13, 17).negate(Range.create(10, 15)).toFragments().get(0));
-        assertEquals(Range.create(10, 13), new RangeSet<>(13, 15).negate(Range.create(10, 17)).toFragments().get(0));
-        assertEquals(Range.create(15, 17), new RangeSet<>(13, 15).negate(Range.create(10, 17)).toFragments().get(1));
-        assertEquals(Collections.emptyList(), new RangeSet<>(10, 17).negate(Range.create(13, 15)).toFragments());
+        assertEquals(Range.create(15, 17), RangeSet.create(10, 15).negate(Range.create(15, 17)).toFragments().get(0));
+        assertEquals(Range.create(15, 17), RangeSet.create(10, 15, 18, 19).negate(Range.create(15, 17)).toFragments().get(0));
+        assertEquals(Range.create(10, 15), RangeSet.create(15, 17).negate(Range.create(10, 15)).toFragments().get(0));
+        assertEquals(Range.create(17, 18), RangeSet.create(10, 15).negate(Range.create(17, 18)).toFragments().get(0));
+        assertEquals(Range.create(10, 15), RangeSet.create(17, 18).negate(Range.create(10, 15)).toFragments().get(0));
+        assertEquals(Range.create(15, 17), RangeSet.create(10, 15).negate(Range.create(13, 17)).toFragments().get(0));
+        assertEquals(Range.create(10, 13), RangeSet.create(13, 17).negate(Range.create(10, 15)).toFragments().get(0));
+        assertEquals(Range.create(10, 13), RangeSet.create(13, 15).negate(Range.create(10, 17)).toFragments().get(0));
+        assertEquals(Range.create(15, 17), RangeSet.create(13, 15).negate(Range.create(10, 17)).toFragments().get(1));
+        assertEquals(Collections.emptyList(), RangeSet.create(10, 17).negate(Range.create(13, 15)).toFragments());
       }
 
     @Test
     public void testMasked__basic() {
-        assertEquals(Range.create(10, 15), new RangeSet<>(10, 15).maskedBy(new RangeSet<>(15, 17)).toFragments().get(0));
-        assertEquals(Range.create(15, 17), new RangeSet<>(15, 17).maskedBy(new RangeSet<>(10, 15)).toFragments().get(0));
-        assertEquals(Range.create(10, 15), new RangeSet<>(10, 15).maskedBy(new RangeSet<>(17, 18)).toFragments().get(0));
-        assertEquals(Range.create(17, 18), new RangeSet<>(17, 18).maskedBy(new RangeSet<>(10, 15)).toFragments().get(0));
-        assertEquals(Range.create(10, 13), new RangeSet<>(10, 15).maskedBy(new RangeSet<>(13, 17)).toFragments().get(0));
-        assertEquals(Range.create(15, 17), new RangeSet<>(13, 17).maskedBy(new RangeSet<>(10, 15)).toFragments().get(0));
-        assertTrue(new RangeSet<>(13, 15).maskedBy(new RangeSet<>(10, 17)).isEmpty());
-        assertEquals(Range.create(10, 13), new RangeSet<>(10, 17).maskedBy(new RangeSet<>(13, 15)).toFragments().get(0));
-        assertEquals(Range.create(15, 17), new RangeSet<>(10, 17).maskedBy(new RangeSet<>(13, 15)).toFragments().get(1));
+        assertEquals(Range.create(10, 15), RangeSet.create(10, 15).maskedBy(RangeSet.create(15, 17)).toFragments().get(0));
+        assertEquals(Range.create(15, 17), RangeSet.create(15, 17).maskedBy(RangeSet.create(10, 15)).toFragments().get(0));
+        assertEquals(Range.create(10, 15), RangeSet.create(10, 15).maskedBy(RangeSet.create(17, 18)).toFragments().get(0));
+        assertEquals(Range.create(17, 18), RangeSet.create(17, 18).maskedBy(RangeSet.create(10, 15)).toFragments().get(0));
+        assertEquals(Range.create(10, 13), RangeSet.create(10, 15).maskedBy(RangeSet.create(13, 17)).toFragments().get(0));
+        assertEquals(Range.create(15, 17), RangeSet.create(13, 17).maskedBy(RangeSet.create(10, 15)).toFragments().get(0));
+        assertTrue(RangeSet.create(13, 15).maskedBy(RangeSet.create(10, 17)).isEmpty());
+        assertEquals(Range.create(10, 13), RangeSet.create(10, 17).maskedBy(RangeSet.create(13, 15)).toFragments().get(0));
+        assertEquals(Range.create(15, 17), RangeSet.create(10, 17).maskedBy(RangeSet.create(13, 15)).toFragments().get(1));
     }
     
     @Test
     public void testMasked__nn1() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
-        .maskedBy(new RangeSet<>(
+        .maskedBy(RangeSet.create(
        4,    6,    8,   10,      13,         17,   19,   21,               27,   29,   31,   33)
 //    ======      ======         ============      ======                  ======      ======
         ).toFragments();
@@ -458,10 +458,10 @@ public class RangeSetTest {
     public void testMasked__nn1reverse() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
        4,    6,    8,   10,      13,         17,   19,   21,               27,   29,   31,   33)
 //    ======      ======         ============      ======                  ======      ======
-        .maskedBy(new RangeSet<>(
+        .maskedBy(RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
         ).toFragments();
@@ -478,10 +478,10 @@ public class RangeSetTest {
     public void testMasked__nn2() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
-        .maskedBy(new RangeSet<>(
+        .maskedBy(RangeSet.create(
  1,                                                                                                      37))
 //=======================================================================================================
         .toFragments();
@@ -492,10 +492,10 @@ public class RangeSetTest {
     public void testMasked__nn2reverse() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
  1,                                                                                                      37)
 //=======================================================================================================
-        .maskedBy(new RangeSet<>(
+        .maskedBy(RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
         ).toFragments();
@@ -513,10 +513,10 @@ public class RangeSetTest {
     public void testMasked__nn3() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
-        .maskedBy(new RangeSet<>(
+        .maskedBy(RangeSet.create(
     2,                                                                                                36   ))
 // ===================================================================================================   
         .toFragments();
@@ -527,10 +527,10 @@ public class RangeSetTest {
     public void testMasked__nn3reverse() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
     2,                                                                                                36   )
 // ===================================================================================================   
-        .maskedBy(new RangeSet<>(
+        .maskedBy(RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
         ).toFragments();
@@ -546,10 +546,10 @@ public class RangeSetTest {
     public void testMasked__nn4() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
-        .maskedBy(new RangeSet<>(
+        .maskedBy(RangeSet.create(
        3,                                                                                          35      )
 //    =============================================================================================      
         ).toFragments();
@@ -562,10 +562,10 @@ public class RangeSetTest {
     public void testMasked__nn4reverse() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
        3,                                                                                          35      )
 //    =============================================================================================      
-        .maskedBy(new RangeSet<>(
+        .maskedBy(RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
         ).toFragments();
@@ -581,10 +581,10 @@ public class RangeSetTest {
     public void testMasked__nn5() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
-        .maskedBy(new RangeSet<>(
+        .maskedBy(RangeSet.create(
                            11,                                    24                                       )
 //                         =======================================                                       
         ).toFragments();
@@ -599,10 +599,10 @@ public class RangeSetTest {
     public void testMasked__nn5reverse() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
                            11,                                    24                                       )
 //                         =======================================                                       
-        .maskedBy(new RangeSet<>(
+        .maskedBy(RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
         ).toFragments();
@@ -616,10 +616,10 @@ public class RangeSetTest {
     public void testMasked__nn6() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
-        .maskedBy(new RangeSet<>(
+        .maskedBy(RangeSet.create(
                                        15,            20                                                   )
 //                                     ===============                                                   
         ).toFragments();
@@ -636,10 +636,10 @@ public class RangeSetTest {
     public void testMasked__nn6reverse() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
                                        15,            20                                                   )
 //                                     ===============                                                   
-        .maskedBy(new RangeSet<>(
+        .maskedBy(RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
         ).toFragments();
@@ -651,10 +651,10 @@ public class RangeSetTest {
     public void testMasked__nn7() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
                                  13,                           23                                             )
 //                               ==============================                                                   
-        .maskedBy(new RangeSet<>(
+        .maskedBy(RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
         ).toFragments();
@@ -668,10 +668,10 @@ public class RangeSetTest {
     public void testMasked__nn7reverse() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
-        .maskedBy(new RangeSet<>(
+        .maskedBy(RangeSet.create(
                                  13,                           23                                             )
 //                               ==============================                                                   
         ).toFragments();
@@ -686,10 +686,10 @@ public class RangeSetTest {
     public void testMasked__nn8() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
                                     14,                     22                                             )
 //                                  ========================                                                   
-        .maskedBy(new RangeSet<>(
+        .maskedBy(RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
         ).toFragments();
@@ -701,10 +701,10 @@ public class RangeSetTest {
     public void testMasked__nn8reverse() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
-        .maskedBy(new RangeSet<>(
+        .maskedBy(RangeSet.create(
                                     14,                     22                                             )
 //                                  ========================                                                   
         ).toFragments();
@@ -720,10 +720,10 @@ public class RangeSetTest {
     public void testMasked__overlap1() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
                                  13,         17,18,         22,   24,   26                  )
 //                               ============   ============      ======                  
-        .maskedBy(new RangeSet<>(
+        .maskedBy(RangeSet.create(
                            11,      14,   16,      19,   21,         25                  )
 //                         =========      =========      ============                   
         ).toFragments();
@@ -737,10 +737,10 @@ public class RangeSetTest {
     public void testMasked__overlap2() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
                                                 18,         22,   24,   26                  )
 //                                              ============      ======                  
-        .maskedBy(new RangeSet<>(
+        .maskedBy(RangeSet.create(
                                              17,   19,   21,         25                  )
 //                                           ======      ============                   
         ).toFragments();
@@ -753,10 +753,10 @@ public class RangeSetTest {
     public void testMasked__overlap3() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
                                  13,         17,18,         22                              )
 //                               ============   ============                              
-        .maskedBy(new RangeSet<>(
+        .maskedBy(RangeSet.create(
                                           16,      19,   21,         25                  )
 //                                        =========      ============                   
         ).toFragments();
@@ -769,10 +769,10 @@ public class RangeSetTest {
     public void testMasked__overlap4() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
                                  13,         17,                  24,   26                  )
 //                               ============                     ======                  
-        .maskedBy(new RangeSet<>(
+        .maskedBy(RangeSet.create(
                                           16,      19,   21,         25                  )
 //                                        =========      ============                   
         ).toFragments();
@@ -785,10 +785,10 @@ public class RangeSetTest {
     public void testMasked__overlap5() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
                                  13,         17,18,         22                              )
 //                               ============   ============                              
-        .maskedBy(new RangeSet<>(
+        .maskedBy(RangeSet.create(
                            11,      14,                  21,         25                  )
 //                         =========                     ============                   
         ).toFragments();
@@ -799,25 +799,25 @@ public class RangeSetTest {
 
     @Test
     public void testMask__basic() {
-        assertEquals(Range.create(15, 17), new RangeSet<>(10, 15).mask(new RangeSet<>(15, 17)).toFragments().get(0));
-        assertEquals(Range.create(10, 15), new RangeSet<>(15, 17).mask(new RangeSet<>(10, 15)).toFragments().get(0));
-        assertEquals(Range.create(17, 18), new RangeSet<>(10, 15).mask(new RangeSet<>(17, 18)).toFragments().get(0));
-        assertEquals(Range.create(10, 15), new RangeSet<>(17, 18).mask(new RangeSet<>(10, 15)).toFragments().get(0));
-        assertEquals(Range.create(15, 17), new RangeSet<>(10, 15).mask(new RangeSet<>(13, 17)).toFragments().get(0));
-        assertEquals(Range.create(10, 13), new RangeSet<>(13, 17).mask(new RangeSet<>(10, 15)).toFragments().get(0));
-        assertTrue(new RangeSet<>(10, 17).mask(new RangeSet<>(13, 15)).isEmpty());
-        assertEquals(Range.create(10, 13), new RangeSet<>(13, 15).mask(new RangeSet<>(10, 17)).toFragments().get(0));
-        assertEquals(Range.create(15, 17), new RangeSet<>(13, 15).mask(new RangeSet<>(10, 17)).toFragments().get(1));
+        assertEquals(Range.create(15, 17), RangeSet.create(10, 15).mask(RangeSet.create(15, 17)).toFragments().get(0));
+        assertEquals(Range.create(10, 15), RangeSet.create(15, 17).mask(RangeSet.create(10, 15)).toFragments().get(0));
+        assertEquals(Range.create(17, 18), RangeSet.create(10, 15).mask(RangeSet.create(17, 18)).toFragments().get(0));
+        assertEquals(Range.create(10, 15), RangeSet.create(17, 18).mask(RangeSet.create(10, 15)).toFragments().get(0));
+        assertEquals(Range.create(15, 17), RangeSet.create(10, 15).mask(RangeSet.create(13, 17)).toFragments().get(0));
+        assertEquals(Range.create(10, 13), RangeSet.create(13, 17).mask(RangeSet.create(10, 15)).toFragments().get(0));
+        assertTrue(RangeSet.create(10, 17).mask(RangeSet.create(13, 15)).isEmpty());
+        assertEquals(Range.create(10, 13), RangeSet.create(13, 15).mask(RangeSet.create(10, 17)).toFragments().get(0));
+        assertEquals(Range.create(15, 17), RangeSet.create(13, 15).mask(RangeSet.create(10, 17)).toFragments().get(1));
     }
     
     @Test
     public void testMask__nn1() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
        4,    6,    8,   10,      13,         17,   19,   21,               27,   29,   31,   33)
 //    ======      ======         ============      ======                  ======      ======
-        .mask(new RangeSet<>(
+        .mask(RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
         ).toFragments();
@@ -834,10 +834,10 @@ public class RangeSetTest {
     public void testMask__nn1reverse() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
-        .mask(new RangeSet<>(
+        .mask(RangeSet.create(
        4,    6,    8,   10,      13,         17,   19,   21,               27,   29,   31,   33)
 //    ======      ======         ============      ======                  ======      ======
         ).toFragments();
@@ -854,10 +854,10 @@ public class RangeSetTest {
     public void testMask__nn2() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
  1,                                                                                                      37)
 //=======================================================================================================
-        .mask(new RangeSet<>(
+        .mask(RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36))
 // ======            ======         ======      ============      ======                        ======
         .toFragments();
@@ -868,10 +868,10 @@ public class RangeSetTest {
     public void testMask__nn2reverse() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
-        .mask(new RangeSet<>(
+        .mask(RangeSet.create(
  1,                                                                                                      37)
 //=======================================================================================================
         ).toFragments();
@@ -889,10 +889,10 @@ public class RangeSetTest {
     public void testMask__nn3() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
     2,                                                                                                36   )
 // ===================================================================================================   
-        .mask(new RangeSet<>(
+        .mask(RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36))
 // ======            ======         ======      ============      ======                        ======
         .toFragments();
@@ -903,10 +903,10 @@ public class RangeSetTest {
     public void testMask__nn3reverse() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
-        .mask(new RangeSet<>(
+        .mask(RangeSet.create(
     2,                                                                                                36   )
 // ===================================================================================================   
         ).toFragments();
@@ -922,10 +922,10 @@ public class RangeSetTest {
     public void testMask__nn4() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
        3,                                                                                          35      )
 //    =============================================================================================      
-        .mask(new RangeSet<>(
+        .mask(RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
         ).toFragments();
@@ -938,10 +938,10 @@ public class RangeSetTest {
     public void testMask__nn4reverse() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
-        .mask(new RangeSet<>(
+        .mask(RangeSet.create(
        3,                                                                                          35      )
 //    =============================================================================================      
         ).toFragments();
@@ -957,10 +957,10 @@ public class RangeSetTest {
     public void testMask__nn5() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
                            11,                                    24                                       )
 //                         =======================================                                       
-        .mask(new RangeSet<>(
+        .mask(RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
         ).toFragments();
@@ -975,10 +975,10 @@ public class RangeSetTest {
     public void testMask__nn5reverse() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
-        .mask(new RangeSet<>(
+        .mask(RangeSet.create(
                            11,                                    24                                       )
 //                         =======================================                                       
         ).toFragments();
@@ -992,10 +992,10 @@ public class RangeSetTest {
     public void testMask__nn6() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
                                        15,            20                                                   )
 //                                     ===============                                                   
-        .mask(new RangeSet<>(
+        .mask(RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
         ).toFragments();
@@ -1012,10 +1012,10 @@ public class RangeSetTest {
     public void testMask__nn6reverse() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
-        .mask(new RangeSet<>(
+        .mask(RangeSet.create(
                                        15,            20                                                   )
 //                                     ===============                                                   
         ).toFragments();
@@ -1027,10 +1027,10 @@ public class RangeSetTest {
     public void testMask__nn7() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
-        .mask(new RangeSet<>(
+        .mask(RangeSet.create(
                                  13,                           23                                             )
 //                               ==============================                                                   
         ).toFragments();
@@ -1044,10 +1044,10 @@ public class RangeSetTest {
     public void testMask__nn7reverse() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
                                  13,                           23                                             )
 //                               ==============================                                                   
-        .mask(new RangeSet<>(
+        .mask(RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
         ).toFragments();
@@ -1062,10 +1062,10 @@ public class RangeSetTest {
     public void testMask__nn8() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
-        .mask(new RangeSet<>(
+        .mask(RangeSet.create(
                                     14,                     22                                             )
 //                                  ========================                                                   
         ).toFragments();
@@ -1077,10 +1077,10 @@ public class RangeSetTest {
     public void testMask__nn8reverse() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
                                     14,                     22                                             )
 //                                  ========================                                                   
-        .mask(new RangeSet<>(
+        .mask(RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
         ).toFragments();
@@ -1096,10 +1096,10 @@ public class RangeSetTest {
     public void testMask__overlap1() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
                            11,      14,   16,      19,   21,         25                  )
 //                         =========      =========      ============                   
-        .mask(new RangeSet<>(
+        .mask(RangeSet.create(
                                  13,         17,18,         22,   24,   26                  )
 //                               ============   ============      ======                  
         ).toFragments();
@@ -1113,10 +1113,10 @@ public class RangeSetTest {
     public void testMask__overlap2() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
                                              17,   19,   21,         25                  )
 //                                           ======      ============                   
-        .mask(new RangeSet<>(
+        .mask(RangeSet.create(
                                                 18,         22,   24,   26                  )
 //                                              ============      ======                  
         ).toFragments();
@@ -1129,10 +1129,10 @@ public class RangeSetTest {
     public void testMask__overlap3() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
                                           16,      19,   21,         25                  )
 //                                        =========      ============                   
-        .mask(new RangeSet<>(
+        .mask(RangeSet.create(
                                  13,         17,18,         22                              )
 //                               ============   ============                              
         ).toFragments();
@@ -1145,10 +1145,10 @@ public class RangeSetTest {
     public void testMask__overlap4() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
                                           16,      19,   21,         25                  )
 //                                        =========      ============                   
-        .mask(new RangeSet<>(
+        .mask(RangeSet.create(
                                  13,         17,                  24,   26                  )
 //                               ============                     ======                  
         ).toFragments();
@@ -1161,10 +1161,10 @@ public class RangeSetTest {
     public void testMask__overlap5() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
                            11,      14,                  21,         25                  )
 //                         =========                     ============                   
-        .mask(new RangeSet<>(
+        .mask(RangeSet.create(
                                  13,         17,18,         22                              )
 //                               ============   ============                              
         ).toFragments();
@@ -1175,7 +1175,7 @@ public class RangeSetTest {
 
     @Test
     public void testCover() {
-        assertEquals(Range.create(13, 26), new RangeSet<>(
+        assertEquals(Range.create(13, 26), RangeSet.create(
                                  13,         17,                  24,   26                  )
 //                               ============                     ======                  
         .cover().orElse(null));
@@ -1184,10 +1184,10 @@ public class RangeSetTest {
     public void testUnion__nn1() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
-        .union(new RangeSet<>(
+        .union(RangeSet.create(
        4,    6,    8,   10,      13,         17,   19,   21,               27,   29,   31,   33)
 //    ======      ======         ============      ======                  ======      ======
         ).toFragments();
@@ -1206,10 +1206,10 @@ public class RangeSetTest {
     public void testUnion__overlap1() {
         List<Range<Integer>> result;
 
-        result = new RangeSet<>(
+        result = RangeSet.create(
                                  13,         17,18,         22,   24,   26                  )
 //                               ============   ============      ======                  
-        .union(new RangeSet<>(
+        .union(RangeSet.create(
                            11,      14,   16,      19,   21,         25                  )
 //                         =========      =========      ============                   
         ).toFragments();

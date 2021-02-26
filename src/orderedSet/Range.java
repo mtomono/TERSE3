@@ -414,8 +414,7 @@ public class Range<T extends Comparable<? super T>> {
         return end;
     }
     
-    static public <T extends Comparable<? super T>> Range<T> inEitherWay(T one, T two) {
-        Order<T> order=new NaturalOrder<>();
+    static public <T extends Comparable<? super T>> Range<T> inEitherWay(T one, T two, Order<T> order) {
         return order.lt(one,two)?new Range<>(one,two,order):new Range<>(two,one,order);
     }
     

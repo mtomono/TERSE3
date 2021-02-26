@@ -16,6 +16,7 @@
 package orderedSet;
 
 import static collection.c.a2i;
+import function.Order;
 import iterator.AbstractBufferedIterator;
 import iterator.IteratorIterator;
 import iterator.PreIterator;
@@ -40,14 +41,14 @@ public class NegateRangeIterator<T extends Comparable<? super T>> extends Abstra
     PreIterator<Range<T>> base;
     
     class demarcation<S extends Comparable<? super S>> extends Range<S> {
-        public demarcation(S point) {
-            super(point, point, new NaturalOrder<>());
+        public demarcation(S point, Order<S> order) {
+            super(point, point, order);
         }
     };
             
     public NegateRangeIterator(Range<T> whole, Iterator<Range<T>> target) {
-        this.base = new PreIterator<>(new IteratorIterator<>(new WalkerRr<>(Collections.singletonList(whole).iterator(), target).intersect(), a2i(new demarcation<>(whole.end()))), 2);
-        this.base.load(new demarcation(whole.start()));
+        this.base = new PreIterator<>(new IteratorIterator<>(new WalkerRr<>(Collections.singletonList(whole).iterator(), target).intersect(), a2i(new demarcation<>(whole.end(), whole.order))), 2);
+        this.base.load(new demarcation(whole.start(), whole.order));
     }
     
     @Override
