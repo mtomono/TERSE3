@@ -17,9 +17,8 @@ package collection;
 
 import iterator.TIterator;
 import iterator.TListIterator;
-import java.util.RandomAccess;
 import java.util.function.Predicate;
-import orderedSet.Range;
+import static orderedSet.Builder.intRange;
 
 /**
  * 
@@ -67,7 +66,7 @@ public class ThresholdSearch<T> {
         assert !applyToNone() : "cannot find threshold when apply to none";
         if (applyToAll())
             return P.p(target.get(size-1), size-1);
-        TList<Integer> index = TList.skipRange(Range.create(start,size),skip).sfix();
+        TList<Integer> index = TList.skipRange(intRange.r(start,size),skip).sfix();
         assert !index.isEmpty() : "target is not empty therefore at least index has start";
         if (!index.last().equals(size-1))
             index=index.append(size-1);

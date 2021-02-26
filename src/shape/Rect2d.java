@@ -17,6 +17,7 @@ package shape;
 
 import collection.c;
 import java.util.Optional;
+import static orderedSet.Builder.doubleRange;
 import orderedSet.Range;
 import static shape.ShapeUtil.err;
 import static shape.ShapeUtil.point2;
@@ -188,7 +189,7 @@ public class Rect2d {
     }
     
     public Range<Double> range(TPoint2d p) {
-        return Range.create(distance(p), farthest(p));
+        return doubleRange.r(distance(p), farthest(p));
     }
     
     public Optional<Dir> touchesEdge(TPoint2d p) {

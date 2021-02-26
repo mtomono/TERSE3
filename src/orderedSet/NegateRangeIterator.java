@@ -39,6 +39,7 @@ import java.util.Iterator;
  */
 public class NegateRangeIterator<T extends Comparable<? super T>> extends AbstractBufferedIterator<Range<T>> {
     PreIterator<Range<T>> base;
+    Order<T> order;
     
     class demarcation<S extends Comparable<? super S>> extends Range<S> {
         public demarcation(S point, Order<S> order) {
@@ -47,8 +48,9 @@ public class NegateRangeIterator<T extends Comparable<? super T>> extends Abstra
     };
             
     public NegateRangeIterator(Range<T> whole, Iterator<Range<T>> target) {
+        this.order=whole.order;
         this.base = new PreIterator<>(new IteratorIterator<>(new WalkerRr<>(Collections.singletonList(whole).iterator(), target).intersect(), a2i(new demarcation<>(whole.end(), whole.order))), 2);
-        this.base.load(new demarcation(whole.start(), whole.order));
+        this.base.load(new demarcation(whole.start(), order));
     }
     
     @Override
@@ -56,7 +58,7 @@ public class NegateRangeIterator<T extends Comparable<? super T>> extends Abstra
         while (base.hasNext()) {
             base.next();
             if (!((base.now() instanceof demarcation || base.pre(-1) instanceof demarcation) && base.pre(-1).end().equals(base.now().start()))) {
-                nextFound(Range.create(base.pre(-1).end(), base.now().start()));
+                nextFound(new Range<>(base.pre(-1).end(), base.now().start(), order));
                 break;
             }
         }

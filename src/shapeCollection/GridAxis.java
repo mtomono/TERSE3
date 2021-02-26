@@ -21,6 +21,7 @@ import static java.lang.Integer.min;
 import static java.lang.Integer.signum;
 import static java.lang.Math.abs;
 import java.util.Optional;
+import static orderedSet.Builder.intRange;
 import orderedSet.Range;
 
 /**
@@ -38,7 +39,7 @@ public class GridAxis {
     public GridAxis(int from, int to) {
         this.from = from;
         this.to = to;
-        this.vr = Range.create(min(from,to),max(from,to)+1);
+        this.vr = intRange.r(min(from,to),max(from,to)+1);
         this.togo = to - from;
         this.size = abs(togo)+1;
         this.sigTogo = signum(togo);

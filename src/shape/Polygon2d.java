@@ -23,6 +23,7 @@ import static java.lang.Math.floor;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import static orderedSet.Builder.doubleRange;
 import orderedSet.Range;
 import static shape.ShapeUtil.err;
 import solver.graph.GridScale;
@@ -136,7 +137,7 @@ public class Polygon2d extends TList<TPoint2d> {
          */
         @Override
         public Range<Double> searchKernel(TPoint2d point, TList<P<TList<Segment2d>, Rect2d>> hint) {
-            return hint.map(h->h.r()).filter(h->h.contains(point)).map(h->h.range(point)).accum(Range.create(0.0,0.0), (a,b)->a.cover(b)).last();
+            return hint.map(h->h.r()).filter(h->h.contains(point)).map(h->h.range(point)).accum(doubleRange.r(0.0,0.0), (a,b)->a.cover(b)).last();
         }
     }
     

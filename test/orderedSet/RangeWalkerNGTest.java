@@ -11,6 +11,7 @@ import static collection.c.a2l;
 import static collection.c.i2l;
 import java.util.Iterator;
 import java.util.List;
+import static orderedSet.Builder.intRange;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import walker.Walker;
@@ -25,8 +26,8 @@ public class RangeWalkerNGTest {
     public RangeWalkerNGTest() {
     }
 
-    private static <S extends Comparable<S>> Range<S> _b(S from, S to) {
-        return Range.create(from, to);
+    private static Range<Integer> _b(Integer from, Integer to) {
+        return intRange.r(from, to);
     }
     
     @Test

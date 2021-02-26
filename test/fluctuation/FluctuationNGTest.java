@@ -7,7 +7,7 @@ package fluctuation;
 
 import java.math.BigDecimal;
 import math.C2;
-import orderedSet.Range;
+import static orderedSet.Builder.longRange;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 
@@ -96,7 +96,7 @@ public class FluctuationNGTest {
     public void testCut() {
         System.out.println(test.TestUtils.methodName(0));
         Fluctuation<BigDecimal> tested = builder.accumulates().a(-1,1,b(1)).a(3,7,b(1)).a(5,10,b(1)).a(4,8,b(1)).a(9,14,b(1)).a(11,13,b(1)).build();
-        Fluctuation<BigDecimal> result = tested.cut(Range.create(6L,9L)).normalize().accumulates.nonzero();
+        Fluctuation<BigDecimal> result = tested.cut(longRange.r(6L,9L)).normalize().accumulates.nonzero();
         Fluctuation<BigDecimal> expected = builder.accumulates().a(6,7,b(3)).a(7,8,b(2)).a(8,9,b(1)).build();
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);

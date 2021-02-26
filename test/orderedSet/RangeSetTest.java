@@ -8,6 +8,7 @@ import collection.TList;
 import collection.c;
 import java.util.Collections;
 import java.util.List;
+import static orderedSet.Builder.intRange;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import static test.TestUtils.methodNamePrint;
@@ -174,10 +175,10 @@ public class RangeSetTest {
         assertTrue(RangeSet.create(15, 17).intersect(RangeSet.create(10, 15)).isEmpty());
         assertTrue(RangeSet.create(10, 15).intersect(RangeSet.create(17, 18)).isEmpty());
         assertTrue(RangeSet.create(17, 18).intersect(RangeSet.create(10, 15)).isEmpty());
-        assertEquals(Range.create(13, 15), RangeSet.create(10, 15).intersect(RangeSet.create(13, 17)).toFragments().get(0));
-        assertEquals(Range.create(13, 15), RangeSet.create(13, 17).intersect(RangeSet.create(10, 15)).toFragments().get(0));
-        assertEquals(Range.create(13, 15), RangeSet.create(13, 15).intersect(RangeSet.create(10, 17)).toFragments().get(0));
-        assertEquals(Range.create(13, 15), RangeSet.create(10, 17).intersect(RangeSet.create(13, 15)).toFragments().get(0));
+        assertEquals(intRange.r(13, 15), RangeSet.create(10, 15).intersect(RangeSet.create(13, 17)).toFragments().get(0));
+        assertEquals(intRange.r(13, 15), RangeSet.create(13, 17).intersect(RangeSet.create(10, 15)).toFragments().get(0));
+        assertEquals(intRange.r(13, 15), RangeSet.create(13, 15).intersect(RangeSet.create(10, 17)).toFragments().get(0));
+        assertEquals(intRange.r(13, 15), RangeSet.create(10, 17).intersect(RangeSet.create(13, 15)).toFragments().get(0));
     }
     
     @Test
@@ -192,10 +193,10 @@ public class RangeSetTest {
 //    ======      ======         ============      ======                  ======      ======
         .toFragments();
         assertEquals(4, result.size());
-        assertEquals(Range.create( 4,  5), result.get(0));
-        assertEquals(Range.create( 9, 10), result.get(1));
-        assertEquals(Range.create(14, 16), result.get(2));
-        assertEquals(Range.create(19, 21), result.get(3));
+        assertEquals(intRange.r( 4,  5), result.get(0));
+        assertEquals(intRange.r( 9, 10), result.get(1));
+        assertEquals(intRange.r(14, 16), result.get(2));
+        assertEquals(intRange.r(19, 21), result.get(3));
     }
     
     @Test
@@ -210,12 +211,12 @@ public class RangeSetTest {
 //=======================================================================================================
         .toFragments();
         assertEquals(6, result.size());
-        assertEquals(Range.create( 2,  5), result.get(0));
-        assertEquals(Range.create( 9, 11), result.get(1));
-        assertEquals(Range.create(14, 16), result.get(2));
-        assertEquals(Range.create(18, 22), result.get(3));
-        assertEquals(Range.create(24, 26), result.get(4));
-        assertEquals(Range.create(34, 36), result.get(5));
+        assertEquals(intRange.r( 2,  5), result.get(0));
+        assertEquals(intRange.r( 9, 11), result.get(1));
+        assertEquals(intRange.r(14, 16), result.get(2));
+        assertEquals(intRange.r(18, 22), result.get(3));
+        assertEquals(intRange.r(24, 26), result.get(4));
+        assertEquals(intRange.r(34, 36), result.get(5));
     }
     
     @Test
@@ -230,12 +231,12 @@ public class RangeSetTest {
 // ===================================================================================================   
         .toFragments();
         assertEquals(6, result.size());
-        assertEquals(Range.create( 2,  5), result.get(0));
-        assertEquals(Range.create( 9, 11), result.get(1));
-        assertEquals(Range.create(14, 16), result.get(2));
-        assertEquals(Range.create(18, 22), result.get(3));
-        assertEquals(Range.create(24, 26), result.get(4));
-        assertEquals(Range.create(34, 36), result.get(5));
+        assertEquals(intRange.r( 2,  5), result.get(0));
+        assertEquals(intRange.r( 9, 11), result.get(1));
+        assertEquals(intRange.r(14, 16), result.get(2));
+        assertEquals(intRange.r(18, 22), result.get(3));
+        assertEquals(intRange.r(24, 26), result.get(4));
+        assertEquals(intRange.r(34, 36), result.get(5));
     }
     
     @Test
@@ -250,12 +251,12 @@ public class RangeSetTest {
 //    =============================================================================================      
         .toFragments();
         assertEquals(6, result.size());
-        assertEquals(Range.create( 3,  5), result.get(0));
-        assertEquals(Range.create( 9, 11), result.get(1));
-        assertEquals(Range.create(14, 16), result.get(2));
-        assertEquals(Range.create(18, 22), result.get(3));
-        assertEquals(Range.create(24, 26), result.get(4));
-        assertEquals(Range.create(34, 35), result.get(5));
+        assertEquals(intRange.r( 3,  5), result.get(0));
+        assertEquals(intRange.r( 9, 11), result.get(1));
+        assertEquals(intRange.r(14, 16), result.get(2));
+        assertEquals(intRange.r(18, 22), result.get(3));
+        assertEquals(intRange.r(24, 26), result.get(4));
+        assertEquals(intRange.r(34, 35), result.get(5));
     }
     
     @Test
@@ -270,8 +271,8 @@ public class RangeSetTest {
 //                         =======================================                                       
         .toFragments();
         assertEquals(2, result.size());
-        assertEquals(Range.create(14, 16), result.get(0));
-        assertEquals(Range.create(18, 22), result.get(1));
+        assertEquals(intRange.r(14, 16), result.get(0));
+        assertEquals(intRange.r(18, 22), result.get(1));
     }
 
     @Test
@@ -286,8 +287,8 @@ public class RangeSetTest {
 //                                     ===============                                                   
         .toFragments();
         assertEquals(2, result.size());
-        assertEquals(Range.create(15, 16), result.get(0));
-        assertEquals(Range.create(18, 20), result.get(1));
+        assertEquals(intRange.r(15, 16), result.get(0));
+        assertEquals(intRange.r(18, 20), result.get(1));
     }
     
     @Test
@@ -301,8 +302,8 @@ public class RangeSetTest {
     2,    5,          9,   11,      14,   16,   18,         22,   24,   26,                     34,   36)
 // ======            ======         ======      ============      ======                        ======
         ).toFragments();
-        assertEquals(Range.create(14, 16), result.get(0));
-        assertEquals(Range.create(18, 22), result.get(1));
+        assertEquals(intRange.r(14, 16), result.get(0));
+        assertEquals(intRange.r(18, 22), result.get(1));
         assertEquals(2, result.size());
     }
 
@@ -318,8 +319,8 @@ public class RangeSetTest {
 // ======            ======         ======      ============      ======                        ======
         ).toFragments();
         assertEquals(2, result.size());
-        assertEquals(Range.create(14, 16), result.get(0));
-        assertEquals(Range.create(18, 22), result.get(1));
+        assertEquals(intRange.r(14, 16), result.get(0));
+        assertEquals(intRange.r(18, 22), result.get(1));
     }
 
     @Test
@@ -333,11 +334,11 @@ public class RangeSetTest {
                            11,      14,   16,      19,   21,         25                  )
 //                         =========      =========      ============                   
         ).toFragments();
-        assertEquals(Range.create(13, 14), result.get(0));
-        assertEquals(Range.create(16, 17), result.get(1));
-        assertEquals(Range.create(18, 19), result.get(2));
-        assertEquals(Range.create(21, 22), result.get(3));
-        assertEquals(Range.create(24, 25), result.get(4));
+        assertEquals(intRange.r(13, 14), result.get(0));
+        assertEquals(intRange.r(16, 17), result.get(1));
+        assertEquals(intRange.r(18, 19), result.get(2));
+        assertEquals(intRange.r(21, 22), result.get(3));
+        assertEquals(intRange.r(24, 25), result.get(4));
         assertEquals(5, result.size());
     }
 
@@ -352,9 +353,9 @@ public class RangeSetTest {
                                              17,   19,   21,         25                  )
 //                                           ======      ============                   
         ).toFragments();
-        assertEquals(Range.create(18, 19), result.get(0));
-        assertEquals(Range.create(21, 22), result.get(1));
-        assertEquals(Range.create(24, 25), result.get(2));
+        assertEquals(intRange.r(18, 19), result.get(0));
+        assertEquals(intRange.r(21, 22), result.get(1));
+        assertEquals(intRange.r(24, 25), result.get(2));
         assertEquals(3, result.size());
     }
 
@@ -370,9 +371,9 @@ public class RangeSetTest {
 //                                        =========      ============                   
         ).toFragments();
         assertEquals(3, result.size());
-        assertEquals(Range.create(16, 17), result.get(0));
-        assertEquals(Range.create(18, 19), result.get(1));
-        assertEquals(Range.create(21, 22), result.get(2));
+        assertEquals(intRange.r(16, 17), result.get(0));
+        assertEquals(intRange.r(18, 19), result.get(1));
+        assertEquals(intRange.r(21, 22), result.get(2));
     }
 
     @Test
@@ -387,8 +388,8 @@ public class RangeSetTest {
 //                                        =========      ============                   
         ).toFragments();
         assertEquals(2, result.size());
-        assertEquals(Range.create(16, 17), result.get(0));
-        assertEquals(Range.create(24, 25), result.get(1));
+        assertEquals(intRange.r(16, 17), result.get(0));
+        assertEquals(intRange.r(24, 25), result.get(1));
     }
 
     @Test
@@ -403,35 +404,35 @@ public class RangeSetTest {
 //                         =========                     ============                   
         ).toFragments();
         assertEquals(2, result.size());
-        assertEquals(Range.create(13, 14), result.get(0));
-        assertEquals(Range.create(21, 22), result.get(1));
+        assertEquals(intRange.r(13, 14), result.get(0));
+        assertEquals(intRange.r(21, 22), result.get(1));
     }
 
     @Test
     public void testNegate() {
-        assertEquals(Range.create(15, 17), RangeSet.create(10, 15).negate(Range.create(15, 17)).toFragments().get(0));
-        assertEquals(Range.create(15, 17), RangeSet.create(10, 15, 18, 19).negate(Range.create(15, 17)).toFragments().get(0));
-        assertEquals(Range.create(10, 15), RangeSet.create(15, 17).negate(Range.create(10, 15)).toFragments().get(0));
-        assertEquals(Range.create(17, 18), RangeSet.create(10, 15).negate(Range.create(17, 18)).toFragments().get(0));
-        assertEquals(Range.create(10, 15), RangeSet.create(17, 18).negate(Range.create(10, 15)).toFragments().get(0));
-        assertEquals(Range.create(15, 17), RangeSet.create(10, 15).negate(Range.create(13, 17)).toFragments().get(0));
-        assertEquals(Range.create(10, 13), RangeSet.create(13, 17).negate(Range.create(10, 15)).toFragments().get(0));
-        assertEquals(Range.create(10, 13), RangeSet.create(13, 15).negate(Range.create(10, 17)).toFragments().get(0));
-        assertEquals(Range.create(15, 17), RangeSet.create(13, 15).negate(Range.create(10, 17)).toFragments().get(1));
-        assertEquals(Collections.emptyList(), RangeSet.create(10, 17).negate(Range.create(13, 15)).toFragments());
+        assertEquals(intRange.r(15, 17), RangeSet.create(10, 15).negate(intRange.r(15, 17)).toFragments().get(0));
+        assertEquals(intRange.r(15, 17), RangeSet.create(10, 15, 18, 19).negate(intRange.r(15, 17)).toFragments().get(0));
+        assertEquals(intRange.r(10, 15), RangeSet.create(15, 17).negate(intRange.r(10, 15)).toFragments().get(0));
+        assertEquals(intRange.r(17, 18), RangeSet.create(10, 15).negate(intRange.r(17, 18)).toFragments().get(0));
+        assertEquals(intRange.r(10, 15), RangeSet.create(17, 18).negate(intRange.r(10, 15)).toFragments().get(0));
+        assertEquals(intRange.r(15, 17), RangeSet.create(10, 15).negate(intRange.r(13, 17)).toFragments().get(0));
+        assertEquals(intRange.r(10, 13), RangeSet.create(13, 17).negate(intRange.r(10, 15)).toFragments().get(0));
+        assertEquals(intRange.r(10, 13), RangeSet.create(13, 15).negate(intRange.r(10, 17)).toFragments().get(0));
+        assertEquals(intRange.r(15, 17), RangeSet.create(13, 15).negate(intRange.r(10, 17)).toFragments().get(1));
+        assertEquals(Collections.emptyList(), RangeSet.create(10, 17).negate(intRange.r(13, 15)).toFragments());
       }
 
     @Test
     public void testMasked__basic() {
-        assertEquals(Range.create(10, 15), RangeSet.create(10, 15).maskedBy(RangeSet.create(15, 17)).toFragments().get(0));
-        assertEquals(Range.create(15, 17), RangeSet.create(15, 17).maskedBy(RangeSet.create(10, 15)).toFragments().get(0));
-        assertEquals(Range.create(10, 15), RangeSet.create(10, 15).maskedBy(RangeSet.create(17, 18)).toFragments().get(0));
-        assertEquals(Range.create(17, 18), RangeSet.create(17, 18).maskedBy(RangeSet.create(10, 15)).toFragments().get(0));
-        assertEquals(Range.create(10, 13), RangeSet.create(10, 15).maskedBy(RangeSet.create(13, 17)).toFragments().get(0));
-        assertEquals(Range.create(15, 17), RangeSet.create(13, 17).maskedBy(RangeSet.create(10, 15)).toFragments().get(0));
+        assertEquals(intRange.r(10, 15), RangeSet.create(10, 15).maskedBy(RangeSet.create(15, 17)).toFragments().get(0));
+        assertEquals(intRange.r(15, 17), RangeSet.create(15, 17).maskedBy(RangeSet.create(10, 15)).toFragments().get(0));
+        assertEquals(intRange.r(10, 15), RangeSet.create(10, 15).maskedBy(RangeSet.create(17, 18)).toFragments().get(0));
+        assertEquals(intRange.r(17, 18), RangeSet.create(17, 18).maskedBy(RangeSet.create(10, 15)).toFragments().get(0));
+        assertEquals(intRange.r(10, 13), RangeSet.create(10, 15).maskedBy(RangeSet.create(13, 17)).toFragments().get(0));
+        assertEquals(intRange.r(15, 17), RangeSet.create(13, 17).maskedBy(RangeSet.create(10, 15)).toFragments().get(0));
         assertTrue(RangeSet.create(13, 15).maskedBy(RangeSet.create(10, 17)).isEmpty());
-        assertEquals(Range.create(10, 13), RangeSet.create(10, 17).maskedBy(RangeSet.create(13, 15)).toFragments().get(0));
-        assertEquals(Range.create(15, 17), RangeSet.create(10, 17).maskedBy(RangeSet.create(13, 15)).toFragments().get(1));
+        assertEquals(intRange.r(10, 13), RangeSet.create(10, 17).maskedBy(RangeSet.create(13, 15)).toFragments().get(0));
+        assertEquals(intRange.r(15, 17), RangeSet.create(10, 17).maskedBy(RangeSet.create(13, 15)).toFragments().get(1));
     }
     
     @Test
@@ -446,12 +447,12 @@ public class RangeSetTest {
 //    ======      ======         ============      ======                  ======      ======
         ).toFragments();
         assertEquals(6, result.size());
-        assertEquals(Range.create( 2,  4), result.get(0));
-        assertEquals(Range.create(10, 11), result.get(1));
-        assertEquals(Range.create(18, 19), result.get(2));
-        assertEquals(Range.create(21, 22), result.get(3));
-        assertEquals(Range.create(24, 26), result.get(4));
-        assertEquals(Range.create(34, 36), result.get(5));
+        assertEquals(intRange.r( 2,  4), result.get(0));
+        assertEquals(intRange.r(10, 11), result.get(1));
+        assertEquals(intRange.r(18, 19), result.get(2));
+        assertEquals(intRange.r(21, 22), result.get(3));
+        assertEquals(intRange.r(24, 26), result.get(4));
+        assertEquals(intRange.r(34, 36), result.get(5));
     }
     
     @Test
@@ -466,12 +467,12 @@ public class RangeSetTest {
 // ======            ======         ======      ============      ======                        ======
         ).toFragments();
         assertEquals(6, result.size());
-        assertEquals(Range.create( 5,  6), result.get(0));
-        assertEquals(Range.create( 8,  9), result.get(1));
-        assertEquals(Range.create(13, 14), result.get(2));
-        assertEquals(Range.create(16, 17), result.get(3));
-        assertEquals(Range.create(27, 29), result.get(4));
-        assertEquals(Range.create(31, 33), result.get(5));
+        assertEquals(intRange.r( 5,  6), result.get(0));
+        assertEquals(intRange.r( 8,  9), result.get(1));
+        assertEquals(intRange.r(13, 14), result.get(2));
+        assertEquals(intRange.r(16, 17), result.get(3));
+        assertEquals(intRange.r(27, 29), result.get(4));
+        assertEquals(intRange.r(31, 33), result.get(5));
     }
     
     @Test
@@ -500,13 +501,13 @@ public class RangeSetTest {
 // ======            ======         ======      ============      ======                        ======
         ).toFragments();
         assertEquals(7, result.size());
-        assertEquals(Range.create( 1,  2), result.get(0));
-        assertEquals(Range.create( 5,  9), result.get(1));
-        assertEquals(Range.create(11, 14), result.get(2));
-        assertEquals(Range.create(16, 18), result.get(3));
-        assertEquals(Range.create(22, 24), result.get(4));
-        assertEquals(Range.create(26, 34), result.get(5));
-        assertEquals(Range.create(36, 37), result.get(6));
+        assertEquals(intRange.r( 1,  2), result.get(0));
+        assertEquals(intRange.r( 5,  9), result.get(1));
+        assertEquals(intRange.r(11, 14), result.get(2));
+        assertEquals(intRange.r(16, 18), result.get(3));
+        assertEquals(intRange.r(22, 24), result.get(4));
+        assertEquals(intRange.r(26, 34), result.get(5));
+        assertEquals(intRange.r(36, 37), result.get(6));
     }
     
     @Test
@@ -535,11 +536,11 @@ public class RangeSetTest {
 // ======            ======         ======      ============      ======                        ======
         ).toFragments();
         assertEquals(5, result.size());
-        assertEquals(Range.create( 5,  9), result.get(0));
-        assertEquals(Range.create(11, 14), result.get(1));
-        assertEquals(Range.create(16, 18), result.get(2));
-        assertEquals(Range.create(22, 24), result.get(3));
-        assertEquals(Range.create(26, 34), result.get(4));
+        assertEquals(intRange.r( 5,  9), result.get(0));
+        assertEquals(intRange.r(11, 14), result.get(1));
+        assertEquals(intRange.r(16, 18), result.get(2));
+        assertEquals(intRange.r(22, 24), result.get(3));
+        assertEquals(intRange.r(26, 34), result.get(4));
     }
 
     @Test
@@ -554,8 +555,8 @@ public class RangeSetTest {
 //    =============================================================================================      
         ).toFragments();
         assertEquals(2, result.size());
-        assertEquals(Range.create( 2,  3), result.get(0));
-        assertEquals(Range.create(35, 36), result.get(1));
+        assertEquals(intRange.r( 2,  3), result.get(0));
+        assertEquals(intRange.r(35, 36), result.get(1));
     }
 
     @Test
@@ -570,11 +571,11 @@ public class RangeSetTest {
 // ======            ======         ======      ============      ======                        ======
         ).toFragments();
         assertEquals(5, result.size());
-        assertEquals(Range.create( 5,  9), result.get(0));
-        assertEquals(Range.create(11, 14), result.get(1));
-        assertEquals(Range.create(16, 18), result.get(2));
-        assertEquals(Range.create(22, 24), result.get(3));
-        assertEquals(Range.create(26, 34), result.get(4));
+        assertEquals(intRange.r( 5,  9), result.get(0));
+        assertEquals(intRange.r(11, 14), result.get(1));
+        assertEquals(intRange.r(16, 18), result.get(2));
+        assertEquals(intRange.r(22, 24), result.get(3));
+        assertEquals(intRange.r(26, 34), result.get(4));
     }
     
     @Test
@@ -589,10 +590,10 @@ public class RangeSetTest {
 //                         =======================================                                       
         ).toFragments();
         assertEquals(4, result.size());
-        assertEquals(Range.create( 2,  5), result.get(0));
-        assertEquals(Range.create( 9, 11), result.get(1));
-        assertEquals(Range.create(24, 26), result.get(2));
-        assertEquals(Range.create(34, 36), result.get(3));
+        assertEquals(intRange.r( 2,  5), result.get(0));
+        assertEquals(intRange.r( 9, 11), result.get(1));
+        assertEquals(intRange.r(24, 26), result.get(2));
+        assertEquals(intRange.r(34, 36), result.get(3));
     }
 
     @Test
@@ -607,9 +608,9 @@ public class RangeSetTest {
 // ======            ======         ======      ============      ======                        ======
         ).toFragments();
         assertEquals(3, result.size());
-        assertEquals(Range.create(11, 14), result.get(0));
-        assertEquals(Range.create(16, 18), result.get(1));
-        assertEquals(Range.create(22, 24), result.get(2));
+        assertEquals(intRange.r(11, 14), result.get(0));
+        assertEquals(intRange.r(16, 18), result.get(1));
+        assertEquals(intRange.r(22, 24), result.get(2));
     }
     
     @Test
@@ -624,12 +625,12 @@ public class RangeSetTest {
 //                                     ===============                                                   
         ).toFragments();
         assertEquals(6, result.size());
-        assertEquals(Range.create( 2,  5), result.get(0));
-        assertEquals(Range.create( 9, 11), result.get(1));
-        assertEquals(Range.create(14, 15), result.get(2));
-        assertEquals(Range.create(20, 22), result.get(3));
-        assertEquals(Range.create(24, 26), result.get(4));
-        assertEquals(Range.create(34, 36), result.get(5));
+        assertEquals(intRange.r( 2,  5), result.get(0));
+        assertEquals(intRange.r( 9, 11), result.get(1));
+        assertEquals(intRange.r(14, 15), result.get(2));
+        assertEquals(intRange.r(20, 22), result.get(3));
+        assertEquals(intRange.r(24, 26), result.get(4));
+        assertEquals(intRange.r(34, 36), result.get(5));
     }
 
     @Test
@@ -644,7 +645,7 @@ public class RangeSetTest {
 // ======            ======         ======      ============      ======                        ======
         ).toFragments();
         assertEquals(1, result.size());
-        assertEquals(Range.create(16, 18), result.get(0));
+        assertEquals(intRange.r(16, 18), result.get(0));
     }
 
     @Test
@@ -659,9 +660,9 @@ public class RangeSetTest {
 // ======            ======         ======      ============      ======                        ======
         ).toFragments();
         assertEquals(3, result.size());
-        assertEquals(Range.create(13, 14), result.get(0));
-        assertEquals(Range.create(16, 18), result.get(1));
-        assertEquals(Range.create(22, 23), result.get(2));
+        assertEquals(intRange.r(13, 14), result.get(0));
+        assertEquals(intRange.r(16, 18), result.get(1));
+        assertEquals(intRange.r(22, 23), result.get(2));
     }
 
     @Test
@@ -676,10 +677,10 @@ public class RangeSetTest {
 //                               ==============================                                                   
         ).toFragments();
         assertEquals(4, result.size());
-        assertEquals(Range.create( 2,  5), result.get(0));
-        assertEquals(Range.create( 9, 11), result.get(1));
-        assertEquals(Range.create(24, 26), result.get(2));
-        assertEquals(Range.create(34, 36), result.get(3));
+        assertEquals(intRange.r( 2,  5), result.get(0));
+        assertEquals(intRange.r( 9, 11), result.get(1));
+        assertEquals(intRange.r(24, 26), result.get(2));
+        assertEquals(intRange.r(34, 36), result.get(3));
     }
     
     @Test
@@ -694,7 +695,7 @@ public class RangeSetTest {
 // ======            ======         ======      ============      ======                        ======
         ).toFragments();
         assertEquals(1, result.size());
-        assertEquals(Range.create(16, 18), result.get(0));
+        assertEquals(intRange.r(16, 18), result.get(0));
     }
 
     @Test
@@ -709,10 +710,10 @@ public class RangeSetTest {
 //                                  ========================                                                   
         ).toFragments();
         assertEquals(4, result.size());
-        assertEquals(Range.create( 2,  5), result.get(0));
-        assertEquals(Range.create( 9, 11), result.get(1));
-        assertEquals(Range.create(24, 26), result.get(2));
-        assertEquals(Range.create(34, 36), result.get(3));
+        assertEquals(intRange.r( 2,  5), result.get(0));
+        assertEquals(intRange.r( 9, 11), result.get(1));
+        assertEquals(intRange.r(24, 26), result.get(2));
+        assertEquals(intRange.r(34, 36), result.get(3));
 
     }
 
@@ -728,9 +729,9 @@ public class RangeSetTest {
 //                         =========      =========      ============                   
         ).toFragments();
         assertEquals(3, result.size());
-        assertEquals(Range.create(14, 16), result.get(0));
-        assertEquals(Range.create(19, 21), result.get(1));
-        assertEquals(Range.create(25, 26), result.get(2));
+        assertEquals(intRange.r(14, 16), result.get(0));
+        assertEquals(intRange.r(19, 21), result.get(1));
+        assertEquals(intRange.r(25, 26), result.get(2));
     }
 
     @Test
@@ -745,8 +746,8 @@ public class RangeSetTest {
 //                                           ======      ============                   
         ).toFragments();
         assertEquals(2, result.size());
-        assertEquals(Range.create(19, 21), result.get(0));
-        assertEquals(Range.create(25, 26), result.get(1));
+        assertEquals(intRange.r(19, 21), result.get(0));
+        assertEquals(intRange.r(25, 26), result.get(1));
     }
 
     @Test
@@ -761,8 +762,8 @@ public class RangeSetTest {
 //                                        =========      ============                   
         ).toFragments();
         assertEquals(2, result.size());
-        assertEquals(Range.create(13, 16), result.get(0));
-        assertEquals(Range.create(19, 21), result.get(1));
+        assertEquals(intRange.r(13, 16), result.get(0));
+        assertEquals(intRange.r(19, 21), result.get(1));
     }
 
     @Test
@@ -777,8 +778,8 @@ public class RangeSetTest {
 //                                        =========      ============                   
         ).toFragments();
         assertEquals(2, result.size());
-        assertEquals(Range.create(13, 16), result.get(0));
-        assertEquals(Range.create(25, 26), result.get(1));
+        assertEquals(intRange.r(13, 16), result.get(0));
+        assertEquals(intRange.r(25, 26), result.get(1));
     }
 
     @Test
@@ -793,21 +794,21 @@ public class RangeSetTest {
 //                         =========                     ============                   
         ).toFragments();
         assertEquals(2, result.size());
-        assertEquals(Range.create(14, 17), result.get(0));
-        assertEquals(Range.create(18, 21), result.get(1));
+        assertEquals(intRange.r(14, 17), result.get(0));
+        assertEquals(intRange.r(18, 21), result.get(1));
     }
 
     @Test
     public void testMask__basic() {
-        assertEquals(Range.create(15, 17), RangeSet.create(10, 15).mask(RangeSet.create(15, 17)).toFragments().get(0));
-        assertEquals(Range.create(10, 15), RangeSet.create(15, 17).mask(RangeSet.create(10, 15)).toFragments().get(0));
-        assertEquals(Range.create(17, 18), RangeSet.create(10, 15).mask(RangeSet.create(17, 18)).toFragments().get(0));
-        assertEquals(Range.create(10, 15), RangeSet.create(17, 18).mask(RangeSet.create(10, 15)).toFragments().get(0));
-        assertEquals(Range.create(15, 17), RangeSet.create(10, 15).mask(RangeSet.create(13, 17)).toFragments().get(0));
-        assertEquals(Range.create(10, 13), RangeSet.create(13, 17).mask(RangeSet.create(10, 15)).toFragments().get(0));
+        assertEquals(intRange.r(15, 17), RangeSet.create(10, 15).mask(RangeSet.create(15, 17)).toFragments().get(0));
+        assertEquals(intRange.r(10, 15), RangeSet.create(15, 17).mask(RangeSet.create(10, 15)).toFragments().get(0));
+        assertEquals(intRange.r(17, 18), RangeSet.create(10, 15).mask(RangeSet.create(17, 18)).toFragments().get(0));
+        assertEquals(intRange.r(10, 15), RangeSet.create(17, 18).mask(RangeSet.create(10, 15)).toFragments().get(0));
+        assertEquals(intRange.r(15, 17), RangeSet.create(10, 15).mask(RangeSet.create(13, 17)).toFragments().get(0));
+        assertEquals(intRange.r(10, 13), RangeSet.create(13, 17).mask(RangeSet.create(10, 15)).toFragments().get(0));
         assertTrue(RangeSet.create(10, 17).mask(RangeSet.create(13, 15)).isEmpty());
-        assertEquals(Range.create(10, 13), RangeSet.create(13, 15).mask(RangeSet.create(10, 17)).toFragments().get(0));
-        assertEquals(Range.create(15, 17), RangeSet.create(13, 15).mask(RangeSet.create(10, 17)).toFragments().get(1));
+        assertEquals(intRange.r(10, 13), RangeSet.create(13, 15).mask(RangeSet.create(10, 17)).toFragments().get(0));
+        assertEquals(intRange.r(15, 17), RangeSet.create(13, 15).mask(RangeSet.create(10, 17)).toFragments().get(1));
     }
     
     @Test
@@ -822,12 +823,12 @@ public class RangeSetTest {
 // ======            ======         ======      ============      ======                        ======
         ).toFragments();
         assertEquals(6, result.size());
-        assertEquals(Range.create( 2,  4), result.get(0));
-        assertEquals(Range.create(10, 11), result.get(1));
-        assertEquals(Range.create(18, 19), result.get(2));
-        assertEquals(Range.create(21, 22), result.get(3));
-        assertEquals(Range.create(24, 26), result.get(4));
-        assertEquals(Range.create(34, 36), result.get(5));
+        assertEquals(intRange.r( 2,  4), result.get(0));
+        assertEquals(intRange.r(10, 11), result.get(1));
+        assertEquals(intRange.r(18, 19), result.get(2));
+        assertEquals(intRange.r(21, 22), result.get(3));
+        assertEquals(intRange.r(24, 26), result.get(4));
+        assertEquals(intRange.r(34, 36), result.get(5));
     }
     
     @Test
@@ -842,12 +843,12 @@ public class RangeSetTest {
 //    ======      ======         ============      ======                  ======      ======
         ).toFragments();
         assertEquals(6, result.size());
-        assertEquals(Range.create( 5,  6), result.get(0));
-        assertEquals(Range.create( 8,  9), result.get(1));
-        assertEquals(Range.create(13, 14), result.get(2));
-        assertEquals(Range.create(16, 17), result.get(3));
-        assertEquals(Range.create(27, 29), result.get(4));
-        assertEquals(Range.create(31, 33), result.get(5));
+        assertEquals(intRange.r( 5,  6), result.get(0));
+        assertEquals(intRange.r( 8,  9), result.get(1));
+        assertEquals(intRange.r(13, 14), result.get(2));
+        assertEquals(intRange.r(16, 17), result.get(3));
+        assertEquals(intRange.r(27, 29), result.get(4));
+        assertEquals(intRange.r(31, 33), result.get(5));
     }
     
     @Test
@@ -876,13 +877,13 @@ public class RangeSetTest {
 //=======================================================================================================
         ).toFragments();
         assertEquals(7, result.size());
-        assertEquals(Range.create( 1,  2), result.get(0));
-        assertEquals(Range.create( 5,  9), result.get(1));
-        assertEquals(Range.create(11, 14), result.get(2));
-        assertEquals(Range.create(16, 18), result.get(3));
-        assertEquals(Range.create(22, 24), result.get(4));
-        assertEquals(Range.create(26, 34), result.get(5));
-        assertEquals(Range.create(36, 37), result.get(6));
+        assertEquals(intRange.r( 1,  2), result.get(0));
+        assertEquals(intRange.r( 5,  9), result.get(1));
+        assertEquals(intRange.r(11, 14), result.get(2));
+        assertEquals(intRange.r(16, 18), result.get(3));
+        assertEquals(intRange.r(22, 24), result.get(4));
+        assertEquals(intRange.r(26, 34), result.get(5));
+        assertEquals(intRange.r(36, 37), result.get(6));
     }
     
     @Test
@@ -911,11 +912,11 @@ public class RangeSetTest {
 // ===================================================================================================   
         ).toFragments();
         assertEquals(5, result.size());
-        assertEquals(Range.create( 5,  9), result.get(0));
-        assertEquals(Range.create(11, 14), result.get(1));
-        assertEquals(Range.create(16, 18), result.get(2));
-        assertEquals(Range.create(22, 24), result.get(3));
-        assertEquals(Range.create(26, 34), result.get(4));
+        assertEquals(intRange.r( 5,  9), result.get(0));
+        assertEquals(intRange.r(11, 14), result.get(1));
+        assertEquals(intRange.r(16, 18), result.get(2));
+        assertEquals(intRange.r(22, 24), result.get(3));
+        assertEquals(intRange.r(26, 34), result.get(4));
     }
 
     @Test
@@ -930,8 +931,8 @@ public class RangeSetTest {
 // ======            ======         ======      ============      ======                        ======
         ).toFragments();
         assertEquals(2, result.size());
-        assertEquals(Range.create( 2,  3), result.get(0));
-        assertEquals(Range.create(35, 36), result.get(1));
+        assertEquals(intRange.r( 2,  3), result.get(0));
+        assertEquals(intRange.r(35, 36), result.get(1));
     }
 
     @Test
@@ -946,11 +947,11 @@ public class RangeSetTest {
 //    =============================================================================================      
         ).toFragments();
         assertEquals(5, result.size());
-        assertEquals(Range.create( 5,  9), result.get(0));
-        assertEquals(Range.create(11, 14), result.get(1));
-        assertEquals(Range.create(16, 18), result.get(2));
-        assertEquals(Range.create(22, 24), result.get(3));
-        assertEquals(Range.create(26, 34), result.get(4));
+        assertEquals(intRange.r( 5,  9), result.get(0));
+        assertEquals(intRange.r(11, 14), result.get(1));
+        assertEquals(intRange.r(16, 18), result.get(2));
+        assertEquals(intRange.r(22, 24), result.get(3));
+        assertEquals(intRange.r(26, 34), result.get(4));
     }
     
     @Test
@@ -965,10 +966,10 @@ public class RangeSetTest {
 // ======            ======         ======      ============      ======                        ======
         ).toFragments();
         assertEquals(4, result.size());
-        assertEquals(Range.create( 2,  5), result.get(0));
-        assertEquals(Range.create( 9, 11), result.get(1));
-        assertEquals(Range.create(24, 26), result.get(2));
-        assertEquals(Range.create(34, 36), result.get(3));
+        assertEquals(intRange.r( 2,  5), result.get(0));
+        assertEquals(intRange.r( 9, 11), result.get(1));
+        assertEquals(intRange.r(24, 26), result.get(2));
+        assertEquals(intRange.r(34, 36), result.get(3));
     }
 
     @Test
@@ -983,9 +984,9 @@ public class RangeSetTest {
 //                         =======================================                                       
         ).toFragments();
         assertEquals(3, result.size());
-        assertEquals(Range.create(11, 14), result.get(0));
-        assertEquals(Range.create(16, 18), result.get(1));
-        assertEquals(Range.create(22, 24), result.get(2));
+        assertEquals(intRange.r(11, 14), result.get(0));
+        assertEquals(intRange.r(16, 18), result.get(1));
+        assertEquals(intRange.r(22, 24), result.get(2));
     }
     
     @Test
@@ -1000,12 +1001,12 @@ public class RangeSetTest {
 // ======            ======         ======      ============      ======                        ======
         ).toFragments();
         assertEquals(6, result.size());
-        assertEquals(Range.create( 2,  5), result.get(0));
-        assertEquals(Range.create( 9, 11), result.get(1));
-        assertEquals(Range.create(14, 15), result.get(2));
-        assertEquals(Range.create(20, 22), result.get(3));
-        assertEquals(Range.create(24, 26), result.get(4));
-        assertEquals(Range.create(34, 36), result.get(5));
+        assertEquals(intRange.r( 2,  5), result.get(0));
+        assertEquals(intRange.r( 9, 11), result.get(1));
+        assertEquals(intRange.r(14, 15), result.get(2));
+        assertEquals(intRange.r(20, 22), result.get(3));
+        assertEquals(intRange.r(24, 26), result.get(4));
+        assertEquals(intRange.r(34, 36), result.get(5));
     }
 
     @Test
@@ -1020,7 +1021,7 @@ public class RangeSetTest {
 //                                     ===============                                                   
         ).toFragments();
         assertEquals(1, result.size());
-        assertEquals(Range.create(16, 18), result.get(0));
+        assertEquals(intRange.r(16, 18), result.get(0));
     }
 
     @Test
@@ -1035,9 +1036,9 @@ public class RangeSetTest {
 //                               ==============================                                                   
         ).toFragments();
         assertEquals(3, result.size());
-        assertEquals(Range.create(13, 14), result.get(0));
-        assertEquals(Range.create(16, 18), result.get(1));
-        assertEquals(Range.create(22, 23), result.get(2));
+        assertEquals(intRange.r(13, 14), result.get(0));
+        assertEquals(intRange.r(16, 18), result.get(1));
+        assertEquals(intRange.r(22, 23), result.get(2));
     }
 
     @Test
@@ -1052,10 +1053,10 @@ public class RangeSetTest {
 // ======            ======         ======      ============      ======                        ======
         ).toFragments();
         assertEquals(4, result.size());
-        assertEquals(Range.create( 2,  5), result.get(0));
-        assertEquals(Range.create( 9, 11), result.get(1));
-        assertEquals(Range.create(24, 26), result.get(2));
-        assertEquals(Range.create(34, 36), result.get(3));
+        assertEquals(intRange.r( 2,  5), result.get(0));
+        assertEquals(intRange.r( 9, 11), result.get(1));
+        assertEquals(intRange.r(24, 26), result.get(2));
+        assertEquals(intRange.r(34, 36), result.get(3));
     }
     
     @Test
@@ -1070,7 +1071,7 @@ public class RangeSetTest {
 //                                  ========================                                                   
         ).toFragments();
         assertEquals(1, result.size());
-        assertEquals(Range.create(16, 18), result.get(0));
+        assertEquals(intRange.r(16, 18), result.get(0));
     }
 
     @Test
@@ -1085,10 +1086,10 @@ public class RangeSetTest {
 // ======            ======         ======      ============      ======                        ======
         ).toFragments();
         assertEquals(4, result.size());
-        assertEquals(Range.create( 2,  5), result.get(0));
-        assertEquals(Range.create( 9, 11), result.get(1));
-        assertEquals(Range.create(24, 26), result.get(2));
-        assertEquals(Range.create(34, 36), result.get(3));
+        assertEquals(intRange.r( 2,  5), result.get(0));
+        assertEquals(intRange.r( 9, 11), result.get(1));
+        assertEquals(intRange.r(24, 26), result.get(2));
+        assertEquals(intRange.r(34, 36), result.get(3));
 
     }
 
@@ -1104,9 +1105,9 @@ public class RangeSetTest {
 //                               ============   ============      ======                  
         ).toFragments();
         assertEquals(3, result.size());
-        assertEquals(Range.create(14, 16), result.get(0));
-        assertEquals(Range.create(19, 21), result.get(1));
-        assertEquals(Range.create(25, 26), result.get(2));
+        assertEquals(intRange.r(14, 16), result.get(0));
+        assertEquals(intRange.r(19, 21), result.get(1));
+        assertEquals(intRange.r(25, 26), result.get(2));
     }
 
     @Test
@@ -1121,8 +1122,8 @@ public class RangeSetTest {
 //                                              ============      ======                  
         ).toFragments();
         assertEquals(2, result.size());
-        assertEquals(Range.create(19, 21), result.get(0));
-        assertEquals(Range.create(25, 26), result.get(1));
+        assertEquals(intRange.r(19, 21), result.get(0));
+        assertEquals(intRange.r(25, 26), result.get(1));
     }
 
     @Test
@@ -1137,8 +1138,8 @@ public class RangeSetTest {
 //                               ============   ============                              
         ).toFragments();
         assertEquals(2, result.size());
-        assertEquals(Range.create(13, 16), result.get(0));
-        assertEquals(Range.create(19, 21), result.get(1));
+        assertEquals(intRange.r(13, 16), result.get(0));
+        assertEquals(intRange.r(19, 21), result.get(1));
     }
 
     @Test
@@ -1153,8 +1154,8 @@ public class RangeSetTest {
 //                               ============                     ======                  
         ).toFragments();
         assertEquals(2, result.size());
-        assertEquals(Range.create(13, 16), result.get(0));
-        assertEquals(Range.create(25, 26), result.get(1));
+        assertEquals(intRange.r(13, 16), result.get(0));
+        assertEquals(intRange.r(25, 26), result.get(1));
     }
 
     @Test
@@ -1169,13 +1170,13 @@ public class RangeSetTest {
 //                               ============   ============                              
         ).toFragments();
         assertEquals(2, result.size());
-        assertEquals(Range.create(14, 17), result.get(0));
-        assertEquals(Range.create(18, 21), result.get(1));
+        assertEquals(intRange.r(14, 17), result.get(0));
+        assertEquals(intRange.r(18, 21), result.get(1));
     }
 
     @Test
     public void testCover() {
-        assertEquals(Range.create(13, 26), RangeSet.create(
+        assertEquals(intRange.r(13, 26), RangeSet.create(
                                  13,         17,                  24,   26                  )
 //                               ============                     ======                  
         .cover().orElse(null));
@@ -1192,14 +1193,14 @@ public class RangeSetTest {
 //    ======      ======         ============      ======                  ======      ======
         ).toFragments();
         assertEquals(8, result.size());
-        assertEquals(Range.create( 2,  6), result.get(0));
-        assertEquals(Range.create( 8, 11), result.get(1));
-        assertEquals(Range.create(13, 17), result.get(2));
-        assertEquals(Range.create(18, 22), result.get(3));
-        assertEquals(Range.create(24, 26), result.get(4));
-        assertEquals(Range.create(27, 29), result.get(5));
-        assertEquals(Range.create(31, 33), result.get(6));
-        assertEquals(Range.create(34, 36), result.get(7));
+        assertEquals(intRange.r( 2,  6), result.get(0));
+        assertEquals(intRange.r( 8, 11), result.get(1));
+        assertEquals(intRange.r(13, 17), result.get(2));
+        assertEquals(intRange.r(18, 22), result.get(3));
+        assertEquals(intRange.r(24, 26), result.get(4));
+        assertEquals(intRange.r(27, 29), result.get(5));
+        assertEquals(intRange.r(31, 33), result.get(6));
+        assertEquals(intRange.r(34, 36), result.get(7));
     }
 
     @Test
@@ -1214,7 +1215,7 @@ public class RangeSetTest {
 //                         =========      =========      ============                   
         ).toFragments();
         assertEquals(1, result.size());
-        assertEquals(Range.create(11, 26), result.get(0));
+        assertEquals(intRange.r(11, 26), result.get(0));
     }
 
 }

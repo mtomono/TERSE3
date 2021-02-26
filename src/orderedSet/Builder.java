@@ -12,14 +12,14 @@ import function.Order;
  * @author masao
  * @param <T>
  */
-public class Builder<T extends Comparable<T>> {
+public class Builder<T extends Comparable<? super T>> {
     public static Builder<Integer> intRange = b();
     public static Builder<Long> longRange = b();
     public static Builder<Double> doubleRange= b();
-    static public <T extends Comparable<T>> Builder<T> b() {
+    static public <T extends Comparable<? super T>> Builder<T> b() {
         return new Builder<>(new NaturalOrder<T>());
     }
-    static public <T extends Comparable<T>> Builder<T> b(Order<T> order) {
+    static public <T extends Comparable<? super T>> Builder<T> b(Order<T> order) {
         return new Builder<>(order);
     }
     final Order<T> order;

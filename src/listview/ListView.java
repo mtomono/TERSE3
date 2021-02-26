@@ -16,6 +16,7 @@
 package listview;
 
 import collection.TList;
+import static orderedSet.Builder.intRange;
 import orderedSet.Range;
 
 /**
@@ -36,7 +37,7 @@ public class ListView<T> {
     }
     
     public Range<Integer> range() {
-        return Range.create(start, start+body.size());
+        return intRange.r(start, start+body.size());
     }
     
     public T get(int index) {

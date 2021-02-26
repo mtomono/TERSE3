@@ -21,6 +21,7 @@ import static java.lang.Integer.min;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
+import static orderedSet.Builder.intRange;
 import orderedSet.Range;
 import shape.TPoint2i;
 
@@ -33,8 +34,8 @@ public class RectSet2i implements Set<TPoint2i> {
     Range<Integer> y;
     
     public RectSet2i(TPoint2i a, TPoint2i b) {
-        this.x = Range.create(min(a.x,b.x),max(a.x,b.x)+1);
-        this.y = Range.create(min(a.y,b.y),max(a.y,b.y)+1);
+        this.x = intRange.r(min(a.x,b.x),max(a.x,b.x)+1);
+        this.y = intRange.r(min(a.y,b.y),max(a.y,b.y)+1);
     }
 
     @Override

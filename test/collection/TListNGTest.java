@@ -16,6 +16,7 @@ import iterator.TListIterator;
 import java.util.*;
 import static java.util.Comparator.naturalOrder;
 import math.C;
+import static orderedSet.Builder.intRange;
 import orderedSet.Range;
 import static org.testng.Assert.*;
 import org.testng.annotations.BeforeClass;
@@ -1472,7 +1473,7 @@ public class TListNGTest {
     @Test
     public void testSubList_Range() {
         System.out.println(test.TestUtils.methodName(0));
-        TList<Integer> result = TList.range(0, 20).subList(Range.create(1, 5));
+        TList<Integer> result = TList.range(0, 20).subList(intRange.r(1, 5));
         TList<Integer> expected = TList.range(1,5);
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
@@ -1537,7 +1538,7 @@ public class TListNGTest {
     @Test
     public void testRange_Range() {
         System.out.println(test.TestUtils.methodName(0));
-        TList<Integer> result = TList.range(Range.create(0,3));
+        TList<Integer> result = TList.range(intRange.r(0,3));
         TList<Integer> expected = TList.sofi(0,1,2);
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
@@ -1750,7 +1751,7 @@ public class TListNGTest {
     @Test
     public void testSkipRange() {
         System.out.println(test.TestUtils.methodName(0));
-        TList<Integer> result = TList.skipRange(Range.create(5,55), 10);
+        TList<Integer> result = TList.skipRange(intRange.r(5,55), 10);
         TList<Integer> expected = TList.sof(5,15,25,35,45);
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
@@ -1760,7 +1761,7 @@ public class TListNGTest {
     @Test
     public void testSkipRange2() {
         System.out.println(test.TestUtils.methodName(0));
-        TList<Integer> result = TList.skipRange(Range.create(5,56), 10);
+        TList<Integer> result = TList.skipRange(intRange.r(5,56), 10);
         TList<Integer> expected = TList.sof(5,15,25,35,45,55);
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
@@ -1770,7 +1771,7 @@ public class TListNGTest {
     @Test
     public void testSkipRange3() {
         System.out.println(test.TestUtils.methodName(0));
-        TList<Integer> result = TList.skipRange(Range.create(0,100), 10);
+        TList<Integer> result = TList.skipRange(intRange.r(0,100), 10);
         TList<Integer> expected = TList.sof(0,10,20,30,40,50,60,70,80,90);
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);

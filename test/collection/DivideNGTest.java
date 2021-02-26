@@ -5,6 +5,7 @@
  */
 package collection;
 
+import static orderedSet.Builder.intRange;
 import orderedSet.Range;
 import static org.testng.Assert.*;
 import org.testng.annotations.BeforeMethod;
@@ -34,7 +35,7 @@ public class DivideNGTest {
     }
         
     Range<Integer> r(int from, int to) {
-        return Range.create(from, to);
+        return intRange.r(from, to);
     }
 
     @Test

@@ -19,6 +19,7 @@ import collection.P;
 import collection.TList;
 import math.C2;
 import math.CList;
+import static orderedSet.Builder.longRange;
 import orderedSet.Range;
 
 /**
@@ -42,7 +43,7 @@ public class Builder<K extends Comparable<K>> {
             return time().pair(q().body());
         }
         TList<P<Range<Long>,C2<K>>> accumulates() {
-            return time().diff((a,b)->Range.create(a,b)).pair(q().body().accumFromStart(s->s,(a,b)->a.add(b)));
+            return time().diff((a,b)->longRange.r(a,b)).pair(q().body().accumFromStart(s->s,(a,b)->a.add(b)));
         }
         Fluctuation<K> build() {
             return new Fluctuation<>(time(),q(),entries(),accumulates(),Builder.this);
@@ -134,7 +135,7 @@ public class Builder<K extends Comparable<K>> {
             this.body=TList.c();
         }
         public AccumulateBuilder a(long from, long to, C2<K> q) {
-            body.add(P.p(Range.create(from,to),q));
+            body.add(P.p(longRange.r(from,to),q));
             return this;
         }
         public Fluctuation<K> build() {
