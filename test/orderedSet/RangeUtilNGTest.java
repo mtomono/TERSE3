@@ -10,7 +10,6 @@ import collection.TList;
 import java.util.Optional;
 import static orderedSet.Builder.intRange;
 import static orderedSet.Range.intersectMany;
-import static orderedSet.Range.inEitherWay;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 
@@ -59,7 +58,7 @@ public class RangeUtilNGTest {
     @Test
     public void testInEitherWay() {
         System.out.println(test.TestUtils.methodName(0));
-        Range<Integer> result = inEitherWay(0,1, new NaturalOrder<>());
+        Range<Integer> result = intRange.inEitherWay(0,1);
         Range<Integer> expected = intRange.r(0,1);
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
@@ -69,7 +68,7 @@ public class RangeUtilNGTest {
     @Test
     public void testInEitherWayR() {
         System.out.println(test.TestUtils.methodName(0));
-        Range<Integer> result = inEitherWay(1,0, new NaturalOrder<>());
+        Range<Integer> result = intRange.inEitherWay(1,0);
         Range<Integer> expected = intRange.r(0,1);
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);

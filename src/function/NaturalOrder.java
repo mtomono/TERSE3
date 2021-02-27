@@ -15,15 +15,15 @@
 
 package function;
 
-import function.CompareUtil;
-import function.Order;
-
 /**
  *
  * @author mtomono
  * @param <T>
  */
 public class NaturalOrder<T extends Comparable<? super T>> implements Order<T> {
+    public int compare(T a, T b) {
+        return a.compareTo(b);
+    }
     @Override
     public boolean eq(T a, T b) { return CompareUtil.eq(a, b); }
     @Override

@@ -23,6 +23,11 @@ import function.Order;
  * @param <T>
  */
 abstract public class EqCenteredOrder<T extends Comparable<T>> implements Order<T> {
+    public int compare(T c1, T c2) {
+        if (gt(c1,c2)) return 1;
+        if (lt(c1,c2)) return -1;
+        return 0;
+    }
     public boolean lt(T      c1, T      c2) { return (!eq(c1, c2)) && c1.compareTo(c2) < 0; }
     public boolean ne(T      c1, T      c2) { return !eq(c1, c2); }
     public boolean gt(T      c1, T      c2) { return  lt(c2, c1); }

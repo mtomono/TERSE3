@@ -7,6 +7,7 @@ package orderedSet;
 
 import function.NaturalOrder;
 import function.Order;
+import java.math.BigDecimal;
 
 /**
  *
@@ -17,6 +18,7 @@ public class Builder<T extends Comparable<? super T>> {
     public static Builder<Integer> intRange = b();
     public static Builder<Long> longRange = b();
     public static Builder<Double> doubleRange= b();
+    public static Builder<BigDecimal> bdRange= b();
     static public <T extends Comparable<? super T>> Builder<T> b() {
         return new Builder<>(new NaturalOrder<T>());
     }
@@ -28,6 +30,9 @@ public class Builder<T extends Comparable<? super T>> {
         this.order=order;
     }
     public Range<T> r(T from, T to) {
-        return Range.create(from, to);
+        return new Range<>(from, to, order);
+    }
+    public Range<T> inEitherWay(T one, T two) {
+        return order.lt(one,two)?r(one,two):r(two,one);
     }
 }

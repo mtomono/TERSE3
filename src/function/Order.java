@@ -14,14 +14,18 @@
  */
 package function;
 
+import java.util.Comparator;
+import java.util.function.Function;
+
 /**
  *
  * @author masao
  * @param <T>
  */
-public interface Order<T> {
+public interface Order<T> extends Comparator<T>{
     default T min(T a, T b) {return lt(a,b)?a:b;}
     default T max(T a, T b) {return gt(a,b)?a:b;}
+    public int compare(T a, T b);
     public boolean eq(T a, T b);
     public boolean ne(T a, T b);
     public boolean lt(T a, T b);

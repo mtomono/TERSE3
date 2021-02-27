@@ -8,6 +8,7 @@ package orderedSet;
 import math.C;
 import math.C2;
 import static orderedSet.Builder.doubleRange;
+import static orderedSet.CBuilder.doubleRange2;
 import static org.testng.Assert.*;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -34,16 +35,16 @@ public class DoubleRangeNGTest {
         System.out.println("expected: "+expected);
         assertEquals(result, expected);
     }
-/*    @Test
+    @Test
     public void testInterpolate1() {
         System.out.println(test.TestUtils.methodName(0));
-        C2<Double> result = Range.create(C2.d.b(0.0),C2.d.b(10.0)).interpolate1(d->d,C2.d.b(0.5));
+        C2<Double> result = doubleRange2.r(C2.d.b(0.0),C2.d.b(10.0)).interpolate1(d->d,C2.d.b(0.5));
         C2<Double> expected = C2.d.b(5.0);
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);
         assertEquals(result, expected);
     }
-*/
+
     @Test
     public void testInterpolate2() {
         System.out.println(test.TestUtils.methodName(0));
