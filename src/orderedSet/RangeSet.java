@@ -22,9 +22,9 @@ import iterator.Iterators;
 import static iterator.Iterators.toStream;
 import static java.util.stream.Collectors.toList;
 import static collection.TList.concat;
-import static function.ComparePolicy.inc;
-import function.CompareUtil;
+import static function.MappedOrder.map;
 import function.Order;
+import java.math.BigDecimal;
 import java.util.function.Function;
 import math.Context;
 import string.Message;
@@ -34,12 +34,63 @@ import string.Message;
  * @author mtomono
  * @param <T>
  */
-public class RangeSet<T extends Comparable<? super T>> extends AbstractList<Range<T>> {
-
-    public static <T extends Comparable<? super T>> RangeSet<T> create(T... range) {
-        return new RangeSet<>(new NaturalOrder<>(),range);
+public class RangeSet<T> extends AbstractList<Range<T>> {
+    public static Builder<Integer> intRanges = b();
+    public static Builder<Long> longRanges = b();
+    public static Builder<Double> doubleRanges= b();
+    public static Builder<BigDecimal> bdRanges= b();
+    public static <T> Builder<T> b(Order<T> order) {
+        return new Builder<>(order);
     }
+    public static <T extends Comparable<? super T>> Builder<T> b() {
+        return b(new NaturalOrder<T>());
+    }
+    public static class Builder<T> {
+        Order<T> order;
+        public Builder(Order<T> order) {
+            this.order=order;
+        }
+        public RangeSet<T> rs(List<Range<T>> ranges) {
+            return new RangeSet<>(this, ranges);
+        }
+        public RangeSet<T> rp(List<T> range) {
+            return rs(Range.c(order,range));
+        }
+        public RangeSet<T> rp(T... range) {
+            return rs(Range.c(order, range));
+        }
+        public RangeSet<T> rs(Range<T> range) {
+            return rs(Collections.singletonList(range));
+        }
+        public RangeSet<T> empty() {
+            return rs(Collections.emptyList());
+        }
+        /**
+         * force some list of range into RangeSet by sorting and merging ranges.
+         * @param <T>
+         * @param rs
+         * @return 
+         */
+        public RangeSet<T> mergeIntoRangeSet(TList<Range<T>> rs) {
+            return rs.sortTo(map(order,r->r.start())).diffChunk((a,b)->!a.overlaps(b)).map(rl->rl.stream().reduce((a,b)->a.cover(b))).filter(or->or.isPresent()).map(or->or.get()).transform(l->rs(l));
+        }
+        public RangeSet<T> intersectMany(List<RangeSet<T>> many) {
+            return many.stream().reduce((a,b)->a.intersect(b)).orElse(empty());
+        }
+
+        public RangeSet<T> unionMany(List<RangeSet<T>> many) {
+            return many.stream().reduce(empty(), (a,b)->a.union(b));
+        }
+    }
+    public RangeSet(Builder<T> builder, List<Range<T>> elements) {
+        super();
+        this.builder=builder;
+        assert rangesAreInOrder(elements) : "range is not in order"+elements.toString();
+        this.elements = elements;
+    }
+    
     List<Range<T>> elements;
+    Builder<T> builder;
     
     @Override
     public Range<T> get(int index) {
@@ -74,54 +125,9 @@ public class RangeSet<T extends Comparable<? super T>> extends AbstractList<Rang
     public final boolean pointsAreInOrder(List<T> target) {
         if (target.size() <= 1)
             return true;
-        return concat(target).pair(target.subList(1, target.size()), (l, r)->CompareUtil.lt(l, r)).stream().allMatch(p->p);
+        return concat(target).pair(target.subList(1, target.size()), (l, r)->builder.order.lt(l, r)).stream().allMatch(p->p);
     }
-    
-    public static <T extends Comparable<? super T>> RangeSet<T> empty() {
-        return new RangeSet<>(Collections.<Range<T>>emptyList());
-    }
-    
-    /**
-     * force some list of range into RangeSet by sorting and merging ranges.
-     * @param <T>
-     * @param rs
-     * @return 
-     */
-    public static <T extends Comparable<? super T>> RangeSet<T> mergeIntoRangeSet(TList<Range<T>> rs) {
-        return rs.sortTo(inc(r->r.start())).diffChunk((a,b)->!a.overlaps(b)).map(rl->rl.stream().reduce((a,b)->a.cover(b))).filter(or->or.isPresent()).map(or->or.get()).transform(l->new RangeSet<>(l));
-    }
-       
-    protected RangeSet() {
-        super();
-    }
-    
-    public RangeSet(Range<T> range) {
-        this();
-        this.elements = Collections.<Range<T>>singletonList(range);
-    }
-    
-    public RangeSet(List<Range<T>> elements) {
-        this();
-        assert rangesAreInOrder(elements) : "range is not in order"+elements.toString();
-        this.elements = elements;
-    }
-    
-    public RangeSet(Order<T> order, T... range) {
-        this(Range.<T>c(order, range));
-    }
-    
-    public RangeSet(Order<T> order, List<T> range) {
-        this(Range.<T>c(order, range));
-    }
-    
-    private RangeSet(T... range) {
-        this(new NaturalOrder<>(), range);
-    }
-    
-    public static <T extends Comparable<? super T>> RangeSet<T> c(List<T> range) {
-        return new RangeSet<>(new NaturalOrder<>(), range);
-    }
-    
+               
     @Override
     public boolean isEmpty() {
         return elements.isEmpty();
@@ -131,12 +137,8 @@ public class RangeSet<T extends Comparable<? super T>> extends AbstractList<Rang
         return elements;
     }
     
-    public boolean contains(T point) {
+    public boolean containsPoint(T point) {
         return containsPoints(Collections.singletonList(point));
-    }
-    
-    public boolean contains(Range<T> range) {
-        return contains(Collections.singletonList(range));
     }
     
     public boolean containsPoints(List<T> another) {
@@ -144,9 +146,13 @@ public class RangeSet<T extends Comparable<? super T>> extends AbstractList<Rang
         return cover().map(r->r.contains(another) && !new WalkerRp<>(negateIterator(r), another.listIterator()).overlap().hasNext()).orElse(another.isEmpty());
     }
     
+    public boolean contains(Range<T> range) {
+        return contains(Collections.singletonList(range));
+    }
+    
     public boolean contains(List<Range<T>> another) {
         assert rangesAreInOrder(another);
-        return contains(new RangeSet<>(another));
+        return contains(new RangeSet<>(builder,another));
     }
     
     public boolean contains(RangeSet<T> another) {
@@ -193,7 +199,7 @@ public class RangeSet<T extends Comparable<? super T>> extends AbstractList<Rang
     }
     
     public RangeSet<T> intersect(RangeSet<T> another) {
-        return new RangeSet<>(intersect(another.elements));
+        return new RangeSet<>(builder,intersect(another.elements));
     }
     
     public Iterator<Range<T>> negateIterator(Range<T> target) {
@@ -201,7 +207,7 @@ public class RangeSet<T extends Comparable<? super T>> extends AbstractList<Rang
     }
     
     public RangeSet<T> negate(Range<T> target) {
-        return new RangeSet<>(toStream(negateIterator(target)).collect(toList()));
+        return new RangeSet<>(builder,toStream(negateIterator(target)).collect(toList()));
     }
     
     public Iterator<Range<T>> maskIterator(ListIterator<Range<T>> another, Range<T> range) {
@@ -221,11 +227,11 @@ public class RangeSet<T extends Comparable<? super T>> extends AbstractList<Rang
     }
     
     public RangeSet<T> maskedBy(RangeSet<T> another) {
-        return new RangeSet<>(toStream(maskedIterator(another.listIterator())).collect(toList()));
+        return new RangeSet<>(builder,toStream(maskedIterator(another.listIterator())).collect(toList()));
     }
     
     public RangeSet<T> mask(RangeSet<T> another) {
-        return another.cover().map(r->new RangeSet<>(toStream(maskIterator(another.listIterator(), r)).collect(toList()))).orElse(this);
+        return another.cover().map(r->new RangeSet<>(builder,toStream(maskIterator(another.listIterator(), r)).collect(toList()))).orElse(this);
     }
     
     public Optional<Range<T>> cover() {
@@ -247,7 +253,7 @@ public class RangeSet<T extends Comparable<? super T>> extends AbstractList<Rang
     }
         
     public RangeSet<T> union(RangeSet<T> another) {
-        return new RangeSet<>(toStream(unionIterator(another)).collect(toList()));
+        return new RangeSet<>(builder,toStream(unionIterator(another)).collect(toList()));
     }
         
     public boolean covers(T point) {
@@ -257,15 +263,7 @@ public class RangeSet<T extends Comparable<? super T>> extends AbstractList<Rang
     }
     
     public <K extends Comparable<? super K>,C extends Context<K,C>> RangeSet<K> shift(Function<T,C> f, C s) {
-        return new RangeSet<>(elements.stream().map(r->r.shift(f,s)).collect(toList()));
-    }
-
-    public static <T extends Comparable<? super T>> RangeSet<T> intersectMany(List<RangeSet<T>> many) {
-        return many.stream().reduce((a,b)->a.intersect(b)).orElse(RangeSet.empty());
-    }
-    
-    public static <T extends Comparable<? super T>> RangeSet<T> unionMany(List<RangeSet<T>> many) {
-        return many.stream().reduce(RangeSet.empty(), (a,b)->a.union(b));
+        return new RangeSet<>(b(),elements.stream().map(r->r.shift(f,s)).collect(toList()));
     }
     
     @Override

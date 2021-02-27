@@ -9,6 +9,7 @@ import collection.P;
 import collection.TList;
 import static collection.c.a2l;
 import static collection.c.i2l;
+import function.NaturalOrder;
 import java.util.Iterator;
 import java.util.List;
 import static orderedSet.Builder.intRange;
@@ -213,7 +214,7 @@ public class RangeWalkerNGTest {
     }
 
     public void testPpBase(List<Integer> leftIn, List<Integer> rightIn, List<Integer> leftOut, List<Integer> rightOut) {
-        Walker<Integer, Integer> tested = new WalkerPp<>(leftIn.iterator(), rightIn.iterator());
+        Walker<Integer, Integer> tested = new WalkerPp<>(leftIn.iterator(), rightIn.iterator(), new NaturalOrder<>());
         List<P<Integer, Integer>> result = i2l(tested);
         List<P<Integer, Integer>> expected = TList.set(leftOut).pair(rightOut);
         System.out.println("result  : " + result);
@@ -232,7 +233,7 @@ public class RangeWalkerNGTest {
     }
 
     public void testPpOverlap(List<Integer> leftIn, List<Integer> rightIn, List<Integer> leftOut, List<Integer> rightOut) {
-        Walker<Integer, Integer> tested = new WalkerPp<>(leftIn.iterator(), rightIn.iterator()).overlap();
+        Walker<Integer, Integer> tested = new WalkerPp<>(leftIn.iterator(), rightIn.iterator(), new NaturalOrder<>()).overlap();
         List<P<Integer, Integer>> result = i2l(tested);
         List<P<Integer, Integer>> expected = TList.set(leftOut).pair(rightOut);
         System.out.println("result  : " + result);
@@ -250,7 +251,7 @@ public class RangeWalkerNGTest {
     }
 
     public void testPpIntersect(List<Integer> leftIn, List<Integer> rightIn, List<Integer> out) {
-        Iterator<Integer> tested = new WalkerPp(leftIn.iterator(), rightIn.iterator()).intersect();
+        Iterator<Integer> tested = new WalkerPp(leftIn.iterator(), rightIn.iterator(), new NaturalOrder<>()).intersect();
         List<Integer> result = i2l(tested);
         List<Integer> expected = out;
         System.out.println("result  : " + result);

@@ -8,6 +8,7 @@ package orderedSet;
 import function.NaturalOrder;
 import function.Order;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  *

@@ -15,6 +15,7 @@
 
 package orderedSet;
 
+import function.Order;
 import java.util.Iterator;
 
 /**
@@ -22,18 +23,20 @@ import java.util.Iterator;
  * @author masao
  * @param <T>
  */
-public class WalkerPp<T extends Comparable<? super T>> extends WalkerSetOp<T, T, T> {
-    public WalkerPp(Iterator<T> left, Iterator<T> right) {
+public class WalkerPp<T> extends WalkerSetOp<T, T, T> {
+    Order<T> order;
+    public WalkerPp(Iterator<T> left, Iterator<T> right, Order<T> order) {
         super(left, right);
+        this.order=order;
     }
     @Override
     public boolean leftIsBehind(T left, T right) {
-        return left.compareTo(right) < 0;
+        return order.lt(left, right);
     }
 
     @Override
     public boolean overlaps(T left, T right) {
-        return left.compareTo(right) == 0;
+        return order.eq(left,right);
     }
 
     @Override

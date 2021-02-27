@@ -26,9 +26,9 @@ public class CBuilder<K, C extends Context<K,C>&ContextOrdered<K,C>, B extends C
     public static CBuilder<Double,C2<Double>,C2.Builder<Double>> doubleRange2= b(C2.d);
     public static CBuilder<BigDecimal,C2<BigDecimal>,C2.Builder<BigDecimal>> bdRange2= b(C2.bd);
     public static CBuilder<Integer,C2N<Integer>,C2N.Builder<Integer>> intRange2n = b(C2N.i);
-    public static CBuilder<Long,C2N<Long>,C2N.Builder<Long>> longRange = b(C2N.l);
-    public static CBuilder<Double,C2N<Double>,C2N.Builder<Double>> doubleRange= b(C2N.d);
-    public static CBuilder<BigDecimal,C2N<BigDecimal>,C2N.Builder<BigDecimal>> bdRange= b(C2N.bd);
+    public static CBuilder<Long,C2N<Long>,C2N.Builder<Long>> longRange2n = b(C2N.l);
+    public static CBuilder<Double,C2N<Double>,C2N.Builder<Double>> doubleRange2n= b(C2N.d);
+    public static CBuilder<BigDecimal,C2N<BigDecimal>,C2N.Builder<BigDecimal>> bdRange2n= b(C2N.bd);
     static public <K, C extends Context<K,C>&ContextOrdered<K,C>, B extends ContextBuilder<K,C>&ContextOrder<K,C>> CBuilder<K,C,B> b(B b) {
         return new CBuilder<>(b);
     }

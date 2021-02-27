@@ -19,7 +19,6 @@ import function.NaturalOrder;
 import collection.ArrayInt;
 import collection.TList;
 import static collection.c.i2l;
-import static function.ComparePolicy.inc;
 import static function.MappedOrder.map;
 import function.Order;
 import iterator.AbstractBufferedIterator;
@@ -38,9 +37,44 @@ import string.Message;
  */
 public class Range<T> {
 
+    public Range(T start, T end, Order<T> order) {
+        assert order.le(start, end) : "start=" + start + ":end = " + end;
+        this.start = start;
+        this.end = end;
+        this.order = order;
+    }
+    
     public static <T extends Comparable<? super T>> Range<T> create(T start, T end) {
         return new Range<>(start, end, new NaturalOrder<>());
     }
+    static public <T> List<Range<T>> c(Order<T> order, T... range) {
+        if (range.length == 0) {
+            return Collections.<Range<T>>emptyList();
+        } else if (range.length % 2 != 0) {
+            throw new RuntimeException("Range(T...) illegal number of parameters");
+        } else {
+            List<Range<T>> retval = new ArrayList<>(range.length / 2);
+            for (int i = 0; i < range.length; i += 2) {
+                retval.add(new Range<>(range[i], range[i+1], order));
+            }
+            return retval;
+        }
+    }
+
+    static public <T> List<Range<T>> c(Order<T> order, List<T> range) {
+        if (range.isEmpty()) {
+            return Collections.<Range<T>>emptyList();
+        } else if (range.size() % 2 != 0) {
+            throw new RuntimeException("Range(T...) illegal number of parameters");
+        } else {
+            List<Range<T>> retval = new ArrayList<>(range.size() / 2);
+            for (int i = 0; i < range.size(); i += 2) {
+                retval.add(new Range<>(range.get(i), range.get(i+1), order));
+            }
+            return retval;
+        }
+    }
+
     public final T start;
     public final T end;
     public final Order<T> order;
@@ -69,40 +103,6 @@ public class Range<T> {
         return new Range<>(start, end, order);
     }
     
-    public Range(T start, T end, Order<T> order) {
-        assert order.le(start, end) : "start=" + start + ":end = " + end;
-        this.start = start;
-        this.end = end;
-        this.order = order;
-    }
-    
-    static public <T> List<Range<T>> c(Order<T> order, T... range) {
-        if (range.length == 0) {
-            return Collections.<Range<T>>emptyList();
-        } else if (range.length % 2 != 0) {
-            throw new RuntimeException("Range(T...) illegal number of parameters");
-        } else {
-            List<Range<T>> retval = new ArrayList<>(range.length / 2);
-            for (int i = 0; i < range.length; i += 2) {
-                retval.add(new Range<>(range[i], range[i+1], order));
-            }
-            return retval;
-        }
-    }
-
-    static public <T> List<Range<T>> c(Order<T> order, List<T> range) {
-        if (range.isEmpty()) {
-            return Collections.<Range<T>>emptyList();
-        } else if (range.size() % 2 != 0) {
-            throw new RuntimeException("Range(T...) illegal number of parameters");
-        } else {
-            List<Range<T>> retval = new ArrayList<>(range.size() / 2);
-            for (int i = 0; i < range.size(); i += 2) {
-                retval.add(new Range<>(range.get(i), range.get(i+1), order));
-            }
-            return retval;
-        }
-    }
 
     public boolean isEmpty() {
         return order.eq(start, end);
