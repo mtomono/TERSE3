@@ -18,7 +18,7 @@ package collection;
 import iterator.TIterator;
 import iterator.TListIterator;
 import java.util.function.Predicate;
-import static orderedSet.Builder.intRange;
+import static orderedSet.Range.intRange;
 
 /**
  * 

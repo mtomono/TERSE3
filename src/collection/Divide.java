@@ -16,7 +16,7 @@
 package collection;
 
 import static collection.TList.toTList;
-import static orderedSet.Builder.intRange;
+import static orderedSet.Range.intRange;
 import orderedSet.Range;
 
 /**

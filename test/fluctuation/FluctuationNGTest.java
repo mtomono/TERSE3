@@ -7,7 +7,7 @@ package fluctuation;
 
 import java.math.BigDecimal;
 import math.C2;
-import static orderedSet.Builder.longRange;
+import static orderedSet.Range.longRange;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 

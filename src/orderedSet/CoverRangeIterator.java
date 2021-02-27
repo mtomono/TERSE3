@@ -27,7 +27,7 @@ import static arithmetic.Arithmetic.*;
  * @author mtomono
  * @param <T>
  */
-public class CoverRangeIterator<T extends Number & Comparable<T>> extends AbstractBufferedIterator<Range<T>> {
+public class CoverRangeIterator<T extends Number&Comparable<T>> extends AbstractBufferedIterator<Range<T>> {
     T unit;
     T base;
     Iterator<T> iter;
@@ -81,7 +81,7 @@ public class CoverRangeIterator<T extends Number & Comparable<T>> extends Abstra
                 break;
             end = (T)ceil(one);
         }
-        nextFound(Range.create(start, end));
+        nextFound(Range.<T>b().r(start, end));
         if (one != null) {
             start = floor(one);
             end = (T)add.o(start, unit);

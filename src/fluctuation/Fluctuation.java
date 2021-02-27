@@ -23,7 +23,7 @@ import java.util.Objects;
 import java.util.function.Function;
 import math.C2;
 import math.CList;
-import static orderedSet.Builder.longRange;
+import static orderedSet.Range.longRange;
 import orderedSet.Range;
 
 /**

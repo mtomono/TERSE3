@@ -12,7 +12,7 @@ import static collection.c.i2l;
 import function.NaturalOrder;
 import java.util.Iterator;
 import java.util.List;
-import static orderedSet.Builder.intRange;
+import static orderedSet.Range.intRange;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import walker.Walker;

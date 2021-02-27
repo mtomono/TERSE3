@@ -25,7 +25,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static orderedSet.Builder.intRange;
+import static orderedSet.Range.intRange;
 import orderedSet.Range;
 import shape.TPoint2i;
 

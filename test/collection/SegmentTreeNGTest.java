@@ -6,8 +6,7 @@
 package collection;
 
 import static java.lang.Integer.min;
-import static orderedSet.Builder.intRange;
-import orderedSet.Range;
+import static orderedSet.Range.intRange;
 import static org.testng.Assert.assertEquals;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;

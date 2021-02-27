@@ -17,7 +17,7 @@ package shape;
 
 import collection.c;
 import java.util.Optional;
-import static orderedSet.Builder.doubleRange;
+import static orderedSet.Range.doubleRange;
 import orderedSet.Range;
 import static shape.ShapeUtil.err;
 import static shape.ShapeUtil.point2;

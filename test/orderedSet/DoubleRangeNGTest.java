@@ -7,7 +7,7 @@ package orderedSet;
 
 import math.C;
 import math.C2;
-import static orderedSet.Builder.doubleRange;
+import static orderedSet.Range.doubleRange;
 import static orderedSet.CBuilder.doubleRange2;
 import static org.testng.Assert.*;
 import org.testng.annotations.BeforeMethod;

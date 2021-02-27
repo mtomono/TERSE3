@@ -19,7 +19,7 @@ import collection.P;
 import collection.TList;
 import math.C2;
 import math.CList;
-import static orderedSet.Builder.longRange;
+import static orderedSet.Range.longRange;
 import orderedSet.Range;
 
 /**

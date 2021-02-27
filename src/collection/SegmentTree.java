@@ -16,7 +16,7 @@
 package collection;
 
 import java.util.function.BinaryOperator;
-import static orderedSet.Builder.intRange;
+import static orderedSet.Range.intRange;
 import orderedSet.Range;
 
 /**

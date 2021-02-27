@@ -47,27 +47,31 @@ public class RangeSet<T> extends AbstractList<Range<T>> {
     }
     public static class Builder<T> {
         Order<T> order;
+        Range.Builder<T> rbuilder;
         public Builder(Order<T> order) {
             this.order=order;
+            this.rbuilder=Range.b(order);
         }
         public RangeSet<T> rs(List<Range<T>> ranges) {
             return new RangeSet<>(this, ranges);
         }
-        public RangeSet<T> rp(List<T> range) {
-            return rs(Range.c(order,range));
-        }
-        public RangeSet<T> rp(T... range) {
-            return rs(Range.c(order, range));
-        }
         public RangeSet<T> rs(Range<T> range) {
             return rs(Collections.singletonList(range));
+        }
+        public RangeSet<T> rs(Range<T>... ranges) {
+            return rs(TList.sof(ranges));
+        }
+        public RangeSet<T> rp(List<T> range) {
+            return rs(rbuilder.rs(range));
+        }
+        public RangeSet<T> rp(T... range) {
+            return rs(rbuilder.rs(range));
         }
         public RangeSet<T> empty() {
             return rs(Collections.emptyList());
         }
         /**
          * force some list of range into RangeSet by sorting and merging ranges.
-         * @param <T>
          * @param rs
          * @return 
          */

@@ -18,6 +18,7 @@ package orderedSet;
 import function.NaturalOrder;
 import collection.ArrayInt;
 import collection.TList;
+import collection.c;
 import static collection.c.i2l;
 import static function.MappedOrder.map;
 import function.Order;
@@ -25,6 +26,7 @@ import iterator.AbstractBufferedIterator;
 import iterator.BufferedIterator;
 import iterator.MergeIterator;
 import iterator.TIterator;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
 import math.Context;
@@ -36,7 +38,43 @@ import string.Message;
  * @param <T>
  */
 public class Range<T> {
-
+    public static Builder<Integer> intRange = b();
+    public static Builder<Long> longRange = b();
+    public static Builder<Double> doubleRange= b();
+    public static Builder<BigDecimal> bdRange= b();
+    public static <T> Builder<T> b(Order<T> order) {
+        return new Builder<>(order);
+    }
+    public static <T extends Comparable<? super T>> Builder<T> b() {
+        return b(new NaturalOrder<T>());
+    }
+    public static class Builder<T> {
+        Order<T> order;
+        public Builder(Order<T> order) {
+            this.order=order;
+        }
+        public Range<T> r(T start,T end) {
+            return new Range<>(this, start,end);
+        }
+        public TList<Range<T>> rs(List<T> range) {
+            assert range.size()%2==0 : "Range(T...) number of parameters has to be even. illegal number of parameters";
+            if (range.isEmpty()) return TList.empty();
+            return TList.set(range).fold(2).map(l->r(l.get(0),l.get(1)));
+        }
+        public TList<Range<T>> rs(T... range) {
+            return rs(c.a2l(range));
+        }
+        public Range<T> inEitherWay(T one, T two) {
+            return order.lt(one,two)?r(one,two):r(two,one);
+        }
+    }
+    protected Range(Builder<T> builder, T start, T end) {
+        assert builder.order.le(start, end) : "start=" + start + ":end = " + end;
+        this.builder=builder;
+        this.order=builder.order;
+        this.start=start;
+        this.end=end;
+    }
     public Range(T start, T end, Order<T> order) {
         assert order.le(start, end) : "start=" + start + ":end = " + end;
         this.start = start;
@@ -44,40 +82,10 @@ public class Range<T> {
         this.order = order;
     }
     
-    public static <T extends Comparable<? super T>> Range<T> create(T start, T end) {
-        return new Range<>(start, end, new NaturalOrder<>());
-    }
-    static public <T> List<Range<T>> c(Order<T> order, T... range) {
-        if (range.length == 0) {
-            return Collections.<Range<T>>emptyList();
-        } else if (range.length % 2 != 0) {
-            throw new RuntimeException("Range(T...) illegal number of parameters");
-        } else {
-            List<Range<T>> retval = new ArrayList<>(range.length / 2);
-            for (int i = 0; i < range.length; i += 2) {
-                retval.add(new Range<>(range[i], range[i+1], order));
-            }
-            return retval;
-        }
-    }
-
-    static public <T> List<Range<T>> c(Order<T> order, List<T> range) {
-        if (range.isEmpty()) {
-            return Collections.<Range<T>>emptyList();
-        } else if (range.size() % 2 != 0) {
-            throw new RuntimeException("Range(T...) illegal number of parameters");
-        } else {
-            List<Range<T>> retval = new ArrayList<>(range.size() / 2);
-            for (int i = 0; i < range.size(); i += 2) {
-                retval.add(new Range<>(range.get(i), range.get(i+1), order));
-            }
-            return retval;
-        }
-    }
-
     public final T start;
     public final T end;
-    public final Order<T> order;
+    public Order<T> order;
+    public Builder<T> builder;
     
     @Override
     public boolean equals(Object o) {
@@ -100,7 +108,7 @@ public class Range<T> {
     
     @Override
     public Range<T> clone() {
-        return new Range<>(start, end, order);
+        return new Range<>(builder,start, end);
     }
     
 
@@ -213,9 +221,9 @@ public class Range<T> {
      */
     public Range<T> cover(T value) {
         if (!hasUpperThan(value))
-            return new Range<>(start, value, order);
+            return new Range<>(builder,start, value);
         if (!hasLowerThan(value))
-            return new Range<>(value, end, order);
+            return new Range<>(builder,value, end);
         return this;
     }
     
@@ -231,13 +239,13 @@ public class Range<T> {
     public Optional<Range<T>> getLower(T value) {
         if (!hasLowerThan(value))
             return Optional.empty();
-        return Optional.of(new Range<>(this.start, hasUpperThan(value) ? value : this.end, order));
+        return Optional.of(new Range<>(builder,this.start, hasUpperThan(value) ? value : this.end));
     }
     
     public Optional<Range<T>> getUpper(T value) {
         if (!hasUpperThan(value))
             return Optional.empty();
-        return Optional.of(new Range<>(hasLowerThan(value) ? value : this.start, this.end, order));
+        return Optional.of(new Range<>(builder,hasLowerThan(value) ? value : this.start, this.end));
     }
     
     public Optional<Range<T>> getLowerRoomIn(Range<T> another) {
@@ -248,16 +256,26 @@ public class Range<T> {
         return another.getUpper(end);
     }
     
+    /**
+     * this will be removed after methods which are using this method are moved to Builder.
+     * @param <T>
+     * @param r
+     * @return 
+     */
+    private static <T> Range.Builder<T> getBuilderXXX_toBeRemoved(TList<Range<T>> r) {
+        return r.get(0).builder;
+    }
+    
     public static <T> Optional<Range<T>> cover(TList<Range<T>> rl) {
         if (rl.isEmpty()) return Optional.empty();
-        Order<T> order=rl.get(0).order;
-        return Optional.of(new Range<>(rl.map(r->r.start).min(order).get(),rl.map(r->r.end).max(order).get(),order));
+        Range.Builder<T> builder=getBuilderXXX_toBeRemoved(rl);
+        return Optional.of(new Range<>(builder,rl.map(r->r.start).min(builder.order).get(),rl.map(r->r.end).max(builder.order).get()));
     }
 
     static public <T> TList<Range<T>> sortToStart(TList<Range<T>> ranges) {
         if (ranges.isEmpty()) return ranges;
-        Order<T> order=ranges.get(0).order;
-        return ranges.sortTo(map(order,r->r.start()));
+        Range.Builder<T> builder=getBuilderXXX_toBeRemoved(ranges);
+        return ranges.sortTo(map(builder.order,r->r.start()));
     }
     /**
      * remove punches from this range.
@@ -449,7 +467,7 @@ public class Range<T> {
     }
     
     public <K extends Comparable<? super K>,C extends Context<K,C>> Range<K> shift(Function<T,C> f, C s) {
-        return new Range<>(f.apply(start).add(s).body(),f.apply(end).add(s).body(),new NaturalOrder<>());
+        return new Range<>(Range.b(),f.apply(start).add(s).body(),f.apply(end).add(s).body());
     }
 }
 

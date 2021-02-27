@@ -21,7 +21,7 @@ import static java.lang.Integer.min;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
-import static orderedSet.Builder.intRange;
+import static orderedSet.Range.intRange;
 import orderedSet.Range;
 import shape.TPoint2i;
 

@@ -23,7 +23,7 @@ import static java.lang.Math.floor;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import static orderedSet.Builder.doubleRange;
+import static orderedSet.Range.doubleRange;
 import orderedSet.Range;
 import static shape.ShapeUtil.err;
 import solver.graph.GridScale;

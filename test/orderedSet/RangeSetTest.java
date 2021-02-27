@@ -4,12 +4,11 @@
  */
 package orderedSet;
 
-import function.NaturalOrder;
 import collection.TList;
 import collection.c;
 import java.util.Collections;
 import java.util.List;
-import static orderedSet.Builder.intRange;
+import static orderedSet.Range.intRange;
 import static orderedSet.RangeSet.intRanges;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
@@ -33,7 +32,7 @@ public class RangeSetTest {
     @Test
     public void testMergeIntoRangeSet() {
         System.out.println(test.TestUtils.methodName(0));
-        RangeSet<Integer> result = intRanges.mergeIntoRangeSet(TList.set(Range.c(new NaturalOrder<>(), 0,3, 5,7, -2,2, 4,8, 10,11)));
+        RangeSet<Integer> result = intRanges.mergeIntoRangeSet(intRange.rs(0,3, 5,7, -2,2, 4,8, 10,11));
         RangeSet<Integer> expected = intRanges.rp(-2,3, 4,8, 10,11);
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);

@@ -21,7 +21,7 @@ import static java.lang.Integer.min;
 import static java.lang.Integer.signum;
 import static java.lang.Math.abs;
 import java.util.Optional;
-import static orderedSet.Builder.intRange;
+import static orderedSet.Range.intRange;
 import orderedSet.Range;
 
 /**

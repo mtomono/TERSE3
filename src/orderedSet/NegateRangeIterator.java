@@ -40,17 +40,18 @@ import java.util.Iterator;
 public class NegateRangeIterator<T> extends AbstractBufferedIterator<Range<T>> {
     PreIterator<Range<T>> base;
     Order<T> order;
+    Range.Builder<T> builder;
     
     class demarcation<S> extends Range<S> {
-        public demarcation(S point, Order<S> order) {
-            super(point, point, order);
+        public demarcation(Range.Builder<S> builder,S point) {
+            super(builder,point, point);
         }
     };
             
     public NegateRangeIterator(Range<T> whole, Iterator<Range<T>> target) {
-        this.order=whole.order;
-        this.base = new PreIterator<>(new IteratorIterator<>(new WalkerRr<>(Collections.singletonList(whole).iterator(), target).intersect(), a2i(new demarcation<>(whole.end(), whole.order))), 2);
-        this.base.load(new demarcation(whole.start(), order));
+        this.builder=whole.builder;
+        this.base = new PreIterator<>(new IteratorIterator<>(new WalkerRr<>(Collections.singletonList(whole).iterator(), target).intersect(), a2i(new demarcation<>(builder,whole.end()))), 2);
+        this.base.load(new demarcation(builder,whole.start()));
     }
     
     @Override
@@ -58,7 +59,7 @@ public class NegateRangeIterator<T> extends AbstractBufferedIterator<Range<T>> {
         while (base.hasNext()) {
             base.next();
             if (!((base.now() instanceof demarcation || base.pre(-1) instanceof demarcation) && base.pre(-1).end().equals(base.now().start()))) {
-                nextFound(new Range<>(base.pre(-1).end(), base.now().start(), order));
+                nextFound(new Range<>(builder,base.pre(-1).end(), base.now().start()));
                 break;
             }
         }

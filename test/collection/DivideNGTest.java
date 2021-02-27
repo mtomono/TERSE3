@@ -5,7 +5,7 @@
  */
 package collection;
 
-import static orderedSet.Builder.intRange;
+import static orderedSet.Range.intRange;
 import orderedSet.Range;
 import static org.testng.Assert.*;
 import org.testng.annotations.BeforeMethod;

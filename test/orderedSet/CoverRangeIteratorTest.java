@@ -6,7 +6,7 @@ package orderedSet;
 
 import collection.c;
 import java.util.Iterator;
-import static orderedSet.Builder.intRange;
+import static orderedSet.Range.intRange;
 import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 

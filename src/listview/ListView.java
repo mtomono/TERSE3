@@ -16,7 +16,7 @@
 package listview;
 
 import collection.TList;
-import static orderedSet.Builder.intRange;
+import static orderedSet.Range.intRange;
 import orderedSet.Range;
 
 /**

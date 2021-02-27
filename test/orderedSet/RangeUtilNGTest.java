@@ -5,10 +5,9 @@
  */
 package orderedSet;
 
-import function.NaturalOrder;
 import collection.TList;
 import java.util.Optional;
-import static orderedSet.Builder.intRange;
+import static orderedSet.Range.intRange;
 import static orderedSet.Range.intersectMany;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
