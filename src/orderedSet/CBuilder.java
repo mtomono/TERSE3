@@ -5,31 +5,27 @@
  */
 package orderedSet;
 
-import function.Order;
+import static arithmetic.NaturalOrder.order;
 import math.Context;
 import math.ContextBuilder;
+import math.ContextComparableBuilder;
 
 /**
  *
  * @author masao
  */
-public class CBuilder<K, C extends Context<K,C>&Comparable<C>> {
-    static public <K, C extends Context<K,C>&Comparable<C>> CBuilder<K,C> b(ContextBuilder<K,C> b, Order<C> order) {
-        return new CBuilder<>(b, order);
+public class CBuilder<K extends Comparable<? super K>, C extends Context<K,C>&Comparable<? super C>> {
+    static public <K extends Comparable<? super K>, C extends Context<K,C>&Comparable<? super C>> CBuilder<K,C> b(ContextComparableBuilder<K,C> b) {
+        return new CBuilder<>(b);
     }
-    static public <K, C extends Context<K,C>&Comparable<C>> CBuilder<K,C> b(ContextBuilder<K,C> b) {
-        return new CBuilder<>(b, new NaturalOrder<>());
-    }
-    final Order<C> order;
-    final ContextBuilder<K,C> b;
-    public CBuilder(ContextBuilder<K,C> b, Order<C> order) {
-        this.order=order;
+    final ContextComparableBuilder<K,C> b;
+    public CBuilder(ContextComparableBuilder<K,C> b) {
         this.b=b;
     }
     public Range<C> r(K start, K end) {
-        return new Range<>(b.c(start),b.c(end),order);
+        return new Range<>(b.c(start),b.c(end),b.order());
     }
     public Range<C> r(C start, C end) {
-        return new Range<>(start,end,order);
+        return new Range<>(start,end,b.order());
     }
 }
