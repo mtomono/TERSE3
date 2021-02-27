@@ -13,7 +13,7 @@ import function.ChainedCompare;
  * @param <K>
  * @param <T>
  */
-public interface ContextNumber<K extends Number, T extends ContextNumber<K,T>> extends Context<K,T>,Comparable<T>,ChainedCompare<T> {
+public interface ContextNumber<K extends Number, T extends ContextNumber<K,T>> extends Context<K,T>,ChainedCompare<T> {
     default boolean isInteger() {
         return self().eq(intValue());
     }

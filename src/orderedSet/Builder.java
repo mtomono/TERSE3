@@ -5,6 +5,7 @@
  */
 package orderedSet;
 
+import function.NaturalOrder;
 import function.Order;
 
 /**

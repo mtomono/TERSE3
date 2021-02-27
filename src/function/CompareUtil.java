@@ -15,16 +15,10 @@
 package function;
 
 /**
- *
+ * basic comparison.
  * @author masao
  */
 public interface CompareUtil {
-    static public <T extends Comparable<? super T>> T min(T a, T b) {
-        return a.compareTo(b)<0?a:b;
-    }
-    static public <T extends Comparable<? super T>> T max(T a, T b) {
-        return a.compareTo(b)>0?a:b;
-    }
     static public <T extends Comparable<? super T>> boolean eq(T a, T b) {
         return a.compareTo(b)==0;
     }

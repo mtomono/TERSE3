@@ -15,6 +15,7 @@
 
 package orderedSet;
 
+import function.NaturalOrder;
 import collection.ArrayInt;
 import collection.TList;
 import static collection.c.i2l;

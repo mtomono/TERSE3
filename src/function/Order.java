@@ -19,13 +19,13 @@ package function;
  * @author masao
  * @param <T>
  */
-public interface Order<T extends Comparable<? super T>> {
-    default T min(T a, T b) { return CompareUtil.min(a, b); }
-    default T max(T a, T b) { return CompareUtil.max(a, b); }
-    default boolean eq(T a, T b) { return CompareUtil.eq(a, b); }
-    default boolean ne(T a, T b) { return CompareUtil.ne(a, b); }
-    default boolean lt(T a, T b) { return CompareUtil.lt(a, b); }
-    default boolean le(T a, T b) { return CompareUtil.le(a, b); }
-    default boolean gt(T a, T b) { return CompareUtil.gt(a, b); }
-    default boolean ge(T a, T b) { return CompareUtil.ge(a, b); }
+public interface Order<T> {
+    default T min(T a, T b) {return lt(a,b)?a:b;}
+    default T max(T a, T b) {return gt(a,b)?a:b;}
+    public boolean eq(T a, T b);
+    public boolean ne(T a, T b);
+    public boolean lt(T a, T b);
+    public boolean le(T a, T b);
+    public boolean gt(T a, T b);
+    public boolean ge(T a, T b);
 }

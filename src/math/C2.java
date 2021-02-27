@@ -14,31 +14,32 @@
  */
 package math;
 
-import function.WrapperOfComparable;
+import function.Order;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.function.Function;
+import function.NaturalOrder;
 
 /**
  * Comparable Calculation Context
  * @author masao
  * @param <K>
  */
-public class C2<K extends Comparable<? super K>> implements WrapperOfComparable<K,C2<K>>,ContextComparable<K,C2<K>> {
-    static public C2.Builder<Integer> i=new Builder<>(new IntegerOp());
-    static public C2.Builder<Long> l=new Builder<>(new LongOp());
-    static public C2.Builder<Float> f=new Builder<>(new FloatOp());
-    static public C2.Builder<Double> d=new Builder<>(new DoubleOp());
-    static public C2.Builder<Rational> r=new Builder<>(new RationalOp());
-    static public C2.Builder<BigDecimal> bd=new Builder<>(new BigDecimalOp());
+public class C2<K> implements ContextOrdered<K,C2<K>> {
+    static public C2.Builder<Integer> i=new Builder<>(new IntegerOp(), new NaturalOrder<>());
+    static public C2.Builder<Long> l=new Builder<>(new LongOp(), new NaturalOrder<>());
+    static public C2.Builder<Float> f=new Builder<>(new FloatOp(), new NaturalOrder<>());
+    static public C2.Builder<Double> d=new Builder<>(new DoubleOp(), new NaturalOrder<>());
+    static public C2.Builder<Rational> r=new Builder<>(new RationalOp(), new NaturalOrder<>());
+    static public C2.Builder<BigDecimal> bd=new Builder<>(new BigDecimalOp(), new NaturalOrder<>());
     static public C2.Builder<BigDecimal> bd(int scale, RoundingMode r) {
-        return new Builder<>(new BigDecimalOpRounded(scale,r));
+        return new Builder<>(new BigDecimalOpRounded(scale,r), new NaturalOrder<>());
     }
-    static public class Builder<K extends Comparable<? super K>> implements ContextBuilder<K,C2<K>> {
+    static public class Builder<K> implements ContextBuilder<K,C2<K>>,ContextOrder<K,C2<K>> {
         final Op<K> body;
-        final Function<C2<K>,K> toComparable=x->x.body();
-        Builder(Op<K> body) {
+        final Order<K> order;
+        Builder(Op<K> body, Order<K> order) {
             this.body=body;
+            this.order=order;
         }
         @Override
         public C2<K> c(K v) {
@@ -54,7 +55,11 @@ public class C2<K extends Comparable<? super K>> implements WrapperOfComparable<
         }
         @Override
         public ContextBuilder<K, C2<K>> wrap(Op<K> body) {
-            return new Builder<>(body);
+            return new Builder<>(body,order);
+        }
+        @Override
+        public Order<K> baseOrder() {
+            return order;
         }
     }
     final Builder<K> builder;
@@ -74,6 +79,9 @@ public class C2<K extends Comparable<? super K>> implements WrapperOfComparable<
     @Override
     public C2<K> self() {
         return this;
+    }
+    public Order<C2<K>> order() {
+        return builder;
     }
     @Override
     public String toString() {

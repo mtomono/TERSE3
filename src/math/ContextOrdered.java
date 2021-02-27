@@ -13,7 +13,7 @@ import function.ChainedCompare;
  * @param <K>
  * @param <T>
  */
-public interface ContextComparable<K,T extends ContextComparable<K,T>> extends Context<K,T>,Comparable<T>,ChainedCompare<T>{
+public interface ContextOrdered<K,T extends ContextOrdered<K,T>> extends Context<K,T>,ChainedCompare<T>{
     default boolean isZero() {
         return self().eq(zero());
     }

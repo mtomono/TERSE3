@@ -4,6 +4,7 @@
  */
 package orderedSet;
 
+import function.NaturalOrder;
 import collection.TList;
 import collection.c;
 import java.util.Collections;
