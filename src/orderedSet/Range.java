@@ -29,6 +29,8 @@ import iterator.TIterator;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
+import math.C2;
+import math.C2N;
 import math.Context;
 import string.Message;
 
@@ -42,6 +44,14 @@ public class Range<T> {
     public static Builder<Long> longRange = b();
     public static Builder<Double> doubleRange= b();
     public static Builder<BigDecimal> bdRange= b();
+    public static Builder<C2<Integer>> intRange2 = b(C2.i);
+    public static Builder<C2<Long>> longRange2=b(C2.l);
+    public static Builder<C2<Double>> doubleRange2=b(C2.d);
+    public static Builder<C2<BigDecimal>> bdRange2=b(C2.bd);
+    public static Builder<C2N<Integer>> intRange2N = b(C2N.i);
+    public static Builder<C2N<Long>> longRange2N=b(C2N.l);
+    public static Builder<C2N<Double>> doubleRange2N=b(C2N.d);
+    public static Builder<C2N<BigDecimal>> bdRange2N=b(C2N.bd);
     public static <T> Builder<T> b(Order<T> order) {
         return new Builder<>(order);
     }
@@ -67,31 +77,99 @@ public class Range<T> {
         public Range<T> inEitherWay(T one, T two) {
             return order.lt(one,two)?r(one,two):r(two,one);
         }
+        public Optional<Range<T>> cover(TList<Range<T>> rl) {
+            return Optional.of(new Range<>(this,rl.map(r->r.start).min(order).get(),rl.map(r->r.end).max(order).get()));
+        }
+        public TList<Range<T>> sortToStart(TList<Range<T>> ranges) {
+            return ranges.sortTo(map(order,r->r.start()));
+        }
+        public TList<Range<T>> unionIfLucky(TList<Range<T>> sorted) {
+            return TList.set(i2l(cover(sorted).map(w->w.unionIteratorIfLucky(sorted.iterator())).orElse(TList.<Range<T>>empty().iterator())));
+        }
+        public Iterator<Range<T>> unionIterator(TList<Range<T>> punches) {
+            return cover(punches).map(w->w.unionIteratorIfLucky(sortToStart(punches).iterator())).orElse(TList.<Range<T>>empty().iterator());
+        }
+        public TList<Range<T>> union(TList<Range<T>> punches) {
+            return unionIfLucky(sortToStart(punches));
+        }
+        public TList<Range<T>> intersectIfLucky(TList<Range<T>> aSorted, TList<Range<T>> bSorted) {
+            return TList.set(i2l(cover(aSorted.append(bSorted)).map(w->w.intersectIteratorIfLucky(aSorted.iterator(),bSorted.iterator())).orElse(TList.<Range<T>>empty().iterator())));
+        }
+        public Iterator<Range<T>> intersectIterator(TList<Range<T>> a, TList<Range<T>> b) {
+            return cover(a.append(b)).map(w->w.intersectIteratorIfLucky(sortToStart(a).iterator(),sortToStart(b).iterator())).orElse(TList.<Range<T>>empty().iterator());
+        }
+        public TList<Range<T>> intersect(TList<Range<T>> a, TList<Range<T>> b) {
+            return intersectIfLucky(sortToStart(a),sortToStart(b));
+        }
+        public boolean overlap(TList<Range<T>> a, TList<Range<T>> b) {
+            return cover(a.append(b)).map(w->w.overlapIfLucky(sortToStart(a).iterator(),sortToStart(b).iterator())).orElse(false);
+        }
+        /**
+         * negate the cover.
+         * @param punches
+         * @return 
+         */
+        public TList<Range<T>> negateCover(TList<Range<T>> punches) {
+            return cover(punches).map(w->w.negate(punches)).orElse(TList.empty());
+        }
+        /**
+         * unary intersect.
+         * @param punches
+         * @return 
+         */
+        public TList<Optional<Range<T>>> intersectSeq(TList<Range<T>> punches) {
+            if (punches.isEmpty()) return TList.empty();
+            return punches.accumFromStart(s->Optional.of(s),(o,x)->o.flatMap(r->r.intersect(x)));
+        }
+        public Optional<Range<T>> intersect(TList<Range<T>> punches) {
+            if (punches.isEmpty()) return Optional.empty();
+            return intersectSeq(punches).last();
+        }
+        public TList<Optional<RangeInt>> intersectPoints(TList<Range<T>> category,TList<T> points) {
+            TList<Optional<RangeInt>> retval=TList.c();
+            BufferedIterator<Range<T>> citer=new BufferedIterator(category.iterator());
+            ArrayInt.BufferedIterator piter=new ArrayInt.BufferedIterator(ArrayInt.range(0, points.size()).iterator());
+            while (citer.hasNext()) {
+                citer.next();
+                if (!piter.hasNext()) {retval.add(Optional.empty());continue;}
+                while (citer.peek().isAbove(points.get(piter.peek()))&&piter.hasNext()) piter.nextInt();
+                if (!citer.peek().contains(points.get(piter.peek()))) {retval.add(Optional.empty());continue;}
+                int start=piter.peek();
+                int end=start+1;
+                while (citer.peek().contains(points.get(piter.peek())))
+                    if (piter.hasNext()) end=piter.nextInt();
+                    else {end++;break;}
+                retval.add(Optional.of(new RangeInt(start,end)));
+            }
+            return retval;
+        }
+        public Optional<Range<T>> intersectMany(List<Range<T>> rs) {
+            TIterator<Optional<Range<T>>> iter = TList.set(rs).accumFromStart(a->Optional.of(a),(a,b)->a.flatMap(r->r.intersect(b))).iterator().until(r->r.isEmpty());
+            if (!iter.hasNext())
+                return Optional.empty();
+            return iter.last();
+        }
     }
     protected Range(Builder<T> builder, T start, T end) {
         assert builder.order.le(start, end) : "start=" + start + ":end = " + end;
         this.builder=builder;
-        this.order=builder.order;
         this.start=start;
         this.end=end;
-    }
-    public Range(T start, T end, Order<T> order) {
-        assert order.le(start, end) : "start=" + start + ":end = " + end;
-        this.start = start;
-        this.end = end;
-        this.order = order;
     }
     
     public final T start;
     public final T end;
-    public Order<T> order;
     public Builder<T> builder;
+
+    Order<T> order() {
+        return builder.order;
+    }
     
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Range))
             return false;
-        return order.eq(this.start, ((Range<T>)o).start) && order.eq(this.end, ((Range<T>)o).end);
+        return order().eq(this.start, ((Range<T>)o).start) && order().eq(this.end, ((Range<T>)o).end);
     }
     
     public boolean equalsAsPoint(T t) {
@@ -113,15 +191,15 @@ public class Range<T> {
     
 
     public boolean isEmpty() {
-        return order.eq(start, end);
+        return order().eq(start, end);
     }
     
     public boolean startsAt(T value) {
-        return order.eq(start, value);
+        return order().eq(start, value);
     }
     
     public boolean endsAt(T value) {
-        return order.eq(end, value);
+        return order().eq(end, value);
     }
     
     /**
@@ -130,7 +208,7 @@ public class Range<T> {
      * @return 
      */
     public boolean contains(T value) {
-        return order.le(this.start, value) && order.lt(value, this.end);
+        return order().le(this.start, value) && order().lt(value, this.end);
     }
     
     /**
@@ -160,7 +238,7 @@ public class Range<T> {
      * @return 
      */
     public boolean hasLowerThan(T value) {
-        return order.lt(this.start, value);
+        return order().lt(this.start, value);
     }
     
     /**
@@ -169,7 +247,7 @@ public class Range<T> {
      * @return 
      */
     public boolean hasUpperThan(T value) {
-        return order.lt(value, this.end);
+        return order().lt(value, this.end);
     }
     
     public boolean startsUpperThan(Range<T> another) {
@@ -189,11 +267,11 @@ public class Range<T> {
     }
     
     public boolean isBelow(T value) {
-        return order.le(end, value);
+        return order().le(end, value);
     }
     
     public boolean isAbove(T value) {
-        return order.lt(value, start);
+        return order().lt(value, start);
     }
     
     public boolean adjoins(Range<T> another) {
@@ -257,27 +335,6 @@ public class Range<T> {
     }
     
     /**
-     * this will be removed after methods which are using this method are moved to Builder.
-     * @param <T>
-     * @param r
-     * @return 
-     */
-    private static <T> Range.Builder<T> getBuilderXXX_toBeRemoved(TList<Range<T>> r) {
-        return r.get(0).builder;
-    }
-    
-    public static <T> Optional<Range<T>> cover(TList<Range<T>> rl) {
-        if (rl.isEmpty()) return Optional.empty();
-        Range.Builder<T> builder=getBuilderXXX_toBeRemoved(rl);
-        return Optional.of(new Range<>(builder,rl.map(r->r.start).min(builder.order).get(),rl.map(r->r.end).max(builder.order).get()));
-    }
-
-    static public <T> TList<Range<T>> sortToStart(TList<Range<T>> ranges) {
-        if (ranges.isEmpty()) return ranges;
-        Range.Builder<T> builder=getBuilderXXX_toBeRemoved(ranges);
-        return ranges.sortTo(map(builder.order,r->r.start()));
-    }
-    /**
      * remove punches from this range.
      * @param sorted
      * @return is in order without overlapping, thus can form RangeSet.
@@ -289,10 +346,10 @@ public class Range<T> {
         return TList.set(i2l(negateIteratorIfLucky(sorted.iterator())));
     }
     public Iterator<Range<T>> negateIterator(TList<Range<T>> punches) {
-        return negateIteratorIfLucky(sortToStart(punches).iterator());
+        return negateIteratorIfLucky(builder.sortToStart(punches).iterator());
     }
     public TList<Range<T>> negate(TList<Range<T>> punches) {
-        return negateIfLucky(sortToStart(punches));
+        return negateIfLucky(builder.sortToStart(punches));
     }
     static class Negate<T> extends AbstractBufferedIterator<Range<T>> {
         Iterator<Range<T>> iter;
@@ -333,29 +390,6 @@ public class Range<T> {
     public Iterator<Range<T>> unionIteratorIfLucky(Iterator<Range<T>> punches) {
         return negateIteratorIfLucky(negateIteratorIfLucky(punches));
     }
-    static public <T> TList<Range<T>> unionIfLucky(TList<Range<T>> sorted) {
-        return TList.set(i2l(cover(sorted).map(w->w.unionIteratorIfLucky(sorted.iterator())).orElse(TList.<Range<T>>empty().iterator())));
-    }
-    static public <T> Iterator<Range<T>> unionIterator(TList<Range<T>> punches) {
-        return cover(punches).map(w->w.unionIteratorIfLucky(sortToStart(punches).iterator())).orElse(TList.<Range<T>>empty().iterator());
-    }
-    static public <T> TList<Range<T>> union(TList<Range<T>> punches) {
-        return unionIfLucky(sortToStart(punches));
-    }
-    /**
-     * unary intersect.
-     * @param <T>
-     * @param punches
-     * @return 
-     */
-    static public <T> TList<Optional<Range<T>>> intersectSeq(TList<Range<T>> punches) {
-        if (punches.isEmpty()) return TList.empty();
-        return punches.accumFromStart(s->Optional.of(s),(o,x)->o.flatMap(r->r.intersect(x)));
-    }
-    static public <T> Optional<Range<T>> intersect(TList<Range<T>> punches) {
-        if (punches.isEmpty()) return Optional.empty();
-        return intersectSeq(punches).last();
-    }
     /**
      * binary intersect.
      * @param a
@@ -363,16 +397,7 @@ public class Range<T> {
      * @return 
      */
     public Iterator<Range<T>> intersectIteratorIfLucky(Iterator<Range<T>> a,Iterator<Range<T>>b) {
-        return negateIteratorIfLucky(unionIteratorIfLucky(new MergeIterator<>(negateIteratorIfLucky(a),negateIteratorIfLucky(b),map(order,r->r.start()))));
-    }
-    static public <T> TList<Range<T>> intersectIfLucky(TList<Range<T>> aSorted, TList<Range<T>> bSorted) {
-        return TList.set(i2l(cover(aSorted.append(bSorted)).map(w->w.intersectIteratorIfLucky(aSorted.iterator(),bSorted.iterator())).orElse(TList.<Range<T>>empty().iterator())));
-    }
-    static public <T> Iterator<Range<T>> intersectIterator(TList<Range<T>> a, TList<Range<T>> b) {
-        return cover(a.append(b)).map(w->w.intersectIteratorIfLucky(sortToStart(a).iterator(),sortToStart(b).iterator())).orElse(TList.<Range<T>>empty().iterator());
-    }
-    static public <T> TList<Range<T>> intersect(TList<Range<T>> a, TList<Range<T>> b) {
-        return intersectIfLucky(sortToStart(a),sortToStart(b));
+        return negateIteratorIfLucky(unionIteratorIfLucky(new MergeIterator<>(negateIteratorIfLucky(a),negateIteratorIfLucky(b),map(order(),r->r.start()))));
     }
     /**
      * overlap. (binary, because there is no such thing like unaly overlap.)
@@ -383,47 +408,16 @@ public class Range<T> {
     public boolean overlapIfLucky(Iterator<Range<T>> a, Iterator<Range<T>> b) {
         return intersectIteratorIfLucky(a,b).hasNext();
     }
-    static public <T> boolean overlap(TList<Range<T>> a, TList<Range<T>> b) {
-        return cover(a.append(b)).map(w->w.overlapIfLucky(sortToStart(a).iterator(),sortToStart(b).iterator())).orElse(false);
-    }
         
-    static public <T> TList<Optional<RangeInt>> intersectPoints(TList<Range<T>> category,TList<T> points) {
-        TList<Optional<RangeInt>> retval=TList.c();
-        BufferedIterator<Range<T>> citer=new BufferedIterator(category.iterator());
-        ArrayInt.BufferedIterator piter=new ArrayInt.BufferedIterator(ArrayInt.range(0, points.size()).iterator());
-        while (citer.hasNext()) {
-            citer.next();
-            if (!piter.hasNext()) {retval.add(Optional.empty());continue;}
-            while (citer.peek().isAbove(points.get(piter.peek()))&&piter.hasNext()) piter.nextInt();
-            if (!citer.peek().contains(points.get(piter.peek()))) {retval.add(Optional.empty());continue;}
-            int start=piter.peek();
-            int end=start+1;
-            while (citer.peek().contains(points.get(piter.peek())))
-                if (piter.hasNext()) end=piter.nextInt();
-                else {end++;break;}
-            retval.add(Optional.of(new RangeInt(start,end)));
-        }
-        return retval;
-    }
-    /**
-     * negate the cover.
-     * @param <T>
-     * @param punches
-     * @return 
-     */
-    static public <T> TList<Range<T>> negateCover(TList<Range<T>> punches) {
-        return cover(punches).map(w->w.negate(punches)).orElse(TList.empty());
-    }
-
     @Override
     public String toString() {
         return Message.nl(start).c("<->").c(end).toString();
     }
     
     public T clip(T x) {
-        if (order.lt(x, start))
+        if (order().lt(x, start))
             return start;
-        if (order.ge(x, end))
+        if (order().ge(x, end))
             return end;
         return x;
     }
@@ -436,13 +430,6 @@ public class Range<T> {
         return end;
     }
         
-    static public <T> Optional<Range<T>> intersectMany(List<Range<T>> rs) {
-        TIterator<Optional<Range<T>>> iter = TList.set(rs).accumFromStart(a->Optional.of(a),(a,b)->a.flatMap(r->r.intersect(b))).iterator().until(r->r.isEmpty());
-        if (!iter.hasNext())
-            return Optional.empty();
-        return iter.last();
-    }
-    
     /**
      * quantifying range.
      * series of methods which can be used to calculate a quantity from range.

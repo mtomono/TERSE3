@@ -34,6 +34,7 @@ public class CoverRangeIterator<T extends Number&Comparable<T>> extends Abstract
     boolean ready;
     T start;
     T end;
+    Range.Builder<T> builder;
     
     final boolean checkBase() {
         this.iter = new AssertOrderListIterator<T>(this.iter) {
@@ -49,6 +50,7 @@ public class CoverRangeIterator<T extends Number&Comparable<T>> extends Abstract
         this.base = base;
         this.unit = unit;
         this.iter = iter;
+        this.builder=Range.<T>b();
         assert checkBase();
         this.ready = false;
         if (iter.hasNext()) {
@@ -81,7 +83,7 @@ public class CoverRangeIterator<T extends Number&Comparable<T>> extends Abstract
                 break;
             end = (T)ceil(one);
         }
-        nextFound(Range.<T>b().r(start, end));
+        nextFound(builder.r(start, end));
         if (one != null) {
             start = floor(one);
             end = (T)add.o(start, unit);

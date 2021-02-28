@@ -8,7 +8,6 @@ package orderedSet;
 import collection.TList;
 import java.util.Optional;
 import static orderedSet.Range.intRange;
-import static orderedSet.Range.intersectMany;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 
@@ -25,7 +24,7 @@ public class RangeUtilNGTest {
     public void testIntersectR() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Range<Integer>> tested = TList.sof(0,10, 1,11, 0,11).fold(2).map(l->intRange.r(l.get(0),l.get(1)));
-        Optional<Range<Integer>> result = intersectMany(tested);
+        Optional<Range<Integer>> result = intRange.intersectMany(tested);
         Optional<Range<Integer>> expected = Optional.of(intRange.r(1,10));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
@@ -36,7 +35,7 @@ public class RangeUtilNGTest {
     public void testIntersectREmpty() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Range<Integer>> tested = TList.sof(0,10, 10,12, 0,11).fold(2).map(l->intRange.r(l.get(0),l.get(1)));
-        Optional<Range<Integer>> result = intersectMany(tested);
+        Optional<Range<Integer>> result = intRange.intersectMany(tested);
         Optional<Range<Integer>> expected = Optional.empty();
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
@@ -47,7 +46,7 @@ public class RangeUtilNGTest {
     public void testIntersectREmptyList() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Range<Integer>> tested = TList.sof();
-        Optional<Range<Integer>> result = intersectMany(tested);
+        Optional<Range<Integer>> result = intRange.intersectMany(tested);
         Optional<Range<Integer>> expected = Optional.empty();
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);

@@ -860,7 +860,7 @@ public class IntegerRangeTest {
     public void testNegateCover() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Range<Integer>> tested = TList.sof(0,10, 11,18, 12,13, 13,15, 20,23).fold(2).map(l->intRange.r(l.get(0),l.get(1)));
-        TList<Range<Integer>> result = Range.negateCover(tested);
+        TList<Range<Integer>> result = intRange.negateCover(tested);
         TList<Range<Integer>> expected = TList.sof(10,11, 18,20).fold(2).map(l->intRange.r(l.get(0),l.get(1)));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
@@ -870,7 +870,7 @@ public class IntegerRangeTest {
     public void testNegateCover2() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Range<Integer>> tested = TList.sof(0,10, 11,18, 12,13, 13,15, 20,28, 21,24, 25,26).fold(2).map(l->intRange.r(l.get(0),l.get(1)));
-        TList<Range<Integer>> result = Range.negateCover(tested);
+        TList<Range<Integer>> result = intRange.negateCover(tested);
         TList<Range<Integer>> expected = TList.sof(10,11, 18,20).fold(2).map(l->intRange.r(l.get(0),l.get(1)));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
@@ -880,7 +880,7 @@ public class IntegerRangeTest {
     public void testUnion() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Range<Integer>> tested = TList.sof(0,10, 11,18, 12,13, 13,15, 20,23).fold(2).map(l->intRange.r(l.get(0),l.get(1)));
-        TList<Range<Integer>> result = Range.union(tested);
+        TList<Range<Integer>> result = intRange.union(tested);
         TList<Range<Integer>> expected = TList.sof(0,10, 11,18, 20,23).fold(2).map(l->intRange.r(l.get(0),l.get(1)));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
@@ -890,7 +890,7 @@ public class IntegerRangeTest {
     public void testUnion2() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Range<Integer>> tested = TList.sof(0,10, 11,18, 12,13, 13,15, 20,28, 21,24, 25,26).fold(2).map(l->intRange.r(l.get(0),l.get(1)));
-        TList<Range<Integer>> result = Range.union(tested);
+        TList<Range<Integer>> result = intRange.union(tested);
         TList<Range<Integer>> expected = TList.sof(0,10, 11,18, 20,28).fold(2).map(l->intRange.r(l.get(0),l.get(1)));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
@@ -900,7 +900,7 @@ public class IntegerRangeTest {
     public void testUnaryIntersect0() {
         System.out.println(test.TestUtils.methodName(0));
         TList<Range<Integer>> tested0 = TList.sof(0,30, 11,45, 13,20, 14,28).fold(2).map(l->intRange.r(l.get(0),l.get(1)));
-        Range<Integer> result = Range.intersect(tested0).get();
+        Range<Integer> result = intRange.intersect(tested0).get();
         Range<Integer> expected = intRange.r(14,20);
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
@@ -911,7 +911,7 @@ public class IntegerRangeTest {
         System.out.println(test.TestUtils.methodName(0));
         TList<Range<Integer>> tested0 = TList.sof(0,10, 11,12, 13,15, 20,28).fold(2).map(l->intRange.r(l.get(0),l.get(1)));
         TList<Range<Integer>> tested1 = TList.sof(0,10,        13,18, 21,24, 25,30).fold(2).map(l->intRange.r(l.get(0),l.get(1)));
-        TList<Range<Integer>> result = Range.intersect(tested0,tested1);
+        TList<Range<Integer>> result = intRange.intersect(tested0,tested1);
         TList<Range<Integer>> expected = TList.sof(0,10, 13,15, 21,24, 25,28).fold(2).map(l->intRange.r(l.get(0),l.get(1)));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
@@ -923,7 +923,7 @@ public class IntegerRangeTest {
         System.out.println(test.TestUtils.methodName(0));
         TList<Range<Integer>> tested0 = TList.sof(0,10, 11,12, 13,15, 20,28, 30,35, 37,40).fold(2).map(l->intRange.r(l.get(0),l.get(1)));
         TList<Integer> tested1 = TList.sof(-10,-1,2,3,3,5,10,12,14,16,16,16);
-        TList<Optional<RangeInt>> result = Range.intersectPoints(tested0, tested1);
+        TList<Optional<RangeInt>> result = intRange.intersectPoints(tested0, tested1);
         TList<Optional<RangeInt>> expected = TList.sof(Optional.of(new RangeInt(2,6)),Optional.empty(),Optional.of(new RangeInt(8,9)),Optional.empty(),Optional.empty(),Optional.empty());
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
@@ -935,7 +935,7 @@ public class IntegerRangeTest {
         System.out.println(test.TestUtils.methodName(0));
         TList<Range<Integer>> tested0 = TList.sof(0,10, 11,12, 13,15).fold(2).map(l->intRange.r(l.get(0),l.get(1)));
         TList<Integer> tested1 = TList.sof(-10,-1,2,3,3,5,10,12,14,14,14);
-        TList<Optional<RangeInt>> result = Range.intersectPoints(tested0, tested1);
+        TList<Optional<RangeInt>> result = intRange.intersectPoints(tested0, tested1);
         TList<Optional<RangeInt>> expected = TList.sof(Optional.of(new RangeInt(2,6)),Optional.empty(),Optional.of(new RangeInt(8,11)));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
