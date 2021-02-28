@@ -1,0 +1,16 @@
+Type Builder
+
+builders are useful in many ways. sometimes they can absorb the dynamic aspect of
+collecting data to build up a certain object.
+aside from this advantage, sometimes builders are useful in the other way.
+for example, look at a class like Range which uses a certain order to judge its way to be ordered.
+sometimes when considering an effect of margin of error, the way ordered can have its variation.
+depending on the situation, we want to use slightly different order. 
+but it's slight clumsy to specify an order everytime instantiate a range.
+by making different builder for each order, parameters are kept simple only as start and end.
+if the difference is quite slight and want to make a difference only in a certain package, you can 
+redefine the builder with the similar name in that package. thus by editting the import statement 
+will switch the usage of builders, and even when an instance is newly created and IDE tries to 
+complement the imports from nearer definition, in this case which means the one define inside the
+package.
+

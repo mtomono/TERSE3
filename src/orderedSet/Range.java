@@ -59,7 +59,7 @@ public class Range<T> {
         return b(new NaturalOrder<T>());
     }
     public static class Builder<T> {
-        Order<T> order;
+        final public Order<T> order;
         public Builder(Order<T> order) {
             this.order=order;
         }
@@ -159,7 +159,7 @@ public class Range<T> {
     
     public final T start;
     public final T end;
-    public Builder<T> builder;
+    public final Builder<T> builder;
 
     Order<T> order() {
         return builder.order;

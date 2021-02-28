@@ -46,8 +46,8 @@ public class RangeSet<T> extends AbstractList<Range<T>> {
         return b(new NaturalOrder<T>());
     }
     public static class Builder<T> {
-        Order<T> order;
-        Range.Builder<T> rbuilder;
+        final public Order<T> order;
+        final public Range.Builder<T> rbuilder;
         public Builder(Order<T> order) {
             this.order=order;
             this.rbuilder=Range.b(order);
@@ -93,8 +93,8 @@ public class RangeSet<T> extends AbstractList<Range<T>> {
         this.elements = elements;
     }
     
-    List<Range<T>> elements;
-    Builder<T> builder;
+    final List<Range<T>> elements;
+    final Builder<T> builder;
     
     @Override
     public Range<T> get(int index) {
