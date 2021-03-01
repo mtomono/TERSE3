@@ -48,6 +48,10 @@ public class C2<K> implements ContextOrdered<K,C2<K>> {
             return format;
         }
         @Override
+        public Builder<K> format(Format<K> format) {
+            return new Builder<>(body,format,order);
+        }
+        @Override
         public C2<K> c(K v) {
             return new C2(this,v);
         }

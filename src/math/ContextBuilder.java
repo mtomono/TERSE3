@@ -17,7 +17,6 @@ package math;
 import function.Wrapper;
 import java.math.BigDecimal;
 import java.text.ParseException;
-import static string.Strings.n;
 
 /**
  *
@@ -27,6 +26,7 @@ import static string.Strings.n;
  */
 public interface ContextBuilder<K, CONTEXT extends Context<K,CONTEXT>> extends Wrapper<Op<K>,ContextBuilder<K,CONTEXT>>{
     public Format<K> format();
+    public ContextBuilder<K,CONTEXT> format(Format<K> format);
     public CONTEXT c(K v);
     default CONTEXT b(int v) {return c(body().b(v));}
     default CONTEXT b(long v) {return c(body().b(v));}

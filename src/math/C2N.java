@@ -47,6 +47,10 @@ public class C2N<K extends Number> implements ContextOrdered<K, C2N<K>>,ContextN
         public Format<K> format() {
             return format;
         }
+       @Override
+        public Builder<K> format(Format<K> format) {
+            return new Builder<>(body,format,order);
+        }
         @Override
         public C2N<K> c(K v) {
             return new C2N(this,v);

@@ -39,10 +39,10 @@ public class C<K> implements Context<K,C<K>>,Wrapper<K,C<K>> {
     }
 
     static public class Builder<K> implements ContextBuilder<K,C<K>>{
-        public final Op<K> op;
+        public final Op<K> body;
         public final Format<K> format;
         public Builder(Op<K> op, Format<K> format) {
-            this.op=op;
+            this.body=op;
             this.format=format;
         }
         @Override
@@ -50,8 +50,12 @@ public class C<K> implements Context<K,C<K>>,Wrapper<K,C<K>> {
             return format;
         }
         @Override
+        public Builder<K> format(Format<K> format) {
+            return new Builder<>(body,format);
+        }
+        @Override
         public Op<K> body() {
-            return op;
+            return body;
         }
         @Override
         public ContextBuilder<K, C<K>> self() {
@@ -59,7 +63,7 @@ public class C<K> implements Context<K,C<K>>,Wrapper<K,C<K>> {
         }
         @Override
         public ContextBuilder<K, C<K>> wrap(Op<K> body) {
-            return new Builder(op,format);
+            return new Builder(this.body,format);
         }
         @Override
         public C<K> c(K v) {
