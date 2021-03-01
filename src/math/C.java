@@ -28,20 +28,26 @@ import java.math.RoundingMode;
  * @param <K>
  */
 public class C<K> implements Context<K,C<K>>,Wrapper<K,C<K>> {
-    static public C.Builder<Integer> i=new Builder<>(new IntegerOp());
-    static public C.Builder<Long> l=new Builder<>(new LongOp());
-    static public C.Builder<Float> f=new Builder<>(new FloatOp());
-    static public C.Builder<Double> d=new Builder<>(new DoubleOp());
-    static public C.Builder<Rational> r=new Builder<>(new RationalOp());
-    static public C.Builder<BigDecimal> bd=new Builder<>(new BigDecimalOp());
+    static public C.Builder<Integer> i=new Builder<>(new IntegerOp(), new IntegerFormat());
+    static public C.Builder<Long> l=new Builder<>(new LongOp(), new LongFormat());
+    static public C.Builder<Float> f=new Builder<>(new FloatOp(), new FloatFormat());
+    static public C.Builder<Double> d=new Builder<>(new DoubleOp(), new DoubleFormat());
+    static public C.Builder<Rational> r=new Builder<>(new RationalOp(), new RationalFormat());
+    static public C.Builder<BigDecimal> bd=new Builder<>(new BigDecimalOp(), new BigDecimalFormat());
     static public C.Builder<BigDecimal> bd(int scale, RoundingMode r) {
-        return new Builder<>(new BigDecimalOpRounded(scale,r));
+        return new Builder<>(new BigDecimalOpRounded(scale,r), new BigDecimalFormat());
     }
 
     static public class Builder<K> implements ContextBuilder<K,C<K>>{
         public final Op<K> op;
-        public Builder(Op<K> op) {
+        public final Format<K> format;
+        public Builder(Op<K> op, Format<K> format) {
             this.op=op;
+            this.format=format;
+        }
+        @Override
+        public Format<K> format() {
+            return format;
         }
         @Override
         public Op<K> body() {
@@ -53,7 +59,7 @@ public class C<K> implements Context<K,C<K>>,Wrapper<K,C<K>> {
         }
         @Override
         public ContextBuilder<K, C<K>> wrap(Op<K> body) {
-            return new Builder(op);
+            return new Builder(op,format);
         }
         @Override
         public C<K> c(K v) {

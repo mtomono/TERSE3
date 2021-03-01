@@ -15,6 +15,7 @@
 package math;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 
 /**
  * Operations over Number class.

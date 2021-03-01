@@ -16,6 +16,8 @@ package math;
 
 import function.Wrapper;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import static string.Strings.n;
 
 /**
  *
@@ -24,12 +26,15 @@ import java.math.BigDecimal;
  * @param <CONTEXT>
  */
 public interface ContextBuilder<K, CONTEXT extends Context<K,CONTEXT>> extends Wrapper<Op<K>,ContextBuilder<K,CONTEXT>>{
+    public Format<K> format();
     public CONTEXT c(K v);
     default CONTEXT b(int v) {return c(body().b(v));}
     default CONTEXT b(long v) {return c(body().b(v));}
     default CONTEXT b(float v) {return c(body().b(v));}
     default CONTEXT b(double v) {return c(body().b(v));}
     default CONTEXT b(String v) {return c(body().b(v));}
+    default CONTEXT f(String v) throws ParseException {return c(format().f(v));}
+    default String toString(CONTEXT v) {return format().toString(v.body());}
     default CONTEXT b(BigDecimal n) {return c(body().b(n));}
     default CONTEXT b(Rational n) {return c(body().b(n));}
     default CONTEXT one() {return c(body().one());}

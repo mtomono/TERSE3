@@ -6,6 +6,7 @@
 package math;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 
@@ -91,6 +92,42 @@ public class CNGTest {
         System.out.println(test.TestUtils.methodName(0));
         C<Double> result = C.d.b(100).interpolate1(C.d.b(0.5), C.d.b(200));
         C<Double> expected = C.d.b(150);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    @Test
+    public void testFormatBigDecimal() throws ParseException {
+        System.out.println(test.TestUtils.methodName(0));
+        C<BigDecimal> result = C.bd.f("5,000.20");
+        C<BigDecimal> expected = C.bd.b("5000.20");
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    @Test
+    public void testFormatRational() throws ParseException {
+        System.out.println(test.TestUtils.methodName(0));
+        C<Rational> result = C.r.f("1,000/2,000");
+        C<Rational> expected = C.r.b("1000/2000");
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    @Test
+    public void testFormatStringBigDecimal() throws ParseException {
+        System.out.println(test.TestUtils.methodName(0));
+        String result = C.bd.f("5000.20").toFormattedString();
+        String expected = "5,000.2";
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    @Test
+    public void testFormatStringRational() throws ParseException {
+        System.out.println(test.TestUtils.methodName(0));
+        String result = C.r.f("1000/2000").toFormattedString();
+        String expected = "1,000/2,000";
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);

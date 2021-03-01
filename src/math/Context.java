@@ -64,4 +64,7 @@ public interface Context<K,T extends Context<K,T>> extends Wrapper<K,T>{
     default T interpolate100(T rate, T o) {
         return interpolate(rate,o,b().b(100).sub(rate));
     }
+    default String toFormattedString() {
+        return b().toString(self());
+    }
 }

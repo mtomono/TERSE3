@@ -25,21 +25,27 @@ import function.NaturalOrder;
  * @param <K>
  */
 public class C2<K> implements ContextOrdered<K,C2<K>> {
-    static public C2.Builder<Integer> i=new Builder<>(new IntegerOp(), new NaturalOrder<>());
-    static public C2.Builder<Long> l=new Builder<>(new LongOp(), new NaturalOrder<>());
-    static public C2.Builder<Float> f=new Builder<>(new FloatOp(), new NaturalOrder<>());
-    static public C2.Builder<Double> d=new Builder<>(new DoubleOp(), new NaturalOrder<>());
-    static public C2.Builder<Rational> r=new Builder<>(new RationalOp(), new NaturalOrder<>());
-    static public C2.Builder<BigDecimal> bd=new Builder<>(new BigDecimalOp(), new NaturalOrder<>());
+    static public C2.Builder<Integer> i=new Builder<>(new IntegerOp(), new IntegerFormat(), new NaturalOrder<>());
+    static public C2.Builder<Long> l=new Builder<>(new LongOp(), new LongFormat(), new NaturalOrder<>());
+    static public C2.Builder<Float> f=new Builder<>(new FloatOp(), new FloatFormat(), new NaturalOrder<>());
+    static public C2.Builder<Double> d=new Builder<>(new DoubleOp(), new DoubleFormat(), new NaturalOrder<>());
+    static public C2.Builder<Rational> r=new Builder<>(new RationalOp(), new RationalFormat(), new NaturalOrder<>());
+    static public C2.Builder<BigDecimal> bd=new Builder<>(new BigDecimalOp(), new BigDecimalFormat(), new NaturalOrder<>());
     static public C2.Builder<BigDecimal> bd(int scale, RoundingMode r) {
-        return new Builder<>(new BigDecimalOpRounded(scale,r), new NaturalOrder<>());
+        return new Builder<>(new BigDecimalOpRounded(scale,r), new BigDecimalFormat(), new NaturalOrder<>());
     }
     static public class Builder<K> implements ContextBuilder<K,C2<K>>,ContextOrder<K,C2<K>> {
         final Op<K> body;
+        final Format<K> format;
         final Order<K> order;
-        Builder(Op<K> body, Order<K> order) {
+        Builder(Op<K> body, Format<K> format, Order<K> order) {
             this.body=body;
+            this.format=format;
             this.order=order;
+        }
+        @Override
+        public Format<K> format() {
+            return format;
         }
         @Override
         public C2<K> c(K v) {
@@ -55,7 +61,7 @@ public class C2<K> implements ContextOrdered<K,C2<K>> {
         }
         @Override
         public ContextBuilder<K, C2<K>> wrap(Op<K> body) {
-            return new Builder<>(body,order);
+            return new Builder<>(body,format,order);
         }
         @Override
         public Order<K> baseOrder() {
