@@ -31,8 +31,9 @@ public class C2N<K extends Number> implements ContextOrdered<K, C2N<K>>,ContextN
     static public C2N.Builder<Double> d=new Builder<>(new DoubleOp(), new DoubleFormat(), new NaturalOrder<>());
     static public C2N.Builder<Rational> r=new Builder<>(new RationalOp(), new RationalFormat(), new NaturalOrder<>());
     static public C2N.Builder<BigDecimal> bd=new Builder<>(new BigDecimalOp(), new BigDecimalFormat(), new NaturalOrder<>());
+    static public C2N.Builder<BigDecimal> bd3=bd(3,RoundingMode.DOWN);
     static public C2N.Builder<BigDecimal> bd(int scale, RoundingMode r) {
-        return new Builder<>(new BigDecimalOpRounded(scale,r), new BigDecimalFormat(), new NaturalOrder<>());
+        return new Builder<>(new BigDecimalOpRounded(bd.body(),scale,r), new BigDecimalFormat(), new NaturalOrder<>());
     }
     static public class Builder<K extends Number> implements ContextBuilder<K,C2N<K>>,ContextOrder<K,C2N<K>> {
         final Op<K> body;

@@ -22,10 +22,11 @@ import java.math.RoundingMode;
  * which does rounding at a certain scale when divided.
  * @author masao
  */
-public class BigDecimalOpRounded extends BigDecimalOp{
+public class BigDecimalOpRounded extends OpWrap<BigDecimal>{
     final public int scale;
     final public RoundingMode round;
-    public BigDecimalOpRounded(int scale, RoundingMode round) {
+    public BigDecimalOpRounded(Op<BigDecimal> op,int scale, RoundingMode round) {
+        super(op,v->v.setScale(scale,round));
         this.scale=scale;
         this.round=round;
     }

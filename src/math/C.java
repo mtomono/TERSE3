@@ -34,8 +34,9 @@ public class C<K> implements Context<K,C<K>>,Wrapper<K,C<K>> {
     static public C.Builder<Double> d=new Builder<>(new DoubleOp(), new DoubleFormat());
     static public C.Builder<Rational> r=new Builder<>(new RationalOp(), new RationalFormat());
     static public C.Builder<BigDecimal> bd=new Builder<>(new BigDecimalOp(), new BigDecimalFormat());
+    static public C.Builder<BigDecimal> bd3=bd(3,RoundingMode.DOWN);
     static public C.Builder<BigDecimal> bd(int scale, RoundingMode r) {
-        return new Builder<>(new BigDecimalOpRounded(scale,r), new BigDecimalFormat());
+        return new Builder<>(new BigDecimalOpRounded(bd.body(),scale,r), new BigDecimalFormat());
     }
 
     static public class Builder<K> implements ContextBuilder<K,C<K>>{

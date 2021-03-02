@@ -31,8 +31,9 @@ public class C2<K> implements ContextOrdered<K,C2<K>> {
     static public C2.Builder<Double> d=new Builder<>(new DoubleOp(), new DoubleFormat(), new NaturalOrder<>());
     static public C2.Builder<Rational> r=new Builder<>(new RationalOp(), new RationalFormat(), new NaturalOrder<>());
     static public C2.Builder<BigDecimal> bd=new Builder<>(new BigDecimalOp(), new BigDecimalFormat(), new NaturalOrder<>());
+    static public C2.Builder<BigDecimal> bd3=bd(3,RoundingMode.DOWN);
     static public C2.Builder<BigDecimal> bd(int scale, RoundingMode r) {
-        return new Builder<>(new BigDecimalOpRounded(scale,r), new BigDecimalFormat(), new NaturalOrder<>());
+        return new Builder<>(new BigDecimalOpRounded(bd.body(),scale,r), new BigDecimalFormat(), new NaturalOrder<>());
     }
     static public class Builder<K> implements ContextBuilder<K,C2<K>>,ContextOrder<K,C2<K>> {
         final Op<K> body;
