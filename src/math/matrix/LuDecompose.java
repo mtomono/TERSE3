@@ -12,26 +12,30 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.
  */
-package math;
+package math.matrix;
 
 import collection.TList;
+import math.Context;
+import math.ContextOrdered;
+import math.NonsingularMatrixException;
 
 /**
  *
  * @author masao
  * @param <K>
+ * @param <T>
  */
-public class LuDecompose<K extends Comparable<K>> {
-    final CMatrix<K> target;
-    public LuDecompose(CMatrix<K> target) {
+public class LuDecompose<K,T extends Context<K,T>&ContextOrdered<K,T>> {
+    final CMatrix<K,T> target;
+    public LuDecompose(CMatrix<K,T> target) {
         this.target=target.sfix();
     }
 
-    public LU<K> decompose() {
-        LU<K> retval=new LU<>(doolittle());
+    public LU<K,T> decompose() {
+        LU<K,T> retval=new LU<>(doolittle());
         return retval;
     }
-    public TList<CMatrix<K>> doolittle() {
+    public TList<CMatrix<K,T>> doolittle() {
         target.assertSquare();
         doolittleWholeMatrix();
         if (!target.nonZeroDiagonal())
@@ -41,7 +45,7 @@ public class LuDecompose<K extends Comparable<K>> {
             //in that case certain level of performance is needed for throwing this exception.
         return target.doolittleFormat();
     }
-    public LuDecompose<K> doolittleWholeMatrix() {
+    public LuDecompose<K,T> doolittleWholeMatrix() {
         TList.range(0,target.minSize()-1).forEach(i->target.subMatrixUR(i,i).doolittleSubMatrix());
         return this;
     }

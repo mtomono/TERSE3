@@ -19,9 +19,12 @@ package function;
  * @author masao
  * @param <S>
  */
-public interface ChainedCompare<S> {
+public interface ChainedCompare<S> extends Comparable<ChainedCompare<S>>{
     Order<S> order();
     S self();
+    default int compareTo(ChainedCompare<S> o) {
+        return order().compare(self(),o.self());
+    }
     default boolean eq(S v) {
         return order().eq(self(),v);
     }

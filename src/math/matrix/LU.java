@@ -12,37 +12,41 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.
  */
-package math;
+package math.matrix;
 
 import collection.TList;
 import java.util.List;
+import math.C2;
+import math.CList;
+import math.Context;
+import math.ContextOrdered;
 
 /**
  *
  * @author masao
  * @param <K>
  */
-public class LU<K extends Comparable<K>> extends TList<CMatrix<K>> {
-    public LU(List<CMatrix<K>> body) {
+public class LU<K,T extends Context<K,T>&ContextOrdered<K,T>> extends TList<CMatrix<K,T>> {
+    public LU(List<CMatrix<K,T>> body) {
         super(body);
     }
-    public CMatrix<K> l() {
+    public CMatrix<K,T> l() {
         return last(1);
     }
-    public CMatrix<K> u() {
+    public CMatrix<K,T> u() {
         return last(0);
     }
-    public CList<K,C2<K>> solve(CList<K,C2<K>> v) {
-        CList<K,C2<K>> y=l().forwardSubstitution(v);
+    public CList<K,T> solve(CList<K,T> v) {
+        CList<K,T> y=l().forwardSubstitution(v);
         return u().backwardSubstitution(y);
     }
-    public CMatrix<K> inv() {
+    public CMatrix<K,T> inv() {
         return u().invUpper().mul(l().invLower());
     }
-    public C2<K> det() {
+    public T det() {
         return u().getDiagonal().stream().reduce(u().bb.one(), (a,b)->a.mul(b));
     }
-    public CMatrix<K> restore() {
+    public CMatrix<K,T> restore() {
         return stream().reduce((a,b)->a.mul(b)).get();
     }
 }

@@ -17,6 +17,7 @@ package math;
 import collection.TList;
 import collection.TListWrapper;
 import function.Transformable;
+import java.math.BigDecimal;
 
 /**
  * 
@@ -24,6 +25,30 @@ import function.Transformable;
  * @param <K>
  */
 public class CList<K, T extends Context<K,T>> implements TListWrapper<T,CList<K,T>>,Transformable<CList<K,T>>{
+    static public Builder<Integer,C2<Integer>> i2= b(C2.i);
+    static public Builder<Long,C2<Long>> l2= b(C2.l);
+    static public Builder<Double,C2<Double>> d2= b(C2.d);
+    static public Builder<Float,C2<Float>> f2= b(C2.f);
+    static public Builder<Rational,C2<Rational>> r2= b(C2.r);
+    static public Builder<BigDecimal,C2<BigDecimal>> bd2= b(C2.bd);
+    public static <K, T extends Context<K,T>> Builder<K,T> b(ContextBuilder<K,T> b) {
+        return new Builder<>(b);
+    }
+    public static class Builder<K, T extends Context<K,T>> {
+        ContextBuilder<K,T> b;
+        public Builder(ContextBuilder<K,T> b) {
+            this.b=b;
+        }
+        public CList<K,T> l(K... v) {
+            return TList.sof(v).toC(x->x,b);
+        }
+        public CList<K,T> l(String v) {
+            return l(TList.sof(v.split(",")).map(s->b.b(s)).sfix());
+        }
+        public CList<K,T> l(TList<T> v) {
+            return new CList<>(b,v);
+        }
+    }
     public final ContextBuilder<K,T> b;
     final TList<T> body;
     public CList(ContextBuilder<K,T> context, TList<T> body) {

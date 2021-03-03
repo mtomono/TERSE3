@@ -12,29 +12,34 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.
  */
-package math;
+package math.matrix;
 
 import collection.ArrayInt;
 import java.util.List;
+import math.C2;
+import math.CList;
+import math.Context;
+import math.ContextOrdered;
 
 /**
  *
  * @author masao
  * @param <K>
+ * @param <T>
  */
-public class PLU<K extends Comparable<K>> extends LU<K> {
+public class PLU<K,T extends Context<K,T>&ContextOrdered<K,T>> extends LU<K,T> {
     ArrayInt order;
-    public PLU(List<CMatrix<K>> body, ArrayInt order) {
+    public PLU(List<CMatrix<K,T>> body, ArrayInt order) {
         super(body);
         this.order=order;
     }
-    public CList<K,C2<K>> porder(CList<K,C2<K>> v) {
-        return v.wrap(v.body.pickUp(order.asList()));
+    public CList<K,T> porder(CList<K,T> v) {
+        return v.wrap(v.body().pickUp(order.asList()));
     } 
-    public CMatrix<K> p() {
+    public CMatrix<K,T> p() {
         return get(0);
     }
-    public CMatrix<K> pinv() {
+    public CMatrix<K,T> pinv() {
         return p().transpose();
     }
     /**
@@ -44,10 +49,10 @@ public class PLU<K extends Comparable<K>> extends LU<K> {
      * @param v
      * @return 
      */
-    public CList<K,C2<K>> solve(CList<K,C2<K>> v) {
+    public CList<K,T> solve(CList<K,T> v) {
         return super.solve(porder(v));
     }
-    public CMatrix<K> inv() {
+    public CMatrix<K,T> inv() {
         return super.inv().mul(pinv());
     }
 }
