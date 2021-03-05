@@ -7,7 +7,6 @@ package math.matrix;
 
 import collection.TList;
 import debug.Te;
-import static java.lang.Math.sqrt;
 import java.math.BigDecimal;
 import math.C2;
 import math.CList;
@@ -621,21 +620,4 @@ public class CMatrixNGTest {
         System.out.println("result  : " + result);
     }
     
-    @Test
-    public void testGramSchmidt() {
-        System.out.println(test.TestUtils.methodName(0));
-        TList<CList<Double,C2<Double>>> result = GramSchmidt.orthogonarize(CMatrix.derr.m(
-                 "1,0,0;"
-                +"1,1,1;"
-                +"0,0,1"
-        ).rows());
-        TList<CList<Double,C2<Double>>> expected = CMatrix.derr.m(
-                 "1,0,0;"
-                +"0.0,  0.7071067811865475, 0.7071067811865475;"
-                +"0.0, -0.7071067811865475, 0.7071067811865475"
-        ).rows();
-        System.out.println("result  : " + result);
-        System.out.println("expected: " + expected);
-        assertEquals(result, expected);
-    }
 }

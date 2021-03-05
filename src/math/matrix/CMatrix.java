@@ -243,7 +243,7 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
     }
 
     CMatrix<K,T> qinv() {
-        return wrap(GramSchmidt.orthogonarize(columns()).map(p->p.body()));
+        return wrap(GramSchmidt.orthogonalize(columns()).map(p->p.body()));
     }
     CMatrix<K,T> q() {
         return qinv().transpose();
