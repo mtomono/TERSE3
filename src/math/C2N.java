@@ -18,6 +18,8 @@ import function.Order;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import function.NaturalOrder;
+import function.Wrapper;
+import java.util.function.BiPredicate;
 
 /**
  * Comparable Calculation Context which is made of Number
@@ -29,20 +31,29 @@ public class C2N<K extends Number> implements ContextOrdered<K, C2N<K>>,ContextN
     static public C2N.Builder<Long> l=new Builder<>(new LongOp(), new LongFormat(), new NaturalOrder<>(){});
     static public C2N.Builder<Float> f=new Builder<>(new FloatOp(), new FloatFormat(), new NaturalOrder<>(){});
     static public C2N.Builder<Double> d=new Builder<>(new DoubleOp(), new DoubleFormat(), new NaturalOrder<>(){});
+    static public C2N.Builder<Double> dc=byComparison(new DoubleOp(), new DoubleFormat(), new NaturalOrder<>(){});
     static public C2N.Builder<Rational> r=new Builder<>(new RationalOp(), new RationalFormat(), new NaturalOrder<>(){});
     static public C2N.Builder<BigDecimal> bd=new Builder<>(new BigDecimalOp(), new BigDecimalFormat(), new NaturalOrder<>(){});
     static public C2N.Builder<BigDecimal> bd3=bd(3,RoundingMode.DOWN);
     static public C2N.Builder<BigDecimal> bd(int scale, RoundingMode r) {
         return new Builder<>(new BigDecimalOpRounded(bd.body(),scale,r), new BigDecimalFormat(), new NaturalOrder<>(){});
     }
+    static public <K extends Number> C2N.Builder<K> byComparison(Op<K> body, Format<K> format, Order<K> order) {
+        return new Builder<>(body,format,order,ContextOrdered::equalsByComparison);
+    }
     static public class Builder<K extends Number> implements ContextBuilder<K,C2N<K>>,ContextOrder<K,C2N<K>> {
         final Op<K> body;
         final Format<K> format;
         final Order<K> order;
-        Builder(Op<K> body, Format<K> format, Order<K> order) {
+        final BiPredicate<C2N<K>,Object> equals;
+        Builder(Op<K> body, Format<K> format, Order<K> order, BiPredicate<C2N<K>,Object> equals) {
             this.body=body;
             this.format=format;
             this.order=order;
+            this.equals=equals;
+        }
+        Builder(Op<K> body, Format<K> format, Order<K> order) {
+            this(body,format,order,Wrapper::equalsByBody);
         }
         @Override
         public Format<K> format() {
@@ -100,13 +111,6 @@ public class C2N<K extends Number> implements ContextOrdered<K, C2N<K>>,ContextN
     }
     @Override
     public boolean equals(Object e) {
-        if (e == null) {
-            return false;
-        }
-        if (!(e instanceof C2N)) {
-            return false;
-        }
-        C2N t = (C2N) e;
-        return body().equals(t.body());
+        return builder.equals.test(this,e);
     }
 }

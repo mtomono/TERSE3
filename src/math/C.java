@@ -17,6 +17,7 @@ package math;
 import function.Wrapper;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.function.BiPredicate;
 
 /**
  * Calculation Context.
@@ -42,9 +43,14 @@ public class C<K> implements Context<K,C<K>>,Wrapper<K,C<K>> {
     static public class Builder<K> implements ContextBuilder<K,C<K>>{
         public final Op<K> body;
         public final Format<K> format;
-        public Builder(Op<K> op, Format<K> format) {
+        final BiPredicate<C<K>,Object> equals;
+        public Builder(Op<K> op, Format<K> format, BiPredicate<C<K>,Object> equals) {
             this.body=op;
             this.format=format;
+            this.equals=equals;
+        }
+        public Builder(Op<K> op, Format<K> format) {
+            this(op,format,Wrapper::equalsByBody);
         }
         @Override
         public Format<K> format() {
@@ -71,19 +77,19 @@ public class C<K> implements Context<K,C<K>>,Wrapper<K,C<K>> {
             return new C<>(this,v);
         }
     }
-    final Builder<K> b;
+    final Builder<K> builder;
     final K v;
     public C(Builder<K> b, K v) {
-        this.b=b;
+        this.builder=b;
         this.v=v;
     }
     @Override
     public ContextBuilder<K, C<K>> b() {
-        return b;
+        return builder;
     }
     @Override
     public C<K> wrap(K v) {
-        return b.c(v);
+        return builder.c(v);
     }
     @Override
     public K body() {
@@ -99,6 +105,6 @@ public class C<K> implements Context<K,C<K>>,Wrapper<K,C<K>> {
     }
     @Override
     public boolean equals(Object e) {
-        return Wrapper.equalsByBody(this, e);
+        return builder.equals.test(this,e);
     }
 }
