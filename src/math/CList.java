@@ -159,6 +159,9 @@ public class CList<K, T extends Context<K,T>> implements TListWrapper<T,CList<K,
         return interpolate(rate,o, b.b(100).sub(rate));
     }
     
+    public CList<K,T> sfix() {
+        return m(b->b.sfix());
+    }
     @Override
     public boolean equals(Object e) {
         if (e == null) {

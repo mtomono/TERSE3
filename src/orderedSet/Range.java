@@ -56,7 +56,7 @@ public class Range<T> {
         return new Builder<>(order);
     }
     public static <T extends Comparable<? super T>> Builder<T> b() {
-        return b(new NaturalOrder<T>());
+        return b(new NaturalOrder<T>(){});
     }
     public static class Builder<T> {
         final public Order<T> order;

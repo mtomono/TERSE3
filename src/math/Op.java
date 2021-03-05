@@ -84,6 +84,7 @@ public interface Op<K> {
     public K div(K v0, K v1);
     public K negate(K v0);
     public K abs(K v0);
+    public K sqrt(K v0);
     public K zero();
     public K one();
 }

@@ -38,4 +38,14 @@ public interface ContextOrdered<K,T extends ContextOrdered<K,T>> extends Context
     default boolean geZero() {
         return self().ge(zero());
     }
+    public static <K,T extends ContextOrdered<K,T>> boolean equalsByComparison(T th, Object e) {
+        if (e == null) {
+            return false;
+        }
+        if (!(e instanceof ContextOrdered)) {
+            return false;
+        }
+        T t = (T) e;
+        return th.eq(t);
+    }
 }

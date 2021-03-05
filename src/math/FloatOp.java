@@ -88,6 +88,11 @@ public class FloatOp implements Op<Float> {
     }
 
     @Override
+    public Float sqrt(Float v0) {
+        return (float)Math.sqrt(v0);
+    }
+
+    @Override
     public Float zero() {
         return Float.valueOf(0);
     }

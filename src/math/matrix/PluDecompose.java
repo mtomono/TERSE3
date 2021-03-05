@@ -36,7 +36,7 @@ public class PluDecompose<K,T extends Context<K,T>&ContextOrdered<K,T>> extends 
         return new PLU<>(doolittle().startFrom(p()),order);
     }
     public CMatrix<K,T> pinv() {
-        return target.pinv(order.asList());
+        return target.reorder(order.asList());
     }
     public CMatrix<K,T> p() {
         return pinv().transpose();

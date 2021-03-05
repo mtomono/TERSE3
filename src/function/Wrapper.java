@@ -23,4 +23,15 @@ public interface Wrapper<B, W extends Wrapper<B,W>> {
     default W m(Function<B,B> f) {
         return wrap(f.apply(body()));
     }
+    public static <B,W extends Wrapper<B,W>> boolean equalsByBody(W th, Object e) {
+        if (e == null) {
+            return false;
+        }
+        if (!(e instanceof Wrapper)) {
+            return false;
+        }
+        W t = (W) e;
+        return th.body().equals(t.body());
+    }
+
 }

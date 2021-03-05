@@ -86,6 +86,11 @@ public class LongOp implements Op<Long> {
     public Long abs(Long v0) {
         return Math.abs(v0);
     }
+    
+    @Override
+    public Long sqrt(Long v0) {
+        return (long)Math.round(Math.sqrt(v0));
+    }
 
     @Override
     public Long zero() {

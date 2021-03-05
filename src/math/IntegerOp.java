@@ -88,6 +88,11 @@ public class IntegerOp implements Op<Integer> {
     }
 
     @Override
+    public Integer sqrt(Integer v0) {
+        return (int)Math.round(Math.sqrt(v0));
+    }
+
+    @Override
     public Integer zero() {
         return 0;
     }

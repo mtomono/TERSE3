@@ -38,7 +38,7 @@ public class C<K> implements Context<K,C<K>>,Wrapper<K,C<K>> {
     static public C.Builder<BigDecimal> bd(int scale, RoundingMode r) {
         return new Builder<>(new BigDecimalOpRounded(bd.body(),scale,r), new BigDecimalFormat());
     }
-
+    
     static public class Builder<K> implements ContextBuilder<K,C<K>>{
         public final Op<K> body;
         public final Format<K> format;
@@ -99,13 +99,6 @@ public class C<K> implements Context<K,C<K>>,Wrapper<K,C<K>> {
     }
     @Override
     public boolean equals(Object e) {
-        if (e == null) {
-            return false;
-        }
-        if (!(e instanceof C)) {
-            return false;
-        }
-        C t = (C) e;
-        return body().equals(t.body());
+        return Wrapper.equalsByBody(this, e);
     }
 }

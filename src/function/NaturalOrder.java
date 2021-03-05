@@ -20,20 +20,8 @@ package function;
  * @author mtomono
  * @param <T>
  */
-public class NaturalOrder<T extends Comparable<? super T>> implements Order<T> {
-    public int compare(T a, T b) {
+public interface NaturalOrder<T extends Comparable<? super T>> extends Order<T> {
+    default int compare(T a, T b) {
         return a.compareTo(b);
     }
-    @Override
-    public boolean eq(T a, T b) { return CompareUtil.eq(a, b); }
-    @Override
-    public boolean ne(T a, T b) { return CompareUtil.ne(a, b); }
-    @Override
-    public boolean lt(T a, T b) { return CompareUtil.lt(a, b); }
-    @Override
-    public boolean le(T a, T b) { return CompareUtil.le(a, b); }
-    @Override
-    public boolean gt(T a, T b) { return CompareUtil.gt(a, b); }
-    @Override
-    public boolean ge(T a, T b) { return CompareUtil.ge(a, b); }
 }

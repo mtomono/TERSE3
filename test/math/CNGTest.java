@@ -5,6 +5,7 @@
  */
 package math;
 
+import collection.TList;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import static org.testng.Assert.*;
@@ -128,6 +129,15 @@ public class CNGTest {
         System.out.println(test.TestUtils.methodName(0));
         String result = C.r.f("1000/2000").toFormattedString();
         String expected = "1,000/2,000";
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    @Test
+    public void testSqrt() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<C<Integer>> result = TList.range(0, 10).map(i->C.i.b(i).sqrt());
+        TList<C<Integer>> expected = TList.sofi(0,1,1,2,2,2,2,3,3,3).map(i->C.i.b(i));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);

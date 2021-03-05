@@ -15,6 +15,7 @@
 package math;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 
 /**
  * Operations for BigDecimal.
@@ -84,6 +85,11 @@ public class BigDecimalOp implements Op<BigDecimal>{
     @Override
     public BigDecimal abs(BigDecimal v0) {
         return v0.abs();
+    }
+
+    @Override
+    public BigDecimal sqrt(BigDecimal v0) {
+        return v0.sqrt(new MathContext(v0.scale()));
     }
 
     @Override

@@ -22,7 +22,7 @@ import java.util.function.Function;
  *
  * @author masao
  */
-public class ComparePolicy {
+public interface ComparePolicy {
     public static <T, S extends Comparable<? super S>> Comparator<T> inc(Function<T, S> func) {
         return (a,b)->func.apply(a).compareTo(func.apply(b));
     } 
@@ -30,4 +30,15 @@ public class ComparePolicy {
     public static <T, S extends Comparable<? super S>> Comparator<T> dec(Function<T, S> func) {
         return (a,b)->func.apply(b).compareTo(func.apply(a));
     } 
+    
+    public static <K extends Comparable<? super K>> boolean equalsByComparison(K th, Object e) {
+        if (e == null) {
+            return false;
+        }
+        if (!(e instanceof Comparable)) {
+            return false;
+        }
+        K t = (K) e;
+        return th.compareTo(t)==0;
+    }
 }

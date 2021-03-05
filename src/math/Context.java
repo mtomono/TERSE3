@@ -55,6 +55,9 @@ public interface Context<K,T extends Context<K,T>> extends Wrapper<K,T>{
     default T abs() {
         return wrap(b().body().abs(body()));
     }
+    default T sqrt() {
+        return wrap(b().body().sqrt(body()));
+    }
     default T interpolate(T rate, T o, T orate) {
         return mul(orate).add(o.mul(rate)).div(rate.add(orate));
     }

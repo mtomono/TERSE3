@@ -87,6 +87,11 @@ public class DoubleOp implements Op<Double> {
     }
 
     @Override
+    public Double sqrt(Double v0) {
+        return Math.sqrt(v0);
+    }
+
+    @Override
     public Double zero() {
         return Double.valueOf(0);
     }

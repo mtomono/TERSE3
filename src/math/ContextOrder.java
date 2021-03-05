@@ -15,12 +15,13 @@
 package math;
 
 import function.MappedOrder;
-import function.Order;
 import java.util.function.Function;
 
 /**
  *
  * @author masao
+ * @param <K>
+ * @param <C>
  */
 public interface ContextOrder<K,C extends Context<K,C>> extends MappedOrder<K,C> {
     @Override

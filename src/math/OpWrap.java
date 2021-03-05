@@ -94,6 +94,11 @@ public class OpWrap<K> implements Op<K> {
     }
 
     @Override
+    public K sqrt(K v0) {
+        return f.apply(op.sqrt(v0));
+    }
+
+    @Override
     public K zero() {
         return f.apply(op.zero());
     }

@@ -37,9 +37,15 @@ import math.Rational;
  *
  * @author masao
  * @param <K>
+ * @param <T>
  */
 public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements TListWrapper<TList<T>,CMatrix<K,T>>{
     public static Builder<Double,C2<Double>,C2.Builder<Double>> d=b(C2.d);
+    public static Builder<Double,C2<Double>,C2.Builder<Double>> dc=b(C2.dc);
+    public static Builder<Double,C2<Double>,C2.Builder<Double>> derr=derr(1e-10);
+    public static Builder<Double,C2<Double>,C2.Builder<Double>> derr(double err) {
+        return b(C2.derr(err));
+    }
     public static Builder<BigDecimal,C2<BigDecimal>,C2.Builder<BigDecimal>> bd=b(C2.bd);
     public static Builder<Rational,C2<Rational>,C2.Builder<Rational>> r=b(C2.r);
     public static <K, T extends Context<K,T>&ContextOrdered<K,T>, B extends ContextBuilder<K,T>&ContextOrder<K,T>> Builder<K,T,B> b(B b) {
@@ -172,7 +178,7 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
         assertSquare();
         return I(bb,x);
     }
-    public CMatrix<K,T> pinv(TList<Integer> order) {
+    public CMatrix<K,T> reorder(TList<Integer> order) {
         return wrap(i().body.pickUp(order));
     }
     public CMatrix<K,T> swap(int c, ArrayInt order) {
@@ -235,6 +241,17 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
     public CMatrix<K,T> invUpper() {
         return wrap(i().columns().map(c->backwardSubstitution(c).body())).transpose();
     }
+
+    CMatrix<K,T> qinv() {
+        return wrap(GramSchmidt.orthogonarize(columns()).map(p->p.body()));
+    }
+    CMatrix<K,T> q() {
+        return qinv().transpose();
+    }
+    CMatrix<K,T> r() {
+        return qinv().mul(this).fillLower(bb.zero());
+    }
+
     public CMatrix<K,T> sfix() {
         return wrap(body.map(r->r.sfix()).sfix());
     }

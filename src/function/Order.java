@@ -15,7 +15,6 @@
 package function;
 
 import java.util.Comparator;
-import java.util.function.Function;
 
 /**
  *
@@ -25,11 +24,12 @@ import java.util.function.Function;
 public interface Order<T> extends Comparator<T>{
     default T min(T a, T b) {return lt(a,b)?a:b;}
     default T max(T a, T b) {return gt(a,b)?a:b;}
+    @Override
     public int compare(T a, T b);
-    public boolean eq(T a, T b);
-    public boolean ne(T a, T b);
-    public boolean lt(T a, T b);
-    public boolean le(T a, T b);
-    public boolean gt(T a, T b);
-    public boolean ge(T a, T b);
+    default boolean eq(T a, T b) { return compare(a, b)==0; }
+    default boolean ne(T a, T b) { return compare(a, b)!=0; }
+    default boolean lt(T a, T b) { return compare(a, b)<0; }
+    default boolean le(T a, T b) { return compare(a, b)<=0; }
+    default boolean gt(T a, T b) { return compare(a, b)>0; }
+    default boolean ge(T a, T b) { return compare(a, b)>=0; }
 }

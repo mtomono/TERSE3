@@ -18,6 +18,8 @@ import function.Order;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import function.NaturalOrder;
+import function.Wrapper;
+import java.util.function.BiPredicate;
 
 /**
  * Comparable Calculation Context
@@ -25,24 +27,37 @@ import function.NaturalOrder;
  * @param <K>
  */
 public class C2<K> implements ContextOrdered<K,C2<K>> {
-    static public C2.Builder<Integer> i=new Builder<>(new IntegerOp(), new IntegerFormat(), new NaturalOrder<>());
-    static public C2.Builder<Long> l=new Builder<>(new LongOp(), new LongFormat(), new NaturalOrder<>());
-    static public C2.Builder<Float> f=new Builder<>(new FloatOp(), new FloatFormat(), new NaturalOrder<>());
-    static public C2.Builder<Double> d=new Builder<>(new DoubleOp(), new DoubleFormat(), new NaturalOrder<>());
-    static public C2.Builder<Rational> r=new Builder<>(new RationalOp(), new RationalFormat(), new NaturalOrder<>());
-    static public C2.Builder<BigDecimal> bd=new Builder<>(new BigDecimalOp(), new BigDecimalFormat(), new NaturalOrder<>());
+    static public C2.Builder<Integer> i=new Builder<>(new IntegerOp(), new IntegerFormat(), new NaturalOrder<>(){});
+    static public C2.Builder<Long> l=new Builder<>(new LongOp(), new LongFormat(), new NaturalOrder<>(){});
+    static public C2.Builder<Float> f=new Builder<>(new FloatOp(), new FloatFormat(), new NaturalOrder<>(){});
+    static public C2.Builder<Double> d=new Builder<>(new DoubleOp(), new DoubleFormat(), new NaturalOrder<>(){});
+    static public C2.Builder<Double> dc=byComparison(new DoubleOp(), new DoubleFormat(), new NaturalOrder<>(){});
+    static public C2.Builder<Double> derr=derr(1e-10);
+    static public C2.Builder<Double> derr(double err) {
+        return byComparison(new DoubleOp(), new DoubleFormat(), new ErroredDoubleOrder(err));
+    }
+    static public C2.Builder<Rational> r=new Builder<>(new RationalOp(), new RationalFormat(), new NaturalOrder<>(){});
+    static public C2.Builder<BigDecimal> bd=new Builder<>(new BigDecimalOp(), new BigDecimalFormat(), new NaturalOrder<>(){});
     static public C2.Builder<BigDecimal> bd3=bd(3,RoundingMode.DOWN);
     static public C2.Builder<BigDecimal> bd(int scale, RoundingMode r) {
-        return new Builder<>(new BigDecimalOpRounded(bd.body(),scale,r), new BigDecimalFormat(), new NaturalOrder<>());
+        return new Builder<>(new BigDecimalOpRounded(bd.body(),scale,r), new BigDecimalFormat(), new NaturalOrder<>(){});
+    }
+    static public <K> C2.Builder<K> byComparison(Op<K> body, Format<K> format, Order<K> order) {
+        return new Builder<>(body,format,order,ContextOrdered::equalsByComparison);
     }
     static public class Builder<K> implements ContextBuilder<K,C2<K>>,ContextOrder<K,C2<K>> {
         final Op<K> body;
         final Format<K> format;
         final Order<K> order;
-        Builder(Op<K> body, Format<K> format, Order<K> order) {
+        final BiPredicate<C2<K>,Object> equals;
+        Builder(Op<K> body, Format<K> format, Order<K> order, BiPredicate<C2<K>,Object> equals) {
             this.body=body;
             this.format=format;
             this.order=order;
+            this.equals=equals;
+        }
+        Builder(Op<K> body, Format<K> format, Order<K> order) {
+            this(body,format,order,Wrapper::equalsByBody);
         }
         @Override
         public Format<K> format() {
@@ -100,13 +115,6 @@ public class C2<K> implements ContextOrdered<K,C2<K>> {
     }
     @Override
     public boolean equals(Object e) {
-        if (e == null) {
-            return false;
-        }
-        if (!(e instanceof C2)) {
-            return false;
-        }
-        C2 t = (C2) e;
-        return body().equals(t.body());
+        return builder.equals.test(this, e);
     }
 }
