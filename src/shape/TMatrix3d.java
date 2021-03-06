@@ -172,7 +172,7 @@ public class TMatrix3d extends Matrix3d {
             assert count < 1000 : "too slow to converge";
         }
         double eigenValue = next.dot(post)/post.dot(post);
-        return P.p(current, eigenValue).addP(count);
+        return P.p(current, eigenValue).c(count);
     }
 
     /**

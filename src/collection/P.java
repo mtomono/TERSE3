@@ -20,7 +20,6 @@ import debug.Monitorable;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
-import java.util.function.Function;
 import string.Message;
 
 /**
@@ -44,11 +43,7 @@ public class P<L, R> extends AbstractList<Object> implements Monitorable {
     public static <L, R> P<L, R> p(L l, R r) {
         return new P<>(l, r);
     }
-    
-    public static <L, R> P<L,R> f(L l, Function<L,R> f) {
-        return P.p(l,f.apply(l));
-    }
-    
+        
     public static <L, R> Optional<P<L, R>> op(Optional<L> l, Optional<R> r) {
         return l.isPresent() && r.isPresent() ? Optional.of(P.p(l.get(), r.get())) : Optional.empty();
     }
@@ -134,10 +129,6 @@ public class P<L, R> extends AbstractList<Object> implements Monitorable {
     @Override
     public int size() {
         return 2;
-    }
-    
-    public <U> P<P<L,R>,U> addP(U a) {
-        return p(this, a);
     }
     
     public P<R,L> flip() {
