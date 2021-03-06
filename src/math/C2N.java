@@ -32,6 +32,10 @@ public class C2N<K extends Number> implements ContextOrdered<K, C2N<K>>,ContextN
     static public C2N.Builder<Float> f=new Builder<>(new FloatOp(), new FloatFormat(), new NaturalOrder<>(){});
     static public C2N.Builder<Double> d=new Builder<>(new DoubleOp(), new DoubleFormat(), new NaturalOrder<>(){});
     static public C2N.Builder<Double> dc=byComparison(new DoubleOp(), new DoubleFormat(), new NaturalOrder<>(){});
+    static public C2N.Builder<Double> derr=derr(1e-10);
+    static public C2N.Builder<Double> derr(double err) {
+        return byComparison(new DoubleOp(), new DoubleFormat(), new ErroredDoubleOrder(err));
+    }
     static public C2N.Builder<Rational> r=new Builder<>(new RationalOp(), new RationalFormat(), new NaturalOrder<>(){});
     static public C2N.Builder<BigDecimal> bd=new Builder<>(new BigDecimalOp(), new BigDecimalFormat(), new NaturalOrder<>(){});
     static public C2N.Builder<BigDecimal> bd3=bd(3,RoundingMode.DOWN);
@@ -39,21 +43,21 @@ public class C2N<K extends Number> implements ContextOrdered<K, C2N<K>>,ContextN
         return new Builder<>(new BigDecimalOpRounded(bd.body(),scale,r), new BigDecimalFormat(), new NaturalOrder<>(){});
     }
     static public <K extends Number> C2N.Builder<K> byComparison(Op<K> body, Format<K> format, Order<K> order) {
-        return new Builder<>(body,format,order,ContextOrdered::equalsByComparison);
+        return new Builder<>(body,format,()->order,ContextOrdered::equalsByComparison);
     }
-    static public class Builder<K extends Number> implements ContextBuilder<K,C2N<K>>,ContextOrder<K,C2N<K>> {
+    static public class Builder<K extends Number> implements ContextBuilder<K,C2N<K>> {
         final Op<K> body;
         final Format<K> format;
-        final Order<K> order;
+        final ContextOrder<K,C2N<K>> order;
         final BiPredicate<C2N<K>,Object> equals;
-        Builder(Op<K> body, Format<K> format, Order<K> order, BiPredicate<C2N<K>,Object> equals) {
+        Builder(Op<K> body, Format<K> format, ContextOrder<K,C2N<K>> order, BiPredicate<C2N<K>,Object> equals) {
             this.body=body;
             this.format=format;
             this.order=order;
             this.equals=equals;
         }
         Builder(Op<K> body, Format<K> format, Order<K> order) {
-            this(body,format,order,Wrapper::equalsByBody);
+            this(body,format,()->order,Wrapper::equalsByBody);
         }
         @Override
         public Format<K> format() {
@@ -61,7 +65,7 @@ public class C2N<K extends Number> implements ContextOrdered<K, C2N<K>>,ContextN
         }
        @Override
         public Builder<K> format(Format<K> format) {
-            return new Builder<>(body,format,order);
+            return new Builder<>(body,format,order,equals);
         }
         @Override
         public C2N<K> c(K v) {
@@ -77,9 +81,9 @@ public class C2N<K extends Number> implements ContextOrdered<K, C2N<K>>,ContextN
         }
         @Override
         public ContextBuilder<K, C2N<K>> wrap(Op<K> body) {
-            return new Builder<>(body,format,order);
+            return new Builder<>(body,format,order,equals);
         }
-        public Order<K> baseOrder() {
+        public Order<C2N<K>> order() {
             return order;
         }
     }
@@ -103,7 +107,7 @@ public class C2N<K extends Number> implements ContextOrdered<K, C2N<K>>,ContextN
     }
     @Override
     public Order<C2N<K>> order() {
-        return builder;
+        return builder.order();
     }
     @Override
     public String toString() {

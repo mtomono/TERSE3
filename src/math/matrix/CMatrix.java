@@ -48,10 +48,10 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
     }
     public static Builder<BigDecimal,C2<BigDecimal>,C2.Builder<BigDecimal>> bd=b(C2.bd);
     public static Builder<Rational,C2<Rational>,C2.Builder<Rational>> r=b(C2.r);
-    public static <K, T extends Context<K,T>&ContextOrdered<K,T>, B extends ContextBuilder<K,T>&ContextOrder<K,T>> Builder<K,T,B> b(B b) {
+    public static <K, T extends Context<K,T>&ContextOrdered<K,T>, B extends ContextBuilder<K,T>> Builder<K,T,B> b(B b) {
         return new Builder<>(b);
     }
-    static public class Builder<K, T extends Context<K,T>&ContextOrdered<K,T>, B extends ContextBuilder<K,T>&ContextOrder<K,T>> {
+    static public class Builder<K, T extends Context<K,T>&ContextOrdered<K,T>, B extends ContextBuilder<K,T>> {
         B b;
         public Builder(B b) {
             this.b=b;

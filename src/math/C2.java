@@ -43,21 +43,21 @@ public class C2<K> implements ContextOrdered<K,C2<K>> {
         return new Builder<>(new BigDecimalOpRounded(bd.body(),scale,r), new BigDecimalFormat(), new NaturalOrder<>(){});
     }
     static public <K> C2.Builder<K> byComparison(Op<K> body, Format<K> format, Order<K> order) {
-        return new Builder<>(body,format,order,ContextOrdered::equalsByComparison);
+        return new Builder<>(body,format,()->order,ContextOrdered::equalsByComparison);
     }
-    static public class Builder<K> implements ContextBuilder<K,C2<K>>,ContextOrder<K,C2<K>> {
+    static public class Builder<K> implements ContextBuilder<K,C2<K>> {
         final Op<K> body;
         final Format<K> format;
-        final Order<K> order;
+        ContextOrder<K,C2<K>> order;
         final BiPredicate<C2<K>,Object> equals;
-        Builder(Op<K> body, Format<K> format, Order<K> order, BiPredicate<C2<K>,Object> equals) {
+        Builder(Op<K> body, Format<K> format, ContextOrder<K,C2<K>> order, BiPredicate<C2<K>,Object> equals) {
             this.body=body;
             this.format=format;
             this.order=order;
             this.equals=equals;
         }
         Builder(Op<K> body, Format<K> format, Order<K> order) {
-            this(body,format,order,Wrapper::equalsByBody);
+            this(body,format,()->order,Wrapper::equalsByBody);
         }
         @Override
         public Format<K> format() {
@@ -65,7 +65,7 @@ public class C2<K> implements ContextOrdered<K,C2<K>> {
         }
         @Override
         public Builder<K> format(Format<K> format) {
-            return new Builder<>(body,format,order);
+            return new Builder<>(body,format,order,equals);
         }
         @Override
         public C2<K> c(K v) {
@@ -81,10 +81,9 @@ public class C2<K> implements ContextOrdered<K,C2<K>> {
         }
         @Override
         public ContextBuilder<K, C2<K>> wrap(Op<K> body) {
-            return new Builder<>(body,format,order);
+            return new Builder<>(body,format,order,equals);
         }
-        @Override
-        public Order<K> baseOrder() {
+        public Order<C2<K>> order() {
             return order;
         }
     }
@@ -107,7 +106,7 @@ public class C2<K> implements ContextOrdered<K,C2<K>> {
         return this;
     }
     public Order<C2<K>> order() {
-        return builder;
+        return builder.order();
     }
     @Override
     public String toString() {
