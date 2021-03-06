@@ -46,7 +46,7 @@ public class LuDecompose<K,T extends Context<K,T>&ContextOrdered<K,T>> {
         return target.doolittleFormat();
     }
     public LuDecompose<K,T> doolittleWholeMatrix() {
-        TList.range(0,target.minSize()-1).forEach(i->target.subMatrixUR(i,i).doolittleSubMatrix());
+        TList.range(0,target.minSize()-1).forEach(i->target.subMatrixLR(i,i).doolittleSubMatrix());
         return this;
     }
 }

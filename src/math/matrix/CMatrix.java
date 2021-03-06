@@ -110,7 +110,7 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
         int x0=fromTo[0];int y0=fromTo[1];  int x1=fromTo[2];int y1=fromTo[3];
         return wrap(body.subList(y0,y1).map(r->r.subList(x0,x1)));
     }
-    public CMatrix<K,T> subMatrixUR(int x0, int y0) {
+    public CMatrix<K,T> subMatrixLR(int x0, int y0) {
         return subMatrix(x0,y0,x,y);
     }
     public int minSize() {

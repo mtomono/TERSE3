@@ -43,7 +43,7 @@ public class PluDecompose<K,T extends Context<K,T>&ContextOrdered<K,T>> extends 
     }
     @Override
     public PluDecompose<K,T> doolittleWholeMatrix() {
-        TList.range(0,target.minSize()-1).forEach(i->target.swap(i,order).subMatrixUR(i,i).doolittleSubMatrix());
+        TList.range(0,target.minSize()-1).forEach(i->target.swap(i,order).subMatrixLR(i,i).doolittleSubMatrix());
         return this;
     }
 
