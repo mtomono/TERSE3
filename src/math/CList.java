@@ -39,13 +39,13 @@ public class CList<K, T extends Context<K,T>> implements TListWrapper<T,CList<K,
         public Builder(ContextBuilder<K,T> b) {
             this.b=b;
         }
-        public CList<K,T> l(K... v) {
+        public CList<K,T> b(K... v) {
             return TList.sof(v).toC(x->x,b);
         }
-        public CList<K,T> l(String v) {
-            return l(TList.sof(v.split(",")).map(s->b.b(s)).sfix());
+        public CList<K,T> b(String v) {
+            return b(TList.sof(v.split(",")).map(s->b.b(s)).sfix());
         }
-        public CList<K,T> l(TList<T> v) {
+        public CList<K,T> b(TList<T> v) {
             return new CList<>(b,v);
         }
     }

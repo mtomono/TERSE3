@@ -23,12 +23,12 @@ public class GramSchmidtNGTest {
     @Test
     public void testOrthogonalizeR2() {
         System.out.println(test.TestUtils.methodName(0));
-        TList<CList<Double,C2<Double>>> result = GramSchmidt.orthogonalize(CMatrix.derr.m(
+        TList<CList<Double,C2<Double>>> result = GramSchmidt.orthogonalize(CMatrix.derr.b(
                  "1,0,0;"
                 +"1,1,1;"
                 +"0,0,1"
         ).rows());
-        TList<CList<Double,C2<Double>>> expected = CMatrix.derr.m(
+        TList<CList<Double,C2<Double>>> expected = CMatrix.derr.b(
                  "1,0,0;"
                 +"0.0,  0.7071067811865475, 0.7071067811865475;"
                 +"0.0, -0.7071067811865475, 0.7071067811865475"
@@ -41,12 +41,12 @@ public class GramSchmidtNGTest {
     @Test
     public void testOrthogonalize() {
         System.out.println(test.TestUtils.methodName(0));
-        TList<CList<Double,C2<Double>>> result = GramSchmidt.orthogonalize(CMatrix.derr.m(
+        TList<CList<Double,C2<Double>>> result = GramSchmidt.orthogonalize(CMatrix.derr.b(
                  "1,0,0;"
                 +"1,1,0;"
                 +"1,1,1"
         ).rows());
-        TList<CList<Double,C2<Double>>> expected = CMatrix.derr.m(
+        TList<CList<Double,C2<Double>>> expected = CMatrix.derr.b(
                  "1,0,0;"
                 +"0,1,0;"
                 +"0,0,1"

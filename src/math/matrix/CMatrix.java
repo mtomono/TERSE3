@@ -26,7 +26,6 @@ import math.C2;
 import math.CList;
 import math.Context;
 import math.ContextBuilder;
-import math.ContextOrder;
 import math.ContextOrdered;
 import math.NonsingularMatrixException;
 import math.PivotingMightBeRequiredException;
@@ -56,16 +55,16 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
         public Builder(B b) {
             this.b=b;
         }
-        public CMatrix<K,T> m(TList<TList<T>> body) {
+        public CMatrix<K,T> b(TList<TList<T>> body) {
             return new CMatrix<>(b, body);
         }
 
-        public CMatrix<K,T> m(Integer[][] matrix) {
-            return m(TList.sof(matrix).map((a) -> TList.sof(a).map((i) -> b.b(i)).sfix()).sfix());
+        public CMatrix<K,T> b(Integer[][] matrix) {
+            return Builder.this.b(TList.sof(matrix).map((a) -> TList.sof(a).map((i) -> b.b(i)).sfix()).sfix());
         }
 
-        public CMatrix<K,T> m(String source) {
-            return m(TList.sof(source.split(";")).map((r) -> TList.sof(r.split(",")).map((s) -> b.b(s)).sfix()).sfix());
+        public CMatrix<K,T> b(String source) {
+            return Builder.this.b(TList.sof(source.split(";")).map((r) -> TList.sof(r.split(",")).map((s) -> b.b(s)).sfix()).sfix());
         }
         
         public CMatrix<K,T> I(int n) {
@@ -254,9 +253,6 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
 
     public CMatrix<K,T> sfix() {
         return wrap(body.map(r->r.sfix()).sfix());
-    }
-    public boolean same(CMatrix<K,T> other) {
-        return body.flatMap(l->l).pair(other.body.flatMap(l->l), (x,y)->x.eq(y)).forAll(b->b);
     }
     
     @Override
