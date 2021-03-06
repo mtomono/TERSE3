@@ -23,9 +23,9 @@ package function;
 public interface EqCenteredOrder<T extends Comparable<? super T>> extends Order<T> {
     @Override
     default int compare(T c1, T c2) {
-        if (gt(c1,c2)) return 1;
-        if (lt(c1,c2)) return -1;
-        return 0;
+        if (eq(c1,c2))
+            return 0;
+        return c1.compareTo(c2);
     }
     @Override
     default boolean lt(T      c1, T      c2) { return (!eq(c1, c2)) && c1.compareTo(c2) < 0; }
