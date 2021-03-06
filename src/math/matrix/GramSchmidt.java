@@ -15,9 +15,9 @@ import math.Context;
  */
 public class GramSchmidt {
     public static <K, T extends Context<K,T>> TList<CList<K,T>> orthogonalize(TList<CList<K,T>> bases) {
-        return bases.stream().reduce(TList.c(), (es,ak)->es.addOne(forEach(ak,es).transform(x->x.scale(x.dot(x).sqrt().inv()))), (es0,es1)->es0.append(es1));
+        return bases.stream().reduce(TList.c(), (es,ak)->es.addOne(extractE(ak,es).sfix()), (es0,es1)->es0.append(es1));
     }
-    private static <K, T extends Context<K,T>> CList<K,T> forEach(CList<K,T>ak, TList<CList<K,T>> e) {
-        return e.stream().map(ei->ei.scale(ak.dot(ei))).reduce(ak,(a,ai)->a.sub(ai)).sfix();
+    private static <K, T extends Context<K,T>> CList<K,T> extractE(CList<K,T>ak, TList<CList<K,T>> e) {
+        return e.stream().map(ei->ei.scale(ak.dot(ei))).reduce(ak,(a,ai)->a.sub(ai)).transform(x->x.scale(x.dot(x).sqrt().inv()));
     }
 }
