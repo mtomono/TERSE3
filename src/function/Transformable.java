@@ -13,7 +13,7 @@ import java.util.function.Function;
  */
 public interface Transformable<K> {
     public K self();
-    public default <L> L transform(Function<K,L> f) {
+    public default <L> L t(Function<K,L> f) {
         return f.apply(self());
     }
 }

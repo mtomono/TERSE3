@@ -14,10 +14,10 @@
  */
 package math.matrix;
 
-import collection.ArrayInt;
 import collection.TList;
 import collection.TListWrapper;
 import collection.TransparentTranspose;
+import function.Transformable;
 import static java.lang.Integer.min;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -27,8 +27,6 @@ import math.CList;
 import math.Context;
 import math.ContextBuilder;
 import math.ContextOrdered;
-import math.NonsingularMatrixException;
-import math.PivotingMightBeRequiredException;
 import math.Rational;
 
 
@@ -38,7 +36,7 @@ import math.Rational;
  * @param <K>
  * @param <T>
  */
-public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements TListWrapper<TList<T>,CMatrix<K,T>>{
+public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements TListWrapper<TList<T>,CMatrix<K,T>>,Transformable<CMatrix<K,T>>{
     public static Builder<Double,C2<Double>,C2.Builder<Double>> d=b(C2.d);
     public static Builder<Double,C2<Double>,C2.Builder<Double>> dc=b(C2.dc);
     public static Builder<Double,C2<Double>,C2.Builder<Double>> derr=derr(1e-10);
@@ -113,6 +111,18 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
         int x0=fromTo[0];int y0=fromTo[1];  int x1=fromTo[2];int y1=fromTo[3];
         return wrap(body.subList(x0,x1).map(r->r.subList(y0,y1)));
     }
+    public CMatrix<K,T> subRows(int from, int to) {
+        return wrap(body.subList(from,to));
+    }
+    public CMatrix<K,T> subRows(int seek) {
+        return seek<0?subRows(0,x+seek):subRows(seek,x);
+    }
+    public CMatrix<K,T> subColumns(int from, int to) {
+        return wrap(body.map(r->r.subList(from,to)));
+    }
+    public CMatrix<K,T> subColumns(int seek) {
+        return seek<0?subColumns(0,y+seek):subColumns(seek,y);
+    }
     public CMatrix<K,T> subMatrixLR(int x0, int y0) {
         return subMatrix(x0,y0,x,y);
     }
@@ -179,15 +189,6 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
     }
     public CMatrix<K,T> reorder(TList<Integer> order) {
         return wrap(i().body.pickUp(order));
-    }
-    public TList<CMatrix<K,T>> doolittleFormat() {
-        return TList.sof(doolittleLower(),doolittleUpper());
-    }
-    public CMatrix<K,T> doolittleLower() {
-        return fillUpper(bb.zero()).fillDiagonal(bb.one());
-    }
-    public CMatrix<K,T> doolittleUpper() {
-        return fillLower(bb.zero());
     }
     /**
      * forward substitution for lower triangle matrix.

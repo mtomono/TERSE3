@@ -18,6 +18,7 @@ import collection.ArrayInt;
 import collection.TList;
 import math.Context;
 import math.ContextOrdered;
+import math.NonsingularMatrixException;
 
 /**
  *
@@ -43,8 +44,22 @@ public class PluDecompose<K,T extends Context<K,T>&ContextOrdered<K,T>> extends 
     }
     @Override
     public PluDecompose<K,T> doolittleWholeMatrix() {
-        TList.range(0,target.minSize()-1).forEach(i->target.swap(i,order).subMatrixLR(i,i).doolittleSubMatrix());
+        TList.range(0,target.minSize()-1).map(i->swap(i,order).subMatrixLR(i,i)).forEach(m->doolittleSubMatrix(m));
         return this;
+    }
+
+    CMatrix<K,T> swap(int c, ArrayInt order) {
+        if (target.x<=1)
+            return target;
+        int maxRow=TList.range(c,target.x).max(i->target.get(i,c).abs()).get();
+        target.body.swap(c,maxRow);
+        if (target.get(c,c).isZero())
+            throw new NonsingularMatrixException("diagonal element was 0 even after pivoting, meaning this matrix is not singular : notified from CMatrix.swap()");
+            // keep this exception message simple, meaning not to include any variable, 
+            //because this exception will be used to detect nonsingular matrix and 
+            //in that case certain level of performance is needed for throwing this exception.
+        order.swap(c,maxRow);
+        return target;
     }
 
 }
