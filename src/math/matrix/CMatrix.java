@@ -106,6 +106,9 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
     public TList<CList<K,T>> columns() {
         return TransparentTranspose.transpose(body).map(r->new CList<>(bb,r)); //if you use body.transpose() instead of TransparentTranspose.transpose(), you will get some exceptions caused by trying to chnage a mapped list which doesn't have reverse map.
     }
+    public T get(int x0, int y0) {
+        return body.get(x0).get(y0);
+    }
     public CMatrix<K,T> subMatrix(int... fromTo) {
         int x0=fromTo[0];int y0=fromTo[1];  int x1=fromTo[2];int y1=fromTo[3];
         return wrap(body.subList(x0,x1).map(r->r.subList(y0,y1)));

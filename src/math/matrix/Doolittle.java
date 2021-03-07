@@ -40,18 +40,18 @@ public class Doolittle<K,T extends Context<K,T>&ContextOrdered<K,T>> extends CMa
     public Doolittle<K,T> swap(int c, ArrayInt order) {
         if (body.size()<=1)
             return this;
-        int maxRow=TList.range(c,body.size()).max(i->body.get(i).get(c).abs()).get();
+        int maxRow=TList.range(c,body.size()).max(i->get(i,c).abs()).get();
         body.swap(c,maxRow);
-        if (body.get(c).get(c).isZero())
+        if (get(c,c).isZero())
             throw new NonsingularMatrixException("diagonal element was 0 even after pivoting, meaning this matrix is not singular : notified from CMatrix.swap()");
             // keep this exception message simple, meaning not to include any variable, 
             //because this exception will be used to detect nonsingular matrix and 
             //in that case certain level of performance is needed for throwing this exception.
-        order.swap(c, maxRow);
+        order.swap(c,maxRow);
         return this;
     }
     public Doolittle<K,T> doolittleSubMatrix() {
-        if (body.get(0).get(0).isZero())
+        if (get(0,0).isZero())
             throw new PivotingMightBeRequiredException("lu decomposition encountered 0 diagonal element:"+ toString() +": notified from CMatrix.doolittleStep");
         CList<K,T>        lcolumn    =subMatrix(1,0, x,1).columns().get(0).reset(cl->cl.scale(body.get(0).get(0).inv()));
         CList<K,T>        eliminator =subMatrix(0,1, 1,y).rows().get(0);
