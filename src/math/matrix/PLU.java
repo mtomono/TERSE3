@@ -16,7 +16,6 @@ package math.matrix;
 
 import collection.ArrayInt;
 import java.util.List;
-import math.C2;
 import math.CList;
 import math.Context;
 import math.ContextOrdered;

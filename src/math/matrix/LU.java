@@ -16,7 +16,6 @@ package math.matrix;
 
 import collection.TList;
 import java.util.List;
-import math.C2;
 import math.CList;
 import math.Context;
 import math.ContextOrdered;
@@ -25,6 +24,7 @@ import math.ContextOrdered;
  *
  * @author masao
  * @param <K>
+ * @param <T>
  */
 public class LU<K,T extends Context<K,T>&ContextOrdered<K,T>> extends TList<CMatrix<K,T>> {
     public LU(List<CMatrix<K,T>> body) {
