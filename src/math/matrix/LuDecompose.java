@@ -26,9 +26,9 @@ import math.NonsingularMatrixException;
  * @param <T>
  */
 public class LuDecompose<K,T extends Context<K,T>&ContextOrdered<K,T>> {
-    final CMatrix<K,T> target;
+    final Doolittle<K,T> target;
     public LuDecompose(CMatrix<K,T> target) {
-        this.target=target.sfix();
+        this.target=new Doolittle<>(target.sfix());
     }
 
     public LU<K,T> decompose() {

@@ -67,20 +67,20 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
             return Builder.this.b(TList.sof(source.split(";")).map((r) -> TList.sof(r.split(",")).map((s) -> b.b(s)).sfix()).sfix());
         }
         
-        public CMatrix<K,T> I(int n) {
-            return CMatrix.I(b,n);
+        public CMatrix<K,T> i(int n) {
+            return b(b.i(n));
         }
     }
     final public ContextBuilder<K,T> bb;
     final public TList<TList<T>> body;
-    final public int x;
-    final public int y;
+    final public int x;//row
+    final public int y;//column
     public CMatrix(ContextBuilder<K,T> bb, TList<TList<T>> body) {
         this.body=body;
         this.bb=bb;
         assert body.map(r->r.size()).isUniform() : "all the raws have to have the same size";
-        this.x=body.isEmpty()?0:body.get(0).size();
-        this.y=body.size();
+        this.x=body.size();
+        this.y=body.isEmpty()?0:body.get(0).size();
     }
     @Override
     public TList<TList<T>> body() {
@@ -108,7 +108,7 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
     }
     public CMatrix<K,T> subMatrix(int... fromTo) {
         int x0=fromTo[0];int y0=fromTo[1];  int x1=fromTo[2];int y1=fromTo[3];
-        return wrap(body.subList(y0,y1).map(r->r.subList(x0,x1)));
+        return wrap(body.subList(x0,x1).map(r->r.subList(y0,y1)));
     }
     public CMatrix<K,T> subMatrixLR(int x0, int y0) {
         return subMatrix(x0,y0,x,y);
@@ -141,11 +141,11 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
     }
     public CMatrix<K,T> fillLower(T v) {
         assertSquare();
-        return wrap(TList.range(0,x).map(i->body.get(i).subList(i,x).startFrom(TList.nCopies(i,v))));
+        return wrap(TList.range(0,x).map(i->body.get(i).subList(i,y).startFrom(TList.nCopies(i,v))));
     }
     public CMatrix<K,T> fillUpper(T v) {
         assertSquare();
-        return wrap(TList.range(0,x).map(i->body.get(i).subList(0,i+1).append(TList.nCopies(x-i-1,v))));
+        return wrap(TList.range(0,x).map(i->body.get(i).subList(0,i+1).append(TList.nCopies(y-i-1,v))));
     }
     public CMatrix<K,T> fillDiagonal(TList<T> diag) {
         assertSquare();
@@ -161,7 +161,7 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
     }
     
     public boolean nonZeroDiagonal() {
-        return getDiagonal().stream().allMatch(d->!d.isZero());
+        return getDiagonal().stream().allMatch(diag->!diag.isZero());
     }
     
     public LU<K,T> luDecompose() {
@@ -170,28 +170,12 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
     public PLU<K,T> pluDecompose() {
         return new PluDecompose<>(this).decompose();
     }
-    static public <K,T extends Context<K,T>&ContextOrdered<K,T>> CMatrix<K,T> I(ContextBuilder<K,T> bb,int n) {
-        return new CMatrix<>(bb,TList.range(0,n).map(i->TList.nCopies(n, bb.zero()).sfix().cset(i, bb.one())));
-    }
     public CMatrix<K,T> i() {
         assertSquare();
-        return I(bb,x);
+        return wrap(bb.i(x));
     }
     public CMatrix<K,T> reorder(TList<Integer> order) {
         return wrap(i().body.pickUp(order));
-    }
-    public CMatrix<K,T> swap(int c, ArrayInt order) {
-        if (body.size()<=1)
-            return this;
-        int maxRow=TList.range(c,body.size()).max(i->body.get(i).get(c).abs()).get();
-        body.swap(c,maxRow);
-        if (body.get(c).get(c).isZero())
-            throw new NonsingularMatrixException("diagonal element was 0 even after pivoting, meaning this matrix is not singular : notified from CMatrix.swap()");
-            // keep this exception message simple, meaning not to include any variable, 
-            //because this exception will be used to detect nonsingular matrix and 
-            //in that case certain level of performance is needed for throwing this exception.
-        order.swap(c, maxRow);
-        return this;
     }
     public TList<CMatrix<K,T>> doolittleFormat() {
         return TList.sof(doolittleLower(),doolittleUpper());
@@ -201,15 +185,6 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
     }
     public CMatrix<K,T> doolittleUpper() {
         return fillLower(bb.zero());
-    }
-    public CMatrix<K,T> doolittleSubMatrix() {
-        if (body.get(0).get(0).isZero())
-            throw new PivotingMightBeRequiredException("lu decomposition encountered 0 diagonal element:"+ toString() +": notified from CMatrix.doolittleStep");
-        CList<K,T>        lcolumn    =subMatrix(0,1, 1,y).columns().get(0).reset(cl->cl.scale(body.get(0).get(0).inv()));
-        CList<K,T>        eliminator =subMatrix(1,0, x,1).rows().get(0);
-        TList<CList<K,T>> eliminated =subMatrix(1,1,x,y).rows();
-        lcolumn.body().pair(eliminated,(l,u)->u.reset(cl->cl.sub(eliminator.scale(l)))).forEach(r->{}); 
-        return this;
     }
     /**
      * forward substitution for lower triangle matrix.

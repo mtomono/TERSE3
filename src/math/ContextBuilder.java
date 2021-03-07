@@ -14,6 +14,7 @@
  */
 package math;
 
+import collection.TList;
 import function.Wrapper;
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -39,4 +40,7 @@ public interface ContextBuilder<K, CONTEXT extends Context<K,CONTEXT>> extends W
     default CONTEXT b(Rational n) {return c(body().b(n));}
     default CONTEXT one() {return c(body().one());}
     default CONTEXT zero() {return c(body().zero());}
+    default TList<TList<CONTEXT>> i(int n) {
+        return TList.range(0,n).map(i->TList.nCopies(n, zero()).sfix().cset(i, one()));
+    }
 }
