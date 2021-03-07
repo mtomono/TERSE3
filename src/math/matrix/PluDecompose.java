@@ -34,7 +34,7 @@ public class PluDecompose<K,T extends Context<K,T>&ContextOrdered<K,T>> extends 
     }
     @Override
     public PLU<K,T> decompose() {
-        return new PLU<>(doolittle().startFrom(p()),order);
+        return new PLU<>(exec().startFrom(p()),order);
     }
     public CMatrix<K,T> pinv() {
         return target.reorder(order.asList());
@@ -43,12 +43,17 @@ public class PluDecompose<K,T extends Context<K,T>&ContextOrdered<K,T>> extends 
         return pinv().transpose();
     }
     @Override
-    public PluDecompose<K,T> doolittleWholeMatrix() {
-        TList.range(0,target.minSize()-1).map(i->swap(i,order).subMatrixLR(i,i)).forEach(m->doolittleSubMatrix(m));
-        return this;
+    public TList<CMatrix<K,T>> doolittleSteps() {
+        return TList.range(0,target.minSize()-1).map(i->pivot(i,order).subMatrixLR(i,i));
     }
 
-    CMatrix<K,T> swap(int c, ArrayInt order) {
+    /**
+     * pivot arrangement at i.
+     * @param c target column.
+     * @param order stores the result of pivoting.
+     * @return 
+     */
+    CMatrix<K,T> pivot(int c, ArrayInt order) {
         if (target.x<=1)
             return target;
         int maxRow=TList.range(c,target.x).max(i->target.get(i,c).abs()).get();

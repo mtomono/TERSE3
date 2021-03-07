@@ -13,7 +13,7 @@ import math.CList;
 import math.NonsingularMatrixException;
 import math.PivotingMightBeRequiredException;
 import math.Rational;
-import static math.matrix.LuDecompose.doolittleSubMatrix;
+import static math.matrix.LuDecompose.doolittleStep;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import test.PTe;
@@ -60,10 +60,12 @@ public class CMatrixNGTest {
     @Test
     public void testEliminate1235() {
         System.out.println(test.TestUtils.methodName(0));
-        CMatrix<BigDecimal,C2<BigDecimal>> result = mbd.b(          "1,2;"
-                                                    + "3,5").t(m->doolittleSubMatrix(m));
-        CMatrix<BigDecimal,C2<BigDecimal>> expected = mbd.b(        "1,2;"
-                                                    + "3,-1");
+        CMatrix<BigDecimal,C2<BigDecimal>> result = mbd.b(          
+                                                        "1,2;"
+                                                      + "3,5").t(m->doolittleStep(m));
+        CMatrix<BigDecimal,C2<BigDecimal>> expected = mbd.b(
+                                                        "1,2;"
+                                                      + "3,-1");
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
@@ -71,9 +73,10 @@ public class CMatrixNGTest {
     @Test
     public void testEliminateI3() {
         System.out.println(test.TestUtils.methodName(0));
-        CMatrix<Rational,C2<Rational>> result = mr.b(                   "1,0,0;"
+        CMatrix<Rational,C2<Rational>> result = mr.b(
+                                                            "1,0,0;"
                                                           + "0,1,0;"
-                                                          + "0,0,1").t(m->doolittleSubMatrix(m));
+                                                          + "0,0,1").t(m->doolittleStep(m));
         CMatrix<Rational,C2<Rational>> expected = mr.b(                 "1,0,0;"
                                                           + "0,1,0;"
                                                           + "0,0,1");
@@ -85,9 +88,10 @@ public class CMatrixNGTest {
     @Test
     public void testEliminate121253112() {
         System.out.println(test.TestUtils.methodName(0));
-        CMatrix<Rational,C2<Rational>> result = mr.b(                   "1,2,1;"
+        CMatrix<Rational,C2<Rational>> result = mr.b(
+                                                            "1,2,1;"
                                                           + "2,5,3;"
-                                                          + "1,1,2").t(m->doolittleSubMatrix(m));
+                                                          + "1,1,2").t(m->doolittleStep(m));
         CMatrix<Rational,C2<Rational>> expected = mr.b(                 "1,2,1;"
                                                           + "2,1,1;"
                                                           + "1,-1,1");
@@ -102,7 +106,7 @@ public class CMatrixNGTest {
         CMatrix<Rational,C2<Rational>> result = new LuDecompose<>(mr.b(
                                                             "1,2,1;"
                                                           + "2,5,3;"
-                                                          + "1,1,2")).doolittleWholeMatrix().target;
+                                                          + "1,1,2")).doolittle();
         CMatrix<Rational,C2<Rational>> expected = mr.b(                 "1,2,1;"
                                                           + "2,1,1;"
                                                           + "1,-1,2");
@@ -118,7 +122,7 @@ public class CMatrixNGTest {
                                                             "2,4,4,2;"
                                                           + "1,8,5,2;"
                                                           + "1,2,7,6;"
-                                                          + "2,4,3,3").t(m->doolittleSubMatrix(m)).map(c->c.m((r->r.reduce())));
+                                                          + "2,4,3,3").t(m->doolittleStep(m)).map(c->c.m((r->r.reduce())));
         CMatrix<Rational,C2<Rational>> expected = mr.b(                 "2,4,4,2;"
                                                           + "1/2,6,3,1;"
                                                           + "1/2,0,5,5;"
@@ -134,7 +138,7 @@ public class CMatrixNGTest {
                                                             "2,4,4,2;"
                                                           + "1,8,5,2;"
                                                           + "1,2,7,6;"
-                                                          + "2,4,3,3")).doolittleWholeMatrix().target.map(c->c.m((r->r.reduce())));
+                                                          + "2,4,3,3")).doolittle().map(c->c.m((r->r.reduce())));
         CMatrix<Rational,C2<Rational>> expected = mr.b(                 "2,4,4,2;"
                                                           + "1/2,6,3,1;"
                                                           + "1/2,0,5,5;"
