@@ -14,6 +14,7 @@
  */
 package math;
 
+import function.Op;
 import collection.TList;
 import function.Wrapper;
 import java.math.BigDecimal;

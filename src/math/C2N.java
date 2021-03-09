@@ -14,10 +14,10 @@
  */
 package math;
 
+import function.Op;
 import function.Order;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import function.NaturalOrder;
 import function.Wrapper;
 import java.util.function.BiPredicate;
 
@@ -27,37 +27,45 @@ import java.util.function.BiPredicate;
  * @param <K>
  */
 public class C2N<K extends Number> implements ContextOrdered<K, C2N<K>>,ContextNumber<K,C2N<K>> {
-    static public C2N.Builder<Integer> i=new Builder<>(new IntegerOp(), new IntegerFormat(), new NaturalOrder<>(){});
-    static public C2N.Builder<Long> l=new Builder<>(new LongOp(), new LongFormat(), new NaturalOrder<>(){});
-    static public C2N.Builder<Float> f=new Builder<>(new FloatOp(), new FloatFormat(), new NaturalOrder<>(){});
-    static public C2N.Builder<Double> d=new Builder<>(new DoubleOp(), new DoubleFormat(), new NaturalOrder<>(){});
-    static public C2N.Builder<Double> dc=byComparison(new DoubleOp(), new DoubleFormat(), new NaturalOrder<>(){});
+    static public C2N.Builder<Integer> i=new Builder<>(new IntegerOp(), new IntegerFormat(), Order.natural());
+    static public C2N.Builder<Long> l=new Builder<>(new LongOp(), new LongFormat(), Order.natural());
+    static public C2N.Builder<Float> f=new Builder<>(new FloatOp(), new FloatFormat(), Order.natural());
+    static public C2N.Builder<Double> d=new Builder<>(new DoubleOp(), new DoubleFormat(), Order.natural());
+    static public C2N.Builder<Double> dc=byComparison(new DoubleOp(), new DoubleFormat(), Order.natural());
     static public C2N.Builder<Double> derr=derr(1e-10);
     static public C2N.Builder<Double> derr(double err) {
-        return byComparison(new DoubleOp(), new DoubleFormat(), new ErroredDoubleOrder(err));
+        return byComparison(new DoubleOp(), new DoubleFormat(), Order.natural(), err);
     }
-    static public C2N.Builder<Rational> r=new Builder<>(new RationalOp(), new RationalFormat(), new NaturalOrder<>(){});
-    static public C2N.Builder<BigDecimal> bd=new Builder<>(new BigDecimalOp(), new BigDecimalFormat(), new NaturalOrder<>(){});
+    static public C2N.Builder<Rational> r=new Builder<>(new RationalOp(), new RationalFormat(), Order.natural());
+    static public C2N.Builder<BigDecimal> bd=new Builder<>(new BigDecimalOp(), new BigDecimalFormat(), Order.natural());
+    static public C2N.Builder<BigDecimal> bdc=byComparison(new BigDecimalOp(), new BigDecimalFormat(), Order.natural());
     static public C2N.Builder<BigDecimal> bd3=bd(3,RoundingMode.DOWN);
+    static public C2N.Builder<BigDecimal> bd3c=bdc(3,RoundingMode.DOWN);
     static public C2N.Builder<BigDecimal> bd(int scale, RoundingMode r) {
-        return new Builder<>(new BigDecimalOpRounded(bd.body(),scale,r), new BigDecimalFormat(), new NaturalOrder<>(){});
+        return new Builder<>(new BigDecimalOpRounded(bd.body(),scale,r), new BigDecimalFormat(), Order.natural());
+    }
+    static public C2N.Builder<BigDecimal> bdc(int scale, RoundingMode r) {
+        return byComparison(new BigDecimalOpRounded(bd.body(),scale,r), new BigDecimalFormat(), Order.natural());
     }
     static public <K extends Number> C2N.Builder<K> byComparison(Op<K> body, Format<K> format, Order<K> order) {
-        return new Builder<>(body,format,()->order,ContextOrdered::equalsByComparison);
+        return new Builder<>(body,format,order.map(s->s.body()),ContextOrdered::equalsByComparison);
+    }
+    static public <K extends Number> C2N.Builder<K> byComparison(Op<K> body, Format<K> format, Order<K> order, K err) {
+        return new Builder<>(body,format,order.error(body,err).map(s->s.body()),ContextOrdered::equalsByComparison);
     }
     static public class Builder<K extends Number> implements ContextBuilder<K,C2N<K>> {
         final Op<K> body;
         final Format<K> format;
-        final ContextOrder<K,C2N<K>> order;
+        final Order<C2N<K>> order;
         final BiPredicate<C2N<K>,Object> equals;
-        Builder(Op<K> body, Format<K> format, ContextOrder<K,C2N<K>> order, BiPredicate<C2N<K>,Object> equals) {
+        Builder(Op<K> body, Format<K> format, Order<C2N<K>> order, BiPredicate<C2N<K>,Object> equals) {
             this.body=body;
             this.format=format;
             this.order=order;
             this.equals=equals;
         }
         Builder(Op<K> body, Format<K> format, Order<K> order) {
-            this(body,format,()->order,Wrapper::equalsByBody);
+            this(body,format,order.map(s->s.body()),Wrapper::equalsByBody);
         }
         @Override
         public Format<K> format() {

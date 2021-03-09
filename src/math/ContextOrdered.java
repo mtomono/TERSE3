@@ -15,6 +15,7 @@
 package math;
 
 import function.ChainedCompare;
+import function.Order;
 
 /**
  *

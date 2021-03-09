@@ -15,14 +15,12 @@
 
 package orderedSet;
 
-import function.NaturalOrder;
 import collection.TList;
 import java.util.*;
 import iterator.Iterators;
 import static iterator.Iterators.toStream;
 import static java.util.stream.Collectors.toList;
 import static collection.TList.concat;
-import static function.MappedOrder.map;
 import function.Order;
 import java.math.BigDecimal;
 import java.util.function.Function;
@@ -43,7 +41,7 @@ public class RangeSet<T> extends AbstractList<Range<T>> {
         return new Builder<>(order);
     }
     public static <T extends Comparable<? super T>> Builder<T> b() {
-        return b(new NaturalOrder<T>(){});
+        return b(Order.<T>natural());
     }
     public static class Builder<T> {
         final public Order<T> order;
@@ -76,7 +74,7 @@ public class RangeSet<T> extends AbstractList<Range<T>> {
          * @return 
          */
         public RangeSet<T> mergeIntoRangeSet(TList<Range<T>> rs) {
-            return rs.sortTo(map(order,r->r.start())).diffChunk((a,b)->!a.overlaps(b)).map(rl->rl.stream().reduce((a,b)->a.cover(b))).filter(or->or.isPresent()).map(or->or.get()).transform(l->rs(l));
+            return rs.sortTo(order.map(r->r.start())).diffChunk((a,b)->!a.overlaps(b)).map(rl->rl.stream().reduce((a,b)->a.cover(b))).filter(or->or.isPresent()).map(or->or.get()).transform(l->rs(l));
         }
         public RangeSet<T> intersectMany(List<RangeSet<T>> many) {
             return many.stream().reduce((a,b)->a.intersect(b)).orElse(empty());

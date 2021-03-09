@@ -15,12 +15,10 @@
 
 package orderedSet;
 
-import function.NaturalOrder;
 import collection.ArrayInt;
 import collection.TList;
 import collection.c;
 import static collection.c.i2l;
-import static function.MappedOrder.map;
 import function.Order;
 import iterator.AbstractBufferedIterator;
 import iterator.BufferedIterator;
@@ -56,7 +54,7 @@ public class Range<T> {
         return new Builder<>(order);
     }
     public static <T extends Comparable<? super T>> Builder<T> b() {
-        return b(new NaturalOrder<T>(){});
+        return b(Order.<T>natural());
     }
     public static class Builder<T> {
         final public Order<T> order;
@@ -81,7 +79,7 @@ public class Range<T> {
             return Optional.of(new Range<>(this,rl.map(r->r.start).min(order).get(),rl.map(r->r.end).max(order).get()));
         }
         public TList<Range<T>> sortToStart(TList<Range<T>> ranges) {
-            return ranges.sortTo(map(order,r->r.start()));
+            return ranges.sortTo(order.map(r->r.start()));
         }
         public TList<Range<T>> unionIfLucky(TList<Range<T>> sorted) {
             return TList.set(i2l(cover(sorted).map(w->w.unionIteratorIfLucky(sorted.iterator())).orElse(TList.<Range<T>>empty().iterator())));
@@ -397,7 +395,7 @@ public class Range<T> {
      * @return 
      */
     public Iterator<Range<T>> intersectIteratorIfLucky(Iterator<Range<T>> a,Iterator<Range<T>>b) {
-        return negateIteratorIfLucky(unionIteratorIfLucky(new MergeIterator<>(negateIteratorIfLucky(a),negateIteratorIfLucky(b),map(order(),r->r.start()))));
+        return negateIteratorIfLucky(unionIteratorIfLucky(new MergeIterator<>(negateIteratorIfLucky(a),negateIteratorIfLucky(b),order().map(r->r.start()))));
     }
     /**
      * overlap. (binary, because there is no such thing like unaly overlap.)

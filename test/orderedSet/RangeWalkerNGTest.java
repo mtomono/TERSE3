@@ -9,7 +9,7 @@ import collection.P;
 import collection.TList;
 import static collection.c.a2l;
 import static collection.c.i2l;
-import function.NaturalOrder;
+import function.Order;
 import java.util.Iterator;
 import java.util.List;
 import static orderedSet.Range.intRange;
@@ -214,7 +214,7 @@ public class RangeWalkerNGTest {
     }
 
     public void testPpBase(List<Integer> leftIn, List<Integer> rightIn, List<Integer> leftOut, List<Integer> rightOut) {
-        Walker<Integer, Integer> tested = new WalkerPp<>(leftIn.iterator(), rightIn.iterator(), new NaturalOrder<>(){});
+        Walker<Integer, Integer> tested = new WalkerPp<>(leftIn.iterator(), rightIn.iterator(), Order.natural());
         List<P<Integer, Integer>> result = i2l(tested);
         List<P<Integer, Integer>> expected = TList.set(leftOut).pair(rightOut);
         System.out.println("result  : " + result);
@@ -233,7 +233,7 @@ public class RangeWalkerNGTest {
     }
 
     public void testPpOverlap(List<Integer> leftIn, List<Integer> rightIn, List<Integer> leftOut, List<Integer> rightOut) {
-        Walker<Integer, Integer> tested = new WalkerPp<>(leftIn.iterator(), rightIn.iterator(), new NaturalOrder<>(){}).overlap();
+        Walker<Integer, Integer> tested = new WalkerPp<>(leftIn.iterator(), rightIn.iterator(), Order.natural()).overlap();
         List<P<Integer, Integer>> result = i2l(tested);
         List<P<Integer, Integer>> expected = TList.set(leftOut).pair(rightOut);
         System.out.println("result  : " + result);
@@ -251,7 +251,7 @@ public class RangeWalkerNGTest {
     }
 
     public void testPpIntersect(List<Integer> leftIn, List<Integer> rightIn, List<Integer> out) {
-        Iterator<Integer> tested = new WalkerPp<>(leftIn.iterator(), rightIn.iterator(), new NaturalOrder<>(){}).intersect();
+        Iterator<Integer> tested = new WalkerPp<>(leftIn.iterator(), rightIn.iterator(), Order.natural()).intersect();
         List<Integer> result = i2l(tested);
         List<Integer> expected = out;
         System.out.println("result  : " + result);

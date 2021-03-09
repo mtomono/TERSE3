@@ -14,6 +14,7 @@
  */
 package math;
 
+import function.Op;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
