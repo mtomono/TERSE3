@@ -31,7 +31,7 @@ import orderedSet.Range;
  * @author masao
  * @param <K>
  */
-public class Fluctuation<K extends Comparable<K>> {
+public class Fluctuation<K> {
     final public Builder<K> builder;
     final public Tq tq;
     final public Entries entries;

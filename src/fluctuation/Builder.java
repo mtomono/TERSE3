@@ -27,7 +27,7 @@ import orderedSet.Range;
  * @author masao
  * @param <K>
  */
-public class Builder<K extends Comparable<K>> {
+public class Builder<K> {
     C2.Builder<K> context;
     protected Builder(C2.Builder<K> context) {
         this.context=context;
