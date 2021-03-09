@@ -15,7 +15,6 @@
 package function;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
 import math.Rational;
 
 /**
