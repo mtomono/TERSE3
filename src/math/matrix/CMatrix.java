@@ -27,7 +27,6 @@ import math.CList;
 import math.Context;
 import math.ContextBuilder;
 import math.ContextOrdered;
-import math.PivotingMightBeRequiredException;
 import math.Rational;
 
 

@@ -18,7 +18,6 @@ import collection.ArrayInt;
 import collection.TList;
 import math.Context;
 import math.ContextOrdered;
-import math.NonsingularMatrixException;
 
 /**
  *

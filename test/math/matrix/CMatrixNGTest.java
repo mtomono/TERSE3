@@ -10,8 +10,6 @@ import debug.Te;
 import java.math.BigDecimal;
 import math.C2;
 import math.CList;
-import math.NonsingularMatrixException;
-import math.PivotingMightBeRequiredException;
 import math.Rational;
 import static math.matrix.LuDecompose.doolittleStep;
 import static org.testng.Assert.*;

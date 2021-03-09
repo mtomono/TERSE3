@@ -18,8 +18,6 @@ import collection.TList;
 import math.CList;
 import math.Context;
 import math.ContextOrdered;
-import math.NonsingularMatrixException;
-import math.PivotingMightBeRequiredException;
 
 /**
  * LU decompose using Doolittle method.

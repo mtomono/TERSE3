@@ -12,14 +12,14 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.
  */
-package math;
+package math.matrix;
 
 /**
  *
  * @author masao
  */
-public class NonsingularMatrixException extends RuntimeException {
-    public  NonsingularMatrixException(String s) {
+public class PivotingMightBeRequiredException extends RuntimeException {
+    public PivotingMightBeRequiredException(String s) {
         super(s);
     }
 }
