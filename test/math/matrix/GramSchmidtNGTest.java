@@ -6,9 +6,9 @@
 package math.matrix;
 
 import collection.TList;
+import static java.lang.Math.sqrt;
 import math.C2;
 import math.CList;
-import org.testng.Assert;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 
@@ -29,10 +29,11 @@ public class GramSchmidtNGTest {
                 +"1,1,1;"
                 +"0,0,1"
         ).rows());
+        double r2=sqrt(2)/2;
         TList<CList<Double,C2<Double>>> expected = CMatrix.derr.b(
                  "1,0,0;"
-                +"0.0,  0.7071067811865475, 0.7071067811865475;"
-                +"0.0, -0.7071067811865475, 0.7071067811865475"
+                +"0.0,  "+r2+", "+r2+";"
+                +"0.0, -"+r2+", "+r2
         ).rows();
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
@@ -47,10 +48,11 @@ public class GramSchmidtNGTest {
                 +"1,1,1;"
                 +"0,0,1"
         ).rows());
+        double r2=sqrt(2)/2;
         TList<CList<Double,C2<Double>>> expected = CMatrix.derr.b(
                  "1,0,0;"
-                +"0.0,  0.7071067811865475, 0.7071067811865475;"
-                +"0.0, -0.7071067811865475, 0.70710678"
+                +"0.0,  "+r2+", "+r2+";"
+                +"0.0, -"+r2+", 0.70710678"
         ).rows();
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
