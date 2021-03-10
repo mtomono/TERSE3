@@ -15,6 +15,7 @@
 
 package collection;
 
+import iterator.MaskIterator;
 import static collection.c.a2l;
 import static collection.c.i2l;
 import static collection.c.l2aInt;
@@ -257,6 +258,7 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
         return teep("");
     }
     
+
     public T getDebug(int at) {
         System.out.println(""+at+":"+get(at));
         return get(at);
@@ -1281,6 +1283,18 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
         return set(new MergeList<>(this, merged, c));
     }
     
+    /**
+     * mask this list by o.
+     * this list and o is expected to be sorted in terms of c.
+     * @param mask. expected to be sorted.
+     * @param c Comparator.
+     * @return excessive elements in this list.
+     */
+    public TList<T> mask(TList<T> mask, Comparator<T> c) {
+        Iterator<T> iter=new MaskIterator<>(iterator(),mask.iterator(),c);
+        return TList.set(collection.c.i2l(iter));
+    }
+
     /**
      * handle two lists in parallel.
      * note here i don't mean any parallelism. it's all about the order of lists.
