@@ -70,4 +70,12 @@ public interface Context<K,T extends Context<K,T>> extends Wrapper<K,T>{
     default String toFormattedString() {
         return b().toString(self());
     }
+    default T tee(String name) {
+        System.out.println(name+":"+body());
+        return self();
+    }
+    default T tee() {
+        System.out.print("tee>"+this);
+        return self();
+    }
 }
