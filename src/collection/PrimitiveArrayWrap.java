@@ -39,6 +39,9 @@ public class PrimitiveArrayWrap {
     public static List<java.lang.Character> wrap(char... body) {
         return new Character(body);
     }
+    public static List<java.lang.Boolean> wrap(boolean... body) {
+        return new Boolean(body);
+    }
     public static double[] unwrapD(List<java.lang.Double> body) {
         double[] retval = new double[body.size()];
         Iterator<java.lang.Double> iter = body.iterator();
@@ -79,6 +82,15 @@ public class PrimitiveArrayWrap {
             retval[i++]=iter.next();
         return retval;
     }
+    public static boolean[] unwrapBo(List<java.lang.Boolean> body) {
+        boolean[] retval = new boolean[body.size()];
+        Iterator<java.lang.Boolean> iter = body.iterator();
+        int i = 0;
+        while (iter.hasNext())
+            retval[i++]=iter.next();
+        return retval;
+    }
+
     public static class Double extends AbstractList<java.lang.Double> {
         double[] body;
         public Double(double[] body) {
@@ -193,6 +205,29 @@ public class PrimitiveArrayWrap {
         @Override
         public java.lang.Character set(int index, java.lang.Character v) {
             java.lang.Character retval = body[index];
+            body[index] = v;
+            return retval;
+        }
+    }
+    public static class Boolean extends AbstractList<java.lang.Boolean> {
+        boolean[] body;
+        public Boolean(boolean[] body) {
+            this.body = body;
+        }
+
+        @Override
+        public java.lang.Boolean get(int index) {
+            return body[index];
+        }
+
+        @Override
+        public int size() {
+            return body.length;
+        }
+        
+        @Override
+        public java.lang.Boolean set(int index, java.lang.Boolean v) {
+            java.lang.Boolean retval = body[index];
             body[index] = v;
             return retval;
         }
