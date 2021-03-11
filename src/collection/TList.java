@@ -816,11 +816,21 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
         return filterWith(filter,b->b);
     }
     
+    /**
+     * remove neighboring same items from list.
+     * @return 
+     */
     public TList<T> rift() {
         assert !isEmpty():"rift() is invalid for empty list";
         return diff().filter(p->!p.l().equals(p.r())).transform(dediff());
     }
         
+    /**
+     * remove neighboring same items from list.
+     * similarity is decided by comparator.
+     * @param c
+     * @return 
+     */
     public TList<T> rift(Comparator<T> c) {
         assert !isEmpty():"rift() is invalid for empty list";
         return diff().filter(p->c.compare(p.l(), p.r())!=0).transform(dediff());
@@ -1531,10 +1541,20 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
         return delimit(map, (a,b)->delimit);
     }
     
+    /**
+     * convert list into items and their occurence.
+     * @return 
+     */
     public P<TList<T>,TList<Integer>> compress() {
         return diffChunk((a,b)->!a.equals(b)).transform(l->P.p(l.map(ll->ll.get(0)), l.map(ll->ll.size())));
     }
     
+    /**
+     * reversal of compress.
+     * given this list is the list of items.
+     * @param duplication
+     * @return 
+     */
     public TList<T> decompress(TList<Integer> duplication) {
         return pair(duplication,(a,b)->nCopies(b,a)).flatMapc(l->l);
     }
