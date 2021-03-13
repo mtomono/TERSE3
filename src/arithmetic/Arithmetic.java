@@ -25,6 +25,7 @@ public class Arithmetic {
     static public BiOperator div = new Div();
     static public BiOperator rem = new Rem();
     static public BiOperator mod = new Mod();
+    static public BiOperator mods = new ModShift();
     static public BiPredicate eq = new Eq();
     static public BiPredicate ne = new Ne();
     static public BiPredicate lt = new Lt();
