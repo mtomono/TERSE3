@@ -14,6 +14,7 @@
  */
 package math;
 
+import collection.P;
 import collection.TList;
 import static java.lang.Long.compare;
 
@@ -67,10 +68,14 @@ public class Rational extends Number implements Comparable<Rational> {
         return this;
     }
     
-    public Rational rednorm() {
+    public Rational simplify() {
         return reduce().normalize();
     }
-
+    
+    public Rational fractionPart() {
+        return new Rational(numerator-longValue()*denominator,denominator);
+    }
+        
     public Rational add(Rational value) {
         if (denominator==value.denominator)
             return new Rational(numerator+value.numerator, denominator);
@@ -88,7 +93,7 @@ public class Rational extends Number implements Comparable<Rational> {
     }
     
     public Rational div(Rational value) {
-        return new Rational(numerator*value.denominator, denominator*value.numerator).rednorm();
+        return new Rational(numerator*value.denominator, denominator*value.numerator).simplify();
     }
 
     public Rational abs() {
@@ -132,12 +137,12 @@ public class Rational extends Number implements Comparable<Rational> {
             return false;
         }
         Rational t = (Rational) e;
-        return rednorm().toList().equals(t.rednorm().toList());
+        return simplify().toList().equals(t.simplify().toList());
     }
 
     @Override
     public int hashCode() {
-        return rednorm().hashCodeBase();
+        return simplify().hashCodeBase();
     }
     
     public int hashCodeBase() {

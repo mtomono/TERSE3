@@ -335,7 +335,7 @@ public class CMatrixNGTest {
                                                           + "0,-1,-1,-5;"
                                                           + "0,0,3,13;"
                                                           + "0,0,0,-13");
-        CList<Rational,C2<Rational>> result = l.backwardSubstitution(lr.b("4,-7,13,-13")).m(ll->ll.map(c->c.m(r->r.rednorm())));
+        CList<Rational,C2<Rational>> result = l.backwardSubstitution(lr.b("4,-7,13,-13")).m(ll->ll.map(c->c.m(r->r.simplify())));
         CList<Rational,C2<Rational>> expected = lr.b("-1,2,0,1");
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
@@ -349,7 +349,7 @@ public class CMatrixNGTest {
                                                           + "1,8,5,2;"
                                                           + "1,2,7,6;"
                                                           + "2,4,3,3");
-        TList<CMatrix<Rational,C2<Rational>>> result = original.luDecompose().map(m->m.map(c->c.m(r->r.rednorm())));
+        TList<CMatrix<Rational,C2<Rational>>> result = original.luDecompose().map(m->m.map(c->c.m(r->r.simplify())));
         TList<CMatrix<Rational,C2<Rational>>> expected = TList.sof(mr.b("1,0,0,0;"
                                                           + "1/2,1,0,0;"
                                                           + "1/2,0,1,0;"
@@ -361,7 +361,7 @@ public class CMatrixNGTest {
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result,expected);
-        System.out.println("lu      : " + result.stream().reduce((a,b)->a.mul(b)).get().map(c->c.m(r->r.rednorm())));
+        System.out.println("lu      : " + result.stream().reduce((a,b)->a.mul(b)).get().map(c->c.m(r->r.simplify())));
         assertEquals(result.stream().reduce((a,b)->a.mul(b)).get(),original);
     }
     @Test
@@ -388,7 +388,7 @@ public class CMatrixNGTest {
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result,expected);
-        System.out.println("lu      : " + result.restore().map(c->c.m(r->r.rednorm())));
+        System.out.println("lu      : " + result.restore().map(c->c.m(r->r.simplify())));
         assertEquals(result.restore(),original);
     }
     @Test
@@ -398,7 +398,7 @@ public class CMatrixNGTest {
                                                           + "2,4,4,2;"
                                                           + "1,8,5,2;"
                                                           + "2,4,3,3").pluDecompose();
-        CList<Rational,C2<Rational>> result = original.solve(lr.b("6,2,12,5")).m(l->l.map(c->c.m(r->r.rednorm())));
+        CList<Rational,C2<Rational>> result = original.solve(lr.b("6,2,12,5")).m(l->l.map(c->c.m(r->r.simplify())));
         CList<Rational,C2<Rational>> expected=lr.b("-3,2,-1,2");
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
@@ -411,7 +411,7 @@ public class CMatrixNGTest {
                                                           + "1/2,1,0,0;"
                                                           + "1/2,0,1,0;"
                                                           + "1,0,-1/5,1");
-        CList<Rational,C2<Rational>> result = l.forwardSubstitution(lr.b("2,12,6,5")).m(ll->ll.map(c->c.m(r->r.rednorm())));
+        CList<Rational,C2<Rational>> result = l.forwardSubstitution(lr.b("2,12,6,5")).m(ll->ll.map(c->c.m(r->r.simplify())));
         CList<Rational,C2<Rational>> expected = lr.b("2,11,5,4");
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
@@ -424,7 +424,7 @@ public class CMatrixNGTest {
                                                           + "0,6,3,1;"
                                                           + "0,0,5,5;"
                                                           + "0,0,0,2");
-        CList<Rational,C2<Rational>> result = l.backwardSubstitution(lr.b("2,11,5,4")).m(ll->ll.map(c->c.m(r->r.rednorm())));
+        CList<Rational,C2<Rational>> result = l.backwardSubstitution(lr.b("2,11,5,4")).m(ll->ll.map(c->c.m(r->r.simplify())));
         CList<Rational,C2<Rational>> expected = lr.b("-3,2,-1,2");
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
@@ -437,8 +437,8 @@ public class CMatrixNGTest {
                                                           + "1,8,5,2;"
                                                           + "1,2,7,6;"
                                                           + "2,4,3,3");
-        CMatrix<Rational,C2<Rational>> result = l.luDecompose().inv().map(c->c.m(r->r.rednorm()));
-        assertEquals(Te.e(result.mul(l).map(c->c.m(r->r.rednorm()))),mr.i(4));
+        CMatrix<Rational,C2<Rational>> result = l.luDecompose().inv().map(c->c.m(r->r.simplify()));
+        assertEquals(Te.e(result.mul(l).map(c->c.m(r->r.simplify()))),mr.i(4));
         CMatrix<Rational,C2<Rational>> expected = mr.b("7/12,-1/3,-1/6,1/6;"
                                                       + "-13/60,1/6,-1/15,1/6;"
                                                       + "9/20,0,1/10,-1/2;"
@@ -454,8 +454,8 @@ public class CMatrixNGTest {
                                                           + "2,4,4,2;"
                                                           + "1,8,5,2;"
                                                           + "2,4,3,3");
-        CMatrix<Rational,C2<Rational>> result = l.pluDecompose().inv().map(c->c.m(r->r.rednorm()));
-        assertEquals(Te.e(result.mul(l).map(c->c.m(r->r.rednorm()))),mr.i(4));
+        CMatrix<Rational,C2<Rational>> result = l.pluDecompose().inv().map(c->c.m(r->r.simplify()));
+        assertEquals(Te.e(result.mul(l).map(c->c.m(r->r.simplify()))),mr.i(4));
         CMatrix<Rational,C2<Rational>> expected = mr.b(             "-1/6,7/12,-1/3,1/6;"
                                                       + "-1/15,-13/60,1/6,1/6;"
                                                       + "1/10,9/20,0,-1/2;"
@@ -471,7 +471,7 @@ public class CMatrixNGTest {
                                                           + "2,1,-1,1;"
                                                           + "3,-1,-1,2;"
                                                           + "-1,2,3,-1");
-        TList<CMatrix<Rational,C2<Rational>>> result = original.luDecompose().map(m->m.map(c->c.m(r->r.rednorm())));
+        TList<CMatrix<Rational,C2<Rational>>> result = original.luDecompose().map(m->m.map(c->c.m(r->r.simplify())));
         TList<CMatrix<Rational,C2<Rational>>> expected = TList.sof(mr.b("1,0,0,0;"
                                                           + "2,1,0,0;"
                                                           + "3,4,1,0;"
@@ -483,7 +483,7 @@ public class CMatrixNGTest {
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result,expected);
-        System.out.println("lu      : " + result.stream().reduce((a,b)->a.mul(b)).get().map(c->c.m(r->r.rednorm())));
+        System.out.println("lu      : " + result.stream().reduce((a,b)->a.mul(b)).get().map(c->c.m(r->r.simplify())));
         assertEquals(result.stream().reduce((a,b)->a.mul(b)).get(),original);
     }
     @Test
@@ -493,7 +493,7 @@ public class CMatrixNGTest {
                                                           + "3,-1,-1,2;"
                                                           + "2,1,-1,1;"
                                                           + "-1,2,3,-1");
-        TList<CMatrix<Rational,C2<Rational>>> result = original.luDecompose().map(m->m.map(c->c.m(r->r.rednorm())));
+        TList<CMatrix<Rational,C2<Rational>>> result = original.luDecompose().map(m->m.map(c->c.m(r->r.simplify())));
         TList<CMatrix<Rational,C2<Rational>>> expected = TList.sof(mr.b("1,0,0,0;"
                                                           + "3,1,0,0;"
                                                           + "2,1/4,1,0;"
@@ -505,7 +505,7 @@ public class CMatrixNGTest {
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result,expected);
-        System.out.println("lu      : " + result.stream().reduce((a,b)->a.mul(b)).get().map(c->c.m(r->r.rednorm())));
+        System.out.println("lu      : " + result.stream().reduce((a,b)->a.mul(b)).get().map(c->c.m(r->r.simplify())));
         assertEquals(result.stream().reduce((a,b)->a.mul(b)).get(),original);
     }
     @Test
@@ -538,7 +538,7 @@ public class CMatrixNGTest {
                                                           + "2,4,3,3;"
                                                         );
         try {
-            TList<CMatrix<Rational,C2<Rational>>> result = original.luDecompose().map(m->m.map(c->c.m(r->r.rednorm())));
+            TList<CMatrix<Rational,C2<Rational>>> result = original.luDecompose().map(m->m.map(c->c.m(r->r.simplify())));
         } catch (Exception e) {
             PTe.e(e);
             throw e;
@@ -569,7 +569,7 @@ public class CMatrixNGTest {
                                                           + "3,6,6,3;"
                                                           + "2,4,3,3;");
         try {
-            TList<CMatrix<Rational,C2<Rational>>> result = original.pluDecompose().map(m->m.map(c->c.m(r->r.rednorm())));
+            TList<CMatrix<Rational,C2<Rational>>> result = original.pluDecompose().map(m->m.map(c->c.m(r->r.simplify())));
         } catch (Exception e) {
             PTe.e(e);
             throw e;
@@ -583,7 +583,7 @@ public class CMatrixNGTest {
                                                           + "2,4,4,2;"
                                                           + "1,8,5,2;"
                                                           + "2,4,3,3;");
-        TList<CMatrix<Rational,C2<Rational>>> result = original.pluDecompose().map(m->m.map(c->c.m(r->r.rednorm())));
+        TList<CMatrix<Rational,C2<Rational>>> result = original.pluDecompose().map(m->m.map(c->c.m(r->r.simplify())));
         TList<CMatrix<Rational,C2<Rational>>> expected = TList.sof(mr.b("0,0,0,1;"
                                                           + "1,0,0,0;"
                                                           + "0,1,0,0;"
@@ -599,7 +599,7 @@ public class CMatrixNGTest {
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result,expected);
-        System.out.println("lu      : " + result.stream().reduce((a,b)->a.mul(b)).get().map(c->c.m(r->r.rednorm())));
+        System.out.println("lu      : " + result.stream().reduce((a,b)->a.mul(b)).get().map(c->c.m(r->r.simplify())));
         assertEquals(result.stream().reduce((a,b)->a.mul(b)).get(),original);
         /**
          * though the exception must be thrown from the line where pluDecompose() is executed, i intentionally 
