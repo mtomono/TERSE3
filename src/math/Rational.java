@@ -14,7 +14,6 @@
  */
 package math;
 
-import collection.P;
 import collection.TList;
 import static java.lang.Long.compare;
 

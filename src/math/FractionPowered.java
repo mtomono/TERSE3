@@ -14,26 +14,13 @@ import collection.TList;
  */
 public class FractionPowered {
     
-    public static FractionPowered simple(long v, int powerInv) {
-        return create(v, new Rational(1,powerInv));
-    }
-    static int mod(int a, int b) {
-        return a%b;
-    }
-    static int shiftMod(int a, int b) {
-        return (a-1)%b+1;
-    }
-    /**
-     * rationalize when num&den are both sqrt'ed.
-     * @return l=rational remains / r=sqrt residue.
-     */
     public static FractionPowered create(Rational v, Rational p) {
         Rational s=v.simplify();
         Long numerator=TList.nCopies((int)p.denominator-1, v.numerator).stream().reduce(v.numerator,(a,b)->a*v.denominator);
         return simple(new Rational(1,v.denominator),numerator,p);
     }
-    public static FractionPowered create(long v,Rational p) {
-        return simple(Rational.ONE,v,p);
+    public static FractionPowered create(long v, int powerInv) {
+        return simple(Rational.ONE,v,new Rational(1,powerInv));
     }
     public static FractionPowered simple(Rational c,long v,Rational p) {
         P<TList<Long>, TList<Integer>> factor=Factorization.exec(v).compress();
