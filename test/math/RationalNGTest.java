@@ -8,7 +8,6 @@ package math;
 import math.Rational;
 import collection.TList;
 import java.math.BigDecimal;
-import static math.Rational.gcd;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 
@@ -19,16 +18,6 @@ import org.testng.annotations.Test;
 public class RationalNGTest {
     
     public RationalNGTest() {
-    }
-
-    @Test
-    public void testGcd() {
-        System.out.println(test.TestUtils.methodName(0));
-        long result = gcd(49,56);
-        long expected = 7;
-        System.out.println("result  : " + result);
-        System.out.println("expected: " + expected);
-        assertEquals(result, expected);
     }
 
     @Test

@@ -22,16 +22,6 @@ import static java.lang.Long.compare;
  * @author masao
  */
 public class Rational extends Number implements Comparable<Rational> {
-    static public long gcd(long mo, long no) {
-        long m=java.lang.Math.abs(mo);
-        long n=java.lang.Math.abs(no);
-        if (m<n)
-            return gcd(n,m);
-        long r = m%n;
-        if (r==0)
-            return n;
-        return gcd(n,r);
-    }
 
     public static final Rational ZERO = new Rational(0,1);
     public static final Rational ONE = new Rational(1,1);
@@ -57,7 +47,7 @@ public class Rational extends Number implements Comparable<Rational> {
     public Rational reduce() {
         if (numerator==0)
             return ZERO;
-        long gcd = java.lang.Math.abs(gcd(numerator, denominator));
+        long gcd = java.lang.Math.abs(Integers.gcd(numerator, denominator));
         return new Rational(numerator/gcd, denominator/gcd);
     }
     

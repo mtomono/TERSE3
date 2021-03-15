@@ -361,6 +361,11 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
         return rangeBase(0, (range.end()-range.start()-1)/interval+1).map(i->range.start()+i*interval);
     }
     
+    static public TList<Integer> intBits=TList.range(0,Integer.SIZE).map(a->1<<a).sfix();
+    static public TList<Integer> intBitsP=TList.range(0,Integer.SIZE-1).map(a->1<<a).sfix();
+    static public TList<Long> longBits=TList.range(0,Long.SIZE).map(a->1L<<a).sfix();
+    static public TList<Long> longBitsP=TList.range(0,Long.SIZE-1).map(a->1L<<a).sfix();
+    
     /**
      * empty list.
      * @param <T>

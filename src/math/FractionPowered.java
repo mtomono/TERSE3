@@ -7,8 +7,7 @@ package math;
 
 import collection.P;
 import collection.TList;
-import static math.Factorization.pow;
-import static math.Rational.gcd;
+import static math.Integers.pow;
 
 /**
  *
@@ -40,7 +39,7 @@ public class FractionPowered {
     }
     
     public FractionPowered simplify() {
-        P<TList<Long>, TList<Integer>> factor=Factorization.exec(base).compress();
+        P<TList<Long>, TList<Integer>> factor=Integers.factorization(base).compress();
         TList<Integer> removed=factor.r().map(i->(int)((i*power.numerator)/power.denominator));
         long c=factor.l().decompress(removed).toC(l->l, C.l).pai().body();
 
@@ -52,7 +51,7 @@ public class FractionPowered {
     }
     
     public FractionPowered mul(FractionPowered v) {
-        long gcd=gcd(power.denominator,v.power.denominator);
+        long gcd=Integers.gcd(power.denominator,v.power.denominator);
         long b=pow(pow(base,(int)power.numerator),(int)(v.power.denominator/gcd))*pow(pow(v.base,(int)v.power.numerator),(int)(power.denominator/gcd));
         return new FractionPowered(coordinate.mul(v.coordinate),b,new Rational(1,power.denominator*v.power.denominator/gcd));
     }
