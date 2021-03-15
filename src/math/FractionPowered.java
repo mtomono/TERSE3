@@ -7,42 +7,56 @@ package math;
 
 import collection.P;
 import collection.TList;
+import static math.Factorization.pow;
+import static math.Rational.gcd;
 
 /**
  *
  * @author masao
  */
 public class FractionPowered {
+    Rational coordinate;
+    long base;
+    Rational power;
     
-    public static FractionPowered create(Rational v, Rational p) {
-        Rational s=v.simplify();
-        Long numerator=TList.nCopies((int)p.denominator-1, v.numerator).stream().reduce(v.numerator,(a,b)->a*v.denominator);
-        return simple(new Rational(1,v.denominator),numerator,p);
+    public static FractionPowered create(Rational base,Rational power) {
+        return create(Rational.ONE,base,power);
     }
+    
+    public static FractionPowered create(Rational coordinate, Rational base, Rational power) {
+        Rational s=base.simplify();
+        Long numerator=TList.nCopies((int)power.denominator-1, base.numerator).stream().reduce(base.numerator,(a,b)->a*base.denominator);
+        return new FractionPowered(coordinate.mul(new Rational(1,base.denominator)),numerator,power);
+    }
+    
     public static FractionPowered create(long v, int powerInv) {
-        return simple(Rational.ONE,v,new Rational(1,powerInv));
+        return new FractionPowered(Rational.ONE,v,new Rational(1,powerInv));
     }
-    public static FractionPowered simple(Rational c,long v,Rational p) {
-        P<TList<Long>, TList<Integer>> factor=Factorization.exec(v).compress();
-        TList<Integer> removed=factor.r().map(i->(int)((i*p.numerator)/p.denominator));
-        TList<Integer> remains=factor.r().map(i->(int)((i*p.numerator)%p.denominator));
-        TList<Boolean> nonzero=remains.map(i->i>0).sfix();
-        Rational power=new Rational(remains.filterWith(nonzero).minval(i->i).orElse(0),p.denominator);
-        long base=factor.l().filterWith(nonzero).decompress(remains.filterWith(nonzero).map(i->(int)(i-power.numerator+1))).toC(l->l, C.l).pai().body();
-        long coordinate=factor.l().decompress(removed).toC(l->l, C.l).pai().body();
-        return new FractionPowered(new Rational(coordinate,1).mul(c), base, power);
-    }
-    final public Rational power;
-    final public long base;
-    final public Rational coordinate;
-    public FractionPowered(Rational coordinate, long base, Rational power) {
+    
+    public FractionPowered(Rational coordinate,long base,Rational power) {
+        this.coordinate=coordinate;
         this.power=power;
         this.base=base;
-        this.coordinate=coordinate;
     }
-    public FractionPowered sqrt() {// damn! very limited partial soolution like 二重根号 is only accessible! .
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+    public FractionPowered simplify() {
+        P<TList<Long>, TList<Integer>> factor=Factorization.exec(base).compress();
+        TList<Integer> removed=factor.r().map(i->(int)((i*power.numerator)/power.denominator));
+        long c=factor.l().decompress(removed).toC(l->l, C.l).pai().body();
+
+        TList<Integer> remains=factor.r().map(i->(int)((i*power.numerator)%power.denominator));
+        TList<Boolean> nonzero=remains.map(i->i>0).sfix();
+        Rational p=new Rational(remains.filterWith(nonzero).minval(i->i).orElse(0),power.denominator);
+        long b=factor.l().filterWith(nonzero).decompress(remains.filterWith(nonzero).map(i->(int)(i-p.numerator+1))).toC(l->l, C.l).pai().body();
+        return new FractionPowered(coordinate.mul(new Rational(c,1)).simplify(),b, p.simplify());
     }
+    
+    public FractionPowered mul(FractionPowered v) {
+        long gcd=gcd(power.denominator,v.power.denominator);
+        long b=pow(pow(base,(int)power.numerator),(int)(v.power.denominator/gcd))*pow(pow(v.base,(int)v.power.numerator),(int)(power.denominator/gcd));
+        return new FractionPowered(coordinate.mul(v.coordinate),b,new Rational(1,power.denominator*v.power.denominator/gcd));
+    }
+
     @Override
     public boolean equals(Object e) {
         if (e == null) {

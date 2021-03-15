@@ -19,4 +19,8 @@ public class Factorization {
         if (x!=1) retval.add(x);
         return retval;
     }
+    
+    public static long pow(long target, int power) {
+        return TList.nCopies(power,target).stream().reduce(1L, (a,b)->a*b);
+    }
 }
