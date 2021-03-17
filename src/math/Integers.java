@@ -5,8 +5,11 @@
  */
 package math;
 
-import collection.ArrayInt;
 import collection.TList;
+import function.Power;
+import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
+import java.util.stream.IntStream;
 
 /**
  *
@@ -35,17 +38,10 @@ public class Integers {
     }
     
     public static long pow(long target, int power) {
-        return TList.longBits.subList(0,Integer.SIZE).reverse().stream().reduce(1L,(a,b)->(power&b)!=0?a*a*target:a*a);
-    }
-
-    /**
-     * naive and slow implimentation of power.
-     * @param target
-     * @param power
-     * @return 
-     */
-    public static long powx(long target, int power) {
-        return TList.nCopies(power,target).stream().reduce(1L, (a,b)->a*b);
+        return Power.pow(target, power, 1L, (a,b)->a*b);
     }
     
+    public static long pow(long target, long power) {
+        return Power.pow(target, power, 1L, (a,b)->a*b);
+    }
 }
