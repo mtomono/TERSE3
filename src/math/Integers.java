@@ -34,7 +34,27 @@ public class Integers {
         }
         return gcd(n, r);
     }
+    public static int gcd(int mo, int no) {
+        int m = Math.abs(mo);
+        int n = Math.abs(no);
+        if (m < n) {
+            return gcd(n, m);
+        }
+        int r = m % n;
+        if (r == 0) {
+            return n;
+        }
+        return gcd(n, r);
+    }
 
+    public static TList<Integer> factorization(int target) {
+        TList<Integer> retval = TList.c();
+        int x=target;
+        for (int i=2;i*i<=x;i++) for(;x%i==0;x/=i) retval.add(i);
+        if (x!=1) retval.add(x);
+        return retval;
+    }
+    
     public static TList<Long> factorization(long target) {
         TList<Long> retval = TList.c();
         long x=target;
@@ -43,8 +63,8 @@ public class Integers {
         return retval;
     }
     
-    public static long pow(long target, int power) {
-        return Power.pow(target, power, 1L, (a,b)->a*b);
+    public static int pow(int target, int power) {
+        return Power.pow(target, power, 1, (a,b)->a*b);
     }
     
     public static long pow(long target, long power) {

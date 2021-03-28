@@ -30,7 +30,7 @@ public class RationalOp implements Op<Rational> {
 
     @Override
     public Rational b(long v) {
-        return new Rational(v,1);
+        return new Rational((int)v,1);
     }
 
     @Override

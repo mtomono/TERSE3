@@ -5,9 +5,7 @@
  */
 package math;
 
-import math.Rational;
 import collection.TList;
-import java.math.BigDecimal;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 
@@ -83,8 +81,8 @@ public class RationalNGTest {
     @Test
     public void testToList() {
         System.out.println(test.TestUtils.methodName(0));
-        TList<Long> result = new Rational(1,2).toList();
-        TList<Long> expected = TList.sof(1L,2L);
+        TList<Integer> result = new Rational(1,2).toList();
+        TList<Integer> expected = TList.sof(1,2);
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);

@@ -452,7 +452,8 @@ public class CMatrixNGTest {
     @Test
     public void testInvNoPivot() {
         System.out.println(test.TestUtils.methodName(0));
-        CMatrix<Rational,C2<Rational>> l = mr.b("2,4,4,2;"
+        CMatrix<Rational,C2<Rational>> l = mr.b(
+                                                            "2,4,4,2;"
                                                           + "1,8,5,2;"
                                                           + "1,2,7,6;"
                                                           + "2,4,3,3");
@@ -469,7 +470,8 @@ public class CMatrixNGTest {
     @Test
     public void testInvert() {
         System.out.println(test.TestUtils.methodName(0));
-        CMatrix<Rational,C2<Rational>> l = mr.b("1,2,7,6;"
+        CMatrix<Rational,C2<Rational>> l = mr.b(
+                                                            "1,2,7,6;"
                                                           + "2,4,4,2;"
                                                           + "1,8,5,2;"
                                                           + "2,4,3,3");

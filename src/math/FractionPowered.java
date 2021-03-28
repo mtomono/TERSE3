@@ -15,7 +15,7 @@ import static math.Integers.pow;
  */
 public class FractionPowered {
     Rational coordinate;
-    long base;
+    int base;
     Rational power;
     
     public static FractionPowered create(Rational base,Rational power) {
@@ -24,35 +24,35 @@ public class FractionPowered {
     
     public static FractionPowered create(Rational coordinate, Rational base, Rational power) {
         Rational s=base.simplify();
-        Long numerator=TList.nCopies((int)power.denominator-1, base.numerator).stream().reduce(base.numerator,(a,b)->a*base.denominator);
+        Integer numerator=TList.nCopies((int)power.denominator-1, base.numerator).stream().reduce(base.numerator,(a,b)->a*base.denominator);
         return new FractionPowered(coordinate.mul(new Rational(1,base.denominator)),numerator,power);
     }
     
-    public static FractionPowered create(long v, int powerInv) {
+    public static FractionPowered create(int v, int powerInv) {
         return new FractionPowered(Rational.ONE,v,new Rational(1,powerInv));
     }
     
-    public FractionPowered(Rational coordinate,long base,Rational power) {
+    public FractionPowered(Rational coordinate,int base,Rational power) {
         this.coordinate=coordinate;
         this.power=power;
         this.base=base;
     }
     
     public FractionPowered simplify() {
-        P<TList<Long>, TList<Integer>> factor=Integers.factorization(base).compress();
+        P<TList<Integer>, TList<Integer>> factor=Integers.factorization(base).compress();
         TList<Integer> removed=factor.r().map(i->(int)((i*power.numerator)/power.denominator));
-        long c=factor.l().decompress(removed).toC(l->l, C.l).pai().body();
+        int c=factor.l().decompress(removed).toC(l->l, C.i).pai().body();
 
         TList<Integer> remains=factor.r().map(i->(int)((i*power.numerator)%power.denominator));
         TList<Boolean> nonzero=remains.map(i->i>0).sfix();
         Rational p=new Rational(remains.filterWith(nonzero).minval(i->i).orElse(0),power.denominator);
-        long b=factor.l().filterWith(nonzero).decompress(remains.filterWith(nonzero).map(i->(int)(i-p.numerator+1))).toC(l->l, C.l).pai().body();
+        int b=factor.l().filterWith(nonzero).decompress(remains.filterWith(nonzero).map(i->(int)(i-p.numerator+1))).toC(l->l, C.i).pai().body();
         return new FractionPowered(coordinate.mul(new Rational(c,1)).simplify(),b, p.simplify());
     }
     
     public FractionPowered mul(FractionPowered v) {
-        long gcd=Integers.gcd(power.denominator,v.power.denominator);
-        long b=pow(pow(base,(int)power.numerator),(int)(v.power.denominator/gcd))*pow(pow(v.base,(int)v.power.numerator),(int)(power.denominator/gcd));
+        int gcd=Integers.gcd(power.denominator,v.power.denominator);
+        int b=pow(pow(base,power.numerator),v.power.denominator/gcd)*pow(pow(v.base,v.power.numerator),power.denominator/gcd);
         return new FractionPowered(coordinate.mul(v.coordinate),b,new Rational(1,power.denominator*v.power.denominator/gcd));
     }
 

@@ -16,7 +16,7 @@ package math;
 
 import java.text.NumberFormat;
 import java.text.ParseException;
-import static math.LongFormat.longValue;
+import static math.IntegerFormat.intValue;
 
 /**
  *
@@ -27,8 +27,8 @@ public class RationalFormat implements Format<Rational> {
     public Rational f(String v) throws ParseException {
         String[] n=v.split("/");
         return n.length==1?
-                new Rational(longValue(v),1):
-                new Rational(longValue(n[0]),longValue(n[1]));
+                new Rational(intValue(v),1):
+                new Rational(intValue(n[0]),intValue(n[1]));
     }
 
     @Override

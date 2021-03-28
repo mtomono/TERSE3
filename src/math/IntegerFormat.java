@@ -22,9 +22,12 @@ import java.text.ParseException;
  * @author masao
  */
 public class IntegerFormat implements Format<Integer> {
+    static int intValue(String s) throws ParseException {
+        return NumberFormat.getInstance().parse(s).intValue();
+    }
     @Override
     public Integer f(String v) throws ParseException {
-        return NumberFormat.getInstance().parse(v).intValue();
+        return intValue(v);
     }
 
     @Override

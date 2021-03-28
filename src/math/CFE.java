@@ -29,7 +29,7 @@ public class CFE<K extends Number&Comparable<K>> {
         fraction=TList.of(cf(1,0));
         intPart=TList.c();
     }
-    static ContinuedFraction cf(long n, long d) {
+    static ContinuedFraction cf(int n, int d) {
             return new ContinuedFraction(n,d);
         }
     public ContinuedFraction next(int ck) {
@@ -61,9 +61,9 @@ public class CFE<K extends Number&Comparable<K>> {
         return fraction.seek(1).map(cf->cf.rationalValue());
     }
     static public class ContinuedFraction {
-        final public long n;
-        final public long d;
-        public ContinuedFraction(long numerator, long denominator) {
+        final public int n;
+        final public int d;
+        public ContinuedFraction(int numerator, int denominator) {
             this.n=numerator;
             this.d=denominator;
         }
