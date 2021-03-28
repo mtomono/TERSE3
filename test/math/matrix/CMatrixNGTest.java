@@ -29,6 +29,25 @@ public class CMatrixNGTest {
     }
     
     @Test
+    public void testMult() {
+        System.out.println(test.TestUtils.methodName(0));
+        CMatrix<Rational,C2<Rational>> tested0=mr.b(
+                 "1,2,3,4;"
+                +"2,3,4,5;"
+                +"3,4,5,6"
+        );
+        CMatrix<Rational,C2<Rational>> result = tested0.mul(tested0.transpose());
+        CMatrix<Rational,C2<Rational>> expected = mr.b(
+                 "30,40,50;"
+                +"40,54,68;"
+                +"50,68,86"
+        );
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    
+    @Test
     public void testSubMatrix() {
         System.out.println(test.TestUtils.methodName(0));
         CMatrix<Rational,C2<Rational>> result = mr.b(             "1,0,0;"
