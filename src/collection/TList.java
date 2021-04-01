@@ -745,6 +745,12 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
     public <K,C extends Context<K,C>> CList<K,C> toC(Function<T,K> f, ContextBuilder<K,C> builder) {
         return CList.c(builder, this.map(f));
     }
+    public <K,C extends Context<K,C>> CList<K,C> stringToC(Function<T,String> f, ContextBuilder<K,C> builder) {
+        return new CList(builder,this.map(f).map(s->builder.b(s)));
+    }
+    public <K,C extends Context<K,C>> CList<K,C> directToC(Function<T,C> f, ContextBuilder<K,C> builder) {
+        return new CList(builder,this.map(f));
+    }
     
 //---------- Filtering
     /**

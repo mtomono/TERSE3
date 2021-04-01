@@ -55,6 +55,10 @@ public class CList<K, T extends Context<K,T>> implements TListWrapper<T,CList<K,
         this.body=body;
         this.b=context;
     }
+    public CList(ContextBuilder<K,T> context, T... body) {
+        this.body=TList.sof(body);
+        this.b=context;
+    }
     static public <K, T extends Context<K,T>> CList<K,T> c(ContextBuilder<K,T> context, TList<K> vs) {
         return new CList<>(context, vs.map(v->context.c(v)));
     }
