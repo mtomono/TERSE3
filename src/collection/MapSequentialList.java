@@ -30,16 +30,16 @@ import java.util.function.Function;
  */
 public class MapSequentialList<S, T> extends AbstractSequentialList<T> implements Monitorable {
     List<S> body;
-    Function<S, T> map;
-    Function<T, S> rmap;
+    Function<? super S, ? extends T> map;
+    Function<? super T, ? extends S> rmap;
     
-    public MapSequentialList(List<S> body, Function<S, T> map, Function<T, S> rmap) {
+    public MapSequentialList(List<S> body, Function<? super S, ? extends T> map, Function<? super T, ? extends S> rmap) {
         this.body = body;
         this.map = map;
         this.rmap = rmap;
     }
     
-    public MapSequentialList(List<S> body, Function<S, T> map) {
+    public MapSequentialList(List<S> body, Function<? super S, ? extends T> map) {
         this(body, map, e->{throw new RuntimeException("NoReach : ");});
     }
     @Override

@@ -163,7 +163,7 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
     }
     
     public <S> TList<S> cast() {
-        return map(e->(S)e);
+        return (TList<S>)this;
     }
     
     /**
@@ -572,7 +572,7 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
      * @param rmap
      * @return 
      */
-    public <S> TList<S> map(Function<T, S> map, Function<S, T> rmap) {
+    public <S> TList<S> map(Function<? super T, ? extends S> map, Function<? super S, ? extends T> rmap) {
         return (body instanceof RandomAccess) ? new TListRandom<>(new MapRandomList<>(this, map, rmap)) : new TList<>(new MapSequentialList<>(this, map, rmap));
     }
     
@@ -584,7 +584,7 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
      * @param map
      * @return 
      */
-    public <S> TList<S> map(Function<T, S> map) {
+    public <S> TList<S> map(Function<? super T, ? extends S> map) {
         return map(map, e->{throw new RuntimeException("Tried to change a list mapped without reverse map");});
     }
     
@@ -594,8 +594,8 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
      * @param map
      * @return 
      */
-    public <S> TList<S> mapc(Function<T, S> map) {
-        return map(map).cache();
+    public <S> TList<S> mapc(Function<? super T, ? extends S> map) {
+        return this.<S>map(map).cache();
     }
     
     /**
@@ -607,8 +607,8 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
      * @param map
      * @return 
      */
-    public <S> TList<S> flatMap(Function<T, List<S>> map) {
-        return (body instanceof RandomAccess) ? new TListRandom<>(new ListRandomList<>(map(map))) : new TList<>(new ListSequentialList<>(map(map)));
+    public <S> TList<S> flatMap(Function<? super T,? extends List<? extends S>> map) {
+        return (body instanceof RandomAccess) ? new TListRandom<>(new ListRandomList<>((List<List<S>>)map(map))) : new TList<>(new ListSequentialList<>((List<List<S>>)map(map)));
     }
     
     /**
@@ -617,8 +617,8 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
      * @param map
      * @return 
      */
-    public <S> TList<S> flatMapc(Function<T, List<S>> map) {
-        return (body instanceof RandomAccess) ? new TListRandom<>(new ListRandomList<>(mapc(map))) : new TList<>(new ListSequentialList<>(mapc(map)));
+    public <S> TList<S> flatMapc(Function<? super T, ? extends List<? extends S>> map) {
+        return (body instanceof RandomAccess) ? new TListRandom<>(new ListRandomList<>((List<List<S>>)mapc(map))) : new TList<>(new ListSequentialList<>((List<List<S>>)mapc(map)));
     }
         
     /**

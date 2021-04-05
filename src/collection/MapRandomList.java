@@ -29,16 +29,16 @@ import java.util.function.Function;
  */
 public class MapRandomList<S, T> extends AbstractList<T> implements RandomAccess,Monitorable {
     List<S> base;
-    Function<S, T> map;
-    Function<T, S> rmap;
+    Function<? super S, ? extends T> map;
+    Function<? super T, ? extends S> rmap;
     
-    public MapRandomList(List<S> base, Function<S, T> map, Function<T, S> rmap) {
+    public MapRandomList(List<S> base, Function<? super S, ? extends T> map, Function<? super T, ? extends S> rmap) {
         this.base = base;
         this.map = map;
         this.rmap = rmap;
     }
     
-    public MapRandomList(List<S> base, Function<S, T> map) {
+    public MapRandomList(List<S> base, Function<? super S, ? extends T> map) {
         this(base, map, e->{throw new RuntimeException("tried to change a member of map result which is unchangeable: "+ e);});
     }
     

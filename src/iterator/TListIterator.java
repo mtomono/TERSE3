@@ -74,4 +74,7 @@ public class TListIterator<T> implements ListIterator<T> {
         body.add(e);
     }
     
+    public OnNodeIterator<T> onto() {
+        return new OnNodeIterator<>(this);
+    }
 }

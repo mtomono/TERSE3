@@ -26,16 +26,16 @@ import java.util.function.Function;
  */
 public class MapListIterator<S, T> implements ListIterator<T> {
     ListIterator<S> body;
-    Function<S, T> map;
-    Function<T, S> rmap;
+    Function<? super S, ? extends T> map;
+    Function<? super T, ? extends S> rmap;
     
-    public MapListIterator(ListIterator<S> body, Function<S, T> map, Function<T, S> rmap) {
+    public MapListIterator(ListIterator<S> body, Function<? super S, ? extends T> map, Function<? super T, ? extends S> rmap) {
         this.body = body;
         this.map = map;
         this.rmap = rmap;
     }
     
-    public MapListIterator(ListIterator<S> body, Function<S, T> map) {
+    public MapListIterator(ListIterator<S> body, Function<? super S, ? extends T> map) {
         this(body, map, e->{throw new RuntimeException("NoReach : no rmap specified");});
     }
     
