@@ -468,6 +468,9 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
         return sof(t);
     }
     
+    public TList<P<Integer,T>> scale() {
+        return pair(new Scale()).map(p->p.flip());
+    }
 //--------- Judging
     /**
      * check whether all the elements are the same.
