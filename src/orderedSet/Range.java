@@ -41,14 +41,17 @@ public class Range<T> {
     public static Builder<Integer> intRange = b();
     public static Builder<Long> longRange = b();
     public static Builder<Double> doubleRange= b();
+    public static Builder<Float> floatRange= b();
     public static Builder<BigDecimal> bdRange= b();
     public static Builder<C2<Integer>> intRange2 = b(C2.i.order());
     public static Builder<C2<Long>> longRange2=b(C2.l.order());
     public static Builder<C2<Double>> doubleRange2=b(C2.d.order());
+    public static Builder<C2<Float>> floatRange2=b(C2.f.order());
     public static Builder<C2<BigDecimal>> bdRange2=b(C2.bd.order());
     public static Builder<C2N<Integer>> intRange2N = b(C2N.i.order());
     public static Builder<C2N<Long>> longRange2N=b(C2N.l.order());
     public static Builder<C2N<Double>> doubleRange2N=b(C2N.d.order());
+    public static Builder<C2N<Float>> floatRange2N=b(C2N.f.order());
     public static Builder<C2N<BigDecimal>> bdRange2N=b(C2N.bd.order());
     public static <T> Builder<T> b(Order<T> order) {
         return new Builder<>(order);
