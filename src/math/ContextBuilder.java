@@ -31,9 +31,13 @@ public interface ContextBuilder<K, CONTEXT extends Context<K,CONTEXT>> extends W
     public ContextBuilder<K,CONTEXT> format(Format<K> format);
     public CONTEXT c(K v);
     default CONTEXT b(int v) {return c(body().b(v));}
+    default CONTEXT b(Integer v) {return c(body().b(v));}
     default CONTEXT b(long v) {return c(body().b(v));}
+    default CONTEXT b(Long v) {return c(body().b(v));}
     default CONTEXT b(float v) {return c(body().b(v));}
+    default CONTEXT b(Float v) {return c(body().b(v));}
     default CONTEXT b(double v) {return c(body().b(v));}
+    default CONTEXT b(Double v) {return c(body().b(v));}
     default CONTEXT b(String v) {return c(body().b(v));}
     default CONTEXT f(String v) throws ParseException {return c(format().f(v));}
     default String toString(CONTEXT v) {return format().toString(v.body());}
@@ -43,5 +47,15 @@ public interface ContextBuilder<K, CONTEXT extends Context<K,CONTEXT>> extends W
     default CONTEXT zero() {return c(body().zero());}
     default TList<TList<CONTEXT>> i(int n) {
         return TList.range(0,n).map(i->TList.nCopies(n, zero()).sfix().cset(i, one()));
+    }
+    default <L,S extends Context<L,S>> CONTEXT cast(Context<L,S> other) {
+        L value=other.body();
+        if (value instanceof Integer) return b((int)value);
+        if (value instanceof Long) return b((long)value);
+        if (value instanceof Float) return b((float)value);
+        if (value instanceof Double) return b((double)value);
+        if (value instanceof BigDecimal) return b((BigDecimal)value);
+        if (value instanceof Rational) return b((Rational)value);
+        throw new RuntimeException("Cast failed");
     }
 }

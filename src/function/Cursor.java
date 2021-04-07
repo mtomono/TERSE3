@@ -14,6 +14,7 @@
  */
 package function;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
@@ -34,18 +35,24 @@ public class Cursor<T> {
      * @param f
      * @return 
      */
-    public Cursor<T> a(UnaryOperator<T> f) {
+    public Cursor<T> c(UnaryOperator<T> f) {
         this.body=f.apply(body);
         return this;
     }
+    public static <T> UnaryOperator<T> o(Consumer<T> body) {
+        return x->{ body.accept(x); return x; };
+    }
     /**
-     * map
+     * map to Cursor<S>
      * @param <S>
      * @param f
      * @return 
      */
-    public <S> S m(Function<T,S> f) {
-        return f.apply(body);
+    public Cursor<T> co(Consumer<T> body) {
+        return c(o(body));
+    }
+    public <S> Cursor<S> f(Function<T,S> f) {
+        return new Cursor<>(f.apply(body));
     }
     public T get() {
         return body;
