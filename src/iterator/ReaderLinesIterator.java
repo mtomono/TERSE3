@@ -14,8 +14,12 @@
  */
 package iterator;
 
+import function.FunctionWithCheckedException;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.stream.Stream;
 
 /**
  * Iterator which returns lines from a BufferedReader.
@@ -26,6 +30,15 @@ import java.io.IOException;
  */
 public class ReaderLinesIterator extends AbstractBufferedIterator<String> {
     BufferedReader r;
+    public static Stream<String> s(File f) {
+        return new TIterator(new ReaderLinesIterator(f)).stream();
+    }
+    public ReaderLinesIterator(File f) {
+        this(FunctionWithCheckedException.<File,FileReader>pass(x->new FileReader(x)).apply(f));
+    }
+    public ReaderLinesIterator(FileReader r) {
+        this(new BufferedReader(r));
+    }
     public ReaderLinesIterator(BufferedReader r) {
         this.r=r;
     }
