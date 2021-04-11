@@ -43,4 +43,10 @@ public interface ChainedCompare<S> extends Comparable<ChainedCompare<S>>{
     default boolean le(S v) {
         return order().le(self(),v);
     }
+    default S max(S v) {
+        return order().lt(self(), v)?v:self();
+    }
+    default S min(S v) {
+        return order().lt(self(), v)?self():v;
+    }
 }
