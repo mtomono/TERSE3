@@ -14,13 +14,14 @@
  */
 package iterator;
 
-import function.FunctionWithCheckedException;
+import static function.FunctionWithCheckedException.pass;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -35,8 +36,9 @@ public class ReaderLinesIterator extends AbstractBufferedIterator<String> {
     public static Stream<String> s(File f) {
         return new TIterator(new ReaderLinesIterator(f)).stream();
     }
+    static Function<File,FileReader> reader=pass(FileReader::new);
     public ReaderLinesIterator(File f) {
-        this(FunctionWithCheckedException.<File,FileReader>pass(x->new FileReader(x)).apply(f));
+        this(reader.apply(f));
     }
     public ReaderLinesIterator(InputStream is) {
         this(new BufferedReader(new InputStreamReader(is)));

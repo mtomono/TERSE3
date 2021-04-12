@@ -16,13 +16,11 @@ public interface FunctionWithCheckedException<S,T> {
     T apply(S s) throws Exception;
     default Function<S,T> uncheck() {
         return s->{
-            T retval;
             try {
-                retval=apply(s);
+                return apply(s);
             } catch(Exception u) {
                 throw new RuntimeException(u);
             }
-            return retval;
         };
     }
     static public <S,T> Function<S,T> pass(FunctionWithCheckedException<S,T> f) {
