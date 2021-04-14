@@ -12,17 +12,11 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.
  */
-package iterator;
+package io;
 
-import static function.FunctionWithCheckedException.pass;
+import iterator.AbstractBufferedIterator;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.function.Function;
-import java.util.stream.Stream;
 
 /**
  * Iterator which returns lines from a BufferedReader.
@@ -32,20 +26,7 @@ import java.util.stream.Stream;
  * @author masao
  */
 public class ReaderLinesIterator extends AbstractBufferedIterator<String> {
-    BufferedReader r;
-    public static Stream<String> s(File f) {
-        return new TIterator(new ReaderLinesIterator(f)).stream();
-    }
-    static Function<File,FileReader> reader=pass(FileReader::new);
-    public ReaderLinesIterator(File f) {
-        this(reader.apply(f));
-    }
-    public ReaderLinesIterator(InputStream is) {
-        this(new BufferedReader(new InputStreamReader(is)));
-    }
-    public ReaderLinesIterator(FileReader r) {
-        this(new BufferedReader(r));
-    }
+    final public BufferedReader r;
     public ReaderLinesIterator(BufferedReader r) {
         this.r=r;
     }

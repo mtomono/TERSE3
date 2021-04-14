@@ -7,7 +7,6 @@ package io;
 
 import static function.PassedConsumer.passC;
 import static function.PassedFunction.passF;
-import iterator.ReaderLinesIterator;
 import iterator.TIterator;
 import java.io.BufferedReader;
 import java.io.File;
