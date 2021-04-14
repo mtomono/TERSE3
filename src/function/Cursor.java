@@ -42,12 +42,6 @@ public class Cursor<T> {
     public static <T> UnaryOperator<T> o(Consumer<T> body) {
         return x->{ body.accept(x); return x; };
     }
-    /**
-     * map to Cursor<S>
-     * @param <S>
-     * @param f
-     * @return 
-     */
     public Cursor<T> co(Consumer<T> body) {
         return c(o(body));
     }
