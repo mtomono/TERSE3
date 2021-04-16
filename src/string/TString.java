@@ -8,6 +8,8 @@ package string;
 import collection.TList;
 import function.Transformable;
 import function.Wrapper;
+import math.Context;
+import math.ContextBuilder;
 import parser.StrSource;
 
 /**
@@ -44,6 +46,9 @@ public class TString implements Wrapper<String,TString>,Transformable<TString> {
         StringBuilder sb = new StringBuilder(body);
         strs.stream().forEachOrdered(s->sb.append(s));
         return new TString(sb.toString());
+    }
+    public <K, T extends Context<K,T>> T toC(ContextBuilder<K,T> b) {
+        return b.b(body);
     }
     public String toString() {
         return body;
