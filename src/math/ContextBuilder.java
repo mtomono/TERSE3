@@ -19,6 +19,7 @@ import collection.TList;
 import function.Wrapper;
 import java.math.BigDecimal;
 import java.text.ParseException;
+import string.TString;
 
 /**
  *
@@ -40,6 +41,8 @@ public interface ContextBuilder<K, CONTEXT extends Context<K,CONTEXT>> extends W
     default CONTEXT b(Double v) {return c(body().b(v));}
     default CONTEXT b(String v) {return c(body().b(v));}
     default CONTEXT f(String v) throws ParseException {return c(format().f(v));}
+    default CONTEXT b(TString v) {return b(v.body);}
+    default CONTEXT f(TString v) throws ParseException {return f(v.body);}
     default String toString(CONTEXT v) {return format().toString(v.body());}
     default CONTEXT b(BigDecimal n) {return c(body().b(n));}
     default CONTEXT b(Rational n) {return c(body().b(n));}

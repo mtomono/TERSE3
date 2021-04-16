@@ -8,6 +8,7 @@ package string;
 import collection.TList;
 import function.Transformable;
 import function.Wrapper;
+import parser.StrSource;
 
 /**
  *
@@ -36,6 +37,9 @@ public class TString implements Wrapper<String,TString>,Transformable<TString> {
     public TList<TList<TString>> cells(String regex) {
         return lines().map(l->l.split(regex));
     }
+    public StrSource asSource() {
+        return new StrSource(body);
+    }
     public TString concat(TList<String> strs) {
         StringBuilder sb = new StringBuilder(body);
         strs.stream().forEachOrdered(s->sb.append(s));
@@ -49,6 +53,8 @@ public class TString implements Wrapper<String,TString>,Transformable<TString> {
         if (e == null) {
             return false;
         }
+        if (e instanceof String) 
+            return body.equals(e);
         if (!(e instanceof TString)) {
             return false;
         }
