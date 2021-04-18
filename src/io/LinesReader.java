@@ -53,7 +53,10 @@ public class LinesReader {
     public Stream<String> stream() {
         return iterator().stream();
     }
+    public Set<String> search(SimpleMatcher matcher) {
+        return stream().flatMap(l->matcher.extract(l)).collect(toSet());
+    }
     public Set<String> search(String regex) {
-        return stream().flatMap(l->new SimpleMatcher(regex).extract(l)).collect(toSet());
+        return search(new SimpleMatcher(regex));
     }
 }

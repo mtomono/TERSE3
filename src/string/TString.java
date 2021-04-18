@@ -8,8 +8,10 @@ package string;
 import collection.TList;
 import function.Transformable;
 import function.Wrapper;
+import java.util.stream.Stream;
 import math.Context;
 import math.ContextBuilder;
+import parser.SimpleMatcher;
 import parser.StrSource;
 
 /**
@@ -41,6 +43,9 @@ public class TString implements Wrapper<String,TString>,Transformable<TString> {
     }
     public StrSource asSource() {
         return new StrSource(body);
+    }
+    public Stream<TString> search(String regex) {
+        return new SimpleMatcher(regex).extract(body).map(s->new TString(s));
     }
     public TString concat(TList<String> strs) {
         StringBuilder sb = new StringBuilder(body);
