@@ -20,6 +20,7 @@ import debug.Monitorable;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
+import java.util.function.Function;
 import string.Message;
 
 /**
@@ -58,6 +59,14 @@ public class P<L, R> extends AbstractList<Object> implements Monitorable {
     
     public R r() {
         return r;
+    }
+    
+    public <LL> P<LL,R> mapl(Function<L,LL> f) {
+        return P.p(f.apply(l), r);
+    }
+    
+    public <RR> P<L,RR> mapr(Function<R,RR> f) {
+        return P.p(l,f.apply(r));
     }
     
     public <RR> P<P<L, R>, RR> c(RR rr) {
