@@ -26,9 +26,9 @@ import java.util.function.Function;
  */
 public class MapIterator<E, F> implements Iterator<F> {
     Iterator<E> base;
-    Function<E, F> map;
+    Function<? super E, ? extends F> map;
             
-    public MapIterator(Iterator<E> base, Function<E, F> map) {
+    public MapIterator(Iterator<E> base, Function<? super E, ? extends F> map) {
         this.base = base;
         this.map  = map;
     }

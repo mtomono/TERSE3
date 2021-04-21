@@ -111,7 +111,7 @@ public class TIterator<T> implements Iterator<T> {
         return retval;
     }
     
-    public <S> TIterator<S> map(Function<T, S> map) {
+    public <S> TIterator<S> map(Function<? super T, ? extends S> map) {
         return set(new MapIterator<>(this, map));
     }
     
@@ -127,8 +127,8 @@ public class TIterator<T> implements Iterator<T> {
         return set(new SkipIterator<>(this, pred));
     }
     
-    public <S> TIterator<S> flatMap(Function<T, Iterator<S>> map) {
-        return set(new IteratorIterator<>(new MapIterator<>(this, map)));
+    public <S> TIterator<S> flatMap(Function<? super T, ? extends Iterator<? extends S>> map) {
+        return set(new IteratorIterator<>((Iterator<Iterator<S>>)new MapIterator<>(this, map)));
     }
     
     public <S> TIterator<S> weave(Function<T, Iterator<S>> map) {
