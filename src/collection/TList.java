@@ -623,6 +623,10 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
     public <S> TList<S> flatMapc(Function<? super T, ? extends List<? extends S>> map) {
         return (body instanceof RandomAccess) ? new TListRandom<>(new ListRandomList<>((List<List<S>>)mapc(map))) : new TList<>(new ListSequentialList<>((List<List<S>>)mapc(map)));
     }
+    
+    public <S> TIterator<S> flatIterator(Function<T,Iterator<S>> map) {
+        return iterator().flatMap(map);
+    }
         
     /**
      * transpose.
