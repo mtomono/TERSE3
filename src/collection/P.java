@@ -61,11 +61,11 @@ public class P<L, R> extends AbstractList<Object> implements Monitorable {
         return r;
     }
     
-    public <LL> P<LL,R> mapl(Function<L,LL> f) {
+    public <LL> P<LL,R> mapl(Function<? super L,? extends LL> f) {
         return P.p(f.apply(l), r);
     }
     
-    public <RR> P<L,RR> mapr(Function<R,RR> f) {
+    public <RR> P<L,RR> mapr(Function<? super R,? extends RR> f) {
         return P.p(l,f.apply(r));
     }
     
@@ -73,11 +73,11 @@ public class P<L, R> extends AbstractList<Object> implements Monitorable {
         return new P<>(this, rr);
     }
     
-    public boolean test(BiPredicate<L,R> test) {
+    public boolean test(BiPredicate<? super L,? super R> test) {
         return test.test(l, r);
     }
     
-    public <S> S map(BiFunction<L,R,S> map) {
+    public <S> S map(BiFunction<? super L,? super R,? extends S> map) {
         return map.apply(l, r);
     }
     
