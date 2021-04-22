@@ -78,8 +78,9 @@ public class Range<T> {
         public Range<T> inEitherWay(T one, T two) {
             return order.lt(one,two)?r(one,two):r(two,one);
         }
-        public Optional<Range<T>> cover(TList<Range<T>> rl) {
-            return Optional.of(new Range<>(this,rl.map(r->r.start).min(order).get(),rl.map(r->r.end).max(order).get()));
+        public Optional<Range<T>> cover(TList<Range<T>> ranges) {
+            if (ranges.isEmpty()) return Optional.empty();
+            return Optional.of(new Range<>(this,ranges.map(r->r.start).min(order).get(),ranges.map(r->r.end).max(order).get()));
         }
         public TList<Range<T>> sortToStart(TList<Range<T>> ranges) {
             return ranges.sortTo(order.map(r->r.start()));
