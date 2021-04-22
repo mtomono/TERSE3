@@ -25,7 +25,7 @@ import java.util.function.Predicate;
  */
 public class ChunkEnvelopIterator<T> extends ChunkIteratorBase<T> {
 
-    public ChunkEnvelopIterator(Iterator<T> body, Predicate<T> pred) {
+    public ChunkEnvelopIterator(Iterator<T> body, Predicate<? super T> pred) {
         super(body,pred);
     }
 

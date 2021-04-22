@@ -537,7 +537,7 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
      * @param pred
      * @return 
      */
-    public boolean forAll(Predicate<T> pred) {
+    public boolean forAll(Predicate<? super T> pred) {
         return filter(pred.negate()).isEmpty();
     }
     
@@ -556,7 +556,7 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
      * @param pred
      * @return 
      */
-    public boolean exists(Predicate<T> pred) {
+    public boolean exists(Predicate<? super T> pred) {
         return !filter(pred).isEmpty();
     }
     
@@ -566,7 +566,7 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
      * @param pred
      * @return 
      */
-    public boolean anyMatch(Predicate<T> pred) {
+    public boolean anyMatch(Predicate<? super T> pred) {
         return exists(pred);
     }
     
@@ -817,7 +817,7 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
      * @param cond
      * @return 
      */
-    public int indexOf(Predicate<T> cond) {
+    public int indexOf(Predicate<? super T> cond) {
         return TList.range(0, size()).filter(i->cond.test(get(i))).getOpt(0).orElse(-1);
     }
     
@@ -874,11 +874,11 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
         return new TList<>(new FilterList<>(this, cond));
     }
     
-    public TList<Integer> filterAt(Predicate<T> cond) {
+    public TList<Integer> filterAt(Predicate<? super T> cond) {
         return pair(new Scale()).filter(p->cond.test(p.l())).map(p->p.r());
     }
     
-    public <S> TList<T> filterWith(TList<S> filter, Predicate<S> pred) {
+    public <S> TList<T> filterWith(TList<S> filter, Predicate<? super S> pred) {
         return pair(filter).filter(p->pred.test(p.r())).map(p->p.l());
     }
     
@@ -1198,20 +1198,20 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
         return TList.sof(subList(0, indexOf(division) + 1), subList(indexOf(division) + 1, size()));
     }
         
-    public TList<TList<T>> filterChunk(Predicate<T> pred, BiFunction<TList<T>,Predicate<T>,TList<TList<T>>> chunk) {
+    public TList<TList<T>> filterChunk(Predicate<? super T> pred, BiFunction<TList<T>,Predicate<? super T>,TList<TList<T>>> chunk) {
         return chunk.apply(this,pred).filter(l->!l.filter(pred.negate()).isEmpty());
     }
     
-    static public <T> BiFunction<TList<T>,Predicate<T>,TList<TList<T>>> chunk() {
+    static public <T> BiFunction<TList<T>,Predicate<? super T>,TList<TList<T>>> chunk() {
         return (a,b)->a.chunk(b);
     }
-    static public <T> BiFunction<TList<T>,Predicate<T>,TList<TList<T>>> reverseChunk() {
+    static public <T> BiFunction<TList<T>,Predicate<? super T>,TList<TList<T>>> reverseChunk() {
         return (a,b)->a.reverseChunk(b);
     }
-    static public <T> BiFunction<TList<T>,Predicate<T>,TList<TList<T>>> trimmedChunk() {
+    static public <T> BiFunction<TList<T>,Predicate<? super T>,TList<TList<T>>> trimmedChunk() {
         return (a,b)->a.trimmedChunk(b);
     }
-    static public <T> BiFunction<TList<T>,Predicate<T>,TList<TList<T>>> envelopChunk() {
+    static public <T> BiFunction<TList<T>,Predicate<? super T>,TList<TList<T>>> envelopChunk() {
         return (a,b)->a.envelopChunk(b);
     }
     
@@ -1222,7 +1222,7 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
      * @param pred
      * @return 
      */
-    public TList<TList<T>> chunk(Predicate<T> pred) {
+    public TList<TList<T>> chunk(Predicate<? super T> pred) {
         return reverse().reverseChunk(pred).map(l->l.reverse()).reverse();
     }
         
@@ -1231,11 +1231,11 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
      * @param pred
      * @return 
      */
-    public TList<TList<T>> trimmedChunk(Predicate<T> pred) {
+    public TList<TList<T>> trimmedChunk(Predicate<? super T> pred) {
         return chunk(pred).map(l->l.filter(pred.negate()));
     }
     
-    public TList<TList<T>> envelopChunk(Predicate<T> pred) {
+    public TList<TList<T>> envelopChunk(Predicate<? super T> pred) {
         TList<TList<T>> chunk = chunk(pred);
         Iterator<TList<T>> iter = chunk.iterator();
         if (!iter.hasNext())
@@ -1252,7 +1252,7 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
      * @param pred
      * @return 
      */    
-    public TList<TList<T>> reverseChunk(Predicate<T> pred) {
+    public TList<TList<T>> reverseChunk(Predicate<? super T> pred) {
         if (isEmpty())
             return TList.empty();
         TList<Integer> divides = filterAt(pred).startFrom(0).append(size());
@@ -1273,7 +1273,7 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
      * @param pred
      * @return 
      */
-    public TList<TList<T>> diffChunk(BiPredicate<T,T> pred) {
+    public TList<TList<T>> diffChunk(BiPredicate<? super T,? super T> pred) {
         Iterator<T> iter=iterator();
         if (!iter.hasNext())
             return TList.empty();

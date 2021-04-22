@@ -25,11 +25,11 @@ import java.util.function.Predicate;
  */
 abstract public class ChunkIteratorBase<T> extends AbstractBufferedIterator<List<T>>{
     Iterator<T> body;
-    Predicate<T> pred;
+    Predicate<? super T> pred;
     List<T> retval;
     boolean finished;
 
-    public ChunkIteratorBase(Iterator<T> body, Predicate<T> pred) {
+    public ChunkIteratorBase(Iterator<T> body, Predicate<? super T> pred) {
         this.body = body;
         this.pred = pred;
         this.retval = new ArrayList<>();

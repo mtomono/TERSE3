@@ -120,11 +120,11 @@ public class TIterator<T> implements Iterator<T> {
         return set(new IteratorIterator<>(a2i(this, iter)));
     }
     
-    public TIterator<T> filter(Predicate<T> pred) {
+    public TIterator<T> filter(Predicate<? super T> pred) {
         return set(new SelectIterator<>(this, pred));
     }
     
-    public TIterator<T> skip(BiPredicate<T,T> pred) {
+    public TIterator<T> skip(BiPredicate<? super T,? super T> pred) {
         return set(new SkipIterator<>(this, pred));
     }
     
@@ -211,32 +211,32 @@ public class TIterator<T> implements Iterator<T> {
         return accum((a,b)->map.apply(b,a));
     }
     
-    public TIterator<TList<T>> chunk(Predicate<T> pred) {
+    public TIterator<TList<T>> chunk(Predicate<? super T> pred) {
         return TIterator.set(new ChunkIterator<>(this,pred)).map(l->TList.set(l));
     }
     
-    public TIterator<TList<T>> reverseChunk(Predicate<T> pred) {
+    public TIterator<TList<T>> reverseChunk(Predicate<? super T> pred) {
         return TIterator.set(new ChunkReverseIterator<>(this,pred)).map(l->TList.set(l));
     }
     
-    public TIterator<TList<T>> envelopChunk(Predicate<T> pred) {
+    public TIterator<TList<T>> envelopChunk(Predicate<? super T> pred) {
         return TIterator.set(new ChunkEnvelopIterator<>(this,pred)).map(l->TList.set(l));
     }
     
-    public TIterator<TList<T>> trimmedChunk(Predicate<T> pred) {
+    public TIterator<TList<T>> trimmedChunk(Predicate<? super T> pred) {
         return TIterator.set(new ChunkTrimmedIterator<>(this,pred)).map(l->TList.set(l));
     }
     
-    public boolean forAll(Predicate<T> pred) {
+    public boolean forAll(Predicate<? super T> pred) {
         return !filter(pred.negate()).hasNext();
     }
-    public boolean allMatch(Predicate<T> pred) {
+    public boolean allMatch(Predicate<? super T> pred) {
         return forAll(pred);
     }
-    public boolean exists(Predicate<T> pred) {
+    public boolean exists(Predicate<? super T> pred) {
         return filter(pred).hasNext();
     }
-    public boolean anyMatch(Predicate<T> pred) {
+    public boolean anyMatch(Predicate<? super T> pred) {
         return exists(pred);
     }
     

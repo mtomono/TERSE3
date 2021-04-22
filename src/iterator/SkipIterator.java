@@ -26,9 +26,9 @@ import java.util.function.BiPredicate;
  */
 public class SkipIterator<T> extends AbstractBufferedIterator<T> {
     Iterator<T> body;
-    BiPredicate<T,T> pred;
+    BiPredicate<? super T,? super T> pred;
     Optional<T> pre;
-    public SkipIterator(Iterator<T> body, BiPredicate<T,T> pred) {
+    public SkipIterator(Iterator<T> body, BiPredicate<? super T,? super T> pred) {
         this.body = body;
         this.pred = pred;
         this.pre = Optional.empty();

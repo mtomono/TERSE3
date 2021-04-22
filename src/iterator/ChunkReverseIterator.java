@@ -25,7 +25,7 @@ import java.util.function.Predicate;
  */
 public class ChunkReverseIterator<T> extends ChunkIteratorBase<T> {
 
-    public ChunkReverseIterator(Iterator<T> body, Predicate<T> pred) {
+    public ChunkReverseIterator(Iterator<T> body, Predicate<? super T> pred) {
         super(body,pred);
     }
 
