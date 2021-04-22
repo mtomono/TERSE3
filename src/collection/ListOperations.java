@@ -52,7 +52,7 @@ public class ListOperations {
      * @param pred
      * @return 
      */
-    static public <T> ListIterator<T> find(ListIterator<T> iter, Predicate<T> pred) {
+    static public <T> ListIterator<T> find(ListIterator<T> iter, Predicate<? super T> pred) {
         while (iter.hasNext())
             if (pred.test(iter.next())) {
                 iter.previous();
@@ -61,7 +61,7 @@ public class ListOperations {
         return iter;
     }
     
-    static public <T> ListIterator<T> findBackward(ListIterator<T> iter, Predicate<T> pred) {
+    static public <T> ListIterator<T> findBackward(ListIterator<T> iter, Predicate<? super T> pred) {
         while (iter.hasPrevious())
             if (pred.test(iter.previous())) {
                 iter.next();
@@ -70,7 +70,7 @@ public class ListOperations {
         return iter;
     }
     
-    static public <T> Iterator<T> findIterator(ListIterator<T> iter, Predicate<T> pred) {
+    static public <T> Iterator<T> findIterator(ListIterator<T> iter, Predicate<? super T> pred) {
         return new Iterator<T>() {
             @Override
             public boolean hasNext() {
@@ -84,7 +84,7 @@ public class ListOperations {
     }
     
     
-    public static <T> ListIterator<T> findNthOccurence(ListIterator<T> iter, Predicate<T> pred, int nth) {
+    public static <T> ListIterator<T> findNthOccurence(ListIterator<T> iter, Predicate<? super T> pred, int nth) {
         if (nth < 1)
             return iter;
         find(iter, pred);
@@ -97,7 +97,7 @@ public class ListOperations {
         return iter;
     }
     
-    static public <T> ListIterator<T> trim(ListIterator<T> iter, Predicate<T> pred) {
+    static public <T> ListIterator<T> trim(ListIterator<T> iter, Predicate<? super T> pred) {
         while (iter.hasNext()) {
             if (pred.test(iter.next()))
                 iter.remove();
@@ -109,13 +109,13 @@ public class ListOperations {
         return iter;
     }
 
-    static public <T> ListIterator<T> trimAround(ListIterator<T> iter, Predicate<T> pred) {
+    static public <T> ListIterator<T> trimAround(ListIterator<T> iter, Predicate<? super T> pred) {
         trim(new ReverseIterator<>(iter), pred);
         trim(iter, pred);
         return iter;
     }
 
-    static public <T> void trimEdge(List<T> list, Predicate<T> pred) {
+    static public <T> void trimEdge(List<T> list, Predicate<? super T> pred) {
         trim(list.listIterator(), pred);
         trim(new ReverseIterator<>(endIterator(list)), pred);
     }
@@ -128,7 +128,7 @@ public class ListOperations {
      * @param pred condition
      * @param result where result is accumulated
      */
-    static public <T> void extract(ListIterator<T> iter, Predicate<T> pred, List<T> result) {
+    static public <T> void extract(ListIterator<T> iter, Predicate<? super T> pred, List<T> result) {
         while (iter.hasNext()) {
             T e = iter.next();
             if (pred.test(e)) {
@@ -146,7 +146,7 @@ public class ListOperations {
      * @param sup
      * @param result 
      */
-    static public <T> void replace(ListIterator<T> iter, Predicate<T> pred, Supplier<T> sup, List<T> result) {
+    static public <T> void replace(ListIterator<T> iter, Predicate<? super T> pred, Supplier<T> sup, List<T> result) {
         while (iter.hasNext()) {
             T e = iter.next();
             if (pred.test(e)) {
@@ -163,7 +163,7 @@ public class ListOperations {
      * @param op
      * @param result 
      */
-    static public <T> void replace(ListIterator<T> iter, Predicate<T> pred, Function<T, T> op, List<T> result) {
+    static public <T> void replace(ListIterator<T> iter, Predicate<? super T> pred, Function<T, T> op, List<T> result) {
         while (iter.hasNext()) {
             T e = iter.next();
             if (pred.test(e)) {

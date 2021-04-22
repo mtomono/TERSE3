@@ -29,6 +29,7 @@ import static java.lang.Math.abs;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collector;
+import java.util.stream.Stream;
 import orderedSet.Range;
 import math.CList;
 import math.Context;
@@ -541,12 +542,32 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
     }
     
     /**
+     * All match.
+     * for the sake of compatibility with Stream.
+     * @param pred
+     * @return 
+     */
+    public boolean allMatch(Predicate<? super T> pred) {
+        return allMatch(pred);
+    }
+    
+    /**
      * check whether a predicate applies to at least one element in the list.
      * @param pred
      * @return 
      */
     public boolean exists(Predicate<T> pred) {
         return !filter(pred).isEmpty();
+    }
+    
+    /**
+     * Any match.
+     * for the sake of compatibility with Stream.
+     * @param pred
+     * @return 
+     */
+    public boolean anyMatch(Predicate<T> pred) {
+        return exists(pred);
     }
     
 //--------- Transforming
@@ -606,6 +627,13 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
      * flat the nested list while mapping.
      * you can use this method only to flat the nested list by giving e->e
      * (i.e. identical mapping) as parameter.
+     * caveat:
+     * when you need to calculate all over the items in a nested list, this method is not a good choice.
+     * everytime getting an item in a nested list, address needs to be calculated, this calculation is 
+     * unavoidable except having a iteration context. 
+     * iterator created by flatten() should do much better in this scenario.
+     * still, this method is effective when the number of items accessed is quite limited. thus 
+     * this method remains here.
      * @param <S>
      * @param map
      * @return 
@@ -616,6 +644,11 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
     
     /**
      * flatMap cached.
+     * caveat:
+     * sometimes cache can alleviate the problem with flatMap. but this doesn't go with 
+     * side effects. 
+     * when accessing all the items in the list, consider about using flatten(). that's 
+     * still the best way.
      * @param <S>
      * @param map
      * @return 
@@ -624,8 +657,27 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
         return (body instanceof RandomAccess) ? new TListRandom<>(new ListRandomList<>((List<List<S>>)mapc(map))) : new TList<>(new ListSequentialList<>((List<List<S>>)mapc(map)));
     }
     
-    public <S> TIterator<S> flatIterator(Function<T,Iterator<S>> map) {
-        return iterator().flatMap(map);
+    /**
+     * flattening to iterator.
+     * @param <S>
+     * @param map
+     * @return 
+     */
+    public <S> TIterator<S> flatten(Function<? super T,? extends List<? extends S>> map) {
+        return iterator().flatMap(map.andThen(l->(Iterator<S>)l.iterator()));
+    }
+    
+    /**
+     * flattening to stream.
+     * flatten lists directly into stream.
+     * you can expect a bit improvement in performance in some cases. when stream interface 
+     * is satisfactory to your needs, it's worth trying.
+     * @param <S>
+     * @param map
+     * @return 
+     */
+    public <S> Stream<S> flattenS(Function<? super T, ? extends List<? extends S>> map) {
+        return stream().flatMap(map.andThen(l->(Stream<S>)l.stream()));
     }
         
     /**
@@ -818,7 +870,7 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
      * @param cond
      * @return 
      */
-    public TList<T> filter(Predicate<T> cond) {
+    public TList<T> filter(Predicate<? super T> cond) {
         return new TList<>(new FilterList<>(this, cond));
     }
     

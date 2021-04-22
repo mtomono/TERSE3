@@ -29,12 +29,12 @@ import java.util.function.Predicate;
 public class FilterListIterator<T> implements ListIterator<T> {
     ListIterator<T> iter;
     int index = 0;
-    Predicate<T> pred;
-    Predicate<T> inputErr;
+    Predicate<? super T> pred;
+    Predicate<? super T> inputErr;
     boolean setable;
     boolean removable;
 
-    public FilterListIterator(ListIterator<T> iter, Predicate<T> pred, int index, Predicate<T> inputErr) {
+    public FilterListIterator(ListIterator<T> iter, Predicate<? super T> pred, int index, Predicate<? super T> inputErr) {
         this.iter = iter;
         this.pred = pred;
         this.inputErr = inputErr;
@@ -44,11 +44,11 @@ public class FilterListIterator<T> implements ListIterator<T> {
         findNthOccurence(iter, pred, index - 1);
     }
 
-    public FilterListIterator(ListIterator<T> iter, Predicate<T> pred, int index) {
+    public FilterListIterator(ListIterator<T> iter, Predicate<? super T> pred, int index) {
         this(iter, pred, index, e->{throw new RuntimeException("input value does not meet the criteria");});
     }
 
-    public FilterListIterator(ListIterator<T> iter, Predicate<T> pred) {
+    public FilterListIterator(ListIterator<T> iter, Predicate<? super T> pred) {
         this(iter, pred, 0);
     }
 

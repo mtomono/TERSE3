@@ -30,8 +30,8 @@ import java.util.function.Predicate;
  */
 public class FilterList<T> extends AbstractSequentialList<T> implements Monitorable {
     List<T> base;
-    Predicate<T> cond;
-    public FilterList(List<T> base, Predicate<T> cond) {
+    Predicate<? super T> cond;
+    public FilterList(List<T> base, Predicate<? super T> cond) {
         this.base = base;
         this.cond = cond;
     }

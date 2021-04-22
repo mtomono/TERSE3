@@ -30,6 +30,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.*;
+import java.util.stream.Collector;
 import java.util.stream.Stream;
 
 /**
@@ -226,8 +227,25 @@ public class TIterator<T> implements Iterator<T> {
         return TIterator.set(new ChunkTrimmedIterator<>(this,pred)).map(l->TList.set(l));
     }
     
+    public boolean forAll(Predicate<T> pred) {
+        return !filter(pred.negate()).hasNext();
+    }
+    public boolean allMatch(Predicate<T> pred) {
+        return forAll(pred);
+    }
+    public boolean exists(Predicate<T> pred) {
+        return filter(pred).hasNext();
+    }
+    public boolean anyMatch(Predicate<T> pred) {
+        return exists(pred);
+    }
+    
     public Stream<T> stream() {
         return toStream(this);
+    }
+    
+    public <R,A> R collect(Collector<? super T,A,R> collector) {
+        return stream().collect(collector);
     }
     
     public Iterable<T> i() {
