@@ -65,7 +65,7 @@ public class TListFlatMapPerformanceNGTest {
         Slow.counter=0;
         TList<Slow> testedBase=TList.range(0,1000).map(i->new Slow(i)).sfix();
         Te.e(testedBase.getClass());
-        TList<TList<Slow>> tested=TList.nCopies(100, testedBase);
+        TList<TList<Slow>> tested=TList.nCopies(1000, testedBase);
         boolean  result = tested.flatten(l->l).anyMatch(i->i.get()>10000010);
         boolean  expected = false;
         System.out.println("result  : " + result);
