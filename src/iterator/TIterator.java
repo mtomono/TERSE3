@@ -16,7 +16,6 @@
 package iterator;
 
 import static collection.c.a2i;
-import collection.OneTimeIterable;
 import collection.P;
 import collection.RingBuffer;
 import collection.TList;
@@ -249,7 +248,7 @@ public class TIterator<T> implements Iterator<T> {
     }
     
     public Iterable<T> i() {
-        return new OneTimeIterable<>(this);
+        return ()->this;
     }
     
     public TList<T> asList() {

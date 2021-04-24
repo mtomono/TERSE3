@@ -15,7 +15,6 @@
 
 package iterator;
 
-import collection.OneTimeIterable;
 import java.util.*;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
@@ -52,17 +51,17 @@ public class Iterators {
         return new RingBufferedListIterator<>(body, 2);
     }
     
+    public static <T> Iterable<T> iterable(Iterator<T> iter) {
+        return ()->iter;
+    }
     public static int count(Iterator<?> iter) {
         int retval = 0;
-        for (Object x : new OneTimeIterable(iter))
+        for (;iter.hasNext();iter.next())
             retval++;
         return retval;
     }
-    
     public static void wind(Iterator<?> iter, int count) {
         for (int i = 0; i < count; i++)
             iter.next();
     }
-    
-    
 }
