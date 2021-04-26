@@ -139,6 +139,10 @@ public class TIterator<T> implements Iterator<T> {
         return set(new WeaveIterator<>(this, iter));
     }
     
+    public TIterator<T> cull(int skip) {
+        return set(new CullIterator(this, skip));
+    }
+    
     public TIterator<T> delimit(Supplier<T> delimiter) {
         return set(new Delimiter<>(this, delimiter));
     }
@@ -157,6 +161,12 @@ public class TIterator<T> implements Iterator<T> {
     
     public TIterator<T> seek(int count) {
         for (int i = 0; i < count && hasNext(); i++)
+            next();
+        return this;
+    }
+    
+    public TIterator<T> seek(long count) {
+        for (long i=0; i<count&&hasNext(); i++)
             next();
         return this;
     }
