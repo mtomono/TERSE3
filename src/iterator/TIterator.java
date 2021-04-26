@@ -257,6 +257,11 @@ public class TIterator<T> implements Iterator<T> {
         return stream().collect(collector);
     }
     
+    public TIterator<T> sink(Consumer<TIterator<T>> sink) {
+        sink.accept(this);
+        return this;
+    }
+    
     public Iterable<T> i() {
         return ()->this;
     }
