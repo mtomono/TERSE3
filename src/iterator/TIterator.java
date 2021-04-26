@@ -130,6 +130,16 @@ public class TIterator<T> implements Iterator<T> {
     public <S> TIterator<S> flatMap(Function<? super T, ? extends Iterator<? extends S>> map) {
         return set(new IteratorIterator<>((Iterator<Iterator<S>>)new MapIterator<>(this, map)));
     }
+    /**
+     * flatten for list of list.
+     * handier than flatMap for list of list. this can solve nesting recursively.
+     * @param <S>
+     * @param map
+     * @return 
+     */
+    public <S> TIterator<S> flatten(Function<? super T, ? extends List<? extends S>> map) {
+        return flatMap(map.andThen(l->l.iterator()));
+    }
     
     public <S> TIterator<S> weave(Function<T, Iterator<S>> map) {
         return set(new WeaveIterator<>(i2l(this.map(map))));

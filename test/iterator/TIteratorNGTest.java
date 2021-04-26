@@ -270,4 +270,15 @@ public class TIteratorNGTest {
         System.out.println("expected: "+expected);
         assertEquals(result, expected);
     }
+    
+    @Test
+    public void testFlatten() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> result = TList.sof(TList.sof(TList.sof(0,1,2),TList.sof(3,4)),TList.sof(TList.sof(5,6),TList.sof(7,8,9)))
+                .iterator().flatten(l->l).flatten(l->l).collect(toTList());
+        TList<Integer> expected = TList.sof(0,1,2,3,4,5,6,7,8,9);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
 }

@@ -659,6 +659,9 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
     
     /**
      * flattening to iterator.
+     * if you apply this recursively, you can simply repeat something looks the same.
+     * because TIterator also has the method flatten() and it well continue the thing 
+     * you may want to make.
      * @param <S>
      * @param map
      * @return 
@@ -672,6 +675,8 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
      * flatten lists directly into stream.
      * you can expect a bit improvement in performance in some cases. when stream interface 
      * is satisfactory to your needs, it's worth trying.
+     * Stream doesn't have method such as flatten. so be careful when you want to dig in 
+     * recursively.
      * @param <S>
      * @param map
      * @return 
