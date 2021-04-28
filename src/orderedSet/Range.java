@@ -67,6 +67,12 @@ public class Range<T> {
         public Range<T> r(T start,T end) {
             return new Range<>(this, start,end);
         }
+        public Range<T> r(List<T> range) {
+            return r(range.get(0),range.get(1));
+        }
+        public Range<T> r(T... range) {
+            return r(TList.sof(range));
+        }
         public TList<Range<T>> rs(List<T> range) {
             assert range.size()%2==0 : "Range(T...) number of parameters has to be even. illegal number of parameters";
             if (range.isEmpty()) return TList.empty();
