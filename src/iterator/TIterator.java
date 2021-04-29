@@ -209,6 +209,10 @@ public class TIterator<T> implements Iterator<T> {
         return set(new LimitIterator<>(this, limit));
     }
     
+    public TIterator<T> limit(long from, long to) {
+        return limit(to).seek(from);
+    }
+    
     public <S> TIterator<S> accum(S start, BiFunction<S, T, S> bf) {
         Holder<S> h = new Holder<>(start);
         return of(start).concat(map(e->h.set(bf.apply(h.get(), e))));
