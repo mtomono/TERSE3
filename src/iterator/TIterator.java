@@ -189,8 +189,12 @@ public class TIterator<T> implements Iterator<T> {
     }
         
     public <S> TIterator<P<T, S>> pair(Iterator<S> add) {
+        return pair(add,(t,s)->P.p(t,s));
+    }
+    
+    public <S,R> TIterator<R> pair(Iterator<S> add, BiFunction<T,S,R> f) {
         assert (!(add instanceof TIterator) || base() != ((TIterator)add).base());
-        return TIterator.set(new ZI<>(this, add));
+        return TIterator.set(new ZI<>(this,add,f));
     }
     
     public <S> TIterator<P<T, S>> diff(Iterator<S> add) {

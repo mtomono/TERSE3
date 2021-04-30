@@ -17,6 +17,7 @@ package iterator;
 
 import collection.P;
 import java.util.Iterator;
+import java.util.function.BiFunction;
 
 /**
  * Z(ipping)I(terators)
@@ -24,23 +25,25 @@ import java.util.Iterator;
  * @param <L>
  * @param <R>
  */
-public class ZI<L, R> implements Iterator<P<L, R>> {
-    Iterator<L> iterL;
-    Iterator<R> iterR;
+public class ZI<T,S,R> implements Iterator<R> {
+    Iterator<T> iterT;
+    Iterator<S> iterS;
+    BiFunction<T,S,R> f;
     
-    public ZI(Iterator<L> iterL, Iterator<R> iterR) {
-        this.iterL = iterL;
-        this.iterR = iterR;
+    public ZI(Iterator<T> iterT, Iterator<S> iterS, BiFunction<T,S,R> f) {
+        this.iterT = iterT;
+        this.iterS = iterS;
+        this.f=f;
     }
         
     @Override
     public boolean hasNext() {
-        return iterL.hasNext() && iterR.hasNext();
+        return iterT.hasNext() && iterS.hasNext();
     }
 
     @Override
-    public P<L, R> next() {
-        return new P<>(iterL.next(), iterR.next());
+    public R next() {
+        return f.apply(iterT.next(), iterS.next());
     }
     
 }
