@@ -19,7 +19,10 @@ import collection.Scale;
 import collection.TList;
 import static collection.c.a2l;
 import static java.lang.Math.signum;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.function.Function;
 
 /**
  * Cubes. calculate cubes of 1 edge of movement 1. calculate the starting cube
@@ -118,5 +121,20 @@ public class Cubes {
         public String toString() {
             return axis+":"+add;
         }
+    }
+    
+    public static TList<Set<TList<Integer>>> divideByConnection(Set<TList<Integer>> cubes) {
+        TList<Set<TList<Integer>>> retval=TList.c();
+        while (!cubes.isEmpty()) {
+            TList<Integer> start=cubes.iterator().next();
+            retval.add(new HashSet<>(TList.sof(start)));
+            cubes.remove(start);
+            separateCubesConnected(start,cubes,retval.last());
+        }
+        return retval;
+    }
+    public static void separateCubesConnected(TList<Integer> start, Set<TList<Integer>> cubes, Set<TList<Integer>>separated) {
+        start.index().flatten(i->TList.sof(start.replaceAt(i, start.get(i)+1).sfix(),start.replaceAt(i, start.get(i)-1).sfix()))
+                .filter(c->cubes.remove(c)).tee(c->separated.add(c)).forEachRemaining(c->separateCubesConnected(c,cubes,separated));
     }
 }

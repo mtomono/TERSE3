@@ -7,12 +7,13 @@ package shapeCollection;
 
 import collection.TList;
 import static collection.c.a2l;
+import java.util.HashSet;
 import static shapeCollection.Cubes.*;
 import java.util.List;
+import java.util.Set;
 import static org.testng.Assert.assertEquals;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import static shape.ShapeUtil.p3i;
 import static shape.ShapeUtil.vector3;
 import shape.TVector3d;
 
@@ -163,5 +164,15 @@ public class CubesNGTest {
         System.out.println("result  : " + results.toWrappedString());
         System.out.println("expected: " + expected);
         results.map(r->TList.sof(r.get(0),r.last())).forEach(r->assertEquals(r, expected));
+    }
+
+    @Test
+    public void testDivideByCoonection() {
+        System.out.println(test.TestUtils.methodName(0));
+        Set<Set<TList<Integer>>> result = new HashSet<>(Cubes.divideByConnection(new HashSet<>(TList.sof(0,0,0, 0,1,0,  2,1,0, 2,2,0,2,2,1).fold(3))));
+        Set<Set<TList<Integer>>> expected = new HashSet<>(TList.sof(new HashSet<>(TList.sof(0,0,0, 0,1,0).fold(3)),new HashSet<>(TList.sof(2,1,0, 2,2,0, 2,2,1).fold(3))));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
     }
 }
