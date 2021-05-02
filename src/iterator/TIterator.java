@@ -20,6 +20,7 @@ import collection.P;
 import collection.RingBuffer;
 import collection.TList;
 import static collection.c.i2l;
+import function.CHolder;
 import function.Holder;
 import function.IntHolder;
 import function.NoReach;
@@ -31,6 +32,7 @@ import java.util.List;
 import java.util.function.*;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
+import math.C;
 
 /**
  *
@@ -38,8 +40,7 @@ import java.util.stream.Stream;
  * @param <T>
  */
 public class TIterator<T> implements Iterator<T> {
-    Iterator<T> body;
-    Consumer<T> tee;
+    final Iterator<T> body;
     
     static public <T> TIterator<T> set(Iterator<T> body) {
         return new TIterator<>(body);
@@ -47,7 +48,6 @@ public class TIterator<T> implements Iterator<T> {
     
     public TIterator(Iterator<T> body) {
         this.body = body;
-        this.tee = e->{};
     }
     
     public Iterator<?> base() {
@@ -61,19 +61,17 @@ public class TIterator<T> implements Iterator<T> {
     
     @Override
     public T next() {
-        return monitor(body.next());
-    }
-    
-    private T monitor(T e) {
-        tee.accept(e);
-        return e;
+        return body.next();
     }
     
     public TIterator<T> tee(Consumer<T> tee) {
-        this.tee = tee;
-        return this;
+        return map(t->{tee.accept(t);return t;});
     }
     
+    public TIterator<T> report(int interval,Consumer<T> tee) {
+        CHolder<Integer,C<Integer>> h=new CHolder<>(C.i.b(0));
+        return tee(t->{if(h.get().body()<interval)h.upx(); else {tee.accept(t);h.set(C.i.zero());}});
+    }
     static public <T> TIterator<T> of(T... t) {
         return set(a2i(t));
     }
