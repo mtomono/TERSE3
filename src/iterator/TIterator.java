@@ -15,6 +15,7 @@
 
 package iterator;
 
+import collection.Counter;
 import static collection.c.a2i;
 import collection.P;
 import collection.RingBuffer;
@@ -71,6 +72,9 @@ public class TIterator<T> implements Iterator<T> {
     public TIterator<T> report(int interval,Consumer<T> tee) {
         CHolder<Integer,C<Integer>> h=new CHolder<>(C.i.b(0));
         return tee(t->{if(h.get().body()<interval)h.upx(); else {tee.accept(t);h.set(C.i.zero());}});
+    }
+    public <S> S transform(Function<TIterator<T>,S> f) {
+        return f.apply(this);
     }
     static public <T> TIterator<T> of(T... t) {
         return set(a2i(t));
@@ -273,6 +277,12 @@ public class TIterator<T> implements Iterator<T> {
         return stream().collect(collector);
     }
     
+    public Counter<T> count() {
+        Counter<T> retval=new Counter<>();
+        forEachRemaining(t->retval.add(t));
+        return retval;
+    }
+    
     public TIterator<T> sink(Consumer<TIterator<T>> sink) {
         sink.accept(this);
         return this;
@@ -294,7 +304,7 @@ public class TIterator<T> implements Iterator<T> {
         return TIterator.this.supplier(new NoReach<>());
     }
         
-    public int count() {
+    public int countRemaining() {
         return Iterators.count(this);
     }
 }

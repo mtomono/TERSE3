@@ -6,6 +6,7 @@
 package shapeCollection;
 
 import collection.TList;
+import static collection.TList.toTList;
 import static collection.c.a2l;
 import java.util.HashSet;
 import static shapeCollection.Cubes.*;
@@ -171,6 +172,25 @@ public class CubesNGTest {
         System.out.println(test.TestUtils.methodName(0));
         Set<Set<TList<Integer>>> result = new HashSet<>(Cubes.divideByConnection(new HashSet<>(TList.sof(0,0,0, 0,1,0,  2,1,0, 2,2,0,2,2,1).fold(3))));
         Set<Set<TList<Integer>>> expected = new HashSet<>(TList.sof(new HashSet<>(TList.sof(0,0,0, 0,1,0).fold(3)),new HashSet<>(TList.sof(2,1,0, 2,2,0, 2,2,1).fold(3))));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+
+    @Test
+    public void testExpand_int_intArr() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<TList<Integer>> result = expand(TList.sof(0,0,0),1,0,1);
+        TList<TList<Integer>> expected = TList.sof(-1,-1,0, -1,0,0, -1,1,0, 0,-1,0, 0,0,0, 0,1,0, 1,-1,0, 1,0,0, 1,1,0).fold(3);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    @Test
+    public void testExpand_int_int_intArr() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<TList<Integer>> result = Cubes.expand(3,1,0,1).apply(TList.sof(0,0,0)).collect(toTList());
+        TList<TList<Integer>> expected = TList.sof(-1,-1,0, -1,0,0, -1,1,0, 0,-1,0, 0,0,0, 0,1,0, 1,-1,0, 1,0,0, 1,1,0).fold(3);
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);

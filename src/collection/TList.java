@@ -570,6 +570,10 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
         return exists(pred);
     }
     
+    public Counter<T> count() {
+        return new Counter<>(this);
+    }
+    
 //--------- Transforming
     /**
      * apply a function to the list itself.
@@ -1993,7 +1997,7 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
     static public <T> Collector<T, ?, TList<T>> toTList() {
         return Collector.of((Supplier<List<T>>)ArrayList::new, List::add, (left,right)->{left.addAll(right);return left;}, TList::set);
     }
-    
+        
     /**
      * a method compatible with TestNG's data provider.
      * @return 

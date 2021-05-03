@@ -15,9 +15,11 @@
 package shapeCollection;
 
 import collection.P;
+import static collection.PrimitiveArrayWrap.wrap;
 import collection.Scale;
 import collection.TList;
 import static collection.c.a2l;
+import iterator.TIterator;
 import static java.lang.Math.signum;
 import java.util.HashSet;
 import java.util.List;
@@ -121,6 +123,21 @@ public class Cubes {
         public String toString() {
             return axis+":"+add;
         }
+    }
+    
+    public static Function<TList<Integer>,TList<TList<Integer>>> expandMap(int times, int axis) {
+        return c->TList.rangeSym(-times,times).map(i->c.replaceAt(axis, c.get(axis)+i));
+    }
+    public static Function<TList<Integer>,TList<TList<Integer>>> expandMap(int times, int... axis) {
+        if (axis.length==0) return c->TList.wrap(c);
+        return TList.set(wrap(axis)).map(i->expandMap(times,i)).stream().reduce((a,b)->a.andThen(l->l.flatMap(b))).get();
+    }
+    public static TList<TList<Integer>> expand(TList<Integer> base, int times, int... axis) {
+        return expandMap(times,axis).apply(base);
+    }
+    public static Function<TList<Integer>,TIterator<TList<Integer>>> expand(int dimension, int times, int... axis) {
+        TList<TList<Integer>> added=expand(TList.nCopies(dimension, 0),times,axis).map(l->l.sfix()).sfix();
+        return c->added.iterator().map(a->add(c,a));
     }
     
     public static TList<Set<TList<Integer>>> divideByConnection(Set<TList<Integer>> cubes) {
