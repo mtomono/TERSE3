@@ -88,6 +88,11 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
         this.add(added);
         return this;
     }
+    
+    public T addTee(T added) {
+        this.add(added);
+        return added;
+    }
 
     public TList<T> cset(int i, T o) {
         this.set(i,o);
