@@ -22,8 +22,8 @@ import java.util.function.Function;
  * @author masao
  */
 public class FlatIterFiber<S,T> extends Fiber<S,T>{
-    Function<S,? extends Iterator<T>> map;
-    public FlatIterFiber(Function<S,? extends Iterator<T>> map) {
+    Function<? super S,? extends Iterator<? extends T>> map;
+    public FlatIterFiber(Function<? super S,? extends Iterator<? extends T>> map) {
         super();
         this.map=map;
     }

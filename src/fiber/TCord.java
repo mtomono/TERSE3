@@ -38,26 +38,26 @@ public class TCord<T> {
     public TCord(TList<TFiber<T>> body) {
         this.body=body;
     }
-    public <R> TCord<R> map(Function<T,R> f) {
-        return set(body.map(s->s.map(f)).sfix());
+    public <R> TCord<R> map(Function<? super T,? extends R> f) {
+        return set(body.<TFiber<R>>map(s->s.map(f)).sfix());
     }
-    public <R> TCord<R> flatMap(Function<T,List<R>>f) {
+    public <R> TCord<R> flatMap(Function<? super T,? extends List<? extends R>>f) {
         return set(body.map(s->s.flatMap(f)).sfix());
     }
-    public <R> TCord<R> flatIter(Function<T,? extends Iterator<R>>f) {
+    public <R> TCord<R> flatIter(Function<? super T,? extends Iterator<? extends R>>f) {
         return set(body.map(s->s.flatIter(f)).sfix());
     }
-    public TCord<T> filter(Predicate<T> pred) {
+    public TCord<T> filter(Predicate<? super T> pred) {
         return set(body.map(s->s.filter(pred)).sfix());
     }
-    public <C extends Collection<T>> TList<C> sink(TList<C> retval) {
+    public <C extends Collection<? super T>> TList<C> sink(TList<C> retval) {
         body.pair(retval,(a,b)->a.sink(b)).sfix();
         return retval;
     }
-    public <C extends Collection<T>> TList<C> sink(C... retval) {
+    public <C extends Collection<? super T>> TList<C> sink(C... retval) {
         return sink(TList.sof(retval));
     }
-    public <C extends Collection<T>> TList<C> sink(Supplier<C> s) {
+    public <C extends Collection<? super T>> TList<C> sink(Supplier<C> s) {
         TList<C> retval=TList.c();
         body.iterator().pair(TIterator.generate(s),(a,b)->a.sink(retval.addTee(b))).forEachRemaining(x->{});
         return retval;

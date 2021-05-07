@@ -21,8 +21,8 @@ import java.util.function.Predicate;
  * @author masao
  */
 public class FilterFiber<T> extends Fiber<T,T> {
-    Predicate<T> pred;
-    public FilterFiber(Predicate<T> pred) {
+    Predicate<? super T> pred;
+    public FilterFiber(Predicate<? super T> pred) {
         super();
         this.pred=pred;
     }

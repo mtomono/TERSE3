@@ -21,14 +21,14 @@ import collection.TList;
  * @author masao
  */
 public class Source<S> {
-    TList<Sink<S>> listeners;
+    TList<Sink<? super S>> listeners;
     public Source() {
         listeners=TList.c();
     }
-    public void add(Sink<S> sink) {
+    public void add(Sink<? super S> sink) {
         listeners.add(sink);
     }
-    public void addAll(Sink<S>... sinks) {
+    public void addAll(Sink<? super S>... sinks) {
         listeners.addAll(TList.sof(sinks));
     }
     public void tellAll(S s) {

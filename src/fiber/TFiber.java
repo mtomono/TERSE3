@@ -32,29 +32,32 @@ public class TFiber<T> {
     public TFiber(Source<T> body) {
         this.body=body;
     }
-    public <R> TFiber<R> map(Function<T,R> f) {
+    public <R> TFiber<R> map(Function<? super T,? extends R> f) {
         Fiber<T,R> retval=new MapFiber<>(f);
         body.add(retval);
         return set(retval);
     }
-    public <R> TFiber<R> flatMap(Function<T,List<R>>f) {
+    public <R> TFiber<R> flatMap(Function<? super T,? extends List<? extends R>>f) {
         Fiber<T,R> retval=new FlatMapFiber<>(f);
         body.add(retval);
         return set(retval);
     }
-    public <R> TFiber<R> flatIter(Function<T,? extends Iterator<R>>f) {
+    public <R> TFiber<R> flatIter(Function<? super T,? extends Iterator<? extends R>>f) {
         Fiber<T,R> retval=new FlatIterFiber<>(f);
         body.add(retval);
         return set(retval);
     }
-    public TFiber<T> filter(Predicate<T> pred) {
+    public TFiber<T> filter(Predicate<? super T> pred) {
         Fiber<T,T> retval=new FilterFiber<>(pred);
         body.add(retval);
         return set(retval);
     }
-    public <C extends Collection<T>> C sink(C retval) {
+    public <C extends Collection<? super T>> C sink(C retval) {
         CSink<T> sink=new CSink<>(retval);
         body.add(sink);
         return retval;
+    }
+    public void sink(Sink<? super T> listener) {
+        body.add(listener);
     }
 }

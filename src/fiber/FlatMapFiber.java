@@ -22,8 +22,8 @@ import java.util.function.Function;
  * @author masao
  */
 public class FlatMapFiber<S,T> extends Fiber<S,T> {
-    Function<S,List<T>> map;
-    public FlatMapFiber(Function<S,List<T>> map) {
+    Function<? super S,? extends List<? extends T>> map;
+    public FlatMapFiber(Function<? super S,? extends List<? extends T>> map) {
         super();
         this.map=map;
     }

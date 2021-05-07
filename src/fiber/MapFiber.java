@@ -21,8 +21,8 @@ import java.util.function.Function;
  * @author masao
  */
 public class MapFiber<S,T> extends Fiber<S,T> {
-    Function<S,T> map;
-    public MapFiber(Function<S,T> map) {
+    Function<? super S,? extends T> map;
+    public MapFiber(Function<? super S,? extends T> map) {
         super();
         this.map=map;
     }

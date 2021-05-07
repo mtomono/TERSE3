@@ -21,8 +21,8 @@ import java.util.Iterator;
  * @author masao
  */
 public class ISource<T> extends Source<T> {
-    Iterator<T> iterator;
-    public ISource(Iterator<T> iterator) {
+    Iterator<? extends T> iterator;
+    public ISource(Iterator<? extends T> iterator) {
         this.iterator=iterator;
     }
     public void go() {

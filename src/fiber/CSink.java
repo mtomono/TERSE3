@@ -21,8 +21,8 @@ import java.util.Collection;
  * @author masao
  */
 public class CSink<T> implements Sink<T> {
-    final public Collection<T> body;
-    public CSink(Collection<T> body) {
+    final public Collection<? super T> body;
+    public CSink(Collection<? super T> body) {
         this.body=body;
     }
     @Override
