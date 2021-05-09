@@ -11,7 +11,7 @@ import java.util.Set;
  *
  * @author masao
  */
-public class Util {
+public class SetUtils {
     public static <T> Set<T> add(Set<T> one, Set<T> two) {
         one.addAll(two);
         return one;
