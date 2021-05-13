@@ -264,6 +264,14 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
         return teep("");
     }
     
+    public TList<T> go() {
+        gone();
+        return this;
+    }
+    
+    public void gone() {
+        forEach(l->{});
+    }
 
     public T getDebug(int at) {
         System.out.println(""+at+":"+get(at));
