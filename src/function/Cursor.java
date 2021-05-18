@@ -14,6 +14,7 @@
  */
 package function;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
@@ -30,33 +31,26 @@ public class Cursor<T> {
     public Cursor(T body) {
         this.body=body;
     }
+    public static <T> Cursor<T> of(T body) {
+        return new Cursor<>(body);
+    }
     /**
      * apply.
      * @param f
      * @return 
      */
-    public Cursor<T> c(UnaryOperator<T> f) {
+    public Cursor<T> map(UnaryOperator<T> f) {
         this.body=f.apply(body);
         return this;
     }
-    public static <T> UnaryOperator<T> o(Consumer<T> body) {
-        return x->{ body.accept(x); return x; };
+    public Cursor<T> tee(Consumer<T> body) {
+        return map(Functions.tee(body));
     }
-    public Cursor<T> co(Consumer<T> body) {
-        return c(o(body));
-    }
-    public <S> Cursor<S> f(Function<T,S> f) {
-        return new Cursor<>(f.apply(body));
+    public <S> Optional<S> opt(Function<T,S> f) {
+        return Optional.of(f.apply(body));
     }
     public T get() {
         return body;
-    }
-    /**
-     * chain
-     * @return 
-     */
-    public Chain<T> c() {
-        return new Chain(body);
     }
     public String toString() {
         return "cursor:"+body;

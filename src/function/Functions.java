@@ -14,7 +14,9 @@
  */
 package function;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 /**
  *
@@ -23,5 +25,8 @@ import java.util.function.Function;
 public class Functions {
     public static <S,T> Function<S,T> f(Function<S,T> f) {
         return f;
+    }
+    public static <T> UnaryOperator<T> tee(Consumer<T> body) {
+        return x->{ body.accept(x); return x; };
     }
 }
