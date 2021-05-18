@@ -30,6 +30,7 @@ import static iterator.Iterators.toStream;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.*;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
@@ -275,6 +276,10 @@ public class TIterator<T> implements Iterator<T> {
     
     public <R,A> R collect(Collector<? super T,A,R> collector) {
         return stream().collect(collector);
+    }
+    
+    public <R,A> Optional<R> collecto(Collector<? super T,A,R> collector) {
+        return Optional.of(collect(collector));
     }
     
     public Counter<T> count() {
