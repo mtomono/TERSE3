@@ -14,7 +14,8 @@
  */
 package parser;
 
-import function.Chain;
+import static function.Functions.tee;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -29,6 +30,6 @@ public class SimpleMatcher {
         this.m=Pattern.compile(pattern).matcher("");
     }
     public Stream<String> extract(String line) {
-        return new Chain<>(m.reset(line)).c(x->x.lookingAt()).f(x->x.results().map(r->line.substring(r.start(),r.end()))).get();
+        return Optional.of(m.reset(line)).map(tee(x->x.lookingAt())).map(x->x.results().map(r->line.substring(r.start(),r.end()))).get();
     }
 }
