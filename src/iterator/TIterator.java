@@ -278,10 +278,6 @@ public class TIterator<T> implements Iterator<T> {
         return stream().collect(collector);
     }
     
-    public <R,A> Optional<R> collecto(Collector<? super T,A,R> collector) {
-        return Optional.of(collect(collector));
-    }
-    
     public Counter<T> count() {
         Counter<T> retval=new Counter<>();
         forEachRemaining(t->retval.add(t));
