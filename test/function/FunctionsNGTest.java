@@ -5,7 +5,7 @@
  */
 package function;
 
-import static function.ChainedFunction.f;
+import static function.Functions.f;
 import java.util.function.Function;
 import static org.testng.Assert.*;
 import org.testng.annotations.BeforeMethod;
@@ -15,9 +15,9 @@ import org.testng.annotations.Test;
  *
  * @author masao
  */
-public class ChainedFunctionNGTest {
+public class FunctionsNGTest {
     
-    public ChainedFunctionNGTest() {
+    public FunctionsNGTest() {
     }
 
     @BeforeMethod
@@ -41,7 +41,7 @@ public class ChainedFunctionNGTest {
     @Test
     public void testO() {
         System.out.println(test.TestUtils.methodName(0));
-        Function<String,Integer> tested = f(X::addOne).o(X::parse);
+        Function<String,Integer> tested = f(X::addOne).compose(X::parse);
         Integer result = tested.apply("1");
         Integer expected = 2;
         System.out.println("result  : "+result);
@@ -52,7 +52,7 @@ public class ChainedFunctionNGTest {
     @Test
     public void testO1() {
         System.out.println(test.TestUtils.methodName(0));
-        Function<String,String> tested = f(Object::toString).o(X::addOne).o(X::parse);
+        Function<String,String> tested = f(Object::toString).compose(X::addOne).compose(X::parse);
         String result = tested.apply("1");
         String expected = "2";
         System.out.println("result  : "+result);
@@ -63,7 +63,7 @@ public class ChainedFunctionNGTest {
     @Test
     public void testA() {
         System.out.println(test.TestUtils.methodName(0));
-        Function<String,String> tested = f(X::addOne).o(X::parse).a(Object::toString);
+        Function<String,String> tested = f(X::addOne).compose(X::parse).andThen(Object::toString);
         String result = tested.apply("1");
         String expected = "2";
         System.out.println("result  : "+result);
@@ -74,7 +74,7 @@ public class ChainedFunctionNGTest {
     @Test
     public void testM0() {
         System.out.println(test.TestUtils.methodName(0));
-        Function<String,String> tested = f(X::addOne).o(X::parse).a(Object::toString).m0(X::merge);
+        Function<String,String> tested = x->X.merge(f(X::addOne).compose(X::parse).andThen(Object::toString).apply(x),x);
         String result = tested.apply("1");
         String expected = "21";
         System.out.println("result  : "+result);
@@ -85,7 +85,7 @@ public class ChainedFunctionNGTest {
     @Test
     public void testM1() {
         System.out.println(test.TestUtils.methodName(0));
-        Function<String,String> tested = f(X::addOne).o(X::parse).a(Object::toString).m1(X::merge);
+        Function<String,String> tested = x->X.merge(x,f(X::addOne).compose(X::parse).andThen(Object::toString).apply(x));
         String result = tested.apply("1");
         String expected = "12";
         System.out.println("result  : "+result);
