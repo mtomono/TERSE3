@@ -5,6 +5,8 @@
  */
 package function;
 
+import collection.TList;
+import static function.ChainedBiFunction.b;
 import static function.Functions.f;
 import java.util.function.Function;
 import static org.testng.Assert.*;
@@ -74,7 +76,19 @@ public class FunctionsNGTest {
     @Test
     public void testM0() {
         System.out.println(test.TestUtils.methodName(0));
-        Function<String,String> tested = x->X.merge(f(X::addOne).compose(X::parse).andThen(Object::toString).apply(x),x);
+        Function<String,String> tested = b(X::merge).unify(f(X::addOne).compose(X::parse).andThen(Object::toString),x->x);
+        String result = tested.apply("1");
+        String expected = "21";
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result, expected);
+    }
+    
+    @Test
+    public void testYaM0() {
+        System.out.println(test.TestUtils.methodName(0));
+        Function<String,String> tested = TList.sof(f(X::addOne).compose(X::parse).andThen(Object::toString),x->x)
+                .stream().reduce((a,b)->b(X::merge).unify(a,b)).get();
         String result = tested.apply("1");
         String expected = "21";
         System.out.println("result  : "+result);
@@ -85,7 +99,7 @@ public class FunctionsNGTest {
     @Test
     public void testM1() {
         System.out.println(test.TestUtils.methodName(0));
-        Function<String,String> tested = x->X.merge(x,f(X::addOne).compose(X::parse).andThen(Object::toString).apply(x));
+        Function<String,String> tested = b(X::merge).unify(x->x,f(X::addOne).compose(X::parse).andThen(Object::toString));
         String result = tested.apply("1");
         String expected = "12";
         System.out.println("result  : "+result);
