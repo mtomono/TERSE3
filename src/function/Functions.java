@@ -29,4 +29,7 @@ public class Functions {
     public static <T> UnaryOperator<T> tee(Consumer<T> body) {
         return x->{ body.accept(x); return x; };
     }
+    public static <T> UnaryOperator<T> id() {
+        return x->x;
+    }
 }
