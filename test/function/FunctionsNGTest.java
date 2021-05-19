@@ -110,9 +110,20 @@ public class FunctionsNGTest {
     }
     
     @Test
-    public void testReduce() {
+    public void testReduce2() {
         System.out.println(test.TestUtils.methodName(0));
-        Function<String,String> tested = bo(X::merge).reduce(TList.sof(f(X::addOne).compose(X::parse).andThen(Object::toString),x->x,x->x));
+        Function<String,String> tested = bo(X::merge).unify(f(X::addOne).compose(X::parse).andThen(Object::toString),x->x);
+        String result = tested.apply("1");
+        String expected = "21";
+        System.out.println("result  : "+result);
+        System.out.println("expected: "+expected);
+        assertEquals(result, expected);
+    }
+    
+    @Test
+    public void testReduce3() {
+        System.out.println(test.TestUtils.methodName(0));
+        Function<String,String> tested = bo(X::merge).unify(f(X::addOne).compose(X::parse).andThen(Object::toString),x->x,x->x);
         String result = tested.apply("1");
         String expected = "211";
         System.out.println("result  : "+result);

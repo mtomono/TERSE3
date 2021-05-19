@@ -22,14 +22,11 @@ public interface ChainedBinaryOperator<T> extends ChainedBiFunction<T,T,T> {
     public static <T> ChainedBinaryOperator<T> bo(ChainedBiFunction<T,T,T> f) {
         return (a,b)->f.apply(a,b);
     }
-    default Function<T,T> reduce(Function<T,T>... fs) {
-        return reduce(TList.sof(fs));
+    default Function<T,T> unify(Function<T,T>... fs) {
+        return unify(TList.sof(fs));
     }
-    default Function<T,T> reduce(TList<Function<T,T>> fs) {
+    default Function<T,T> unify(TList<Function<T,T>> fs) {
         assert !fs.isEmpty() : "reduce() has to have at least one parameter";
-        return reduce((a,b)->apply(a,b),fs.stream()).get();
-    }
-    public static <T> Optional<Function<T,T>> reduce(ChainedBinaryOperator<T> combiner, Stream<Function<T,T>> fs) {
-        return fs.reduce((a,b)->combiner.unify(a, b));
+        return fs.stream().reduce((a,b)->unify(a,b)).get();
     }
 }
