@@ -241,6 +241,17 @@ public class TIterator<T> implements Iterator<T> {
         return accum((a,b)->map.apply(b,a));
     }
     
+    public <S> S reduce(S s, BiFunction<S,T,S> accumulator) {
+        S retval=s;
+        while (hasNext()) retval=accumulator.apply(retval,next());
+        return retval;
+    }
+    
+    public Optional<T> reduce(BinaryOperator<T> accumulator) {
+        if (!hasNext()) return Optional.empty();
+        return Optional.of(reduce(next(),accumulator));
+    }
+    
     public TIterator<TList<T>> chunk(Predicate<? super T> pred) {
         return TIterator.set(new ChunkIterator<>(this,pred)).map(l->TList.set(l));
     }
