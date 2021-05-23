@@ -25,21 +25,20 @@ public class GramSchmidtNGTest {
     public void testOrthogonalizeR2() {
         System.out.println(test.TestUtils.methodName(0));
         TList<CList<Double,C2<Double>>> result = GramSchmidt.orthogonalize(CMatrix.derr.b(
-                 "1,0,0;"
-                +"1,1,1;"
-                +"0,0,1"
-        ).rows());
+                 "1,1,0;"
+                +"0,1,0;"
+                +"0,1,1"
+        ).columns());
         double r2=sqrt(2)/2;
         TList<CList<Double,C2<Double>>> expected = CMatrix.derr.b(
                  "1,0,0;"
-                +"0.0,  "+r2+", "+r2+";"
-                +"0.0, -"+r2+", "+r2
-        ).rows();
+                +"0.0,  "+r2+",-"+r2+";"
+                +"0.0, "+r2+", "+r2
+        ).columns();
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
     }
-    
     @Test
     public void testOrthogonalizeR2Fail() {
         System.out.println(test.TestUtils.methodName(0));
@@ -63,15 +62,15 @@ public class GramSchmidtNGTest {
     public void testOrthogonalize() {
         System.out.println(test.TestUtils.methodName(0));
         TList<CList<Double,C2<Double>>> result = GramSchmidt.orthogonalize(CMatrix.derr.b(
-                 "1,0,0;"
-                +"1,1,0;"
-                +"1,1,1"
-        ).rows());
+                 "1,1,1;"
+                +"0,1,1;"
+                +"0,0,1"
+        ).columns());
         TList<CList<Double,C2<Double>>> expected = CMatrix.derr.b(
                  "1,0,0;"
                 +"0,1,0;"
                 +"0,0,1"
-        ).rows();
+        ).columns();
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);

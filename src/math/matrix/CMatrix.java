@@ -183,7 +183,7 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
     public PLU<K,T> pluDecompose() {
         return new PluDecompose<>(this).decompose();
     }
-
+    
     public CMatrix<K,T> i() {
         assertSquare();
         return wrap(bb.i(x));
@@ -241,7 +241,7 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
      * @return 
      */
     CMatrix<K,T> r() {//R  stands for R of QR method.
-        return qinv().mul(this).fillLower(bb.zero());
+        return qinv().mul(this);//.fillLower(bb.zero());//even without fillLower(), they should be zero.
     }
 
     public CMatrix<K,T> sfix() {

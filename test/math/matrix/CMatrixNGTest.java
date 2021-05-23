@@ -7,6 +7,7 @@ package math.matrix;
 
 import collection.TList;
 import debug.Te;
+import static java.lang.Math.sqrt;
 import java.math.BigDecimal;
 import math.C2;
 import math.CList;
@@ -644,4 +645,53 @@ public class CMatrixNGTest {
         System.out.println("result  : " + result);
     }
     
+    @Test
+    public void testQ0() {
+        System.out.println(test.TestUtils.methodName(0));
+        CMatrix<Double,C2<Double>> original = CMatrix.derr.b("1,1,0;"
+                                                            +"0,1,0;"
+                                                            +"0,1,1");
+        double r2=sqrt(2)/2;
+        CMatrix<Double,C2<Double>> result = original.q();
+        CMatrix<Double,C2<Double>> expected =CMatrix.derr.b(
+                 "1,0,0;"
+                +"0.0,  "+r2+",-"+r2+";"
+                +"0.0, "+r2+", "+r2);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result,expected);
+    }
+    @Test
+    public void testQ() {
+        System.out.println(test.TestUtils.methodName(0));
+        CMatrix<Double,C2<Double>> original = CMatrix.derr.b("1,0,0;"
+                                                            +"1,1,1;"
+                                                            +"0,0,1");
+        double r2=sqrt(2)/2;
+        CMatrix<Double,C2<Double>> result = original.q();
+        CMatrix<Double,C2<Double>> expected =CMatrix.derr.b(
+                ""+r2+",-"+r2+",0.0;"
+                  +r2+", "+r2+",0.0;"
+                  +"0.0,  0.0,  1.0");
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result,expected);
+    }
+    @Test
+    public void testR() {
+        System.out.println(test.TestUtils.methodName(0));
+        CMatrix<Double,C2<Double>> original = CMatrix.derr.b("1,0,0;"
+                                                            +"1,1,1;"
+                                                            +"0,0,1");
+        double r2=sqrt(2)/2;
+        double r2inv=1/r2;
+        CMatrix<Double,C2<Double>> result = original.r();
+        CMatrix<Double,C2<Double>> expected =CMatrix.derr.b(
+                ""+r2inv+","+r2+","+r2+";"
+                  +"0.0, "+r2+","+r2+";"
+                  +"0.0,  0.0,  1.0");
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result,expected);
+    }
 }

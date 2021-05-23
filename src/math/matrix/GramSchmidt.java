@@ -23,10 +23,10 @@ import math.Context;
  * @author masao
  */
 public class GramSchmidt {
-    public static <K, T extends Context<K,T>> TList<CList<K,T>> orthogonalize(TList<CList<K,T>> bases) {
-        return bases.stream().reduce(TList.c(), (es,ak)->es.addOne(extractE(ak,es).sfix()), (es0,es1)->es0.append(es1));
+    public static <K, T extends Context<K,T>> TList<CList<K,T>> orthogonalize(TList<CList<K,T>> base) {
+        return base.iterator().reduce(TList.c(), (ob,ak)->ob.addOne(expandOrthonormalBasis(ak,ob).sfix()));
     }
-    private static <K, T extends Context<K,T>> CList<K,T> extractE(CList<K,T>ak, TList<CList<K,T>> e) {
-        return e.stream().map(ei->ei.scale(ak.dot(ei))).reduce(ak,(a,ai)->a.sub(ai)).t(x->x.scale(x.dot(x).sqrt().inv()));
+    private static <K, T extends Context<K,T>> CList<K,T> expandOrthonormalBasis(CList<K,T>ak, TList<CList<K,T>> orthonormalBase) {
+        return orthonormalBase.stream().map(ei->ei.scale(ak.dot(ei))).reduce(ak,(a,ai)->a.sub(ai)).t(x->x.scale(x.dot(x).sqrt().inv()));
     }
 }
