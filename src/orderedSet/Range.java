@@ -216,9 +216,9 @@ public class Range<T> {
      * @return 
      */
     public boolean contains(T value) {
-        return order().le(this.start, value) && order().lt(value, this.end);
+        return !isAbove(value)&&!isBelow(value);
     }
-    
+
     /**
      * contains every value in values
      * @param values
@@ -228,6 +228,25 @@ public class Range<T> {
         return values.stream().allMatch(this::contains);
     }
     
+    /**
+     * value < start.
+     * basis for range to point comparison.
+     * @param value
+     * @return 
+     */
+    public boolean isAbove(T value) {
+        return order().lt(value, start);
+    }
+    /**
+     * end <= value.
+     * basis for range to point comparison.
+     * @param value
+     * @return 
+     */
+    public boolean isBelow(T value) {
+        return order().le(end, value);
+    }
+        
     public boolean contains(Range<T> another) {
         return !another.hasLowerThan(start) && !another.hasUpperThan(end);
     }
@@ -241,27 +260,30 @@ public class Range<T> {
     }
 
     /**
-     * the width of a range start to value is not zero
+     * start < value.
+     * the width of a range between start and value is not zero 
+     * basis of range to range comparison
      * @param value
      * @return 
      */
     public boolean hasLowerThan(T value) {
         return order().lt(this.start, value);
     }
-    
     /**
-     * the width of a range value to end is not zero
+     * value < end.
+     * the width of a range between value and end is not zero
+     * basis of range to range comparison.
      * @param value
      * @return 
      */
     public boolean hasUpperThan(T value) {
         return order().lt(value, this.end);
     }
-    
+    @Deprecated
     public boolean startsUpperThan(Range<T> another) {
         return another.hasLowerThan(start);
     }
-    
+    @Deprecated
     public boolean endsLowerThan(Range<T> another) {
         return another.hasUpperThan(end);
     }
@@ -272,14 +294,6 @@ public class Range<T> {
     
     public boolean isUpperThan(Range<T> another) {
         return another.isLowerThan(this);
-    }
-    
-    public boolean isBelow(T value) {
-        return order().le(end, value);
-    }
-    
-    public boolean isAbove(T value) {
-        return order().lt(value, start);
     }
     
     public boolean adjoins(Range<T> another) {
@@ -293,6 +307,10 @@ public class Range<T> {
     public boolean adjoinsAtEndWith(Range<T> another) {
         return another.startsAt(end);
     }
+    
+    /*
+    * manipulations
+    */
     
     public Optional<Range<T>> intersect(Range<T> another) {
         return another.getUpper(start).flatMap(r->r.getLower(end));
@@ -438,7 +456,7 @@ public class Range<T> {
         return end;
     }
         
-    /**
+    /*
      * quantifying range.
      * series of methods which can be used to calculate a quantity from range.
      * they assume that something forming range can be translated as a point in
