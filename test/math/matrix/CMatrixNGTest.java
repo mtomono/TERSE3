@@ -15,6 +15,7 @@ import math.Rational;
 import static math.matrix.LuDecompose.doolittleStep;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
+import string.TString;
 import test.PTe;
 
 /**
@@ -652,13 +653,12 @@ public class CMatrixNGTest {
         CMatrix<Double,C2<Double>> original = CMatrix.derr.b("1,1,0;"
                                                             +"0,1,0;"
                                                             +"0,1,1");
-        Double r2=sqrt(2)/2;
         CMatrix<Double,C2<Double>> result = original.q();
         CMatrix<Double,C2<Double>> expected =CMatrix.derr.b(
-                ("1.0, 0.0,     0.0;"
-                +"0.0, #{r2}, -#{r2};"
-                +"0.0, #{r2},  #{r2}")
-                          .replace("#{r2}", r2.toString()));
+                 new TString("1.0, 0.0,     0.0;"
+                            +"0.0, #{r2}, -#{r2};"
+                            +"0.0, #{r2},  #{r2}")
+                          .let("#{r2}", sqrt(2)/2).body());
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result,expected);
@@ -669,13 +669,12 @@ public class CMatrixNGTest {
         CMatrix<Double,C2<Double>> original = CMatrix.derr.b("1,0,0;"
                                                             +"1,1,1;"
                                                             +"0,0,1");
-        Double r2=sqrt(2)/2;
         CMatrix<Double,C2<Double>> result = original.q();
         CMatrix<Double,C2<Double>> expected =CMatrix.derr.b(
-                ("#{r2}, -#{r2},  0.0;"
-                +"#{r2},  #{r2},  0.0;"
-                +"0.0,    0.0,    1.0")
-                          .replace("#{r2}", r2.toString()));
+                 new TString("#{r2}, -#{r2},  0.0;"
+                            +"#{r2},  #{r2},  0.0;"
+                            +"0.0,    0.0,    1.0")
+                          .let("#{r2}", sqrt(2)/2).body());
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result,expected);
@@ -686,15 +685,13 @@ public class CMatrixNGTest {
         CMatrix<Double,C2<Double>> original = CMatrix.derr.b("1,0,0;"
                                                             +"1,1,1;"
                                                             +"0,0,1");
-        Double r2=sqrt(2)/2;
-        Double r2inv=1/r2;
         CMatrix<Double,C2<Double>> result = original.r();
         CMatrix<Double,C2<Double>> expected =CMatrix.derr.b(
-                  ("#{r2inv}, #{r2},  #{r2};"
-                  +"0.0,      #{r2},  #{r2};"
-                  +"0.0,       0.0,  1.0")
-                          .replace("#{r2}", r2.toString())
-                          .replace("#{r2inv}", r2inv.toString()));
+                 new TString("#{r2inv}, #{r2},  #{r2};"
+                            +"0.0,      #{r2},  #{r2};"
+                            +"0.0,       0.0,  1.0")
+                          .let("#{r2}", sqrt(2)/2)
+                          .let("#{r2inv}", 2/sqrt(2)).body());
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result,expected);

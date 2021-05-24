@@ -55,6 +55,9 @@ public class TString implements Wrapper<String,TString>,Transformable<TString> {
     public <K, T extends Context<K,T>> T toC(ContextBuilder<K,T> b) {
         return b.b(body);
     }
+    public TString let(String name, Object value) {
+        return wrap(body().replace(name, value.toString()));
+    }
     public String toString() {
         return body;
     }
