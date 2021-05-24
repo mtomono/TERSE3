@@ -55,6 +55,15 @@ public class TString implements Wrapper<String,TString>,Transformable<TString> {
     public <K, T extends Context<K,T>> T toC(ContextBuilder<K,T> b) {
         return b.b(body);
     }
+    /**
+     * substitute variable in string.
+     * recommendation: use something like #{..} for variable expression.
+     * bracing would make it easier to avoid sub-string matching of variable.
+     * example: new TString("#{the} appearance of #{them}").let("#{the}","his").let("#{them}",30);
+     * @param name
+     * @param value
+     * @return 
+     */
     public TString let(String name, Object value) {
         return wrap(body().replace(name, value.toString()));
     }
