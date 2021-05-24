@@ -341,6 +341,7 @@ public class Range<T> {
     
     /**
      * basis for subtraction of range.
+     * thus hasLowerThan() is used.
      * @param value
      * @return 
      */
@@ -351,6 +352,7 @@ public class Range<T> {
     }
     /**
      * basis for subtraction of range.
+     * thus hasUpperThan() is used.
      * @param value
      * @return 
      */
