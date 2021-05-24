@@ -197,6 +197,22 @@ public class Range<T> {
         return new Range<>(builder,start, end);
     }
     
+    /**
+     * Symmetric range which contains start and end.
+     * @param <T> 
+     */
+    public class RangeSym<T> extends Range<T> {
+        public RangeSym(Builder<T> builder, T start, T end) {
+            super(builder, start, end);
+        }
+        @Override
+        public boolean isBelow(T value) {
+            return order().lt(end, value);
+        }
+    }
+    public Range<T> sym() {
+        return new RangeSym<>(builder,start,end);
+    }
 
     public boolean isEmpty() {
         return order().eq(start, end);
