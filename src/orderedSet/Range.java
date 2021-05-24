@@ -339,13 +339,21 @@ public class Range<T> {
         return another.map(p->cover(p)).orElse(this);
     }
     
-    
+    /**
+     * basis for subtraction of range.
+     * @param value
+     * @return 
+     */
     public Optional<Range<T>> getLower(T value) {
         if (!hasLowerThan(value))
             return Optional.empty();
         return Optional.of(new Range<>(builder,this.start, hasUpperThan(value) ? value : this.end));
     }
-    
+    /**
+     * basis for subtraction of range.
+     * @param value
+     * @return 
+     */
     public Optional<Range<T>> getUpper(T value) {
         if (!hasUpperThan(value))
             return Optional.empty();
