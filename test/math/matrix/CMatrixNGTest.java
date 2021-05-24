@@ -693,8 +693,8 @@ public class CMatrixNGTest {
                   ("#{r2inv}, #{r2},  #{r2};"
                   +"0.0,      #{r2},  #{r2};"
                   +"0.0,       0.0,  1.0")
-                          .replace("#{r2inv}", r2inv.toString())
-                          .replace("#{r2}", r2.toString()));
+                          .replace("#{r2}", r2.toString())
+                          .replace("#{r2inv}", r2inv.toString()));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result,expected);
