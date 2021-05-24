@@ -655,10 +655,11 @@ public class CMatrixNGTest {
                                                             +"0,1,1");
         CMatrix<Double,C2<Double>> result = original.q();
         CMatrix<Double,C2<Double>> expected =CMatrix.derr.b(
-                 new TString("1.0, 0.0,     0.0;"
-                            +"0.0, #{r2}, -#{r2};"
-                            +"0.0, #{r2},  #{r2}")
-                          .let("#{r2}", sqrt(2)/2).body());
+                 new TString(
+                         "1.0, 0.0,     0.0;"
+                        +"0.0, #{r2}, -#{r2};"
+                        +"0.0, #{r2},  #{r2}"
+                 ).let("#{r2}", sqrt(2)/2).body());
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result,expected);
@@ -671,10 +672,11 @@ public class CMatrixNGTest {
                                                             +"0,0,1");
         CMatrix<Double,C2<Double>> result = original.q();
         CMatrix<Double,C2<Double>> expected =CMatrix.derr.b(
-                 new TString("#{r2}, -#{r2},  0.0;"
-                            +"#{r2},  #{r2},  0.0;"
-                            +"0.0,    0.0,    1.0")
-                          .let("#{r2}", sqrt(2)/2).body());
+                 new TString(
+                         "#{r2}, -#{r2},  0.0;"
+                        +"#{r2},  #{r2},  0.0;"
+                        +"0.0,    0.0,    1.0"
+                 ).let("#{r2}", sqrt(2)/2).body());
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result,expected);
@@ -687,11 +689,12 @@ public class CMatrixNGTest {
                                                             +"0,0,1");
         CMatrix<Double,C2<Double>> result = original.r();
         CMatrix<Double,C2<Double>> expected =CMatrix.derr.b(
-                 new TString("#{r2inv}, #{r2},  #{r2};"
-                            +"0.0,      #{r2},  #{r2};"
-                            +"0.0,       0.0,  1.0")
-                          .let("#{r2}", sqrt(2)/2)
-                          .let("#{r2inv}", 2/sqrt(2)).body());
+                 new TString(
+                         "#{r2inv}, #{r2},  #{r2};"
+                        +"0.0,      #{r2},  #{r2};"
+                        +"0.0,       0.0,  1.0"
+                 ).let("#{r2}", sqrt(2)/2)
+                  .let("#{r2inv}", 2/sqrt(2)).body());
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result,expected);
