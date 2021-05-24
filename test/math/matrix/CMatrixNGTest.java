@@ -606,7 +606,8 @@ public class CMatrixNGTest {
                                                           + "1,8,5,2;"
                                                           + "2,4,3,3;");
         TList<CMatrix<Rational,C2<Rational>>> result = original.pluDecompose().map(m->m.map(c->c.m(r->r.simplify())));
-        TList<CMatrix<Rational,C2<Rational>>> expected = TList.sof(mr.b("0,0,0,1;"
+        TList<CMatrix<Rational,C2<Rational>>> expected = TList.sof(mr.b(
+                                                            "0,0,0,1;"
                                                           + "1,0,0,0;"
                                                           + "0,1,0,0;"
                                                           + "0,0,1,0"),
@@ -636,7 +637,7 @@ public class CMatrixNGTest {
     @Test
     public void testPlu() {
         System.out.println(test.TestUtils.methodName(0));
-        CMatrix<Double,C2<Double>> original = md.b(               "5,4,3,2,1;"
+        CMatrix<Double,C2<Double>> original = md.b(     "5,4,3,2,1;"
                                                       + "4,4,3,2,1;"
                                                       + "3,3,3,2,1;"
                                                       + "2,2,2,2,1;"
@@ -651,12 +652,13 @@ public class CMatrixNGTest {
         CMatrix<Double,C2<Double>> original = CMatrix.derr.b("1,1,0;"
                                                             +"0,1,0;"
                                                             +"0,1,1");
-        double r2=sqrt(2)/2;
+        Double r2=sqrt(2)/2;
         CMatrix<Double,C2<Double>> result = original.q();
         CMatrix<Double,C2<Double>> expected =CMatrix.derr.b(
-                 "1,0,0;"
-                +"0.0,  "+r2+",-"+r2+";"
-                +"0.0, "+r2+", "+r2);
+                ("1.0, 0.0,     0.0;"
+                +"0.0, #{r2}, -#{r2};"
+                +"0.0, #{r2},  #{r2}")
+                          .replace("#{r2}", r2.toString()));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result,expected);
@@ -667,12 +669,13 @@ public class CMatrixNGTest {
         CMatrix<Double,C2<Double>> original = CMatrix.derr.b("1,0,0;"
                                                             +"1,1,1;"
                                                             +"0,0,1");
-        double r2=sqrt(2)/2;
+        Double r2=sqrt(2)/2;
         CMatrix<Double,C2<Double>> result = original.q();
         CMatrix<Double,C2<Double>> expected =CMatrix.derr.b(
-                ""+r2+",-"+r2+",0.0;"
-                  +r2+", "+r2+",0.0;"
-                  +"0.0,  0.0,  1.0");
+                ("#{r2}, -#{r2},  0.0;"
+                +"#{r2},  #{r2},  0.0;"
+                +"0.0,    0.0,    1.0")
+                          .replace("#{r2}", r2.toString()));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result,expected);
@@ -683,13 +686,15 @@ public class CMatrixNGTest {
         CMatrix<Double,C2<Double>> original = CMatrix.derr.b("1,0,0;"
                                                             +"1,1,1;"
                                                             +"0,0,1");
-        double r2=sqrt(2)/2;
-        double r2inv=1/r2;
+        Double r2=sqrt(2)/2;
+        Double r2inv=1/r2;
         CMatrix<Double,C2<Double>> result = original.r();
         CMatrix<Double,C2<Double>> expected =CMatrix.derr.b(
-                ""+r2inv+","+r2+","+r2+";"
-                  +"0.0, "+r2+","+r2+";"
-                  +"0.0,  0.0,  1.0");
+                  ("#{r2inv}, #{r2},  #{r2};"
+                  +"0.0,      #{r2},  #{r2};"
+                  +"0.0,       0.0,  1.0")
+                          .replace("#{r2inv}", r2inv.toString())
+                          .replace("#{r2}", r2.toString()));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result,expected);
