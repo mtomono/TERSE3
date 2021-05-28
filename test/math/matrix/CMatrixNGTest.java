@@ -77,6 +77,30 @@ public class CMatrixNGTest {
     }
 
     @Test
+    public void testAppendDiag() {
+        System.out.println(test.TestUtils.methodName(0));
+        CMatrix<Rational,C2<Rational>> m0=mr.b(
+                          "1,2,3;"
+                        + "4,5,6"
+        );
+        CMatrix<Rational,C2<Rational>> m1=mr.b(
+                          "9,8;"
+                        + "7,6;"
+                        + "5,4"
+        );
+        var result = m0.appendDiag(m1);
+        var expected = mr.b(
+                          "1,2,3,0,0;"
+                        + "4,5,6,0,0;"
+                        + "0,0,0,9,8;"
+                        + "0,0,0,7,6;"
+                        + "0,0,0,5,4"
+        );
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    @Test
     public void testEliminate1235() {
         System.out.println(test.TestUtils.methodName(0));
         CMatrix<BigDecimal,C2<BigDecimal>> result = mbd.b(          

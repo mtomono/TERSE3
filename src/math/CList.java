@@ -77,6 +77,9 @@ public class CList<K, T extends Context<K,T>> implements TListWrapper<T,CList<K,
     public CList<K,T> self() {
         return this;
     }
+    public CList<K,T> zero() {
+        return wrap(TList.nCopies(body.size(), b.zero()));
+    }
     public T average() {
         return sigma().div(b.b(body.size()));
     }

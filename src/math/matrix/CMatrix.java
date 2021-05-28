@@ -21,6 +21,7 @@ import function.Transformable;
 import static java.lang.Integer.min;
 import java.math.BigDecimal;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
 import math.C2;
 import math.CList;
@@ -67,6 +68,9 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
         
         public CMatrix<K,T> i(int n) {
             return b(b.i(n));
+        }
+        public CMatrix<K,T> diag(TList<CMatrix<K,T>> blocks) {
+            return blocks.stream().reduce((a,b)->a.appendDiag(b)).orElse(b(TList.empty()));
         }
     }
     final public ContextBuilder<K,T> bb;
@@ -125,6 +129,9 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
     }
     public CMatrix<K,T> subMatrixLR(int x0, int y0) {
         return subMatrix(x0,y0,x,y);
+    }
+    public CMatrix<K,T> appendDiag(CMatrix<K,T> added) {
+        return wrap(body().map(r->r.append(TList.nCopies(added.y, bb.zero()))).append(added.body().map(r->TList.nCopies(y, bb.zero()).append(r))));
     }
     public int minSize() {
         return min(x,y);
