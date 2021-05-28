@@ -183,6 +183,9 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
     public PLU<K,T> pluDecompose() {
         return new PluDecompose<>(this).decompose();
     }
+    public QR<K,T> qrDecompose() {
+        return new QrDecompose<>(this).decompose();
+    }
     
     public CMatrix<K,T> i() {
         assertSquare();
@@ -219,29 +222,6 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
     }
     public CMatrix<K,T> invUpper() {
         return wrap(i().columns().map(c->backwardSubstitution(c).body())).transpose();
-    }
-    /**
-     * inversion of Q in QR method.
-     * Q means Orthogonal Metrix.
-     * @return 
-     */
-    CMatrix<K,T> qinv() {// Q stands for Orthogonal Matrix
-        return wrap(GramSchmidt.orthogonalize(columns()).map(p->p.body()));
-    }
-    /**
-     * Q in QR method.
-     * Q means Orthogonal Metrix.
-     * @return 
-     */
-    CMatrix<K,T> q() {
-        return qinv().transpose();
-    }
-    /**
-     * R in QR method.
-     * @return 
-     */
-    CMatrix<K,T> r() {//R  stands for R of QR method.
-        return qinv().mul(this);//.fillLower(bb.zero());//even without fillLower(), they should be zero.
     }
 
     public CMatrix<K,T> sfix() {
