@@ -16,9 +16,9 @@
 package solver.path;
 
 import collection.P;
+import collection.TTreeMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.TreeMap;
 import orderedSet.Comparators;
 
 /**
@@ -30,7 +30,7 @@ public class ShortestPathMemo<N extends Comparable<N>> extends ShortestPathNoRev
     Map<P<N,N>, Optional<Integer>> memo;
     public ShortestPathMemo(Map<P<N, N>, Integer> graph) {
         super(graph);
-        this.memo = new TreeMap<>(Comparators.<P<N,N>>sof(p->p.l(),p->p.r()).compile());
+        this.memo = new TTreeMap<>(Comparators.<P<N,N>>sof(p->p.l(),p->p.r()).compile());
     }
     
     @Override

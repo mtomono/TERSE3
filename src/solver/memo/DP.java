@@ -16,8 +16,8 @@
 package solver.memo;
 
 import collection.TList;
+import collection.TTreeMap;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.function.Function;
 import orderedSet.Comparators;
 import static shape.ShapeUtil.p2i;
@@ -59,7 +59,7 @@ abstract public class DP<S,R> {
     }
     
     public DP<S,R> memo() {
-        return memo(new TreeMap<>(Comparators.<TPoint2i>sof(p->p.x, p->p.y).compile()));
+        return memo(new TTreeMap<>(Comparators.<TPoint2i>sof(p->p.x, p->p.y).compile()));
     }
     
     public DP<S,R> memo(Grid<R> map) {
