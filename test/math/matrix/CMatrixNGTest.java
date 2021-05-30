@@ -674,16 +674,18 @@ public class CMatrixNGTest {
     @Test
     public void testQ0() {
         System.out.println(test.TestUtils.methodName(0));
-        CMatrix<Double,C2<Double>> original = CMatrix.derr.b("1,1,0;"
-                                                            +"0,1,0;"
-                                                            +"0,1,1");
+        CMatrix<Double,C2<Double>> original = CMatrix.derr.b("""
+                                                            1,1,0;
+                                                            0,1,0;
+                                                            0,1,1
+                                                             """);
         CMatrix<Double,C2<Double>> result = original.qrDecompose().q();
         CMatrix<Double,C2<Double>> expected =CMatrix.derr.b(
-                 new TString(
-                         "1.0, 0.0,     0.0;"
-                        +"0.0, #{r2}, -#{r2};"
-                        +"0.0, #{r2},  #{r2}"
-                 ).let("#{r2}", sqrt(2)/2).body());
+                new TString("""
+                         1.0, 0.0,     0.0;
+                         0.0, #{r2}, -#{r2};
+                         0.0, #{r2},  #{r2}
+                """).let("#{r2}", sqrt(2)/2).body());
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result,expected);
@@ -691,16 +693,18 @@ public class CMatrixNGTest {
     @Test
     public void testQ() {
         System.out.println(test.TestUtils.methodName(0));
-        CMatrix<Double,C2<Double>> original = CMatrix.derr.b("1,0,0;"
-                                                            +"1,1,1;"
-                                                            +"0,0,1");
+        CMatrix<Double,C2<Double>> original = CMatrix.derr.b("""
+                                                            1,0,0;
+                                                            1,1,1;
+                                                            0,0,1
+                                              """);
         CMatrix<Double,C2<Double>> result = original.qrDecompose().q();
         CMatrix<Double,C2<Double>> expected =CMatrix.derr.b(
-                 new TString(
-                         "#{r2}, -#{r2},  0.0;"
-                        +"#{r2},  #{r2},  0.0;"
-                        +"0.0,    0.0,    1.0"
-                 ).let("#{r2}", sqrt(2)/2).body());
+                new TString("""
+                         #{r2}, -#{r2},  0.0;
+                         #{r2},  #{r2},  0.0;
+                         0.0,    0.0,    1.0
+                """).let("#{r2}", sqrt(2)/2).body());
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result,expected);
@@ -708,17 +712,19 @@ public class CMatrixNGTest {
     @Test
     public void testR() {
         System.out.println(test.TestUtils.methodName(0));
-        CMatrix<Double,C2<Double>> original = CMatrix.derr.b("1,0,0;"
-                                                            +"1,1,1;"
-                                                            +"0,0,1");
+        CMatrix<Double,C2<Double>> original = CMatrix.derr.b("""
+                                                         1,0,0;
+                                                         1,1,1;
+                                                         0,0,1
+                                                             """);
         CMatrix<Double,C2<Double>> result = original.qrDecompose().r();
         CMatrix<Double,C2<Double>> expected =CMatrix.derr.b(
-                 new TString(
-                         "#{r2inv}, #{r2},  #{r2};"
-                        +"0.0,      #{r2},  #{r2};"
-                        +"0.0,       0.0,  1.0"
-                 ).let("#{r2}", sqrt(2)/2)
-                  .let("#{r2inv}", 2/sqrt(2)).body());
+                 new TString("""
+                        #{r2inv}, #{r2},  #{r2};
+                        0.0,      #{r2},  #{r2};
+                        0.0,       0.0,  1.0
+                 """).let("#{r2}", sqrt(2)/2)
+                     .let("#{r2inv}", 2/sqrt(2)).body());
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result,expected);
@@ -726,9 +732,11 @@ public class CMatrixNGTest {
     @Test
     public void testRsolve() {
         System.out.println(test.TestUtils.methodName(0));
-        CMatrix<Double,C2<Double>> original = CMatrix.derr.b("1,0,0;"
-                                                            +"1,1,1;"
-                                                            +"0,0,1");
+        CMatrix<Double,C2<Double>> original = CMatrix.derr.b("""
+                                                     1,0,0;
+                                                     1,1,1;
+                                                     0,0,1
+                                                   """);
         CList<Double,C2<Double>> result = original.qrDecompose().solve(TList.sof(1.0,1.0,1.0).toC(v->v, C2.derr));
         CList<Double,C2<Double>> expected =TList.sof(1.0,-1.0,1.0).toC(v->v, C2.derr);
         System.out.println("result  : " + result);
