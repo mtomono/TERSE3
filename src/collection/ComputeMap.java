@@ -24,32 +24,24 @@ import java.util.function.Function;
  *
  * @author masao
  */
-public class TTreeMap<K,V> extends TreeMap<K,V> {
-    public TTreeMap() {
-        super();
-    }
-    public TTreeMap(Comparator<? super K> comparator) {
-        super(comparator);
-    }
-    public TTreeMap(Map<? extends K,? extends V> m) {
-        super(m);
-    }
-    public TTreeMap(SortedMap<K, ? extends V> m) {
-        super(m);
-    }
+public class ComputeMap {
     /**
-     * works like TreeMap#computeIfAbsent() but allows to add entry from mappingFunction.
+     * works like Map#computeIfAbsent() but this allows mappingFunction to change map.
+     * it usually happens when mappingFunction is recursive.
+     * @param <K>
+     * @param <V>
+     * @param map
      * @param key
      * @param mappingFunction
      * @return 
      */
-    public V computeIfAbsent(K key, Function<? super K, ? extends V> mappingFunction) {
+    public static <K,V> V computeIfAbsent(Map<K,V> map, K key, Function<? super K, ? extends V> mappingFunction) {
         V value;
-        if (!containsKey(key)) {
+        if (!map.containsKey(key)) {
             value=mappingFunction.apply(key);
-            put(key,value);
+            map.put(key,value);
         } else
-            value=get(key);
+            value=map.get(key);
         return value;
     }
 }

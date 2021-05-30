@@ -685,7 +685,7 @@ public class CMatrixNGTest {
                          1.0, 0.0,     0.0;
                          0.0, #{r2}, -#{r2};
                          0.0, #{r2},  #{r2}
-                """).let("#{r2}", sqrt(2)/2).body());
+                           """).let("#{r2}", sqrt(2)/2).body());
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result,expected);
@@ -697,14 +697,14 @@ public class CMatrixNGTest {
                                                             1,0,0;
                                                             1,1,1;
                                                             0,0,1
-                                              """);
+                                                            """);
         CMatrix<Double,C2<Double>> result = original.qrDecompose().q();
         CMatrix<Double,C2<Double>> expected =CMatrix.derr.b(
                 new TString("""
                          #{r2}, -#{r2},  0.0;
                          #{r2},  #{r2},  0.0;
                          0.0,    0.0,    1.0
-                """).let("#{r2}", sqrt(2)/2).body());
+                           """).let("#{r2}", sqrt(2)/2).body());
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result,expected);
@@ -723,7 +723,7 @@ public class CMatrixNGTest {
                         #{r2inv}, #{r2},  #{r2};
                         0.0,      #{r2},  #{r2};
                         0.0,       0.0,  1.0
-                 """).let("#{r2}", sqrt(2)/2)
+                            """).let("#{r2}", sqrt(2)/2)
                      .let("#{r2inv}", 2/sqrt(2)).body());
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
@@ -736,7 +736,7 @@ public class CMatrixNGTest {
                                                      1,0,0;
                                                      1,1,1;
                                                      0,0,1
-                                                   """);
+                                                        """);
         CList<Double,C2<Double>> result = original.qrDecompose().solve(TList.sof(1.0,1.0,1.0).toC(v->v, C2.derr));
         CList<Double,C2<Double>> expected =TList.sof(1.0,-1.0,1.0).toC(v->v, C2.derr);
         System.out.println("result  : " + result);

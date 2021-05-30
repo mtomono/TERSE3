@@ -6,8 +6,8 @@
 package solver.memo;
 
 import collection.TList;
-import collection.TTreeMap;
 import debug.Te;
+import java.util.TreeMap;
 import orderedSet.Comparators;
 import static org.testng.Assert.*;
 import org.testng.annotations.BeforeMethod;
@@ -362,7 +362,7 @@ public class KnapsackNGTest {
                 new Luggage(5,8)
         );
         
-        int result = new Knapsack().target(tested.map(l->p2i(l.weight(),l.value()))).memo(new TTreeMap<>(Comparators.<TPoint2i>sof(p->p.x, p->p.y).compile())).solve(15).value;
+        int result = new Knapsack().target(tested.map(l->p2i(l.weight(),l.value()))).memo(new TreeMap<>(Comparators.<TPoint2i>sof(p->p.x, p->p.y).compile())).solve(15).value;
         int expected = 20;
         System.out.println("result  : "+result);
         System.out.println("expected: "+expected);

@@ -16,8 +16,9 @@
 package solver.memo;
 
 import collection.TList;
-import collection.TTreeMap;
+import static collection.ComputeMap.computeIfAbsent;
 import java.util.Map;
+import java.util.TreeMap;
 import static orderedSet.Comparators.sof;
 import static shape.ShapeUtil.p2i;
 import shape.TPoint2i;
@@ -32,7 +33,7 @@ public class KnapsackBasicMemo extends KnapsackBasic {
     Map<TPoint2i, Integer>memo;
 
     public KnapsackBasicMemo() {
-        this.memo = new TTreeMap<>(sof(xc,yc).compile());
+        this.memo = new TreeMap<>(sof(xc,yc).compile());
     }
     
     /**
@@ -52,7 +53,7 @@ public class KnapsackBasicMemo extends KnapsackBasic {
      */
     @Override
     public int value(int i, int rest, TList<TPoint2i> c) {
-        return memo.computeIfAbsent(p2i(i,rest),p->super.value(i,rest,c));
+        return computeIfAbsent(memo, p2i(i,rest),p->super.value(i,rest,c));
     }
         
 

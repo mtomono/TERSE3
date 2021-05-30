@@ -16,9 +16,10 @@
 package solver.path;
 
 import collection.P;
-import collection.TTreeMap;
+import static collection.ComputeMap.computeIfAbsent;
 import java.util.Map;
 import java.util.Optional;
+import java.util.TreeMap;
 import orderedSet.Comparators;
 
 /**
@@ -30,11 +31,11 @@ public class ShortestPathMemo<N extends Comparable<N>> extends ShortestPathNoRev
     Map<P<N,N>, Optional<Integer>> memo;
     public ShortestPathMemo(Map<P<N, N>, Integer> graph) {
         super(graph);
-        this.memo = new TTreeMap<>(Comparators.<P<N,N>>sof(p->p.l(),p->p.r()).compile());
+        this.memo = new TreeMap<>(Comparators.<P<N,N>>sof(p->p.l(),p->p.r()).compile());
     }
     
     @Override
     public Optional<Integer> find(N from, N to) {
-        return memo.computeIfAbsent(P.p(from,to), p->super.find(p.l(),p.r()));
+        return computeIfAbsent(memo, P.p(from,to), p->super.find(p.l(),p.r()));
     }
 }
