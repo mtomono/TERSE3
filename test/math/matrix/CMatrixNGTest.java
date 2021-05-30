@@ -662,11 +662,13 @@ public class CMatrixNGTest {
     @Test
     public void testPlu() {
         System.out.println(test.TestUtils.methodName(0));
-        CMatrix<Double,C2<Double>> original = md.b(     "5,4,3,2,1;"
-                                                      + "4,4,3,2,1;"
-                                                      + "3,3,3,2,1;"
-                                                      + "2,2,2,2,1;"
-                                                      + "1,1,1,1,1");
+        CMatrix<Double,C2<Double>> original = md.b("""
+                                                 5,4,3,2,1;
+                                                 4,4,3,2,1;
+                                                 3,3,3,2,1;
+                                                 2,2,2,2,1;
+                                                 1,1,1,1,1
+                                                   """);
         TList<CMatrix<Double,C2<Double>>> result = original.pluDecompose();
         System.out.println("result  : " + result);
     }
