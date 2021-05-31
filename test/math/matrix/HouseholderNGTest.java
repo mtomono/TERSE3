@@ -44,12 +44,12 @@ public class HouseholderNGTest {
     @Test
     public void testRemove1() {
         System.out.println(test.TestUtils.methodName(0));
-        CMatrix<Double,C2<Double>> target=CMatrix.derr.b(
-                          "5,4,2,3;"
-                        + "1,2,3,4;"
-                        + "2,3,4,5;"
-                        + "6,5,1,3;"
-        );
+        CMatrix<Double,C2<Double>> target=CMatrix.derr.b("""
+                        5,4,2,3;
+                        1,2,3,4;
+                        2,3,4,5;
+                        6,5,1,3;
+                             """);
         CMatrix<Double,C2<Double>> tested=Householder.localQ(target);
         var result=tested.mul(target).columns().get(0);
         var expected=TList.sof(8.12403840463596, 0.0, 0.0, 0.0).toC(v->v, C2.derr);
@@ -61,12 +61,12 @@ public class HouseholderNGTest {
     @Test
     public void testRemove2() {
         System.out.println(test.TestUtils.methodName(0));
-        CMatrix<Double,C2<Double>> target=CMatrix.derr.b(
-                          "5,4,2,3;"
-                        + "1,2,3,4;"
-                        + "2,3,4,5;"
-                        + "6,5,1,3;"
-        );
+        CMatrix<Double,C2<Double>> target=CMatrix.derr.b("""
+                        5,4,2,3;
+                        1,2,3,4;
+                        2,3,4,5;
+                        6,5,1,3;
+                             """);
         CMatrix<Double,C2<Double>> h0=Householder.localQ(target);
         CMatrix<Double,C2<Double>> r1=h0.mul(target).sfix();
         CMatrix<Double,C2<Double>> s1=r1.subMatrixLR(1,1);
@@ -81,12 +81,12 @@ public class HouseholderNGTest {
     @Test
     public void testQrDecomposeH_QisOrthogonal() {
         System.out.println(test.TestUtils.methodName(0));
-        CMatrix<Double,C2<Double>> target=CMatrix.derr.b(
-                          "5,4,2,3;"
-                        + "1,2,3,4;"
-                        + "2,3,4,5;"
-                        + "6,5,1,3;"
-        );
+        CMatrix<Double,C2<Double>> target=CMatrix.derr.b("""
+                        5,4,2,3;
+                        1,2,3,4;
+                        2,3,4,5;
+                        6,5,1,3;
+                             """);
         var qr=new QrDecompose<>(target).decompose();
         var result = qr.qinv().mul(qr.q());
         var expected = target.i();
@@ -98,12 +98,12 @@ public class HouseholderNGTest {
     @Test
     public void testQrDecomposeH_RisUpperTriangle() {
         System.out.println(test.TestUtils.methodName(0));
-        CMatrix<Double,C2<Double>> target=CMatrix.derr.b(
-                          "5,4,2,3;"
-                        + "1,2,3,4;"
-                        + "2,3,4,5;"
-                        + "6,5,1,3;"
-        );
+        CMatrix<Double,C2<Double>> target=CMatrix.derr.b("""
+                        5,4,2,3;
+                        1,2,3,4;
+                        2,3,4,5;
+                        6,5,1,3;
+                             """);
         var qr=new QrDecompose<>(target).decompose();
         var result = qr.r();
         var expected = qr.r().fillLower(C2.derr.zero());
@@ -115,12 +115,12 @@ public class HouseholderNGTest {
     @Test
     public void testQrDecomposeH_QRisTarget() {
         System.out.println(test.TestUtils.methodName(0));
-        CMatrix<Double,C2<Double>> target=CMatrix.derr.b(
-                          "5,4,2,3;"
-                        + "1,2,3,4;"
-                        + "2,3,4,5;"
-                        + "6,5,1,3;"
-        );
+        CMatrix<Double,C2<Double>> target=CMatrix.derr.b("""
+                        5,4,2,3;
+                        1,2,3,4;
+                        2,3,4,5;
+                        6,5,1,3;
+                             """);
         var qr=new QrDecompose<>(target).decompose();
         var result = qr.q().mul(qr.r());
         var expected = target;

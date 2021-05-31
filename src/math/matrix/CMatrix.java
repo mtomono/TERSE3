@@ -63,7 +63,8 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
         }
 
         public CMatrix<K,T> b(String source) {
-            return Builder.this.b(TList.sof(source.split(";")).map(r->TList.sof(r.trim().split(",")).map(s->b.b(s.trim())).sfix()).sfix());
+            return Builder.this.b(TList.sof(source.split(";")).filter(l->!l.trim().isEmpty())
+                    .map(r->TList.sof(r.trim().split(",")).map(s->b.b(s.trim())).sfix()).sfix());
         }
         
         public CMatrix<K,T> i(int n) {
