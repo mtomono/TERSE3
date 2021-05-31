@@ -22,10 +22,10 @@ public class QR<K,T extends Context<K,T>&ContextOrdered<K,T>> extends TList<CMat
         super(body);
     }
     public CMatrix<K,T> q() {
-        return last(1).transpose();
+        return qinv().transpose();
     }
     public CMatrix<K,T> qinv() {
-        return last(1);
+        return get(0);
     }
     public CMatrix<K,T> r() {
         return last(0);

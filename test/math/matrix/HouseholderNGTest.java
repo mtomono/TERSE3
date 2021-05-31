@@ -6,8 +6,8 @@
 package math.matrix;
 
 import collection.TList;
+import debug.Te;
 import math.C2;
-import math.CList;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 
@@ -21,19 +21,9 @@ public class HouseholderNGTest {
     }
 
     @Test
-    public void testU() {
-        System.out.println(test.TestUtils.methodName(0));
-        CList<Double,C2<Double>> result=new Householder<>(C2.derr,TList.sof(1,1,1).toC(v->(double)v,C2.derr),TList.sof(1,-1,1).toC(v->(double)v, C2.derr)).u();
-        CList<Double,C2<Double>> expected = TList.sof(0,2,0).toC(v->(double)v, C2.derr);
-        System.out.println("result  : " + result);
-        System.out.println("expected: " + expected);
-        assertEquals(result, expected);
-    }
-
-    @Test
     public void testQSymmetric() {
         System.out.println(test.TestUtils.methodName(0));
-        CMatrix<Double,C2<Double>> tested=new Householder<>(C2.derr,TList.sof(1,1,1).toC(v->(double)v,C2.derr),TList.sof(1,-1,1).toC(v->(double)v, C2.derr)).H();
+        CMatrix<Double,C2<Double>> tested=Householder.mirror(C2.derr,TList.sof(1,1,1).toC(v->(double)v,C2.derr),TList.sof(1,-1,1).toC(v->(double)v, C2.derr));
         var result=tested.transpose();
         var expected=tested;
         System.out.println("result  : " + result);
@@ -44,7 +34,7 @@ public class HouseholderNGTest {
     @Test
     public void testQOrthogonal() {
         System.out.println(test.TestUtils.methodName(0));
-        CMatrix<Double,C2<Double>> tested=new Householder<>(C2.derr,TList.sof(1,1,1).toC(v->(double)v,C2.derr),TList.sof(1,-1,1).toC(v->(double)v, C2.derr)).H();
+        CMatrix<Double,C2<Double>> tested=Householder.mirror(C2.derr,TList.sof(1,1,1).toC(v->(double)v,C2.derr),TList.sof(1,-1,1).toC(v->(double)v, C2.derr));
         var result=tested.transpose().mul(tested);
         var expected=tested.i();
         System.out.println("result  : " + result);
@@ -60,16 +50,14 @@ public class HouseholderNGTest {
                         + "2,3,4,5;"
                         + "6,5,1,3;"
         );
-        var x=target.columns().get(0);
-        var y=x.wrap(TList.sof(x.dot(x).sqrt()).append(TList.nCopies(x.body().size()-1,x.b.zero())));
-        CMatrix<Double,C2<Double>> tested=new Householder<>(C2.derr,x,y).H();
-        System.out.println(tested.mul(x));
+        CMatrix<Double,C2<Double>> tested=Householder.localQ(target);
         var result=tested.mul(target).columns().get(0);
-        var expected=y;
+        var expected=TList.sof(8.12403840463596, 0.0, 0.0, 0.0).toC(v->v, C2.derr);
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
     }
+
     @Test
     public void testRemove2() {
         System.out.println(test.TestUtils.methodName(0));
@@ -79,15 +67,63 @@ public class HouseholderNGTest {
                         + "2,3,4,5;"
                         + "6,5,1,3;"
         );
-        var x0=target.columns().get(0);
-        var y0=x0.wrap(TList.sof(x0.dot(x0).sqrt()).append(TList.nCopies(x0.body().size()-1,x0.b.zero())));
-        CMatrix<Double,C2<Double>> h0=new Householder<>(C2.derr,x0,y0).H();
-        CMatrix<Double,C2<Double>> t1=h0.mul(target);
-        var x1=t1.columns().get(1).m(l->l.replaceAt(0, x0.b.zero()));
-        var y1=x1.wrap(TList.nCopies(x1.body().size(),x1.b.zero()).replaceAt(1, x1.dot(x1).sqrt()));
-        CMatrix<Double,C2<Double>> h1=new Householder<>(C2.derr,x1,y1).H();
-        var result=h1.mul(h0.mul(target)).columns().get(1).m(l->l.subList(1,4));
-        var expected=y1.m(l->l.subList(1,4));
+        CMatrix<Double,C2<Double>> h0=Householder.localQ(target);
+        CMatrix<Double,C2<Double>> r1=h0.mul(target).sfix();
+        CMatrix<Double,C2<Double>> s1=r1.subMatrixLR(1,1);
+        CMatrix<Double,C2<Double>> h1=Householder.localQ(s1);
+        var result=h1.mul(s1).columns().get(0);
+        var expected=TList.sof(1.7407765595569777, 0.0, 0.0).toC(v->v, C2.derr);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    
+    @Test
+    public void testQrDecomposeH_QisOrthogonal() {
+        System.out.println(test.TestUtils.methodName(0));
+        CMatrix<Double,C2<Double>> target=CMatrix.derr.b(
+                          "5,4,2,3;"
+                        + "1,2,3,4;"
+                        + "2,3,4,5;"
+                        + "6,5,1,3;"
+        );
+        var qr=new QrDecompose<>(target).decompose();
+        var result = qr.qinv().mul(qr.q());
+        var expected = target.i();
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    
+    @Test
+    public void testQrDecomposeH_RisUpperTriangle() {
+        System.out.println(test.TestUtils.methodName(0));
+        CMatrix<Double,C2<Double>> target=CMatrix.derr.b(
+                          "5,4,2,3;"
+                        + "1,2,3,4;"
+                        + "2,3,4,5;"
+                        + "6,5,1,3;"
+        );
+        var qr=new QrDecompose<>(target).decompose();
+        var result = qr.r();
+        var expected = qr.r().fillLower(C2.derr.zero());
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    
+    @Test
+    public void testQrDecomposeH_QRisTarget() {
+        System.out.println(test.TestUtils.methodName(0));
+        CMatrix<Double,C2<Double>> target=CMatrix.derr.b(
+                          "5,4,2,3;"
+                        + "1,2,3,4;"
+                        + "2,3,4,5;"
+                        + "6,5,1,3;"
+        );
+        var qr=new QrDecompose<>(target).decompose();
+        var result = qr.q().mul(qr.r());
+        var expected = target;
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);

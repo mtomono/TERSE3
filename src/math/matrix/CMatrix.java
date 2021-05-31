@@ -63,7 +63,7 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
         }
 
         public CMatrix<K,T> b(String source) {
-            return Builder.this.b(TList.sof(source.split(";")).map((r) -> TList.sof(r.split(",")).map((s) -> b.b(s)).sfix()).sfix());
+            return Builder.this.b(TList.sof(source.split(";")).map(r->TList.sof(r.trim().split(",")).map(s->b.b(s.trim())).sfix()).sfix());
         }
         
         public CMatrix<K,T> i(int n) {
@@ -127,11 +127,21 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
     public CMatrix<K,T> subColumns(int seek) {
         return seek<0?subColumns(0,y+seek):subColumns(seek,y);
     }
+    /**
+     * submatrix of lower right.
+     * @param x0
+     * @param y0
+     * @return 
+     */
     public CMatrix<K,T> subMatrixLR(int x0, int y0) {
         return subMatrix(x0,y0,x,y);
     }
     public CMatrix<K,T> appendDiag(CMatrix<K,T> added) {
         return wrap(body().map(r->r.append(TList.nCopies(added.y, bb.zero()))).append(added.body().map(r->TList.nCopies(y, bb.zero()).append(r))));
+    }
+    public CMatrix<K,T> reset(CMatrix<K,T> matrix) {
+        rows().pair(matrix.rows(),(a,b)->a.reset(r->b)).forEach(x->{});
+        return this;
     }
     public int minSize() {
         return min(x,y);

@@ -101,6 +101,26 @@ public class CMatrixNGTest {
         assertEquals(result, expected);
     }
     @Test
+    public void testReset() {
+        System.out.println(test.TestUtils.methodName(0));
+        CMatrix<Rational,C2<Rational>> result = mr.i(5).sfix();
+        result.subMatrixLR(2, 2).reset(mr.b(Te.e("""
+                                            1,1,1;
+                                            1,1,1;
+                                            1,1,1
+                                            """)));
+        CMatrix<Rational,C2<Rational>> expected = mr.b("""
+                                     1,0,0,0,0;
+                                     0,1,0,0,0;
+                                     0,0,1,1,1;
+                                     0,0,1,1,1;
+                                     0,0,1,1,1
+                                                       """);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    @Test
     public void testEliminate1235() {
         System.out.println(test.TestUtils.methodName(0));
         CMatrix<BigDecimal,C2<BigDecimal>> result = mbd.b(          
@@ -629,7 +649,7 @@ public class CMatrixNGTest {
         CMatrix<Rational,C2<Rational>> original = mr.b("1,2,2,1;"
                                                           + "2,4,4,2;"
                                                           + "1,8,5,2;"
-                                                          + "2,4,3,3;");
+                                                          + "2,4,3,3");
         TList<CMatrix<Rational,C2<Rational>>> result = original.pluDecompose().map(m->m.map(c->c.m(r->r.simplify())));
         TList<CMatrix<Rational,C2<Rational>>> expected = TList.sof(mr.b(
                                                             "0,0,0,1;"
