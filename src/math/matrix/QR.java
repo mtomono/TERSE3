@@ -30,6 +30,9 @@ public class QR<K,T extends Context<K,T>&ContextOrdered<K,T>> extends TList<CMat
     public CMatrix<K,T> r() {
         return last(0);
     }
+    public CMatrix<K,T> rinv() {
+        return r().invUpper();
+    }
     public CList<K,T> solve(CList<K,T> v) {
         return r().backwardSubstitution(qinv().mul(v));
     }

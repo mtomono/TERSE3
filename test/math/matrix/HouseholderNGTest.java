@@ -128,4 +128,21 @@ public class HouseholderNGTest {
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
     }
+    
+    @Test
+    public void testQrDecomposeH_RinvRisI() {
+        System.out.println(test.TestUtils.methodName(0));
+        CMatrix<Double,C2<Double>> target=CMatrix.derr.b("""
+                        5,4,2,3;
+                        1,2,3,4;
+                        2,3,4,5;
+                        6,5,1,3;
+                             """);
+        var qr=new QrDecompose<>(target).decompose();
+        var result = qr.rinv().mul(qr.r());
+        var expected = target.i();
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
 }
