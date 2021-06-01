@@ -144,6 +144,10 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
         rows().pair(matrix.rows(),(a,b)->a.reset(r->b)).forEach(x->{});
         return this;
     }
+    public CMatrix<K,T> resetLR(CMatrix<K,T> matrix) {
+        subMatrixLR(x-matrix.x, y-matrix.y).reset(matrix);
+        return this;
+    }
     public int minSize() {
         return min(x,y);
     }

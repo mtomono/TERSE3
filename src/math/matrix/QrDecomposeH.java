@@ -5,9 +5,9 @@
  */
 package math.matrix;
 
-import collection.P;
 import collection.TList;
 import function.Holder;
+import static function.Functions.tee;
 import java.util.Optional;
 import math.Context;
 import math.ContextOrdered;
@@ -26,12 +26,30 @@ public class QrDecomposeH<K, T extends Context<K,T>&ContextOrdered<K,T>> {
     }
     
     public QR<K,T> decompose() {
-        Holder<CMatrix> rh=new Holder<>(target);
-        Holder<CMatrix> qh=new Holder<>(target.i().sfix());
+        Holder<CMatrix<K,T>> rh=new Holder<>(target.sfix());
+        Holder<CMatrix<K,T>> qh=new Holder<>(target.i().sfix());
         TList.range(0,target.y-1).iterator()
                 .map(i->rh.get().subMatrixLR(i,i))
-                .map(s->P.p(s,localQ(s))).tee(rq->qh.set(Optional.of(qh.get().subMatrixLR(rq.l().x,rq.l().y)).map(qc->qc.reset(rq.r().mul(qc))).get()))
-                .map(rq->rq.l().reset(rq.r().mul(rq.l()))).forEachRemaining(v->{});
+                .forEachRemaining(rs->Optional.of(localQ(rs).sfix())
+                        .map(tee(lq->rh.get().resetLR(lq.mul(rs).sfix())))
+                        .map(tee(lq->qh.set(target.i().sfix().resetLR(lq).mul(qh.get()).sfix()))));
+        return new QR<>(TList.sof(qh.get(),rh.get()));
+    }
+    
+    /**
+     * demopose() equivalent which is simpler to read.
+     * but disadvantageous in the perspective of performance.
+     * @return 
+     */
+    public QR<K,T> decompose_reference() {
+        Holder<CMatrix<K,T>> rh=new Holder<>(target.sfix());
+        Holder<CMatrix<K,T>> qh=new Holder<>(target.i().sfix());
+        TList.range(0,target.y-1).iterator().forEachRemaining(i->{
+            var rs=rh.get().subMatrixLR(i,i);
+            var lq=target.wrap(target.bb.i(i)).appendDiag(localQ(rs).sfix());
+            rh.set(lq.mul(rh.get()).sfix());
+            qh.set(lq.mul(qh.get()).sfix());
+        });
         return new QR<>(TList.sof(qh.get(),rh.get()));
     }
 
