@@ -96,7 +96,7 @@ public class HouseholderNGTest {
     }
     
     @Test
-    public void testQrDecomposeH_QsDetisOne() {
+    public void testQrDecomposeH_SquareOfQsDetisOne() {
         System.out.println(test.TestUtils.methodName(0));
         CMatrix<Double,C2<Double>> target=CMatrix.derr.b("""
                         5,4,2,3;
