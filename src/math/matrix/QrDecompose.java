@@ -19,7 +19,7 @@ import math.Context;
 import math.ContextOrdered;
 
 /**
- *
+ * QR decomposition using Gram-Schmidt method.
  * @author masao
  * @param <K>
  * @param <T>

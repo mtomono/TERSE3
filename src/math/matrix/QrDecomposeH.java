@@ -23,7 +23,7 @@ import math.ContextOrdered;
 import static math.matrix.Householder.localQ;
 
 /**
- *
+ * QR decomposition using Householder method.
  * @author masao
  * @param <K>
  * @param <T>

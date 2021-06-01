@@ -137,14 +137,33 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
     public CMatrix<K,T> subMatrixLR(int x0, int y0) {
         return subMatrix(x0,y0,x,y);
     }
+    /**
+     * connect another matrix in a diagonal way.
+     * the other part of the resulting matrix is filled with zero.
+     * @param added
+     * @return 
+     */
     public CMatrix<K,T> appendDiag(CMatrix<K,T> added) {
         return wrap(body().map(r->r.append(TList.nCopies(added.y, bb.zero()))).append(added.body().map(r->TList.nCopies(y, bb.zero()).append(r))));
     }
+    /**
+     * replace content with parameter 'matrix'.
+     * intended to be applied to submatrix of some matrix.
+     * @param matrix
+     * @return 
+     */
     public CMatrix<K,T> reset(CMatrix<K,T> matrix) {
         rows().pair(matrix.rows(),(a,b)->a.reset(r->b)).forEach(x->{});
         return this;
     }
+    /**
+     * replace lower right part of this matrix with 'matrix'.
+     * size of the marameter 'matrix' is supposed to be smaller than this matrix.
+     * @param matrix
+     * @return 
+     */
     public CMatrix<K,T> resetLR(CMatrix<K,T> matrix) {
+        assert x>=matrix.x&&y>=matrix.y:"size of the parameter matrix is supposed to be smaller than this matrix";
         subMatrixLR(x-matrix.x, y-matrix.y).reset(matrix);
         return this;
     }
