@@ -35,7 +35,7 @@ public class Householder<K, T extends Context<K,T>&ContextOrdered<K,T>> {
     }
     public static <K, T extends Context<K,T>&ContextOrdered<K,T>> CMatrix<K,T> localQ(CMatrix<K,T> target) {
         CList<K,T> x=target.columns().get(0).sfix();
-        CList<K,T> y=x.zero().m(l->l.replaceAt(0, x.dot(x).sqrt())).sfix();
+        CList<K,T> y=x.zero().m(l->l.replaceAt(0, x.get(0).gtZero()?x.dot(x).sqrt().negate():x.dot(x).sqrt())).sfix();
         return mirror(target.bb,x,y);
     }
 }

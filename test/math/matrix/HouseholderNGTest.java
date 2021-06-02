@@ -52,7 +52,7 @@ public class HouseholderNGTest {
                              """);
         CMatrix<Double,C2<Double>> tested=Householder.localQ(target);
         var result=tested.mul(target).columns().get(0);
-        var expected=TList.sof(8.12403840463596, 0.0, 0.0, 0.0).toC(v->v, C2.derr);
+        var expected=TList.sof(-8.12403840463596, 0.0, 0.0, 0.0).toC(v->v, C2.derr);
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
@@ -72,7 +72,7 @@ public class HouseholderNGTest {
         CMatrix<Double,C2<Double>> s1=r1.subMatrixLR(1,1);
         CMatrix<Double,C2<Double>> h1=Householder.localQ(s1);
         var result=h1.mul(s1).columns().get(0);
-        var expected=TList.sof(1.7407765595569777, 0.0, 0.0).toC(v->v, C2.derr);
+        var expected=TList.sof(-1.7407765595569777, 0.0, 0.0).toC(v->v, C2.derr);
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
@@ -141,10 +141,10 @@ public class HouseholderNGTest {
         var qr=new QrDecomposeH<>(target).decompose();
         var result = qr.r();
         var expected = CMatrix.derr.b("""
-    8.12403840463596, 7.139306476801298, 3.323470256441984, 5.785300076028639;
-    4.440892098500626E-16, 1.740776559556978, 4.177863742936749, 4.996028725928528;
-    8.881784197001252E-16, 0.0, 1.224744871391587, 0.734846922834951;
-    1.7763568394002505E-15, -2.7755575615628914E-17, 3.3306690738754696E-16, 0.17320508075688734;
+    -8.12403840463596, -7.139306476801299, -3.323470256441984, -5.785300076028639;
+    1.1102230246251565E-16, -1.7407765595569784, -4.177863742936747, -4.996028725928527;
+    3.3306690738754696E-16, 2.736526283353413E-16, -1.2247448713915898, -0.7348469228349542;
+    4.440892098500626E-16, 0.0, 5.551115123125783E-17, -0.17320508075688756;
                                     """);
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
@@ -165,10 +165,10 @@ public class HouseholderNGTest {
         var q=target.mul(rinv);
         var result = qr.q();
         var expected = CMatrix.derr.b("""
-    0.6154574548966636, -0.22630095274240644, 0.7348469228349535, 0.1732050807568868;
-    0.12309149097933253, 0.644087327036083, -0.081649658092776, 0.7505553499465094;
-    0.24618298195866553, 0.713718389418361, 0.16329931618554583, -0.6350852961085884;
-    0.7385489458759965, -0.15666989036012854, -0.6531972647421818, -0.05773502691897292;
+    -0.6154574548966638, 0.22630095274240733, -0.7348469228349533, -0.17320508075688817;
+    -0.12309149097933272, -0.6440873270360821, 0.08164965809277289, -0.7505553499465134;
+    -0.24618298195866545, -0.7137183894183611, -0.16329931618554577, 0.6350852961085883;
+    -0.7385489458759964, 0.15666989036012788, 0.653197264742181, 0.05773502691896297
                                                                         """);
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
