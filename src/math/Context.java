@@ -55,8 +55,26 @@ public interface Context<K,T extends Context<K,T>> extends Wrapper<K,T>{
     default T abs() {
         return wrap(b().body().abs(body()));
     }
+    default T sign() {
+        return wrap(b().body().sign(body()));
+    }
     default T sqrt() {
         return wrap(b().body().sqrt(body()));
+    }
+    default T sin() {
+        return wrap(b().body().sin(body()));
+    }
+    default T cos() {
+        return wrap(b().body().cos(body()));
+    }
+    default T tan() {
+        return wrap(b().body().tan(body()));
+    }
+    default T log() {
+        return wrap(b().body().log(body()));
+    }
+    default T log10() {
+        return wrap(b().body().log10(body()));
     }
     default T interpolate(T rate, T o, T orate) {
         return mul(orate).add(o.mul(rate)).div(rate.add(orate));

@@ -101,4 +101,34 @@ public class DoubleOp implements Op<Double> {
     public Double one() {
         return Double.valueOf(1);
     }
+
+    @Override
+    public Double sign(Double v0) {
+        return Math.signum(v0);
+    }
+
+    @Override
+    public Double sin(Double v0) {
+        return Math.sin(v0);
+    }
+
+    @Override
+    public Double cos(Double v0) {
+        return Math.cos(v0);
+    }
+    
+    @Override
+    public Double tan(Double v0) {
+        return Math.tan(v0);
+    }
+
+    @Override
+    public Double log(Double v0) {
+        return Math.log(v0);
+    }
+    
+    @Override
+    public Double log10(Double v0) {
+        return Math.log10(v0);
+    }
 }

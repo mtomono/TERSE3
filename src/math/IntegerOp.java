@@ -102,5 +102,35 @@ public class IntegerOp implements Op<Integer> {
     public Integer one() {
         return 1;
     }
+
+    @Override
+    public Integer sign(Integer v0) {
+        return Integer.signum(v0);
+    }
+
+    @Override
+    public Integer sin(Integer v0) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Integer cos(Integer v0) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Integer tan(Integer v0) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Integer log(Integer v0) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
+    public Integer log10(Integer v0) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

@@ -102,4 +102,34 @@ public class BigDecimalOp implements Op<BigDecimal>{
     public BigDecimal one() {
         return BigDecimal.ONE;
     }
+
+    @Override
+    public BigDecimal sign(BigDecimal v0) {
+        return b(v0.signum());
+    }
+
+    @Override
+    public BigDecimal sin(BigDecimal v0) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public BigDecimal cos(BigDecimal v0) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public BigDecimal tan(BigDecimal v0) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public BigDecimal log(BigDecimal v0) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
+    public BigDecimal log10(BigDecimal v0) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

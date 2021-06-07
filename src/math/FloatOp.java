@@ -102,4 +102,34 @@ public class FloatOp implements Op<Float> {
     public Float one() {
         return Float.valueOf(1);
     }
+
+    @Override
+    public Float sign(Float v0) {
+        return Math.signum(v0);
+    }
+
+    @Override
+    public Float sin(Float v0) {
+        return(float)Math.sin(v0);
+    }
+
+    @Override
+    public Float cos(Float v0) {
+        return(float)Math.cos(v0);
+    }
+
+    @Override
+    public Float tan(Float v0) {
+        return(float)Math.tan(v0);
+    }
+
+    @Override
+    public Float log(Float v0) {
+        return(float)Math.log(v0);
+    }
+
+    @Override
+    public Float log10(Float v0) {
+        return(float)Math.log10(v0);
+    }
 }

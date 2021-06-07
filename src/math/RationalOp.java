@@ -110,4 +110,34 @@ public class RationalOp implements Op<Rational> {
         return Rational.ONE;
     }
 
+    @Override
+    public Rational sign(Rational v0) {
+        return new Rational(Long.signum(v0.denominator),Long.signum(v0.numerator));
+    }
+
+    @Override
+    public Rational sin(Rational v0) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Rational cos(Rational v0) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Rational tan(Rational v0) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Rational log(Rational v0) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Rational log10(Rational v0) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }
