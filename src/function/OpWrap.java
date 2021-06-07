@@ -108,5 +108,34 @@ public class OpWrap<K> implements Op<K> {
     public K one() {
         return f.apply(op.one());
     }
+
+    @Override
+    public K sign(K v0) {
+        return f.apply(op.sign(v0));
+    }
+
+    @Override
+    public K sin(K v0) {
+        return f.apply(op.sin(v0));
+    }
+
+    @Override
+    public K cos(K v0) {
+        return f.apply(op.cos(v0));
+    }
     
+    @Override
+    public K tan(K v0) {
+        return f.apply(op.tan(v0));
+    }
+
+    @Override
+    public K log(K v0) {
+        return f.apply(op.log(v0));
+    }
+    
+    @Override
+    public K log10(K v0) {
+        return f.apply(op.log10(v0));
+    }
 }

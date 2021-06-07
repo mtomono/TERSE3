@@ -84,7 +84,13 @@ public interface Op<K> {
     public K div(K v0, K v1);
     public K negate(K v0);
     public K abs(K v0);
+    public K sign(K v0);
     public K sqrt(K v0);
+    public K sin(K v0);
+    public K cos(K v0);
+    public K tan(K v0);
+    public K log(K v0);
+    public K log10(K v0);
     public K zero();
     public K one();
 }
