@@ -27,6 +27,7 @@ import java.util.function.BiPredicate;
  * @param <K>
  */
 public class C2<K> implements ContextOrdered<K,C2<K>> {
+    static public C2.Builder<String> s=new Builder<>(new StringOp(), new StringFormat(), Order.natural());
     static public C2.Builder<Integer> i=new Builder<>(new IntegerOp(), new IntegerFormat(), Order.natural());
     static public C2.Builder<Long> l=new Builder<>(new LongOp(), new LongFormat(), Order.natural());
     static public C2.Builder<Float> f=new Builder<>(new FloatOp(), new FloatFormat(), Order.natural());

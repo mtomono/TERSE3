@@ -15,37 +15,24 @@
 package math.matrix;
 
 import collection.TList;
-import java.util.List;
-import math.CList;
+import iterator.TIterator;
+import java.util.Optional;
 import math.Context;
 import math.ContextOrdered;
+import static math.matrix.Householder.columnEraser;
 
 /**
- *
+ * QR decomposition using Householder method.
+ * I left several variation of decompose() in this class.
+ * because all of them seemed to me similarly important.
+ * i like decompose_with_accum() best.
  * @author masao
  * @param <K>
  * @param <T>
  */
-public class QR<K,T extends Context<K,T>&ContextOrdered<K,T>> extends TList<CMatrix<K,T>> {
-    public QR(List<CMatrix<K, T>> body) {
-        super(body);
-    }
-    public QR(CMatrix<K, T>... body) {
-        this(TList.sof(body));
-    }
-    public CMatrix<K,T> q() {
-        return qinv().transpose();
-    }
-    public CMatrix<K,T> qinv() {
-        return get(0);
-    }
-    public CMatrix<K,T> r() {
-        return last(0);
-    }
-    public CMatrix<K,T> rinv() {
-        return r().invUpper();
-    }
-    public CList<K,T> solve(CList<K,T> v) {
-        return r().backwardSubstitution(qinv().mul(v));
+public class HouseholderQR<K, T extends Context<K,T>&ContextOrdered<K,T>> {
+    public static <K, T extends Context<K,T>&ContextOrdered<K,T>> QR<K,T> decompose(CMatrix<K,T> target) {
+        return TIterator.range(0,target.y-1).accum(new QR<>(target.i().sfix(), target.sfix()),
+                (qr,i)->{var qn=columnEraser(qr.r(),i);return new QR<>(qn.mul(qr.qinv()).sfix(),qn.mul(qr.r()).sfix());}).last();
     }
 }

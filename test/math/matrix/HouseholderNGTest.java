@@ -50,7 +50,7 @@ public class HouseholderNGTest {
                         2,3,4,5;
                         6,5,1,3;
                              """);
-        CMatrix<Double,C2<Double>> tested=Householder.localQ(target);
+        CMatrix<Double,C2<Double>> tested=Householder.columnEraserLR(target);
         var result=tested.mul(target).columns().get(0);
         var expected=TList.sof(-8.12403840463596, 0.0, 0.0, 0.0).toC(v->v, C2.derr);
         System.out.println("result  : " + result);
@@ -67,10 +67,10 @@ public class HouseholderNGTest {
                         2,3,4,5;
                         6,5,1,3;
                              """);
-        CMatrix<Double,C2<Double>> h0=Householder.localQ(target);
+        CMatrix<Double,C2<Double>> h0=Householder.columnEraserLR(target);
         CMatrix<Double,C2<Double>> r1=h0.mul(target).sfix();
         CMatrix<Double,C2<Double>> s1=r1.subMatrixLR(1,1);
-        CMatrix<Double,C2<Double>> h1=Householder.localQ(s1);
+        CMatrix<Double,C2<Double>> h1=Householder.columnEraserLR(s1);
         var result=h1.mul(s1).columns().get(0);
         var expected=TList.sof(-1.7407765595569777, 0.0, 0.0).toC(v->v, C2.derr);
         System.out.println("result  : " + result);
@@ -87,7 +87,7 @@ public class HouseholderNGTest {
                         2,3,4,5;
                         6,5,1,3;
                              """);
-        var qr=new QrDecomposeH<>(target).decompose();
+        var qr=HouseholderQR.decompose(target);
         var result = qr.qinv().mul(qr.q());
         var expected = target.i();
         System.out.println("result  : " + result);
@@ -104,7 +104,7 @@ public class HouseholderNGTest {
                         2,3,4,5;
                         6,5,1,3;
                              """);
-        var qr=new QrDecomposeH<>(target).decompose();
+        var qr=HouseholderQR.decompose(target);
         var result = Optional.of(qr.q().luDecompose().det()).map(d->d.mul(d)).get();
         var expected = C2.derr.one();
         System.out.println("result  : " + result);
@@ -121,7 +121,7 @@ public class HouseholderNGTest {
                         2,3,4,5;
                         6,5,1,3;
                              """);
-        var qr=new QrDecomposeH<>(target).decompose();
+        var qr=HouseholderQR.decompose(target);
         var result = qr.r();
         var expected = qr.r().fillLower(C2.derr.zero());
         System.out.println("result  : " + result);
@@ -138,7 +138,7 @@ public class HouseholderNGTest {
                         2,3,4,5;
                         6,5,1,3;
                              """);
-        var qr=new QrDecomposeH<>(target).decompose();
+        var qr=HouseholderQR.decompose(target);
         var result = qr.r();
         var expected = CMatrix.derr.b("""
     -8.12403840463596, -7.139306476801299, -3.323470256441984, -5.785300076028639;
@@ -160,7 +160,7 @@ public class HouseholderNGTest {
                         2,3,4,5;
                         6,5,1,3;
                              """);
-        var qr=new QrDecomposeH<>(target).decompose();
+        var qr=HouseholderQR.decompose(target);
         var rinv=qr.r().luDecompose().inv();
         var q=target.mul(rinv);
         var result = qr.q();
@@ -184,7 +184,7 @@ public class HouseholderNGTest {
                         2,3,4,5;
                         6,5,1,3;
                              """);
-        var qr=new QrDecomposeH<>(target).decompose();
+        var qr=HouseholderQR.decompose(target);
         var rinv=qr.r().luDecompose().inv();
         var q=target.mul(rinv);
         System.out.println(q);
@@ -203,7 +203,7 @@ public class HouseholderNGTest {
                         2,3,4,5;
                         6,5,1,3;
                              """);
-        var qr=new QrDecomposeH<>(target).decompose();
+        var qr=HouseholderQR.decompose(target);
         var result = qr.q().mul(qr.r());
         var expected = target;
         System.out.println("result  : " + result);
@@ -220,7 +220,7 @@ public class HouseholderNGTest {
                         2,3,4,5;
                         6,5,1,3;
                              """);
-        var qr=new QrDecomposeH<>(target).decompose();
+        var qr=HouseholderQR.decompose(target);
         var result = qr.rinv().mul(qr.r());
         var expected = target.i();
         System.out.println("result  : " + result);

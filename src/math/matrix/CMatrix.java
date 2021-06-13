@@ -18,7 +18,6 @@ import collection.TList;
 import collection.TListWrapper;
 import collection.TransparentTranspose;
 import function.Transformable;
-import static java.lang.Integer.min;
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.Optional;
@@ -38,6 +37,7 @@ import math.Rational;
  * @param <T>
  */
 public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements TListWrapper<TList<T>,CMatrix<K,T>>,Transformable<CMatrix<K,T>>{
+    public static Builder<String,C2<String>,C2.Builder<String>> s=b(C2.s);
     public static Builder<Double,C2<Double>,C2.Builder<Double>> d=b(C2.d);
     public static Builder<Double,C2<Double>,C2.Builder<Double>> dc=b(C2.dc);
     public static Builder<Double,C2<Double>,C2.Builder<Double>> derr=derr(1e-10);
@@ -66,13 +66,15 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
             return Builder.this.b(TList.sof(source.split(";")).filter(l->!l.trim().isEmpty())
                     .map(r->TList.sof(r.trim().split(",")).map(s->b.b(s.trim())).sfix()).sfix());
         }
-        
         public CMatrix<K,T> i(int n) {
             return b(b.i(n));
         }
         public CMatrix<K,T> diag(TList<CMatrix<K,T>> blocks) {
             return blocks.stream().reduce((a,b)->a.appendDiag(b)).orElse(b(TList.empty()));
         }
+    }
+    public static CMatrix<String,C2<String>> create(String v, int r, int c) {
+        return new CMatrix(C2.s,TList.range(0,r).map(rr->TList.range(0,c).toC(cc->v+rr+cc,C2.s).body()));
     }
     final public ContextBuilder<K,T> bb;
     final public TList<TList<T>> body;
@@ -112,6 +114,9 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
     public T get(int x0, int y0) {
         return body.get(x0).get(y0);
     }
+    public T get(TList<Integer> xy) {
+        return get(xy.get(0),xy.get(1));
+    }
     public CMatrix<K,T> subMatrix(int... fromTo) {
         int x0=fromTo[0];int y0=fromTo[1];  int x1=fromTo[2];int y1=fromTo[3];
         return wrap(body.subList(x0,x1).map(r->r.subList(y0,y1)));
@@ -146,6 +151,13 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
     public CMatrix<K,T> appendDiag(CMatrix<K,T> added) {
         return wrap(body().map(r->r.append(TList.nCopies(added.y, bb.zero()))).append(added.body().map(r->TList.nCopies(y, bb.zero()).append(r))));
     }
+    public CMatrix<K,T> set(int row,int column,T v) {
+        body.get(row).set(column, v);
+        return this;
+    }
+    public CMatrix<K,T> set(TList<Integer> xy,T v) {
+        return set(xy.get(0),xy.get(1),v);
+    }
     /**
      * replace content with parameter 'matrix'.
      * intended to be applied to submatrix of some matrix.
@@ -167,8 +179,24 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
         subMatrixLR(x-matrix.x, y-matrix.y).reset(matrix);
         return this;
     }
+    public TList<TList<Integer>> upper() {
+        return body.index().flatMap(i->TList.range(i,x).map(j->TList.sof(i,j)));
+    }
+    public TList<TList<Integer>> lower() {
+        return body.index().flatMap(i->TList.range(0,i+1).map(j->TList.sof(i,j)));
+    }
+
+    public TList<TList<Integer>> upperNoDiag() {
+        return body.range(0,y-1).flatMap(i->TList.range(i+1,x).map(j->TList.sof(i,j)));
+    }
+    public TList<TList<Integer>> lowerNoDiag() {
+        return body.range(1,y).flatMap(i->TList.range(0,i).map(j->TList.sof(i,j)));
+    }
+    public boolean contains(TList<Integer> cell) {
+        return 0<=cell.get(0)&&cell.get(0)<x&&0<=cell.get(1)&&cell.get(1)<y;
+    }
     public int minSize() {
-        return min(x,y);
+        return Integer.min(x,y);
     }
     public CMatrix<K,T> map(Function<T,T> f) {
         return wrap(body.map(r->r.map(f)));

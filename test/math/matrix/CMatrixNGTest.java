@@ -9,12 +9,14 @@ import collection.TList;
 import debug.Te;
 import static java.lang.Math.sqrt;
 import java.math.BigDecimal;
+import javax.vecmath.Point2i;
 import math.C2;
 import math.CList;
 import math.Rational;
 import static math.matrix.LuDecompose.doolittleStep;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
+import static shape.ShapeUtil.p2i;
 import string.TString;
 import test.PTe;
 
@@ -116,6 +118,66 @@ public class CMatrixNGTest {
                                      0,0,1,1,1;
                                      0,0,1,1,1
                                                        """);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    @Test
+    public void testUpper() {
+        System.out.println(test.TestUtils.methodName(0));
+        CMatrix<Double,C2<Double>> target=CMatrix.derr.b("""
+                        5,4,2,3;
+                        1,2,3,4;
+                        2,3,4,5;
+                        6,5,1,3;
+                             """);
+        TList<TList<Integer>> result = target.upper();
+        TList<TList<Integer>> expected = TList.sof(0,0, 0,1, 0,2, 0,3, 1,1, 1,2, 1,3, 2,2, 2,3, 3,3).fold(2);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    @Test
+    public void testLower() {
+        System.out.println(test.TestUtils.methodName(0));
+        CMatrix<Double,C2<Double>> target=CMatrix.derr.b("""
+                        5,4,2,3;
+                        1,2,3,4;
+                        2,3,4,5;
+                        6,5,1,3;
+                             """);
+        TList<TList<Integer>> result = target.lower();
+        TList<TList<Integer>> expected = TList.sof(0,0, 1,0, 1,1, 2,0, 2,1, 2,2, 3,0, 3,1, 3,2, 3,3).fold(2);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    @Test
+    public void testUpperNoDiag() {
+        System.out.println(test.TestUtils.methodName(0));
+        CMatrix<Double,C2<Double>> target=CMatrix.derr.b("""
+                        5,4,2,3;
+                        1,2,3,4;
+                        2,3,4,5;
+                        6,5,1,3;
+                             """);
+        TList<TList<Integer>> result = target.upperNoDiag();
+        TList<TList<Integer>> expected = TList.sof(0,1, 0,2, 0,3, 1,2, 1,3, 2,3).fold(2);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    @Test
+    public void testLowerNoDiag() {
+        System.out.println(test.TestUtils.methodName(0));
+        CMatrix<Double,C2<Double>> target=CMatrix.derr.b("""
+                        5,4,2,3;
+                        1,2,3,4;
+                        2,3,4,5;
+                        6,5,1,3;
+                             """);
+        TList<TList<Integer>> result = target.lowerNoDiag();
+        TList<TList<Integer>> expected = TList.sof(1,0, 2,0, 2,1, 3,0, 3,1, 3,2).fold(2);
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
