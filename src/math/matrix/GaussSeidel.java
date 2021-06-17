@@ -51,9 +51,9 @@ public class GaussSeidel <K, T extends Context<K,T>&ContextOrdered<K,T>> {
         public CList<K,T> next(CList<K,T> v) {
             return L.forwardSubstitution(negU.mul(v).add(b)).sfix();
         }
-        public TIterator<CList<K,T>> conv(CList<K,T> v) {
+        public TIterator<CList<K,T>> conv(CList<K,T> init) {
             assert isStrictDiagonallyDominant() : "Jacobi method will not converge with this matrix";
-            return TIterator.iterate(v, vp->next(vp));
+            return TIterator.iterate(init, vp->next(vp));
         }
     }
 }

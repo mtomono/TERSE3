@@ -35,6 +35,7 @@ import java.util.function.*;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
 import math.C;
+import math.C2;
 
 /**
  *
@@ -85,8 +86,12 @@ public class TIterator<T> implements Iterator<T> {
         return set(new SupplierWrapper<>(supplier));
     }
     
-    static public <T> TIterator<T> iterate(T init, UnaryOperator<T> op) {
+    static public <T> TIterator<T> iterateOmit0(T init, UnaryOperator<T> op) {
         return set(new OperatorWrapper(init, op));
+    }
+    
+    static public <T> TIterator<T> iterate(T init, UnaryOperator<T> op) {
+        return set(OperatorWrapper.fromStart(init, op));
     }
     
     static public TIterator<Integer> range(int start, int end) {
@@ -168,6 +173,18 @@ public class TIterator<T> implements Iterator<T> {
         return set(new UntilIterator<>(this, term));
     }
     
+    public <K> TIterator<T> converge(Function<T,C2<K>> f,C2<K> threshold) {
+        return converge(f,(p,c)->p.sub(c).abs().lt(threshold));
+    }
+    
+    public <K> TIterator<T> converge(Function<T,C2<K>> f,BiPredicate<C2<K>,C2<K>> cond) {
+        if (!hasNext())
+            return this;
+        T start=next();
+        Holder<C2<K>> prev=new Holder<>(f.apply(start));
+        return of(start).append(until(t->{var v=f.apply(t);return cond.test(prev.push(v),v);}));
+    }
+    
     public TIterator<T> seek(Predicate<T> term) {
         return of(set(new UntilIterator<>(this, term)).last()).concat(this);
     }
@@ -185,10 +202,14 @@ public class TIterator<T> implements Iterator<T> {
     }
        
     public TIterator<P<T, T>> diff() {
+        return diff((a,b)->P.p(a, b));
+    }
+        
+    public <R> TIterator<R> diff(BiFunction<T,T,R> f) {
         if (!hasNext())
             return of();
         Holder<T> h = new Holder<>(next());
-        return map(e->new P(h.push(e), e));
+        return map(e->f.apply(h.push(e), e));
     }
         
     public <S> TIterator<P<T, S>> pair(Iterator<S> add) {
@@ -240,7 +261,7 @@ public class TIterator<T> implements Iterator<T> {
     public TIterator<T> heap(BinaryOperator<T> map) {
         return accum((a,b)->map.apply(b,a));
     }
-    
+        
     public <S> S reduce(S s, BiFunction<S,T,S> accumulator) {
         S retval=s;
         while (hasNext()) retval=accumulator.apply(retval,next());

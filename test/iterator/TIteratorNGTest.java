@@ -21,6 +21,7 @@ import static org.testng.Assert.*;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import static iterator.TIterator.generate;
+import math.C2;
 import static test.TestUtils.methodName;
 
 /**
@@ -153,6 +154,17 @@ public class TIteratorNGTest {
     }
     
     @Test
+    public void testConverge() {
+        System.out.println(test.TestUtils.methodName(0));
+        System.out.println("in this sequence, the difference between previous item should be the item itself.");
+        List<C2<Double>> result=TIterator.iterate(C2.derr.b(1.0), v->v.div(C2.derr.b(2))).converge(v->v,C2.derr.b(0.0001)).asList();
+        List<C2<Double>> expected=TList.sof(1.0, 0.5, 0.25, 0.125, 0.0625, 0.03125, 0.015625, 0.0078125, 0.00390625, 0.001953125, 9.765625E-4, 4.8828125E-4, 2.44140625E-4, 1.220703125E-4, 6.103515625E-5).map(v->C2.derr.b(v));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    
+    @Test
     public void testSeek() {
         System.out.println(methodName(0));
         List<Integer> result = i2l(range(0, 20).seek(i->i==15));
@@ -198,6 +210,17 @@ public class TIteratorNGTest {
     public void testDiffMap() {
         System.out.println(methodName(0));
         Iterator<Integer> iter = range(0, 5).diff().map(p->p.r()-p.l());
+        List<Integer> result = i2l(iter);
+        List<Integer> expected = a2l(1, 1, 1, 1);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    
+    @Test
+    public void testDiffWithMap() {
+        System.out.println(methodName(0));
+        Iterator<Integer> iter = range(0, 5).diff((a,b)->b-a);
         List<Integer> result = i2l(iter);
         List<Integer> expected = a2l(1, 1, 1, 1);
         System.out.println("result  : " + result);

@@ -72,7 +72,7 @@ public class TIterableNGTest {
     @Test
     public void testIterate() {
         System.out.println(methodName(0));
-        check3(iterate(0, i->i+1).limit(5));
+        check3(iterate(1, i->i+1).limit(5));
     }    
 
     @Test
