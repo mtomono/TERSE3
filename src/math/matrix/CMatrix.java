@@ -204,6 +204,9 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
     public CMatrix<K,T> scale(T scale) {
         return wrap(rows().map(r->r.scale(scale).body()));
     }
+    public CMatrix<K,T> negate() {
+        return wrap(rows().map(r->r.negate().body()));
+    }
     public CMatrix<K,T> add(CMatrix<K,T> other) {
         return wrap(rows().pair(other.rows(), (a,b)->a.add(b).body()));
     }
@@ -237,6 +240,9 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
         assertSquare();
         return fillDiagonal(TList.nCopies(x, diag));
     }
+    public CMatrix<K,T> fillNoDiagonal(T nodiag) {
+        return fillLower(nodiag).fillUpper(nodiag);
+    }
     public TList<T> getDiagonal() {
         assertSquare();
         return TList.range(0,x).map(i->body.get(i).get(i));
@@ -259,6 +265,9 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
     public CMatrix<K,T> i() {
         assertSquare();
         return wrap(bb.i(x));
+    }
+    public CMatrix<K,T> fillAll(T v) {
+        return new CMatrix<>(bb,TList.nCopies(x, TList.nCopies(y,v)));
     }
     public CMatrix<K,T> reorder(TList<Integer> order) {
         return wrap(i().body.pickUp(order));

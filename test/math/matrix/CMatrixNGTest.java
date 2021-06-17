@@ -9,14 +9,12 @@ import collection.TList;
 import debug.Te;
 import static java.lang.Math.sqrt;
 import java.math.BigDecimal;
-import javax.vecmath.Point2i;
 import math.C2;
 import math.CList;
 import math.Rational;
 import static math.matrix.LuDecompose.doolittleStep;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
-import static shape.ShapeUtil.p2i;
 import string.TString;
 import test.PTe;
 

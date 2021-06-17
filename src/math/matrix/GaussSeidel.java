@@ -20,18 +20,21 @@ import math.Context;
 import math.ContextOrdered;
 
 /**
- *
+ * GaussSeidel.
+ * L(x(k+1))=-U(x(k))+b
  * @author masao
  * @param <K>
  * @param <T>
  */
-public class Jacobi <K, T extends Context<K,T>&ContextOrdered<K,T>> {
+public class GaussSeidel <K, T extends Context<K,T>&ContextOrdered<K,T>> {
     final CMatrix<K,T> A;
-    final CMatrix<K,T> Dinv;
+    final CMatrix<K,T> L;
+    final CMatrix<K,T> negU;
     final CMatrix<K,T> negLU;
-    public Jacobi(CMatrix<K,T> A) {
+    public GaussSeidel(CMatrix<K,T> A) {
         this.A=A;
-        this.Dinv=A.fillAll(A.bb.zero()).fillDiagonal(A.getDiagonal().map(t->t.inv()));
+        this.L=A.fillUpper(A.bb.zero());
+        this.negU=A.sfix().fillDiagonal(A.bb.zero()).fillLower(A.bb.zero()).negate();
         this.negLU=A.sfix().fillDiagonal(A.bb.zero()).negate();
     }
     public Convergence target(CList<K,T> b) {
@@ -46,7 +49,7 @@ public class Jacobi <K, T extends Context<K,T>&ContextOrdered<K,T>> {
             this.b=b;
         }
         public CList<K,T> next(CList<K,T> v) {
-            return Dinv.mul(negLU.mul(v).add(b)).sfix();
+            return L.forwardSubstitution(negU.mul(v).add(b)).sfix();
         }
         public TIterator<CList<K,T>> conv(CList<K,T> v) {
             assert isStrictDiagonallyDominant() : "Jacobi method will not converge with this matrix";

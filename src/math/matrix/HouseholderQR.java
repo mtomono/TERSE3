@@ -14,9 +14,7 @@
  */
 package math.matrix;
 
-import collection.TList;
 import iterator.TIterator;
-import java.util.Optional;
 import math.Context;
 import math.ContextOrdered;
 import static math.matrix.Householder.columnEraser;
