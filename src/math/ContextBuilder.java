@@ -46,6 +46,7 @@ public interface ContextBuilder<K, CONTEXT extends Context<K,CONTEXT>> extends W
     default String toString(CONTEXT v) {return format().toString(v.body());}
     default CONTEXT b(BigDecimal n) {return c(body().b(n));}
     default CONTEXT b(Rational n) {return c(body().b(n));}
+    default CList<K,CONTEXT> l(String v) {return TList.sof(v.split(",")).directToC(x->b(x.trim()),this);}
     default CONTEXT one() {return c(body().one());}
     default CONTEXT zero() {return c(body().zero());}
     default TList<TList<CONTEXT>> i(int n) {

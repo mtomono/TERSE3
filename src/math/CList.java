@@ -23,6 +23,7 @@ import java.math.BigDecimal;
  * 
  * @author masao
  * @param <K>
+ * @param <T>
  */
 public class CList<K, T extends Context<K,T>> implements TListWrapper<T,CList<K,T>>,Transformable<CList<K,T>>{
     static public Builder<Integer,C2<Integer>> i2= b(C2.i);

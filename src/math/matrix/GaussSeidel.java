@@ -49,11 +49,25 @@ public class GaussSeidel <K, T extends Context<K,T>&ContextOrdered<K,T>> {
             this.b=b;
         }
         public CList<K,T> next(CList<K,T> v) {
-            return L.forwardSubstitution(negU.mul(v).add(b)).sfix();
+            return L.forwardSubstitution(negU.mul(v).add(b));
         }
         public TIterator<CList<K,T>> conv(CList<K,T> init) {
-            assert isStrictDiagonallyDominant() : "Jacobi method will not converge with this matrix";
-            return TIterator.iterate(init, vp->next(vp));
+            assert isStrictDiagonallyDominant() : "GaussSeidel method will not converge with this matrix";
+            return TIterator.iterate(init, vp->next(vp).sfix());
+        }
+        /**
+         * Successive OverRelaxation.
+         * when the omega is out of range(0,2), this will not converge.
+         * when eigenvalue of next() is negative, omega should belong to (0,1].
+         * when not, omega should belong to [0,1).
+         * @param init
+         * @param omega
+         * @return 
+         */
+        public TIterator<CList<K,T>> conv(CList<K,T> init, T omega) {
+            assert isStrictDiagonallyDominant() : "GaussSeidel method will not converge with this matrix";
+            assert init.b.zero().lt(omega)&&omega.lt(init.b.b(2)) : "omega of SOR out of range(0,2)";
+            return TIterator.iterate(init, vp->vp.scale(init.b.one().sub(omega)).add(next(vp).scale(omega)).sfix());
         }
     }
 }
