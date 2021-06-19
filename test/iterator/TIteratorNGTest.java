@@ -293,4 +293,14 @@ public class TIteratorNGTest {
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
     }
+    
+    @Test
+    public void testUntilDifferential() {
+        System.out.println(test.TestUtils.methodName(0));
+        var result=TIterator.iterate(256, v->v/2).until(v->v,(a,b)->a-b<10).asList();
+        var expected=TList.sof(256,128,64,32,16,8);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
 }
