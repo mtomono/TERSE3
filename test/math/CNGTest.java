@@ -98,7 +98,7 @@ public class CNGTest {
         assertEquals(result, expected);
     }
     @Test
-    public void testFormatBigDecimal() throws ParseException {
+    public void testFormatBigDecimal() {
         System.out.println(test.TestUtils.methodName(0));
         C<BigDecimal> result = C.bd.f("5,000.20");
         C<BigDecimal> expected = C.bd.b("5000.20");
@@ -107,7 +107,7 @@ public class CNGTest {
         assertEquals(result, expected);
     }
     @Test
-    public void testFormatRational() throws ParseException {
+    public void testFormatRational() {
         System.out.println(test.TestUtils.methodName(0));
         C<Rational> result = C.r.f("1,000/2,000");
         C<Rational> expected = C.r.b("1000/2000");
@@ -116,7 +116,7 @@ public class CNGTest {
         assertEquals(result, expected);
     }
     @Test
-    public void testFormatStringBigDecimal() throws ParseException {
+    public void testFormatStringBigDecimal() {
         System.out.println(test.TestUtils.methodName(0));
         String result = C.bd.f("5000.20").toFormattedString();
         String expected = "5,000.2";
@@ -125,7 +125,7 @@ public class CNGTest {
         assertEquals(result, expected);
     }
     @Test
-    public void testFormatStringRational() throws ParseException {
+    public void testFormatStringRational() {
         System.out.println(test.TestUtils.methodName(0));
         String result = C.r.f("1000/2000").toFormattedString();
         String expected = "1,000/2,000";

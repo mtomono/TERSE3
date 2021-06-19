@@ -16,9 +16,10 @@ package math;
 
 import function.Op;
 import collection.TList;
+import static function.PassedFunction.passF;
+import static function.PassedSupplier.pass;
 import function.Wrapper;
 import java.math.BigDecimal;
-import java.text.ParseException;
 import string.TString;
 
 /**
@@ -40,13 +41,25 @@ public interface ContextBuilder<K, CONTEXT extends Context<K,CONTEXT>> extends W
     default CONTEXT b(double v) {return c(body().b(v));}
     default CONTEXT b(Double v) {return c(body().b(v));}
     default CONTEXT b(String v) {return c(body().b(v));}
-    default CONTEXT f(String v) throws ParseException {return c(format().f(v));}
+    default CONTEXT f(String v) {return c(pass(()->format().f(v)));}
     default CONTEXT b(TString v) {return b(v.body);}
-    default CONTEXT f(TString v) throws ParseException {return f(v.body);}
+    default CONTEXT f(TString v) {return f(v.body);}
     default String toString(CONTEXT v) {return format().toString(v.body());}
     default CONTEXT b(BigDecimal n) {return c(body().b(n));}
     default CONTEXT b(Rational n) {return c(body().b(n));}
+    /**
+     * build CList with string.
+     * if you're using comma separated number, try lf().
+     * @param v
+     * @return 
+     */
     default CList<K,CONTEXT> l(String v) {return TList.sof(v.split(",")).directToC(x->b(x.trim()),this);}
+    /**
+     * build list with format.
+     * @param v
+     * @return 
+     */
+    default CList<K,CONTEXT> lf(String v) {return TList.sof(v.split(",")).directToC(x->f(x.trim()),this);}
     default CONTEXT one() {return c(body().one());}
     default CONTEXT zero() {return c(body().zero());}
     default TList<TList<CONTEXT>> i(int n) {
