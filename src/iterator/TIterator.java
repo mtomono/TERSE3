@@ -189,6 +189,16 @@ public class TIterator<T> implements Iterator<T> {
         return of(start).append(until(t->{var v=f.apply(t);return cond.test(prev.push(v),v);}));
     }
     
+    /**
+     * until for differential determination.
+     * convergence is a calculation belongs to this.
+     * @param cond
+     * @return 
+     */
+    public TIterator<T> until(BiPredicate<T,T> cond) {
+        return until(v->v,cond);
+    }
+    
     public TIterator<T> seek(Predicate<T> term) {
         return of(set(new UntilIterator<>(this, term)).last()).concat(this);
     }
