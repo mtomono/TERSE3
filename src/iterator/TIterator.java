@@ -173,18 +173,6 @@ public class TIterator<T> implements Iterator<T> {
         return set(new UntilIterator<>(this, term));
     }
     
-    public <K> TIterator<T> converge(Function<T,C2<K>> f,C2<K> threshold) {
-        return converge(f,(p,c)->p.sub(c).abs().lt(threshold));
-    }
-    
-    public <K> TIterator<T> converge(Function<T,C2<K>> f,BiPredicate<C2<K>,C2<K>> cond) {
-        if (!hasNext())
-            return this;
-        T start=next();
-        Holder<C2<K>> prev=new Holder<>(f.apply(start));
-        return of(start).append(until(t->{var v=f.apply(t);return cond.test(prev.push(v),v);}));
-    }
-    
     public TIterator<T> seek(Predicate<T> term) {
         return of(set(new UntilIterator<>(this, term)).last()).concat(this);
     }
