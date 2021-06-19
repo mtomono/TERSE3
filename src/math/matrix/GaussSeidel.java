@@ -65,8 +65,8 @@ public class GaussSeidel <K, T extends Context<K,T>&ContextOrdered<K,T>> {
          * @return 
          */
         public TIterator<CList<K,T>> conv(CList<K,T> init, T omega) {
-            assert isStrictDiagonallyDominant() : "GaussSeidel method will not converge with this matrix";
-            assert init.b.zero().lt(omega)&&omega.lt(init.b.b(2)) : "omega of SOR out of range(0,2)";
+            assert isStrictDiagonallyDominant() : "GaussSeidel method will not converge with this matrix : supposed to be strict diagonally dominant.";
+            assert init.b.zero().lt(omega)&&omega.lt(init.b.b(2)) : "omega of SOR must be in range(0,2)";
             return TIterator.iterate(init, vp->vp.scale(init.b.one().sub(omega)).add(next(vp).scale(omega)).sfix());
         }
     }
