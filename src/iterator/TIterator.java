@@ -186,7 +186,7 @@ public class TIterator<T> implements Iterator<T> {
             return this;
         T start=next();
         Holder<S> prev=new Holder<>(f.apply(start));
-        return of(start).append(until(t->{var v=f.apply(t);return cond.test(prev.push(v),v);}));
+        return of(start).append(until(t->cond.test(prev.get(),prev.set(f.apply(t)))));
     }
     
     /**

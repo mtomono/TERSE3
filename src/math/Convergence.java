@@ -15,15 +15,14 @@
 
 package math;
 
-import iterator.TIterator;
-import java.util.function.Function;
+import java.util.function.BiPredicate;
 
 /**
  *
  * @author masao
  */
 public class Convergence {
-    public static <S,K,T extends ContextOrdered<K,T>> TIterator<S> diff(TIterator<S> target,Function<S,T> f,T threshold) {
-        return target.until(f,(p,c)->p.sub(c).abs().lt(threshold));
+    public static <K,T extends ContextOrdered<K,T>> BiPredicate<T,T> diff(T threshold) {
+        return (p,c)->p.sub(c).abs().lt(threshold);
     }
 }
