@@ -172,23 +172,7 @@ public class TIterator<T> implements Iterator<T> {
     public TIterator<T> until(Predicate<T> term) {
         return set(new UntilIterator<>(this, term));
     }
-    
-    /**
-     * until for differential determination.
-     * convergence is a calculation belongs to this.
-     * @param <S>
-     * @param f
-     * @param cond
-     * @return 
-     */
-    public <S> TIterator<T> until(Function<T,S> f,BiPredicate<S,S> cond) {
-        if (!hasNext())
-            return this;
-        T start=next();
-        Holder<S> prev=new Holder<>(f.apply(start));
-        return of(start).append(until(t->cond.test(prev.get(),prev.set(f.apply(t)))));
-    }
-    
+        
     /**
      * until for differential determination.
      * convergence is a calculation belongs to this.
@@ -196,7 +180,11 @@ public class TIterator<T> implements Iterator<T> {
      * @return 
      */
     public TIterator<T> until(BiPredicate<T,T> cond) {
-        return until(v->v,cond);
+        if (!hasNext())
+            return this;
+        T start=next();
+        Holder<T> prev=new Holder<>(start);
+        return of(start).append(until(t->cond.test(prev.get(),prev.set(t))));
     }
     
     public TIterator<T> seek(Predicate<T> term) {
