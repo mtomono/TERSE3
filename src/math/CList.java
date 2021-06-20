@@ -91,6 +91,27 @@ public class CList<K, T extends Context<K,T>> implements TListWrapper<T,CList<K,
     public T sigma() {
         return body.stream().reduce(b.zero(),(a,b)->a.add(b));
     }
+    /**
+     * l1 distance.
+     * @return 
+     */
+    public T l1() {
+        return abs().sigma();
+    }
+    /**
+     * square of l2 distance.
+     * @return 
+     */
+    public T l2sq() {
+        return dot(this);
+    }
+    /**
+     * l2 distance.
+     * @return 
+     */
+    public T l2() {
+        return l2sq().sqrt();
+    }
     
     public T pai() {
         return body.stream().reduce(b.one(),(a,b)->a.mul(b));
