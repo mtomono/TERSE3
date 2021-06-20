@@ -52,5 +52,8 @@ public class Jacobi <K, T extends Context<K,T>&ContextOrdered<K,T>> {
             assert isStrictDiagonallyDominant() : "Jacobi method will not converge with this matrix";
             return TIterator.iterate(init, vp->next(vp));
         }
+        public TIterator<CList<K,T>> conv(CList<K,T> init, T threshold) {
+            return conv(init).until((pre,now)->pre.sub(now).l2().lt(threshold));
+        }
     }
 }
