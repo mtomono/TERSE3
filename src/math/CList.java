@@ -91,6 +91,26 @@ public class CList<K, T extends Context<K,T>> implements TListWrapper<T,CList<K,
     public T sigma() {
         return body.stream().reduce(b.zero(),(a,b)->a.add(b));
     }
+    
+    public T pai() {
+        return body.stream().reduce(b.one(),(a,b)->a.mul(b));
+    }
+    
+    public CList<K,T> add() {
+        return wrap(body.accumFromStart((a,b)->a.add(b)));
+    }
+
+    public CList<K,T> mul() {
+        return wrap(body.accumFromStart((a,b)->a.mul(b)));
+    }
+    
+    public T dot(CList<K,T> o) {
+        return mul(o).sigma();
+    }
+    public T dot(TList<K> o) {
+        return dot(c(b,o));
+    }
+        
     /**
      * l1 distance.
      * @return 
@@ -112,26 +132,7 @@ public class CList<K, T extends Context<K,T>> implements TListWrapper<T,CList<K,
     public T l2() {
         return l2sq().sqrt();
     }
-    
-    public T pai() {
-        return body.stream().reduce(b.one(),(a,b)->a.mul(b));
-    }
-    
-    public CList<K,T> add() {
-        return wrap(body.accumFromStart((a,b)->a.add(b)));
-    }
 
-    public CList<K,T> mul() {
-        return wrap(body.accumFromStart((a,b)->a.mul(b)));
-    }
-    
-    public T dot(CList<K,T> o) {
-        return mul(o).sigma();
-    }
-    public T dot(TList<K> o) {
-        return dot(c(b,o));
-    }
-        
     public CList<K,T> scale(T s) {
         return wrap(body.map(v->v.mul(s)));
     }
