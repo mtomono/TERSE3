@@ -16,13 +16,13 @@ import java.util.stream.Collector;
  * @param <C>
  */
 public class AverageMutable<K,C extends Context<K,C>> {
-    int count;
+    long count;
     C sum;
-    public AverageMutable(int count, C value) {
+    public AverageMutable(long count, C value) {
         this.count=count;
         this.sum=value;
     }
-    public int count() {
+    public long count() {
         return count;
     }
     public C sum() {

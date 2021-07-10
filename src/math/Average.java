@@ -16,9 +16,9 @@ import java.util.stream.Collector;
  * @param <C>
  */
 public class Average<K,C extends Context<K,C>> {
-    final public int count;
+    final public long count;
     final public C sum;
-    public Average(int count, C value) {
+    public Average(long count, C value) {
         this.count=count;
         this.sum=value;
     }
