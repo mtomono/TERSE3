@@ -15,6 +15,8 @@
 
 package function;
 
+import java.util.function.UnaryOperator;
+
 /**
  * Holder
  * use this instead of ordinary variable when new the value is calculated 
@@ -35,7 +37,7 @@ public class Holder<T> {
     public T get() {
         return value;
     }
-    public T set(T value) {
+    public T setget(T value) {
         this.value = value;
         return this.value;
     }
@@ -43,5 +45,9 @@ public class Holder<T> {
         T retval = this.value;
         this.value = value;
         return retval;
+    }
+    public Holder<T> set(T value) {
+        this.value = value;
+        return this;
     }
 }

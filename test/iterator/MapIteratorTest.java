@@ -26,7 +26,7 @@ public class MapIteratorTest {
         List<Integer> tested = Arrays.<Integer>asList(1, 5, 4, 6, 3);
         List<Integer> expected = Arrays.<Integer>asList(1, 6, 10, 16, 19);
         Holder<Integer> h = new Holder<>(0);
-        assertTrue(Iterators.test(new MapIterator<>(tested.iterator(), v->h.set(h.get() + v)), expected.iterator()));
+        assertTrue(Iterators.test(new MapIterator<>(tested.iterator(), v->h.setget(h.get() + v)), expected.iterator()));
     }
     
 }

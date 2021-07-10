@@ -37,7 +37,7 @@ public class CHolder<K,T extends Context<K,T>> extends Holder<T> {
         return xup(b.one());
     }
     public T upx(T v) {
-        return set(get().add(v));
+        return setget(get().add(v));
     }
     public T upx() {
         return upx(b.one());
@@ -49,7 +49,7 @@ public class CHolder<K,T extends Context<K,T>> extends Holder<T> {
         return xdown(b.one());
     }
     public T downx(T v) {
-        return set(get().sub(v));
+        return setget(get().sub(v));
     }
     public T downx() {
         return downx(b.one());

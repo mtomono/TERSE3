@@ -112,7 +112,7 @@ public class Fluctuation<K> {
         }
         public TList<Boolean> noticeableChanges(C2<K> limit) {
             Holder<C2<K>> h=new Holder<>(zero());
-            return q.body().iterator().map(x->h.set(h.get().add(x)).abs().gt(limit)).tee(t->h.set(t?zero():h.get())).asList();
+            return q.body().iterator().map(x->h.setget(h.get().add(x)).abs().gt(limit)).tee(t->h.setget(t?zero():h.get())).asList();
         }
     }
 

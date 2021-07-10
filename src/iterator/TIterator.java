@@ -73,7 +73,7 @@ public class TIterator<T> implements Iterator<T> {
     
     public TIterator<T> report(int interval,Consumer<T> tee) {
         CHolder<Integer,C<Integer>> h=new CHolder<>(C.i.b(0));
-        return tee(t->{if(h.get().body()<interval)h.upx(); else {tee.accept(t);h.set(C.i.zero());}});
+        return tee(t->{if(h.get().body()<interval)h.upx(); else {tee.accept(t);h.setget(C.i.zero());}});
     }
     public <S> S transform(Function<TIterator<T>,S> f) {
         return f.apply(this);
@@ -184,7 +184,7 @@ public class TIterator<T> implements Iterator<T> {
             return this;
         T start=next();
         Holder<T> prev=new Holder<>(start);
-        return of(start).append(until(t->cond.test(prev.get(),prev.set(t))));
+        return of(start).append(until(t->cond.test(prev.get(),prev.setget(t))));
     }
     
     public TIterator<T> seek(Predicate<T> term) {
@@ -245,7 +245,7 @@ public class TIterator<T> implements Iterator<T> {
     
     public <S> TIterator<S> accum(S start, BiFunction<S, T, S> bf) {
         Holder<S> h = new Holder<>(start);
-        return of(start).concat(map(e->h.set(bf.apply(h.get(), e))));
+        return of(start).concat(map(e->h.setget(bf.apply(h.get(), e))));
     }
     
     @Deprecated

@@ -49,7 +49,7 @@ public class HolderNGTest {
     public void testSet() {
         System.out.println(test.TestUtils.methodName(0));
         Holder<Integer> h = new Holder<>(1);
-        Integer result = h.set(h.get()+1);
+        Integer result = h.setget(h.get()+1);
         Integer expected = 2;
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);

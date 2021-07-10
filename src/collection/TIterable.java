@@ -163,7 +163,7 @@ public class TIterable<T> implements Iterable<T> {
     public TSupplier<T> repeat() {
         Holder<Iterator<T>> h = new Holder<>(iterator());
         assert h.get().hasNext();
-        return TSupplier.f(()->h.get().hasNext() ? h.get().next() : h.set(iterator()).next());
+        return TSupplier.f(()->h.get().hasNext() ? h.get().next() : h.setget(iterator()).next());
     }
     
     @Override

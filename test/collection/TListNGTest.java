@@ -1162,7 +1162,7 @@ public class TListNGTest {
     public void testAccept() {
         System.out.println(test.TestUtils.methodName(0));
         Holder<String> h = new Holder<>("str");
-        TList.of(0, 1, 2).accept(l->h.set(l.toString()));
+        TList.of(0, 1, 2).accept(l->h.setget(l.toString()));
         String result = h.get();
         String expected = "T[0, 1, 2]";
         System.out.println("result  : "+result);
