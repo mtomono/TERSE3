@@ -27,4 +27,14 @@ public class AverageNGTest {
         assertEquals(result, expected);
     }
     
+    @Test
+    public void testAverageMutable() {
+        System.out.println(test.TestUtils.methodName(0));
+        C<Double> result = C.d.l("1.0,2.0,3.0,4.0,5.0").body().stream().collect(AverageMutable.collector(v->v,C.d.zero()));
+        C<Double> expected = C.d.b(3);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    
 }

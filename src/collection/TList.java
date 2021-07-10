@@ -29,6 +29,8 @@ import static java.lang.Math.abs;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collector;
+import static java.util.stream.Collectors.counting;
+import static java.util.stream.Collectors.groupingBy;
 import java.util.stream.Stream;
 import orderedSet.Range;
 import math.CList;
@@ -583,10 +585,10 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
         return exists(pred);
     }
     
-    public Counter<T> count() {
-        return new Counter<>(this);
+    public TMap<T,Long> count() {
+        return stream().collect(groupingBy(t->t,TMap::c,counting()));
     }
-    
+        
 //--------- Transforming
     /**
      * apply a function to the list itself.

@@ -15,11 +15,11 @@
 
 package iterator;
 
-import collection.Counter;
 import static collection.c.a2i;
 import collection.P;
 import collection.RingBuffer;
 import collection.TList;
+import collection.TMap;
 import static collection.c.i2l;
 import function.CHolder;
 import function.Holder;
@@ -33,9 +33,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.*;
 import java.util.stream.Collector;
+import static java.util.stream.Collectors.counting;
+import static java.util.stream.Collectors.groupingBy;
 import java.util.stream.Stream;
 import math.C;
-import math.C2;
 
 /**
  *
@@ -312,10 +313,8 @@ public class TIterator<T> implements Iterator<T> {
         return stream().collect(collector);
     }
     
-    public Counter<T> count() {
-        Counter<T> retval=new Counter<>();
-        forEachRemaining(t->retval.add(t));
-        return retval;
+    public TMap<T,Long> count() {
+        return stream().collect(groupingBy(t->t,TMap::c,counting()));
     }
     
     public TIterator<T> sink(Consumer<TIterator<T>> sink) {
