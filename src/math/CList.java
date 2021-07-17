@@ -16,8 +16,11 @@ package math;
 
 import collection.TList;
 import collection.TListWrapper;
+import collection.TMap;
 import function.Transformable;
 import java.math.BigDecimal;
+import java.util.function.Function;
+import static java.util.stream.Collectors.groupingBy;
 
 /**
  * 

@@ -16,9 +16,9 @@
 package collection;
 
 import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
-import java.util.function.Supplier;
 
 /**
  * Map wrapper which bridges to TList.
@@ -41,12 +41,20 @@ public class TMap<K, V> implements Map<K, V> {
         return TList.set(body.entrySet()).map(es->map.apply(es.getKey(),es.getValue()));
     }
     
-    public <T> TList<T> filter(BiPredicate<K,V> pred, BiFunction<K,V,T> map) {
+    public <T> TList<T> map(BiPredicate<K,V> pred, BiFunction<K,V,T> map) {
         return TList.set(body.entrySet()).filter(es->pred.test(es.getKey(), es.getValue())).map(es->map.apply(es.getKey(), es.getValue()));
     }
+    
+    public void forEach(BiPredicate<K,V> pred, BiConsumer<K,V> consumer) {
+        TList.set(body.entrySet()).filter(es->pred.test(es.getKey(), es.getValue())).forEach(es->consumer.accept(es.getKey(), es.getValue()));
+    }
 
-    public TList<K> filter(BiPredicate<K,V> pred) {
-        return filter(pred,(k,v)->k);
+    public TList<K> filterKey(BiPredicate<K,V> pred) {
+        return map(pred,(k,v)->k);
+    }
+    
+    public TList<V> filterValues(BiPredicate<K,V> pred) {
+        return map(pred,(k,v)->v);
     }
 
     @Override

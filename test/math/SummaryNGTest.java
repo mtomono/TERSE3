@@ -12,15 +12,15 @@ import org.testng.annotations.Test;
  *
  * @author masao
  */
-public class AverageNGTest {
+public class SummaryNGTest {
     
-    public AverageNGTest() {
+    public SummaryNGTest() {
     }
 
     @Test
     public void testAverage() {
         System.out.println(test.TestUtils.methodName(0));
-        C<Double> result = C.d.l("1.0,2.0,3.0,4.0,5.0").body().stream().collect(Average.collector(v->v,C.d.zero()));
+        C<Double> result = C.d.l("1.0,2.0,3.0,4.0,5.0").body().stream().collect(Summary.summary(v->v,C.d.zero())).average();
         C<Double> expected = C.d.b(3);
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
@@ -30,7 +30,7 @@ public class AverageNGTest {
     @Test
     public void testAverageMutable() {
         System.out.println(test.TestUtils.methodName(0));
-        C<Double> result = C.d.l("1.0,2.0,3.0,4.0,5.0").body().stream().collect(AverageMutable.collector(v->v,C.d.zero()));
+        C<Double> result = C.d.l("1.0,2.0,3.0,4.0,5.0").body().stream().collect(SummaryM.summary(v->v,C.d.zero())).average();
         C<Double> expected = C.d.b(3);
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);

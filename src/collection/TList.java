@@ -36,6 +36,7 @@ import orderedSet.Range;
 import math.CList;
 import math.Context;
 import math.ContextBuilder;
+import math.Summary;
 
 /**
  *
@@ -589,6 +590,16 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
         return stream().collect(groupingBy(t->t,TMap::c,counting()));
     }
         
+    public <S,K,C extends Context<K,C>> TMap<S,Summary<K,C>> summary(Function<T,S> classify,Function<T,C> value,C zero) {
+        return stream().collect(groupingBy(classify,TMap::c,Summary.summary(value,zero)));
+    }
+    
+    public <K,V> TMap<K,V> toMap(Function<T,K> key, Function<T,V> value) {
+        TMap<K,V> retval = TMap.c();
+        forEach(t->retval.put(key.apply(t),value.apply(t)));
+        return retval;
+    }
+
 //--------- Transforming
     /**
      * apply a function to the list itself.

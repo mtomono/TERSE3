@@ -36,7 +36,9 @@ import java.util.stream.Collector;
 import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
 import java.util.stream.Stream;
+import math.Summary;
 import math.C;
+import math.Context;
 
 /**
  *
@@ -315,6 +317,10 @@ public class TIterator<T> implements Iterator<T> {
     
     public TMap<T,Long> count() {
         return stream().collect(groupingBy(t->t,TMap::c,counting()));
+    }
+    
+    public <S,K,C extends Context<K,C>> TMap<S,Summary<K,C>> summary(Function<T,S> classify,Function<T,C> value,C zero) {
+        return stream().collect(groupingBy(classify,TMap::c,Summary.summary(value,zero)));
     }
     
     public TIterator<T> sink(Consumer<TIterator<T>> sink) {

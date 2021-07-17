@@ -16,6 +16,7 @@
 package shapeCollection;
 
 import collection.TList;
+import math.C;
 
 /**
  * 
@@ -34,5 +35,8 @@ public class CubeInt {
     }
     public TList<Integer> center(TList<Integer> mesh) {
         return mesh.pair(factor,(a,b)->a*b+b/2);
+    }
+    public Integer volume() {
+        return factor.toC(i->i, C.i).pai().body();
     }
 }
