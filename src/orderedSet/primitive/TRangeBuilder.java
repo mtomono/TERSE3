@@ -15,6 +15,7 @@
 package orderedSet.primitive;
 
 import java.util.Comparator;
+import java.util.function.BinaryOperator;
 
 /**
  *
@@ -76,18 +77,25 @@ public class TRangeBuilder<T> {
         if (a instanceof And<T> and0) return and(and(and0.a,b),and(and0.b,b));
         if (b instanceof Or<T> or0) return or(and(a,or0.a),and(a,or0.b));
         if (a instanceof Or<T> or0) return or(and(or0.a,b),and(or0.b,b));
-        return comparator.compare(a.representative(),b.representative())<=0?new And<>(a,b):new And<>(b,a);
+        return sort(a,b,(x,y)->new And<>(x,y));
     }
 
     public TRange<T> or(TRange<T> a, TRange<T> b) {
         if (a.contains(b)) return a;
         if (b.contains(a)) return b;
-        if (!a.overlaps(b)) return comparator.compare(a.representative(),b.representative())<=0?new Or<>(a,b):new Or<>(b,a);
-        if (and(a.negate(),b.negate()).equals(none())) return whole();
-        if (b instanceof Or<T> or0) return or(or(a,or0.a),or(a,or0.b));
-        if (a instanceof Or<T> or0) return or(or(or0.a,b),or(or0.b,b));
-        return comparator.compare(a.representative(),b.representative())<=0?new Or<>(a,b):new Or<>(b,a);
+        if (a.overlaps(b)) {
+            if (and(a.negate(),b.negate()).equals(none())) return whole();
+            if (b instanceof And<T> and0) return and(or(a,and0.a),or(a,and0.b));
+            if (a instanceof And<T> and0) return and(or(and0.a,b),or(and0.b,b));
+            if (b instanceof Or<T> or0) return or(or(a,or0.a),or(a,or0.b));
+            if (a instanceof Or<T> or0) return or(or(or0.a,b),or(or0.b,b));
+        }
+        return sort(a,b,(x,y)->new Or<>(x,y));
     }
+    
+    public TRange<T> sort(TRange<T> a, TRange<T> b, BinaryOperator<TRange<T>> op) {
+        return comparator.compare(a.representative(),b.representative())<=0?op.apply(a,b):op.apply(b,a);
+    } 
     
 //    public TRange<T> cover(TRange<T> a, TRange<T> b) {
     
