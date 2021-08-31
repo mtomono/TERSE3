@@ -106,7 +106,7 @@ public class AndNGTest {
     @Test
     public void testReduction04() {
         System.out.println(test.TestUtils.methodName(0));
-        var x=PTe.e(c.and(c.and(c.ge(0),c.lt(5)).negate(),c.and(c.ge(6),c.lt(10)).negate()));
+        var x=PTe.e(c.or(c.and(c.ge(0),c.lt(5)),c.and(c.ge(6),c.lt(10))).negate());
         assertFalse(x.contains(7));
         assertFalse(x.contains(6));
         assertTrue(x.contains(5));
@@ -115,10 +115,37 @@ public class AndNGTest {
     @Test
     public void testReduction05() {
         System.out.println(test.TestUtils.methodName(0));
+        var x=PTe.e(c.and(c.and(c.ge(0),c.lt(5)).negate(),c.and(c.ge(6),c.lt(10)).negate()));
+        assertFalse(x.contains(7));
+        assertFalse(x.contains(6));
+        assertTrue(x.contains(5));
+    }
+    
+    @Test
+    public void testReduction06() {
+        System.out.println(test.TestUtils.methodName(0));
         var x=PTe.e(c.or(c.and(c.ge(0),c.lt(5)),c.and(c.ge(6),c.lt(10))));
         assertTrue(x.contains(7));
         assertTrue(x.contains(6));
         assertFalse(x.contains(5));
     }
     
+    @Test
+    public void testReduction07() {
+        System.out.println(test.TestUtils.methodName(0));
+        var x=PTe.e(c.or(c.or(c.and(c.ge(0),c.lt(5)),c.lt(0)),c.gt(4)));
+        assertTrue(x.contains(7));
+        assertTrue(x.contains(6));
+        assertTrue(x.contains(5));
+        assertEquals(x,c.whole());
+    }
+    
+    @Test
+    public void testReduction08() {
+        System.out.println(test.TestUtils.methodName(0));
+        var x=PTe.e(c.or(c.or(c.lt(0),c.gt(4)),c.none()));
+        assertTrue(x.contains(7));
+        assertTrue(x.contains(6));
+        assertTrue(x.contains(5));
+    }
 }
