@@ -16,6 +16,10 @@ public class And<T> implements TRange<T> {
         this.a=a;
         this.b=b;
     }
+    @Override
+    public T representative() {
+        return a.representative();
+    }
     public TRangeBuilder<T> builder() {
         return a.builder();
     }

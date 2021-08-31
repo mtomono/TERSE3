@@ -16,6 +16,10 @@ public class None<T> implements TRange<T> {
         this.builder=builder;
     }
     @Override
+    public T representative() {
+        throw new UnsupportedOperationException("none doesn't have representative value");
+    }
+    @Override
     public TRangeBuilder<T> builder() {
         return builder;
     }

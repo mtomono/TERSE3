@@ -21,4 +21,5 @@ public interface TRange<T> {
         return builder().and(this, other);
     }
     TRange<T> negate();
+    T representative();
 }

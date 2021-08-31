@@ -61,24 +61,24 @@ public class TRangeBuilder<T> {
     }
     
     public TRange<T> and(TRange<T> a, TRange<T> b) {
-        if (a.contains(b)) return b;
         if (b.contains(a)) return a;
+        if (a.contains(b)) return b;
         if (!a.overlaps(b)) return none();
-        if (a instanceof And<T> and0) return and(and(and0.a,b),and(and0.b,b));
         if (b instanceof And<T> and0) return and(and(a,and0.a),and(a,and0.b));
-        if (a instanceof Or<T> or0) return or(and(or0.a,b),and(or0.b,b));
+        if (a instanceof And<T> and0) return and(and(and0.a,b),and(and0.b,b));
         if (b instanceof Or<T> or0) return or(and(a,or0.a),and(a,or0.b));
-        return new And<>(a,b);
+        if (a instanceof Or<T> or0) return or(and(or0.a,b),and(or0.b,b));
+        return comparator.compare(a.representative(),b.representative())<=0?new And<>(a,b):new And<>(b,a);
     }
 
     public TRange<T> or(TRange<T> a, TRange<T> b) {
         if (a.contains(b)) return a;
         if (b.contains(a)) return b;
-        if (!a.overlaps(b)) return new Or<>(a,b);
+        if (!a.overlaps(b)) return comparator.compare(a.representative(),b.representative())<=0?new Or<>(a,b):new Or<>(b,a);
         if (and(a.negate(),b.negate()).equals(none())) return whole();
-        if (a instanceof Or<T> or0) return or(or(or0.a,b),or(or0.b,b));
         if (b instanceof Or<T> or0) return or(or(a,or0.a),or(a,or0.b));
-        return new Or<>(a,b);
+        if (a instanceof Or<T> or0) return or(or(or0.a,b),or(or0.b,b));
+        return comparator.compare(a.representative(),b.representative())<=0?new Or<>(a,b):new Or<>(b,a);
     }
     
 //    public TRange<T> cover(TRange<T> a, TRange<T> b) {

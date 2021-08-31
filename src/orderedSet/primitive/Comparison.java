@@ -21,6 +21,11 @@ abstract public class Comparison<T> implements TRange<T> {
         G,L;
     }
     abstract GL dir();
+    @Override
+    public T representative() {
+        return base;
+    }
+    @Override
     public TRangeBuilder<T> builder() {
         return builder;
     }

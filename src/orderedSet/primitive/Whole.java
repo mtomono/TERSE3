@@ -16,6 +16,10 @@ public class Whole<T> implements TRange<T> {
         this.builder=builder;
     }
     @Override
+    public T representative() {
+        throw new UnsupportedOperationException("whole doesn't have representative value");
+    }
+    @Override
     public TRangeBuilder<T> builder() {
         return builder;
     }
