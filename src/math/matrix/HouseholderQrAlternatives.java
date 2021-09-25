@@ -36,17 +36,17 @@ public class HouseholderQrAlternatives {
     }
         
     public static <K, T extends Context<K,T>&ContextOrdered<K,T>> QR<K,T> decompose_with_accum(CMatrix<K,T> target) {
-        return TIterator.range(0,target.y-1).accum(new QR<>(target.i().sfix(), target.sfix()),
+        return TIterator.range(0,target.columns-1).accum(new QR<>(target.i().sfix(), target.sfix()),
                 (qr,i)->{var qn=columnEraser(qr.r(),i);return new QR<>(qn.mul(qr.qinv()).sfix(),qn.mul(qr.r()).sfix());}).last();
     }
     
     public static <K, T extends Context<K,T>&ContextOrdered<K,T>> QR<K,T> decompose_with_accum_novar(CMatrix<K,T> target) {
-        return TIterator.range(0,target.y-1).accum(new QR<>(target.i().sfix(), target.sfix()),
+        return TIterator.range(0,target.columns-1).accum(new QR<>(target.i().sfix(), target.sfix()),
                 (qr,i)->new QR<>(columnEraser(qr.r(),i).mul(qr.qinv()).sfix(),columnEraser(qr.r(),i).mul(qr.r()).sfix())).last();
     }
 
     public static <K, T extends Context<K,T>&ContextOrdered<K,T>> QR<K,T> decompose_with_accum_optional(CMatrix<K,T> target) {
-        return TIterator.range(0,target.y-1).accum(new QR<>(target.i().sfix(), target.sfix()),
+        return TIterator.range(0,target.columns-1).accum(new QR<>(target.i().sfix(), target.sfix()),
                 (qr,i)->Optional.of(columnEraser(qr.r(),i)).map(qn->new QR<>(qn.mul(qr.qinv()).sfix(),qn.mul(qr.r()).sfix())).get()).last();
     }
     
@@ -55,13 +55,13 @@ public class HouseholderQrAlternatives {
         return new QR<>(qn.mul(qr.qinv()).sfix(),qn.mul(qr.r()).sfix());
     }
     public static <K, T extends Context<K,T>&ContextOrdered<K,T>> QR<K,T> decompose_with_next(CMatrix<K,T> target) {
-        return TIterator.range(0,target.y-1).accum(new QR<>(target.i().sfix(), target.sfix()),(a,b)->next(a,b)).last();
+        return TIterator.range(0,target.columns-1).accum(new QR<>(target.i().sfix(), target.sfix()),(a,b)->next(a,b)).last();
     }
     
     public static <K, T extends Context<K,T>&ContextOrdered<K,T>> QR<K,T> decompose_with_for(CMatrix<K,T> target) {
         CMatrix<K,T> rh=target.sfix();
         CMatrix<K,T> qh=target.i().sfix();
-        for(int i=0;i<target.y-1;i++) {
+        for(int i=0;i<target.columns-1;i++) {
             var lq=columnEraser(rh,i);
             rh=lq.mul(rh).sfix();
             qh=lq.mul(qh).sfix();

@@ -53,9 +53,9 @@ public class PluDecompose<K,T extends Context<K,T>&ContextOrdered<K,T>> extends 
      * @return 
      */
     CMatrix<K,T> pivot(int c, ArrayInt order) {
-        if (target.x<=1)
+        if (target.rows<=1)
             return target;
-        int maxRow=TList.range(c,target.x).max(i->target.get(i,c).abs()).get();
+        int maxRow=TList.range(c,target.rows).max(i->target.get(i,c).abs()).get();
         target.body.swap(c,maxRow);
         if (target.get(c,c).isZero())
             throw new NonsingularMatrixException("diagonal element was 0 even after pivoting, meaning this matrix is not singular : notified from CMatrix.swap()");

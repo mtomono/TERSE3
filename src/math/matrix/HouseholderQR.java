@@ -30,7 +30,7 @@ import static math.matrix.Householder.columnEraser;
  */
 public class HouseholderQR<K, T extends Context<K,T>&ContextOrdered<K,T>> {
     public static <K, T extends Context<K,T>&ContextOrdered<K,T>> QR<K,T> decompose(CMatrix<K,T> target) {
-        return TIterator.range(0,target.y-1).accum(new QR<>(target.i().sfix(), target.sfix()),
+        return TIterator.range(0,target.columns-1).accum(new QR<>(target.i().sfix(), target.sfix()),
                 (qr,i)->{var qn=columnEraser(qr.r(),i);return new QR<>(qn.mul(qr.qinv()).sfix(),qn.mul(qr.r()).sfix());}).last();
     }
 }

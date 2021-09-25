@@ -78,14 +78,14 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
     }
     final public ContextBuilder<K,T> bb;
     final public TList<TList<T>> body;
-    final public int x;//row
-    final public int y;//column
+    final public int rows;//row
+    final public int columns;//column
     public CMatrix(ContextBuilder<K,T> bb, TList<TList<T>> body) {
         this.body=body;
         this.bb=bb;
         assert body.map(r->r.size()).isUniform() : "all the raws have to have the same size";
-        this.x=body.size();
-        this.y=body.isEmpty()?0:body.get(0).size();
+        this.rows=body.size();
+        this.columns=body.isEmpty()?0:body.get(0).size();
     }
     @Override
     public TList<TList<T>> body() {
@@ -100,7 +100,7 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
         return this;
     }
     public boolean isSquare() {
-        return x==y;
+        return rows==columns;
     }
     public void assertSquare() {
         assert isSquare() : "this method is incompatible for a matrix that is not square";
@@ -111,36 +111,36 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
     public TList<CList<K,T>> columns() {
         return TransparentTranspose.transpose(body).map(r->new CList<>(bb,r)); //if you use body.transpose() instead of TransparentTranspose.transpose(), you will get some exceptions caused by trying to chnage a mapped list which doesn't have reverse map.
     }
-    public T get(int x0, int y0) {
-        return body.get(x0).get(y0);
+    public T get(int r, int c) {
+        return body.get(r).get(c);
     }
-    public T get(TList<Integer> xy) {
-        return get(xy.get(0),xy.get(1));
+    public T get(TList<Integer> rc) {
+        return get(rc.get(0),rc.get(1));
     }
     public CMatrix<K,T> subMatrix(int... fromTo) {
-        int x0=fromTo[0];int y0=fromTo[1];  int x1=fromTo[2];int y1=fromTo[3];
-        return wrap(body.subList(x0,x1).map(r->r.subList(y0,y1)));
+        int r0=fromTo[0];int c0=fromTo[1];  int r1=fromTo[2];int c1=fromTo[3];
+        return wrap(body.subList(r0,r1).map(r->r.subList(c0,c1)));
     }
     public CMatrix<K,T> subRows(int from, int to) {
         return wrap(body.subList(from,to));
     }
     public CMatrix<K,T> subRows(int seek) {
-        return seek<0?subRows(0,x+seek):subRows(seek,x);
+        return seek<0?subRows(0,rows+seek):subRows(seek,rows);
     }
     public CMatrix<K,T> subColumns(int from, int to) {
         return wrap(body.map(r->r.subList(from,to)));
     }
     public CMatrix<K,T> subColumns(int seek) {
-        return seek<0?subColumns(0,y+seek):subColumns(seek,y);
+        return seek<0?subColumns(0,columns+seek):subColumns(seek,columns);
     }
     /**
      * submatrix of lower right.
-     * @param x0
-     * @param y0
+     * @param r0
+     * @param c0
      * @return 
      */
-    public CMatrix<K,T> subMatrixLR(int x0, int y0) {
-        return subMatrix(x0,y0,x,y);
+    public CMatrix<K,T> subMatrixLR(int r0, int c0) {
+        return subMatrix(r0,c0,rows,columns);
     }
     /**
      * connect another matrix in a diagonal way.
@@ -149,14 +149,14 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
      * @return 
      */
     public CMatrix<K,T> appendDiag(CMatrix<K,T> added) {
-        return wrap(body().map(r->r.append(TList.nCopies(added.y, bb.zero()))).append(added.body().map(r->TList.nCopies(y, bb.zero()).append(r))));
+        return wrap(body().map(r->r.append(TList.nCopies(added.columns, bb.zero()))).append(added.body().map(r->TList.nCopies(columns, bb.zero()).append(r))));
     }
     public CMatrix<K,T> set(int row,int column,T v) {
         body.get(row).set(column, v);
         return this;
     }
-    public CMatrix<K,T> set(TList<Integer> xy,T v) {
-        return set(xy.get(0),xy.get(1),v);
+    public CMatrix<K,T> set(TList<Integer> rc,T v) {
+        return set(rc.get(0),rc.get(1),v);
     }
     /**
      * replace content with parameter 'matrix'.
@@ -175,28 +175,28 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
      * @return 
      */
     public CMatrix<K,T> resetLR(CMatrix<K,T> matrix) {
-        assert x>=matrix.x&&y>=matrix.y:"size of the parameter matrix is supposed to be smaller than this matrix";
-        subMatrixLR(x-matrix.x, y-matrix.y).reset(matrix);
+        assert rows>=matrix.rows&&columns>=matrix.columns:"size of the parameter matrix is supposed to be smaller than this matrix";
+        subMatrixLR(rows-matrix.rows, columns-matrix.columns).reset(matrix);
         return this;
     }
     public TList<TList<Integer>> upper() {
-        return body.index().flatMap(i->TList.range(i,x).map(j->TList.sof(i,j)));
+        return body.index().flatMap(i->TList.range(i,rows).map(j->TList.sof(i,j)));
     }
     public TList<TList<Integer>> lower() {
         return body.index().flatMap(i->TList.range(0,i+1).map(j->TList.sof(i,j)));
     }
 
     public TList<TList<Integer>> upperNoDiag() {
-        return body.range(0,y-1).flatMap(i->TList.range(i+1,x).map(j->TList.sof(i,j)));
+        return body.range(0,columns-1).flatMap(i->TList.range(i+1,rows).map(j->TList.sof(i,j)));
     }
     public TList<TList<Integer>> lowerNoDiag() {
-        return body.range(1,y).flatMap(i->TList.range(0,i).map(j->TList.sof(i,j)));
+        return body.range(1,columns).flatMap(i->TList.range(0,i).map(j->TList.sof(i,j)));
     }
     public boolean contains(TList<Integer> cell) {
-        return 0<=cell.get(0)&&cell.get(0)<x&&0<=cell.get(1)&&cell.get(1)<y;
+        return 0<=cell.get(0)&&cell.get(0)<rows&&0<=cell.get(1)&&cell.get(1)<columns;
     }
     public int minSize() {
-        return Integer.min(x,y);
+        return Integer.min(rows,columns);
     }
     public CMatrix<K,T> map(Function<T,T> f) {
         return wrap(body.map(r->r.map(f)));
@@ -226,26 +226,26 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
     }
     public CMatrix<K,T> fillLower(T v) {
         assertSquare();
-        return wrap(TList.range(0,x).map(i->body.get(i).subList(i,y).startFrom(TList.nCopies(i,v))));
+        return wrap(TList.range(0,rows).map(i->body.get(i).subList(i,columns).startFrom(TList.nCopies(i,v))));
     }
     public CMatrix<K,T> fillUpper(T v) {
         assertSquare();
-        return wrap(TList.range(0,x).map(i->body.get(i).subList(0,i+1).append(TList.nCopies(y-i-1,v))));
+        return wrap(TList.range(0,rows).map(i->body.get(i).subList(0,i+1).append(TList.nCopies(columns-i-1,v))));
     }
     public CMatrix<K,T> fillDiagonal(TList<T> diag) {
         assertSquare();
-        return wrap(TList.range(0,x).map(i->body.get(i).replaceAt(i, diag.get(i))));
+        return wrap(TList.range(0,rows).map(i->body.get(i).replaceAt(i, diag.get(i))));
     }
     public CMatrix<K,T> fillDiagonal(T diag) {
         assertSquare();
-        return fillDiagonal(TList.nCopies(x, diag));
+        return fillDiagonal(TList.nCopies(rows, diag));
     }
     public CMatrix<K,T> fillNoDiagonal(T nodiag) {
         return fillLower(nodiag).fillUpper(nodiag);
     }
     public TList<T> getDiagonal() {
         assertSquare();
-        return TList.range(0,x).map(i->body.get(i).get(i));
+        return TList.range(0,rows).map(i->body.get(i).get(i));
     }
     
     public boolean nonZeroDiagonal() {
@@ -264,10 +264,10 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
     
     public CMatrix<K,T> i() {
         assertSquare();
-        return wrap(bb.i(x));
+        return wrap(bb.i(rows));
     }
     public CMatrix<K,T> fillAll(T v) {
-        return new CMatrix<>(bb,TList.nCopies(x, TList.nCopies(y,v)));
+        return new CMatrix<>(bb,TList.nCopies(rows, TList.nCopies(columns,v)));
     }
     public CMatrix<K,T> reorder(TList<Integer> order) {
         return wrap(i().body.pickUp(order));
