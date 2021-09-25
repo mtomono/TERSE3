@@ -108,6 +108,7 @@ public class JacobiGivens<K, T extends Context<K,T>&ContextOrdered<K,T>> {
      * @return 
      */
     public static <K, T extends Context<K,T>&ContextOrdered<K,T>> JacobiGivens<K,T> erase(CMatrix<K,T> target, T threshold) {
+        assert target.isSymmetric();
         return TIterator.iterate(new JacobiGivens<>(target.sfix(),target.i().sfix()), j->j.next()).until(j->j.largestNonDiag().lt(threshold)).last();
     }
     

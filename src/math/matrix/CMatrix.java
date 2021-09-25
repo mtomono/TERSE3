@@ -224,6 +224,9 @@ public class CMatrix<K, T extends Context<K,T>&ContextOrdered<K,T>> implements T
     public CMatrix<K,T> transpose() {
         return wrap(body.transposeT(l->l)).sfix();
     }
+    public boolean isSymmetric() {
+        return equals(transpose());
+    }
     public CMatrix<K,T> fillLower(T v) {
         assertSquare();
         return wrap(TList.range(0,rows).map(i->body.get(i).subList(i,columns).startFrom(TList.nCopies(i,v))));
