@@ -16,6 +16,7 @@ package function;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
 /**
@@ -31,5 +32,11 @@ public class Functions {
     }
     public static <T> UnaryOperator<T> id() {
         return x->x;
+    }
+    public static <T> T incase(T value, Predicate<T> incase, T otherwise) {
+        if (incase.test(value))
+            return otherwise;
+        else
+            return value;
     }
 }
