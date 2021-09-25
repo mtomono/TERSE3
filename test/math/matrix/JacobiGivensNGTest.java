@@ -24,6 +24,7 @@ public class JacobiGivensNGTest {
     CMatrix<Double,C2<Double>> pap(CMatrix<Double,C2<Double>> p, CMatrix<Double,C2<Double>> a) {
         return p.transpose().mul(a).mul(p);
     }
+    
     @Test
     public void testEraser1221() {
         System.out.println(test.TestUtils.methodName(0));
@@ -57,6 +58,7 @@ public class JacobiGivensNGTest {
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
     }
+    
     @Test
     public void testEraser1223() {
         System.out.println(test.TestUtils.methodName(0));
@@ -93,6 +95,44 @@ public class JacobiGivensNGTest {
     }
     
     @Test
+    public void testErase3x3WithObject() {
+        System.out.println(test.TestUtils.methodName(0));
+        CMatrix<Double,C2<Double>> target=CMatrix.derr.b("""
+                        1,2,-1;
+                        2,-2,2;
+                        -1,2,1;
+                             """);
+        var result=pap(JacobiGivens.erase_with_object(target,C2.derr.b(1e-10)).P,target);
+        var expected = CMatrix.derr.b("""
+                                      2,0,0;
+                                      0,-4,0;
+                                      0,0,2;
+                                      """);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    
+    @Test
+    public void testErase3x3Flat() {
+        System.out.println(test.TestUtils.methodName(0));
+        CMatrix<Double,C2<Double>> target=CMatrix.derr.b("""
+                        1,2,-1;
+                        2,-2,2;
+                        -1,2,1;
+                             """);
+        var result=pap(JacobiGivens.erase_flat(target,C2.derr.b(1e-10)).get(1),target);
+        var expected = CMatrix.derr.b("""
+                                      2,0,0;
+                                      0,-4,0;
+                                      0,0,2;
+                                      """);
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    
+    @Test
     public void testOrthogonal() {
         System.out.println(test.TestUtils.methodName(0));
         CMatrix<Double,C2<Double>> target=CMatrix.derr.b("""
@@ -107,6 +147,7 @@ public class JacobiGivensNGTest {
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
     }
+    
     @Test
     public void testPrintP() {
         System.out.println(test.TestUtils.methodName(0));

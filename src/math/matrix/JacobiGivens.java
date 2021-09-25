@@ -70,7 +70,7 @@ public class JacobiGivens<K, T extends Context<K,T>&ContextOrdered<K,T>> {
         T cos2=alpha2.div(alpha2.add(beta2)).sqrt();
         T cos=b.one().add(cos2).div(b.b(2)).sqrt();
         T sin=b.one().sub(cos2).div(b.b(2)).sqrt().mul(incase(alpha.sign(),x->x.isZero(),alpha.one())).mul(beta.sign());
-        return Givens.back(target, erase, cos, sin);
+        return Givens.spin(target, erase, cos, sin);
     }
     
     final public CMatrix<K,T> A;

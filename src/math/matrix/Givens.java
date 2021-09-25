@@ -15,7 +15,6 @@
 package math.matrix;
 
 import collection.TList;
-import math.CList;
 import math.Context;
 import math.ContextOrdered;
 
@@ -26,6 +25,7 @@ import math.ContextOrdered;
 public class Givens {
     /**
      * Givens Rotation Matrix.
+     * spins in clockwise.
      * @param <K>
      * @param <T>
      * @param target target matrix.
@@ -34,28 +34,18 @@ public class Givens {
      * @param sin
      * @return Givens Rotation Matrix
      */
-    public static <K, T extends Context<K,T>&ContextOrdered<K,T>> CMatrix<K,T> fore(CMatrix<K,T> target, TList<Integer> plane, T cos, T sin) {
+    public static <K, T extends Context<K,T>&ContextOrdered<K,T>> CMatrix<K,T> spin(CMatrix<K,T> target, TList<Integer> plane, T cos, T sin) {
         assert plane.size()==2 : "plane has to have 2 axis";
         assert target.contains(plane) : "plane has to be a cell in target";
         assert !plane.isUniform() : "plane has to have 2 different axis";
-        return target.i().sfix()
-                .set(plane.get(0),plane.get(0),cos)
-                .set(plane.get(1),plane.get(1),cos)
-                .set(plane.get(0),plane.get(1),sin)
-                .set(plane.get(1),plane.get(0),sin.negate());
-    }
-    
-    public static <K, T extends Context<K,T>&ContextOrdered<K,T>> CMatrix<K,T> back(CMatrix<K,T> target, TList<Integer> plane, T cos, T sin) {
-        assert plane.size()==2 : "plane has to have 2 axis";
-        assert target.contains(plane) : "plane has to be a cell in target";
-        assert !plane.isUniform() : "plane has to have 2 different axis";
+        assert cos.mul(cos).add(sin.mul(sin)).eq(target.bb.one()) : "sin^2+cos^2 has to be 1";
         return target.i().sfix()
                 .set(plane.get(0),plane.get(0),cos)
                 .set(plane.get(1),plane.get(1),cos)
                 .set(plane.get(0),plane.get(1),sin.negate())
                 .set(plane.get(1),plane.get(0),sin);
     }
-
+    
     public static <K, T extends Context<K,T>&ContextOrdered<K,T>> TList<Integer> plane(CMatrix<K,T> target) {
         if (target.rows*target.columns<=1)
             return TList.empty();
