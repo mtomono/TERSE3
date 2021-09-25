@@ -74,7 +74,7 @@ public class JacobiGivensNGTest {
         assertEquals(result, expected);
     }
     @Test
-    public void testJacobi() {
+    public void testErase3x3() {
         System.out.println(test.TestUtils.methodName(0));
         CMatrix<Double,C2<Double>> target=CMatrix.derr.b("""
                         1,2,-1;
@@ -92,4 +92,31 @@ public class JacobiGivensNGTest {
         assertEquals(result, expected);
     }
     
+    @Test
+    public void testOrthogonal() {
+        System.out.println(test.TestUtils.methodName(0));
+        CMatrix<Double,C2<Double>> target=CMatrix.derr.b("""
+                        1,2,-1;
+                        2,-2,2;
+                        -1,2,1;
+                             """);
+        var p=JacobiGivens.erase(target,C2.derr.b(1e-10)).P;
+        var result=p.transpose().mul(p);
+        var expected = target.i();
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    @Test
+    public void testPrintP() {
+        System.out.println(test.TestUtils.methodName(0));
+        CMatrix<Double,C2<Double>> target=CMatrix.derr.b("""
+                        1,2,-1;
+                        2,-2,2;
+                        -1,2,1;
+                             """);
+        var p=JacobiGivens.erase(target,C2.derr.b(1e-10)).P;
+        System.out.println(p);
+    }
+
 }

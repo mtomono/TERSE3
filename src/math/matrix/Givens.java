@@ -15,7 +15,6 @@
 package math.matrix;
 
 import collection.TList;
-import debug.Te;
 import math.CList;
 import math.Context;
 import math.ContextOrdered;
@@ -60,6 +59,6 @@ public class Givens {
     public static <K, T extends Context<K,T>&ContextOrdered<K,T>> TList<Integer> plane(CMatrix<K,T> target) {
         if (target.rows*target.columns<=1)
             return TList.empty();
-        return Te.e(target.lowerNoDiag()).max(xy->target.get(xy).abs()).get();
+        return target.lowerNoDiag().max(xy->target.get(xy).abs()).get();
     }
 }
