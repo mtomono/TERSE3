@@ -31,6 +31,20 @@ public class CMatrixNGTest {
     }
     
     @Test
+    public void testGet() {
+        System.out.println(test.TestUtils.methodName(0));
+        CMatrix<Rational,C2<Rational>> tested0=mr.b(
+                 "1,2,3,4;"
+                +"5,6,7,8;"
+                +"9,10,11,12"
+        );
+        var result = tested0.get(1,0);
+        var expected = C2.r.b(5); //this is row-column, not rows-columns
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    @Test
     public void testMult() {
         System.out.println(test.TestUtils.methodName(0));
         CMatrix<Rational,C2<Rational>> tested0=mr.b(
