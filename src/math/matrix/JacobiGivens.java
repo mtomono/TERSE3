@@ -15,7 +15,7 @@
 package math.matrix;
 
 import collection.TList;
-import static function.Functions.incase;
+import function.One;
 import iterator.TIterator;
 import math.Context;
 import math.ContextBuilder;
@@ -69,7 +69,7 @@ public class JacobiGivens<K, T extends Context<K,T>&ContextOrdered<K,T>> {
         T beta2=beta.mul(beta);
         T cos2=alpha2.div(alpha2.add(beta2)).sqrt();
         T cos=b.one().add(cos2).div(b.b(2)).sqrt();
-        T sin=b.one().sub(cos2).div(b.b(2)).sqrt().mul(incase(alpha.sign(),x->x.isZero(),alpha.one())).mul(beta.sign());
+        T sin=b.one().sub(cos2).div(b.b(2)).sqrt().mul(One.of(alpha.sign()).incase(x->x.isZero(),alpha.one()).get()).mul(beta.sign());
         return Givens.spin(target, erase, cos, sin);
     }
     
