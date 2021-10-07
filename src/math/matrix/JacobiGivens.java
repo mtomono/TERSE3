@@ -15,8 +15,8 @@
 package math.matrix;
 
 import collection.TList;
-import function.One;
 import iterator.TIterator;
+import java.util.Optional;
 import math.Context;
 import math.ContextBuilder;
 import math.ContextOrdered;
@@ -69,7 +69,7 @@ public class JacobiGivens<K, T extends Context<K,T>&ContextOrdered<K,T>> {
         T beta2=beta.mul(beta);
         T cos2=alpha2.div(alpha2.add(beta2)).sqrt();
         T cos=b.one().add(cos2).div(b.b(2)).sqrt();
-        T sin=b.one().sub(cos2).div(b.b(2)).sqrt().mul(One.of(alpha.sign()).incase(x->x.isZero(),alpha.one()).get()).mul(beta.sign());
+        T sin=b.one().sub(cos2).div(b.b(2)).sqrt().mul(Optional.of(alpha.sign()).map(x->x.isZero()?alpha.one():x).get()).mul(beta.sign());
         return Givens.spin(target, erase, cos, sin);
     }
     
