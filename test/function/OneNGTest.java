@@ -107,4 +107,47 @@ public class OneNGTest {
         assertEquals(result, expected);
     } //takes 3.126s
 
+    /**
+     * here are additional tests to eradicate the influence of caching.
+     * now used i instead of 5 as target.
+     * now everything got slower (even 1).
+     * still 3 was slower than the others though the outcome performance got 
+     * much closer.
+     * the winner remains the same. 2.
+     */
+    @Test(groups="performance")
+    public void testIncase_3argsPerformance2() {
+        System.out.println(test.TestUtils.methodName(0));
+        Integer result = One.incase(5,x->x%3==0,0);
+        for (int i=0; i<1000000000; i++)
+            result = One.incase(i,x->x%3==0,0);
+        Integer expected = 0;
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    } //takes 3.075s
+
+    @Test(groups="performance")
+    public void testIncase_OptionalPerformance2() {
+        System.out.println(test.TestUtils.methodName(0));
+        Integer result = Optional.of(5).map(x->x%3==0?0:x).get();
+        for (int i=0; i<1000000000; i++)
+            result = Optional.of(i).map(x->x%3==0?0:x).get();
+        Integer expected = 0;
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    } //takes 2.761s
+
+    @Test(groups="performance")
+    public void testIncase_Predicate_GenericTypePerformance2() {
+        System.out.println(test.TestUtils.methodName(0));
+        Integer result = One.of(5).incase(x->x%3==0,0).get();
+        for (int i=0; i<1000000000; i++)
+            result = One.of(i).incase(x->x%3==0,0).get();
+        Integer expected = 0;
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    } //takes 4.955s
 }
