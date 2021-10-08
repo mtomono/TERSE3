@@ -28,6 +28,21 @@ public class OneNGTest {
             return ()->incase(get(),pred,value);
         }
     }
+    static public class Two<T> {
+        final T body;
+        public Two(T body) {
+            this.body=body;
+        }
+        public T get() {
+            return body;
+        }
+        public static <T> Two<T> of(T x) {
+            return new Two<>(x);
+        }
+        public Two<T> incase(Predicate<? super T> pred, T value) {
+            return new Two<>(pred.test(body)?value:body);
+        }
+    }
     
     @Test
     public void testIncase_3args() {
@@ -65,11 +80,14 @@ public class OneNGTest {
      * here are 3 performance tests for 3 variations of incase().
      * 1)ordinary function which takes original value as first parameter.
      * 2)optional
-     * 3)one
+     * 3)one made of an interface
+     * 4)two made of a class
      * when executed 3) was 150 times slower than others.
-     * 1) was just a bit faster than 2). but acceptable enough to have this 
+     * 1) was just a bit faster than 2) and 4). but acceptable enough to have this 
      * versatile context of optional. as a conclusion, 2) is the best choice.
      * thus One is removed.
+     * # afterward, added 4) and a fact was revealed that class generation in 3) 
+     * # was the most time consuming part.
      */
     @Test(groups="performance")
     public void testIncase_3argsPerformance() {
@@ -106,6 +124,18 @@ public class OneNGTest {
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
     } //takes 3.126s
+
+    @Test(groups="performance")
+    public void testIncase_TwoPerformance() {
+        System.out.println(test.TestUtils.methodName(0));
+        Integer result = Two.of(5).incase(x->x%3==0,0).get();
+        for (int i=0; i<1000000000; i++)
+            result = Two.of(5).incase(x->x%3==0,0).get();
+        Integer expected = 5;
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    } //takes 0.02s
 
     /**
      * here are additional tests to eradicate the influence of caching.
