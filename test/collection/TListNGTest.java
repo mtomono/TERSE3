@@ -557,7 +557,7 @@ public class TListNGTest {
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
-    }
+    } //3.016s
     
     @Test
     public void testChunk() {

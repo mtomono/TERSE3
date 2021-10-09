@@ -1227,7 +1227,7 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
      * @return 
      */
     public TList<TList<T>> divide(T division) {
-        return Optional.of(indexOf(division)).map(i->i==-1?TList.sof(this):TList.sof(subList(0, indexOf(division) + 1), subList(indexOf(division) + 1, size()))).get();
+        return Optional.of(indexOf(division)).map(index->index==-1?TList.sof(this):TList.sof(subList(0, index+1), subList(index+1, size()))).get();
     }
         
     public TList<TList<T>> filterChunk(Predicate<? super T> pred, BiFunction<TList<T>,Predicate<? super T>,TList<TList<T>>> chunk) {
