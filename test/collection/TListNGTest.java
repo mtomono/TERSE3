@@ -546,6 +546,18 @@ public class TListNGTest {
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
     }
+    @Test(groups="performance")
+    public void testDividePerformance() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> tested = TList.sof(1, 3, 7, 9, 11, 2, 3, 8, 9, 11, 9);
+        TList<TList<Integer>> result = null;
+        for (int i=0;i<100000000/*1e8*/;i++)
+            result=tested.divide(11);
+        TList<TList<Integer>> expected = TList.sof(TList.sof(1, 3, 7, 9, 11), TList.sof(2, 3, 8, 9, 11, 9));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
     
     @Test
     public void testChunk() {
@@ -1948,6 +1960,19 @@ public class TListNGTest {
     public void testEnvelopChunk() {
         System.out.println(test.TestUtils.methodName(0));
         TList<TList<Integer>> result = TList.sof(0,5,5,5,0,4,4,0,0,6).envelopChunk(i->i<=0);
+        TList<TList<Integer>> expected = TList.sof(TList.sof(0),TList.sof(0,5,5,5,0),TList.sof(0,4,4,0),TList.sof(0,0),TList.sof(0,6));
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result, expected);
+    }
+    
+    @Test(groups="performance")
+    public void testEnvelopChunkPerformance() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> tested = TList.sof(0,5,5,5,0,4,4,0,0,6);
+        TList<TList<Integer>> result = null;
+        for (int j=0; j<100000;j++) 
+            result=tested.envelopChunk(i->i<=0);
         TList<TList<Integer>> expected = TList.sof(TList.sof(0),TList.sof(0,5,5,5,0),TList.sof(0,4,4,0),TList.sof(0,0),TList.sof(0,6));
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);

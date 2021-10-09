@@ -107,6 +107,17 @@ public class TIterator<T> implements Iterator<T> {
         return set(new IteratorIterator<>(this,added));
     }
     
+    public boolean hasMore(int size) {
+        assert size>=0;
+        if (size==0) return true;
+        if (!hasNext()) return false;
+        for (int i=1; i<size; i++) {
+            next();
+            if (!hasNext()) return false;
+        }
+        return true;
+    }
+    
     public T last() {
         assert hasNext() : "last() is called when no item is left in this iterator";
         T retval = next();

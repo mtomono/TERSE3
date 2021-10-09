@@ -21,7 +21,6 @@ import static org.testng.Assert.*;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import static iterator.TIterator.generate;
-import math.C2;
 import static test.TestUtils.methodName;
 
 /**
@@ -302,5 +301,17 @@ public class TIteratorNGTest {
         System.out.println("result  : " + result);
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
+    }
+    
+    @Test
+    public void testHasMore() {
+        System.out.println(test.TestUtils.methodName(0));
+        assertTrue(TList.sof().iterator().hasMore(0));
+        assertFalse(TList.sof().iterator().hasMore(1));
+        assertTrue(TList.sof(0).iterator().hasMore(1));
+        assertFalse(TList.sof(0).iterator().hasMore(2));
+        assertTrue(TList.sof(0,0).iterator().hasMore(1));
+        assertTrue(TList.sof(0,0).iterator().hasMore(2));
+        assertFalse(TList.sof(0,0).iterator().hasMore(3));
     }
 }

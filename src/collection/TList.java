@@ -1227,10 +1227,7 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
      * @return 
      */
     public TList<TList<T>> divide(T division) {
-        int index = indexOf(division);
-        if (index == -1) 
-            return TList.sof(this);
-        return TList.sof(subList(0, indexOf(division) + 1), subList(indexOf(division) + 1, size()));
+        return Optional.of(indexOf(division)).map(i->i==-1?TList.sof(this):TList.sof(subList(0, indexOf(division) + 1), subList(indexOf(division) + 1, size()))).get();
     }
         
     public TList<TList<T>> filterChunk(Predicate<? super T> pred, BiFunction<TList<T>,Predicate<? super T>,TList<TList<T>>> chunk) {
@@ -1271,15 +1268,9 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
     }
     
     public TList<TList<T>> envelopChunk(Predicate<? super T> pred) {
-        TList<TList<T>> chunk = chunk(pred);
-        Iterator<TList<T>> iter = chunk.iterator();
-        if (!iter.hasNext())
-            return chunk;
-        iter.next();
-        if (!iter.hasNext())
-            return chunk;
-        return chunk.diff((a,b)->b.startFrom(a.last())).startFrom(chunk.get(0));
+        return Optional.of(chunk(pred)).map(chunk->!chunk.iterator().hasMore(2)?chunk:chunk.diff((a,b)->b.startFrom(a.last())).startFrom(chunk.get(0))).get();
     }
+    
         
     /**
      * main body of chunk.
