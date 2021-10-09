@@ -88,9 +88,9 @@ public class JacobiGivens<K, T extends Context<K,T>&ContextOrdered<K,T>> {
     public T largestNonDiag() {
         return A.get(plane);
     }
+
     public JacobiGivens<K,T> next() {
-        CMatrix<K,T> eraser=eraser(A,plane);
-        return new JacobiGivens(eraser.transpose().mul(A).mul(eraser).sfix(),P.mul(eraser));
+        return Optional.of(eraser(A,plane)).map(eraser->new JacobiGivens(eraser.transpose().mul(A).mul(eraser).sfix(),P.mul(eraser))).get();
     }
     
     /**
@@ -117,36 +117,4 @@ public class JacobiGivens<K, T extends Context<K,T>&ContextOrdered<K,T>> {
         return A.toString()+P.toString()+plane.toString();
     }
 
-    /**
-     * erase alternative.
-     * erase_flat() is shortest in terms of LOC. but it is not showing its structure clearly.
-     * using JacobiGivens object, erase_with_object() exhibits it clearer.
-     * after all, erase_with_object() itself is so simple that it can be written in 1 line.
-     * that is the above method, erase().
-     * @param <K>
-     * @param <T>
-     * @param target
-     * @param threshold
-     * @return 
-     */
-    public static <K, T extends Context<K,T>&ContextOrdered<K,T>> JacobiGivens<K,T> erase_with_object(CMatrix<K,T> target, T threshold) {
-        JacobiGivens<K,T> jg=new JacobiGivens<>(target.sfix(),target.i().sfix());
-        do
-            jg=jg.next();
-        while(jg.largestNonDiag().ge(threshold));
-        return jg;
-    }
-
-    public static <K, T extends Context<K,T>&ContextOrdered<K,T>> TList<CMatrix<K,T>> erase_flat(CMatrix<K,T> target, T threshold) {
-        CMatrix<K,T> A=target.sfix();
-        CMatrix<K,T> P=target.i().sfix();
-        TList<Integer> plane=Givens.plane(A);
-        do {
-            CMatrix<K,T> eraser=eraser(A,plane);
-            A=eraser.transpose().mul(A).mul(eraser).sfix();
-            P=P.mul(eraser);
-            plane=Givens.plane(A);
-        } while(A.get(plane).ge(threshold));
-        return TList.sof(A,P);
-    }
 }

@@ -8,6 +8,9 @@ package math.matrix;
 import collection.TList;
 import static java.lang.Math.sqrt;
 import math.C2;
+import math.Context;
+import math.ContextOrdered;
+import static math.matrix.JacobiGivens.eraser;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import string.TString;
@@ -94,6 +97,26 @@ public class JacobiGivensNGTest {
         assertEquals(result, expected);
     }
     
+    /**
+     * erase alternative.
+     * erase_flat() is shortest in terms of LOC. but it is not showing its structure clearly.
+     * using JacobiGivens object, erase_with_object() exhibits it clearer.
+     * after all, erase_with_object() itself is so simple that it can be written in 1 line.
+     * that is the above method, erase().
+     * @param <K>
+     * @param <T>
+     * @param target
+     * @param threshold
+     * @return 
+     */
+    public static <K, T extends Context<K,T>&ContextOrdered<K,T>> JacobiGivens<K,T> erase_with_object(CMatrix<K,T> target, T threshold) {
+        JacobiGivens<K,T> jg=new JacobiGivens<>(target.sfix(),target.i().sfix());
+        do
+            jg=jg.next();
+        while(jg.largestNonDiag().ge(threshold));
+        return jg;
+    }
+
     @Test
     public void testErase3x3WithObject() {
         System.out.println(test.TestUtils.methodName(0));
@@ -102,7 +125,7 @@ public class JacobiGivensNGTest {
                         2,-2,2;
                         -1,2,1;
                              """);
-        var result=pap(JacobiGivens.erase_with_object(target,C2.derr.b(1e-10)).P,target);
+        var result=pap(erase_with_object(target,C2.derr.b(1e-10)).P,target);
         var expected = CMatrix.derr.b("""
                                       2,0,0;
                                       0,-4,0;
@@ -113,6 +136,18 @@ public class JacobiGivensNGTest {
         assertEquals(result, expected);
     }
     
+    public static <K, T extends Context<K,T>&ContextOrdered<K,T>> TList<CMatrix<K,T>> erase_flat(CMatrix<K,T> target, T threshold) {
+        CMatrix<K,T> A=target.sfix();
+        CMatrix<K,T> P=target.i().sfix();
+        TList<Integer> plane=Givens.plane(A);
+        do {
+            CMatrix<K,T> eraser=eraser(A,plane);
+            A=eraser.transpose().mul(A).mul(eraser).sfix();
+            P=P.mul(eraser);
+            plane=Givens.plane(A);
+        } while(A.get(plane).ge(threshold));
+        return TList.sof(A,P);
+    }
     @Test
     public void testErase3x3Flat() {
         System.out.println(test.TestUtils.methodName(0));
@@ -121,7 +156,7 @@ public class JacobiGivensNGTest {
                         2,-2,2;
                         -1,2,1;
                              """);
-        var result=pap(JacobiGivens.erase_flat(target,C2.derr.b(1e-10)).get(1),target);
+        var result=pap(erase_flat(target,C2.derr.b(1e-10)).get(1),target);
         var expected = CMatrix.derr.b("""
                                       2,0,0;
                                       0,-4,0;
