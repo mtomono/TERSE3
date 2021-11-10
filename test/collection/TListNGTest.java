@@ -2330,4 +2330,15 @@ public class TListNGTest {
         System.out.println("expected: " + expected);
         assertEquals(result, expected);
     }
+    
+    @Test
+    public void testShuffle() {
+        System.out.println(test.TestUtils.methodName(0));
+        TList<Integer> tested=TList.sof(0,1,2);
+        TList<Integer> result = tested.shuffle();
+        TList<Integer> expected = tested;
+        System.out.println("result  : " + result);
+        System.out.println("expected: " + expected);
+        assertEquals(result.sortTo(Comparator.naturalOrder()), expected);
+    }
 }

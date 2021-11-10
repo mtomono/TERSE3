@@ -31,6 +31,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.function.*;
 import java.util.stream.Collector;
 import static java.util.stream.Collectors.counting;
@@ -89,6 +90,24 @@ public class TIterator<T> implements Iterator<T> {
         return set(new SupplierWrapper<>(supplier));
     }
     
+    static public <T> TIterator<T> shuffle(List<T> base) {
+        return set(new ShuffleIterator<>(base));
+    }
+    
+    static public <T> TIterator<T> random(List<T> base) {
+        return randomInteger(base.size()).map(i->base.get(i));
+    }
+    
+    static public TIterator<Integer> randomInteger(int range) {
+        Random r=new Random();
+        return generate(()->r.nextInt(range));
+    }
+
+    static public TIterator<Double> randomDouble(double range) {
+        Random r=new Random();
+        return generate(()->r.nextDouble()*range);
+    }
+
     static public <T> TIterator<T> iterateOmit0(T init, UnaryOperator<T> op) {
         return set(new OperatorWrapper(init, op));
     }

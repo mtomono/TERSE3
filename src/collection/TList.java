@@ -49,6 +49,12 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
         super(body);
     }
     
+    public T get(Random r) {
+        return TList.this.get(r.nextInt(size()));
+    }
+    public TList<T> cset(Random r,T v) {
+        return TList.this.cset(r.nextInt(size()), v);
+    }
     /**
      * last item of the list.
      * when you want the first item, you can get it by .get(0).
@@ -150,7 +156,7 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
     public TList<T> replaceAt(int at, T t) {
         return replaceAt(at, wrap(t));
     }
-    
+        
     /**
      * fix the calculation.
      * basically, TList accepts calculation requests but keep the actual calculation
@@ -376,6 +382,22 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
     
     static public TList<Integer> skipRange(Range<Integer> range, int interval) {
         return rangeBase(0, (range.end()-range.start()-1)/interval+1).map(i->range.start()+i*interval);
+    }
+    
+    static public TList<Integer> randomInteger(int range, int size) {
+        return TIterator.randomInteger(range).limit(size).asList();
+    }
+    
+    public TList<T> random(int size) {
+        return TIterator.random(this).limit(size).asList();
+    }
+    
+    public TList<T> shuffle(int size) {
+        return TIterator.shuffle(this).limit(size).asList();
+    }
+    
+    public TList<T> shuffle() {
+        return TIterator.shuffle(this).asList();
     }
     
     static public TList<Integer> intBits=TList.range(0,Integer.SIZE).map(a->1<<a).sfix();
