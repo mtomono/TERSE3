@@ -55,6 +55,13 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
     public TList<T> cset(Random r,T v) {
         return TList.this.cset(r.nextInt(size()), v);
     }
+    public T remove(Random r) {
+        return remove(r.nextInt(size()));
+    }
+    public TList<T> cremove(Random r) {
+        remove(r.nextInt(size()));
+        return this;
+    }
     /**
      * last item of the list.
      * when you want the first item, you can get it by .get(0).
@@ -111,6 +118,11 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
     public TList<T> csetDebug(int i, T o) {
         System.out.println(this+"cset("+i+","+o+")");
         return cset(i,o);
+    }
+    
+    public TList<T> cremove(int i) {
+        remove(i);
+        return this;
     }
     
     public TList<T> swap(int i0,int i1) {
@@ -674,6 +686,22 @@ public class TList<T> extends ListWrapper<T> implements Monitorable {
         return this.<S>map(map).cache();
     }
     
+    public TList<T> cset(int i, Function<? super T, ? extends T> map) {
+        return cset(i, map.apply(get(i)));
+    }
+
+    public TList<T> replaceAt(int i, Function<? super T, ? extends T> map) {
+        return replaceAt(i, map.apply(get(i)));
+    }
+    public TList<T> cset(Random r, Function<? super T, ? extends T> map) {
+        int ri=r.nextInt(size());
+        return cset(ri, map.apply(get(ri)));
+    }
+
+    public TList<T> replaceAt(Random r, Function<? super T, ? extends T> map) {
+        int ri=r.nextInt(size());
+        return replaceAt(ri, map.apply(get(ri)));
+    }
     /**
      * flat map.
      * flat the nested list while mapping.
