@@ -19,8 +19,11 @@ import static collection.PrimitiveArrayWrap.wrap;
 import collection.Scale;
 import collection.TList;
 import static collection.c.a2l;
+import debug.Te;
 import iterator.TIterator;
 import static java.lang.Math.signum;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -151,6 +154,23 @@ public class Cubes {
         return retval;
     }
     public static void separateCubesConnected(TList<Integer> start, Set<TList<Integer>> cubes, Set<TList<Integer>>separated) {
+        Deque<TList<Integer>> stack=new ArrayDeque<>();
+        stack.push(start);
+        while (!stack.isEmpty()) {
+            TList<Integer> x=stack.pop();
+            x.index().flatten(i->TList.sof(x.replaceAt(i, x.get(i)+1).sfix(),x.replaceAt(i, x.get(i)-1).sfix()))
+                    .filter(c->cubes.remove(c)).tee(c->separated.add(c)).forEachRemaining(c->stack.push(c));
+        }
+    }
+    
+    /**
+     * this is the original of separateCubesConnected().
+     * 
+     * @param start
+     * @param cubes
+     * @param separated 
+     */
+    public static void separateCubesConnectedRecursive(TList<Integer> start, Set<TList<Integer>> cubes, Set<TList<Integer>>separated) {
         start.index().flatten(i->TList.sof(start.replaceAt(i, start.get(i)+1).sfix(),start.replaceAt(i, start.get(i)-1).sfix()))
                 .filter(c->cubes.remove(c)).tee(c->separated.add(c)).forEachRemaining(c->separateCubesConnected(c,cubes,separated));
     }
