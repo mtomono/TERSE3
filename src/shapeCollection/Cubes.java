@@ -17,12 +17,11 @@ package shapeCollection;
 import collection.P;
 import static collection.PrimitiveArrayWrap.wrap;
 import collection.Scale;
+import collection.StackDeque;
 import collection.TList;
 import static collection.c.a2l;
-import debug.Te;
 import iterator.TIterator;
 import static java.lang.Math.signum;
-import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
@@ -153,14 +152,9 @@ public class Cubes {
         }
         return retval;
     }
+    static final TList<Integer> shift=TList.sofi(1,-1);
     public static void separateCubesConnected(TList<Integer> start, Set<TList<Integer>> cubes, Set<TList<Integer>>separated) {
-        Deque<TList<Integer>> stack=new ArrayDeque<>();
-        stack.push(start);
-        while (!stack.isEmpty()) {
-            TList<Integer> x=stack.pop();
-            x.index().flatten(i->TList.sof(x.replaceAt(i, x.get(i)+1).sfix(),x.replaceAt(i, x.get(i)-1).sfix()))
-                    .filter(c->cubes.remove(c)).tee(c->separated.add(c)).forEachRemaining(c->stack.push(c));
-        }
+        new StackDeque<>(start).execi(x->x.index().flatten(i->shift.map(s->x.replaceAt(i, x.get(i)+s).sfix())).filter(c->cubes.remove(c)).tee(c->separated.add(c)));
     }
     
     /**
